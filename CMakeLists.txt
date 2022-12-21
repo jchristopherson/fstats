@@ -17,6 +17,7 @@ add_subdirectory(configure)
 
 # Deal with the dependencies
 find_package(ferror 1.4.0 QUIET)
+find_package(linalg 1.7.0 QUIET)
 add_subdirectory(dependencies)
 
 # Source
@@ -30,6 +31,7 @@ add_fortran_library(
     ${FSTATS_SOURCES}
 )
 link_library(${PROJECT_NAME} ${ferror_LIBRARY} ${ferror_INCLUDE_DIR})
+link_library(${PROJECT_NAME} ${linalg_LIBRARY} ${linalg_INCLUDE_DIR})
 
 # Installation
 
@@ -39,6 +41,7 @@ include(CTest)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 if (BUILD_TESTING)
     enable_testing()
+    add_subdirectory(tests)
 endif()
 
 # Examples

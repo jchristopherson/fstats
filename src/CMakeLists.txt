@@ -9,5 +9,6 @@ set(FSTATS_SOURCES
     ${dir}/distributions_normal.f90
     ${dir}/distributions_t.f90
     ${dir}/distributions_f.f90
+    ${dir}/statistics_implementation.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)

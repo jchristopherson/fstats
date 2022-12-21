@@ -2,212 +2,45 @@
 
 module fstats
     use iso_fortran_env
+    use ferror
     implicit none
     private
-    public :: beta
-    public :: regularized_beta
-    public :: incomplete_beta
-    public :: digamma
-    public :: incomplete_gamma_upper
-    public :: incomplete_gamma_lower
     public :: distribution
     public :: distribution_function
     public :: distribution_property
     public :: t_distribution
     public :: normal_distribution
     public :: f_distribution
-
+    public :: mean
+    public :: variance
+    public :: standard_deviation
+    public :: median
+    public :: r_squared
+    public :: adjusted_r_squared
+    public :: quantile
+    public :: t_test_equal_variance
+    public :: t_test_unequal_variance
+    public :: t_test_paired
+    public :: f_test
+    public :: anova
+    public :: anova_factor
+    public :: single_factor_anova_table
+    public :: two_factor_anova_table
+    public :: confidence_interval
+    public :: beta
+    public :: regularized_beta
+    public :: incomplete_beta
+    public :: digamma
+    public :: incomplete_gamma_upper
+    public :: incomplete_gamma_lower
+    public :: FS_NO_ERROR
+    public :: FS_ARRAY_SIZE_ERROR
 
 ! ******************************************************************************
-! SPECIAL FUNCTIONS
+! ERROR CODES
 ! ------------------------------------------------------------------------------
-    !> Computes the beta function.
-    !!
-    !! @par Syntax
-    !! @code{.f90}
-    !! real(real64) function beta(real(real64) a, real(real64) b)
-    !! real(real32) function beta(real(real32) a, real(real32) b)
-    !! @endcode
-    !!
-    !! @param[in] a The first argument of the function.
-    !! @param[in] b The second argument of the function.
-    !!
-    !! @return The value of the beta function at @p a and @p b.
-    !!
-    !! @remarks The beta function is related to the gamma function
-    !! by the following relationship \f$ \beta(a,b) = 
-    !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
-    interface beta
-        module procedure :: beta_real64
-        module procedure :: beta_real32
-    end interface
-
-    !> Computes the regularized beta function.
-    !!
-    !! @par Syntax
-    !! @code{.f90}
-    !! real(real64) function regularized_beta(real(real64) a, real(real64) b, real(real64) x)
-    !! real(real32) function regularized_beta(real(real32) a, real(real32) b, real(real32) x)
-    !! @endcode
-    !!
-    !! @param[in] a The first argument of the function.
-    !! @param[in] b The second argument of the function.
-    !! @param[in] x The upper limit of the integration.
-    !!
-    !! @return The value of the incomplete beta function.
-    !!
-    !! @remarks The regularized beta function is defined as the ratio between
-    !! the incomplete beta function and the beta function: \f$ I_{x}(a,b) = 
-    !! \frac{\beta(x;a,b)}{\beta(a,b)} \f$.
-    interface regularized_beta
-        module procedure :: regularized_beta_real64
-        module procedure :: regularized_beta_real32
-    end interface
-
-    !> Computes the incomplete beta function.
-    !!
-    !! @par Syntax
-    !! @code{.f90}
-    !! real(real64) function incomplete_beta(real(real64) a, real(real64) b, real(real64) x)
-    !! real(real32) function incomplete_beta(real(real32) a, real(real32) b, real(real32) x)
-    !! @endcode
-    !!
-    !! @param[in] a The first argument of the function.
-    !! @param[in] b The second argument of the function.
-    !! @param[in] x The upper limit of the integration.
-    !!
-    !! @return The value of the incomplete beta function.
-    !!
-    !! @remarks The incomplete beta function is defind as \f$ \beta(x;a,b) =
-    !! \int_{0}^{x} t^{a-1} (1 - t)^{b-1} dt \f$.
-    interface incomplete_beta
-        module procedure :: incomplete_beta_real64
-        module procedure :: incomplete_beta_real32
-    end interface
-
-    !> Computes the digamma function \f$ \psi(x) = 
-    !! \frac{d}{dx}\left( \ln \left( \Gamma \left( x \right) \right) 
-    !! \right) \f$.
-    !!
-    !! @par Syntax
-    !! @code{.f90}
-    !! real(real64) function digamma(real(real64) x)
-    !! real(real32) function digamma(real(real32) x)
-    !! @endcode
-    !!
-    !! @param[in] x The value at which to evaluate the function.
-    !! @return The function value.
-    interface digamma
-        module procedure :: digamma_real64
-        module procedure :: digamma_real32
-    end interface
-    
-    !> Computes the "upper" incomplete gamma function 
-    !! \f$ \Gamma(a, x) = \int_{x}^{\infty} t^{a-1} e^{-t} \,dt \f$.
-    !!
-    !! @par Syntax
-    !! @code{.f90}
-    !! real(real64) incomplete_gamma_upper(real(real64) a, real(real64) x)
-    !! real(real32) incomplete_gamma_upper(real(real32) a, real(real32) x)
-    !! @endcode
-    !!
-    !! @param[in] a The coefficient value.
-    !! @param[in] x The value at which to evaluate the function.
-    !! @return The function value.
-    interface incomplete_gamma_upper
-        module procedure :: incomplete_gamma_upper_real64
-        module procedure :: incomplete_gamma_upper_real32
-    end interface
-
-    !> Computes the "lower" incomplete gamma function 
-    !! \f$ \gamma(a, x) = \int_{0}^{x} t^{a-1} e^{-t} \,dt \f$.
-    !!
-    !! @par Syntax
-    !! @code{.f90}
-    !! real(real64) incomplete_gamma_lower(real(real64) a, real(real64) x)
-    !! real(real32) incomplete_gamma_lower(real(real32) a, real(real32) x)
-    !! @endcode
-    !!
-    !! @param[in] a The coefficient value.
-    !! @param[in] x The value at which to evaluate the function.
-    !! @return The function value.
-    interface incomplete_gamma_lower
-        module procedure :: incomplete_gamma_lower_real64
-        module procedure :: incomplete_gamma_lower_real32
-    end interface
-
-    ! special_functions_beta.f90
-    interface
-        pure elemental module function beta_real64(a, b) result(rst)
-            real(real64), intent(in) :: a, b
-            real(real64) :: rst
-        end function
-
-        pure elemental module function beta_real32(a, b) result(rst)
-            real(real32), intent(in) :: a, b
-            real(real32) :: rst
-        end function
-
-        pure elemental module function regularized_beta_real64(a, b, x) result(rst)
-            real(real64), intent(in) :: a, b, x
-            real(real64) :: rst
-        end function
-
-        pure elemental module function regularized_beta_real32(a, b, x) result(rst)
-            real(real32), intent(in) :: a, b, x
-            real(real32) :: rst
-        end function
-
-        pure elemental module function incomplete_beta_real64(a, b, x) result(rst)
-            real(real64), intent(in) :: a, b, x
-            real(real64) :: rst
-        end function
-
-        pure elemental module function incomplete_beta_real32(a, b, x) result(rst)
-            real(real32), intent(in) :: a, b, x
-            real(real32) :: rst
-        end function
-    end interface
-
-    ! special_functions_digamma.f90
-    interface
-        pure elemental module function digamma_real64(x) result(rst)
-            real(real64), intent(in) :: x
-            real(real64) :: rst
-        end function
-
-        pure elemental module function digamma_real32(x) result(rst)
-            real(real32), intent(in) :: x
-            real(real32) :: rst
-        end function
-    end interface
-
-    ! special_functions_gamma.f90
-    interface
-        pure elemental module function incomplete_gamma_upper_real64(a, x) &
-            result(rst)
-            real(real64), intent(in) :: a, x
-            real(real64) :: rst
-        end function
-
-        pure elemental module function incomplete_gamma_upper_real32(a, x) &
-            result(rst)
-            real(real32), intent(in) :: a, x
-            real(real32) :: rst
-        end function
-
-        pure elemental module function incomplete_gamma_lower_real64(a, x) &
-            result(rst)
-            real(real64), intent(in) :: a, x
-            real(real64) :: rst
-        end function
-
-        pure elemental module function incomplete_gamma_lower_real32(a, x) &
-            result(rst)
-            real(real32), intent(in) :: a, x
-            real(real32) :: rst
-        end function
-    end interface
+    integer(int32), parameter :: FS_NO_ERROR = 0
+    integer(int32), parameter :: FS_ARRAY_SIZE_ERROR = 10000
 
 ! ******************************************************************************
 ! DISTRIBUTIONS
@@ -659,6 +492,717 @@ module fstats
         pure module function fd_variance(this) result(rst)
             class(f_distribution), intent(in) :: this
             real(real64) :: rst
+        end function
+    end interface
+
+! ******************************************************************************
+! GENERAL STATISTICS
+! ------------------------------------------------------------------------------
+    !> Defines an ANOVA factor result.
+    type anova_factor
+        !> The number of degrees of freedome.
+        real(real64) :: dof
+        !> The estimate of variance.
+        real(real64) :: variance
+        !> The sum of the squares.
+        real(real64) :: sum_of_squares
+        !> The F-statistic.
+        real(real64) :: f_statistic
+        !> The variance probability term.
+        real(real64) :: probability
+    end type
+
+    !> Defines a single-factor ANOVA results table.
+    type single_factor_anova_table
+        !> The main, or main factor, results.
+        type(anova_factor) :: main_factor
+        !> The within-treatement (error) results.
+        type(anova_factor) :: within_factor
+        !> The total number of degrees of freedom.
+        real(real64) :: total_dof
+        !> The total sum of squares.
+        real(real64) :: total_sum_of_squares
+        !> The total variance estimate.
+        real(real64) :: total_variance
+        !> The overall mean value.
+        real(real64) :: overall_mean
+    end type
+
+    !> Defines a two-factor ANOVA results table.
+    type two_factor_anova_table
+        !> The first main-factor results.
+        type(anova_factor) :: main_factor_1
+        !> The second main-factor results.
+        type(anova_factor) :: main_factor_2
+        !> The interaction effects.
+        type(anova_factor) :: interaction
+        !> The within (error) factor results.
+        type(anova_factor) :: within_factor
+        !> The total number of degrees of freedom.
+        real(real64) :: total_dof
+        !> The total sum of squares.
+        real(real64) :: total_sum_of_squares
+        !> The total variance estimate.
+        real(real64) :: total_variance
+        !> The overall mean value.
+        real(real64) :: overall_mean
+    end type
+
+    !> Computes the mean of the values in an array.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function mean(real(real64) x(:))
+    !! real(real32) function mean(real(real32) x(:))
+    !! @endcode
+    !!
+    !! @param[in] x The N-element array on which to operate.
+    !! @return The result.
+    interface mean
+        module procedure :: mean_real64
+        module procedure :: mean_real32
+    end interface
+
+    !> Computes the sample variance of the values in an array.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function variance(real(real64) x(:))
+    !! real(real32) function variance(real(real32) x(:))
+    !! @endcode
+    !!
+    !! @param[in] x The N-element array on which to operate.
+    !! @return The result.
+    interface variance
+        module procedure :: variance_real64
+        module procedure :: variance_real32
+    end interface
+
+    !> Computes the sample standard deviation of the values in an array.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function standard_deviation(real(real64) x(:))
+    !! real(real32) function standard_deviation(real(real32) x(:))
+    !! @endcode
+    !!
+    !! @param[in] x The N-element array on which to operate.
+    !! @return The result.
+    interface standard_deviation
+        module procedure :: standard_deviation_real64
+        module procedure :: standard_deviation_real32
+    end interface
+
+    !> Computes the median of the vlaues in an array.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function median(real(real64) x(:))
+    !! real(real32) function median(real(real32) x(:))
+    !! @endcode
+    !!
+    !! @param[in,out] On input, the N-element array on which to operate.  On
+    !!  output, the same array but sorted into ascending order.
+    !! @return The result.
+    interface median
+        module procedure :: median_real64
+        module procedure :: median_real32
+    end interface
+
+    !> Computes the R-squared value for a data set.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function r_squared(real(real64) x(:), real(real64) xm(:), optional class(errors) err)
+    !! real(real32) function r_squared(real(real32) x(:), real(real32) xm(:), optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] x An N-element array containing the dependent variables 
+    !!  from the data set.
+    !! @param[in] xm An N-element array containing the corresponding modeled
+    !!  values.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
+    !!
+    !! @return The result.
+    interface r_squared
+        module procedure :: r_squared_real64
+        module procedure :: r_squared_real32
+    end interface
+
+    !> Computes the adjusted R-squared value for a data set.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !!
+    !! @endcode
+    !!
+    !! @param[in] p The number of model parameters.
+    !! @param[in] x An N-element array containing the dependent variables 
+    !!  from the data set.
+    !! @param[in] xm An N-element array containing the corresponding modeled
+    !!  values.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
+    !!
+    !! @return The result.
+    interface adjusted_r_squared
+        module procedure :: adjusted_r_squared_real64
+        module procedure :: adjusted_r_squared_real32
+    end interface
+
+    !> Computes the specified quantile of a data set using the SAS Method 4 per
+    !! the paper:
+    !! http://www.haiweb.org/medicineprices/manual/quartiles_iTSS.pdf
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) quantile(real(real64) x, real(real64) q)
+    !! real(real32) quantile(real(real32) x, real(real32) q)
+    !! @endcode
+    !! 
+    !! @param[in] x An N-element array containing the data.
+    !! @param[in] q The quantile to compute (e.g. 0.25 computes the 25% 
+    !!  quantile).
+    !!
+    !! @return The result.
+    interface quantile
+        module procedure :: quantile_real64
+        module procedure :: quantile_real32
+    end interface
+
+    !> Computes the 2-tailed Student's T-Test for two data sets of assumed 
+    !! equivalent variances.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine t_test_equal_variance(real(real64) x1(:), real(real64) x2(:), real(real64) stat, real(real64) p, real(real64) dof)
+    !! subroutine t_test_equal_variance(real(real32) x1(:), real(real32) x2(:), real(real32) stat, real(real32) p, real(real32) dof)
+    !! @endcode
+    !!
+    !! @param[in] x1 An N-element array containing the first data set.
+    !! @param[in] x2 An M-element array containing the second data set.
+    !! @param[out] stat The Student-'s T-Test statistic.
+    !! @param[out] p The probability value that the two samples are likely to
+    !!  have come from the same two underlying populations that have the same
+    !!  mean.
+    !! @param[out] dof The degrees of freedom.
+    interface t_test_equal_variance
+        module procedure :: t_test_equal_var_real64
+        module procedure :: t_test_equal_var_real32
+    end interface
+    
+    !> Computes the 2-tailed Student's T-Test for two data sets of assumed 
+    !! non-equivalent variances.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine t_test_unequal_variance(real(real64) x1(:), real(real64) x2(:), real(real64) stat, real(real64) p, real(real64) dof)
+    !! subroutine t_test_unequal_variance(real(real32) x1(:), real(real32) x2(:), real(real32) stat, real(real32) p, real(real32) dof)
+    !! @endcode
+    !!
+    !! @param[in] x1 An N-element array containing the first data set.
+    !! @param[in] x2 An M-element array containing the second data set.
+    !! @param[out] stat The Student-'s T-Test statistic.
+    !! @param[out] p The probability value that the two samples are likely to
+    !!  have come from the same two underlying populations that have the same
+    !!  mean.
+    !! @param[out] dof The degrees of freedom.
+    interface t_test_unequal_variance
+        module procedure :: t_test_unequal_var_real64
+        module procedure :: t_test_unequal_var_real32
+    end interface
+
+    !> Computes the 2-tailed Student's T-Test for two paired data sets.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine t_test_paired(real(real64) x1(:), real(real64) x2(:), real(real64) stat, real(real64) p, real(real64) dof, optional class(errors) err)
+    !! subroutine t_test_paired(real(real32) x1(:), real(real32) x2(:), real(real32) stat, real(real32) p, real(real32) dof, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] x1 An N-element array containing the first data set.
+    !! @param[in] x2 An N-element array containing the second data set.
+    !! @param[out] stat The Student-'s T-Test statistic.
+    !! @param[out] p The probability value that the two samples are likely to
+    !!  have come from the same two underlying populations that have the same
+    !!  mean.
+    !! @param[out] dof The degrees of freedom.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p x1 and @p x2 are not the same length.
+    interface t_test_paired
+        module procedure :: t_test_paired_real64
+        module procedure :: t_test_paired_real32
+    end interface
+
+    !> Computes the F-test and returns the probability (two-tailed) that the
+    !! variances of two data sets are not significantly different.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine f_test(real(real64) x1(:), real(real64) x2(:), real(real64) stat, real(real64) p, real(real64) dof1, real(real64) dof2)
+    !! subroutine f_test(real(real32) x1(:), real(real32) x2(:), real(real32) stat, real(real32) p, real(real32) dof1, real(real32) dof2)
+    !! @endcode
+    !!
+    !! @param[in] x1 An N-element array containing the first data set.
+    !! @param[in] x2 An M-element array containing the second data set.
+    !! @param[out] stat The F-Test statistic.
+    !! @param[out] p The probability value that the two data sets have an 
+    !!  equivalent variance.
+    !! @param[out] dof1 The degrees of freedom of the first data set.
+    !! @param[out] dof2 The degrees of freedom of the second data set.
+    interface f_test
+        module procedure :: f_test_real64
+        module procedure :: f_test_real32
+    end interface
+
+    !> Performs an analysis of variance (ANOVA) on the supplied data set.
+    !!
+    !! @par Syntax - Single-Factor ANOVA
+    !! @code{.f90}
+    !! type(single_factor_anova_table) function anova(real(real64) x(:,:))
+    !! @endcode
+    !!
+    !! @param[in] x An M-by-N matrix containing the M replications of the N test 
+    !!  points of interest.
+    !! @return A @ref single_factor_anova_table instance containing the ANOVA
+    !!  results.
+    !!
+    !! @par Syntax - Two-Factor ANOVA
+    !! @code{.f90}
+    !! type(two_factor_anova_table) function anova(real(real64) x(:,:,:))
+    !! @endcode
+    !!
+    !! @param[in] x An M-by-N-by-K array containing the M replications of the
+    !!  N first factor results, and the K second factor results.
+    !! @return A @ref two_factor_anova_table instance containing the ANOVA
+    !!  results.
+    !!
+    !! @par Syntax - Model Fit ANOVA
+    !! @code{.f90}
+    !! type(single_factor_anova_table) function anova(integer(int32) nmodelparams, real(real64) ymeas(:), real(real64) ymod(:), optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] nmodelparams: The number of model parameters.
+    !! @param[in] ymeas An N-element array containing the measured dependent
+    !!  variable data.
+    !! @param[in] ymod An N-element array containing the modeled dependent 
+    !!  variable data.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p ymeas and @p ymod are not the same 
+    !!      length.
+    !! - ML_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! @return A @ref single_factor_anova_table instance containing the ANOVA
+    !!  results.
+    interface anova
+        module procedure :: anova_1_factor
+        module procedure :: anova_2_factor
+        module procedure :: anova_model_fit
+    end interface
+
+    !> Computes the confidence interval for the specified distribution.
+    !!
+    !! @par Syntax Option 1
+    !! @code{.f90}
+    !! real(real64) function confidence_interval(class(distribution) dist, real(real64) alpha, real(real64) s, integer(int32) n)
+    !! real(real32) function confidence_interval(class(distribution) dist, real(real32) alpha, real(real64) s, integer(int32) n)
+    !! @endcode
+    !!
+    !! @param[in] dist The @ref distribution object defining the probability
+    !! distribution to establish the confidence level.
+    !! @param[in] alpha The probability value of interest.
+    !! @param[in] s The sample standard deviation.
+    !! @param[in] n The number of samples in the data set.
+    !! @return The confidence interval.
+    !!
+    !! @par Syntax Option 2
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function confidence_interval(class(distribution) dist, real(real64) alpha, real(real64) x(:))
+    !! real(real32) function confidence_interval(class(distribution) dist, real(real32) alpha, real(real32) x(:))
+    !! @endcode
+    !!
+    !! @param[in] dist The @ref distribution object defining the probability
+    !! distribution to establish the confidence level.
+    !! @param[in] alpha The probability value of interest.
+    !! @param[in] x An N-element array containing the data to analyze.
+    !! @return The confidence interval.
+    interface confidence_interval
+        module procedure :: confidence_interval_real64
+        module procedure :: confidence_interval_real32
+        module procedure :: confidence_interval_real64_array
+        module procedure :: confidence_interval_real32_array
+    end interface
+
+    ! statistics_implementation.f90
+    interface
+        pure module function mean_real64(x) result(rst)
+            real(real64), intent(in) :: x(:)
+            real(real64) :: rst
+        end function
+
+        pure module function mean_real32(x) result(rst)
+            real(real32), intent(in) :: x(:)
+            real(real32) :: rst
+        end function
+
+        pure module function variance_real64(x) result(rst)
+            real(real64), intent(in) :: x(:)
+            real(real64) :: rst
+        end function
+
+        pure module function variance_real32(x) result(rst)
+            real(real32), intent(in) :: x(:)
+            real(real32) :: rst
+        end function
+
+        pure module function standard_deviation_real64(x) result(rst)
+            real(real64), intent(in) :: x(:)
+            real(real64) :: rst
+        end function
+
+        pure module function standard_deviation_real32(x) result(rst)
+            real(real32), intent(in) :: x(:)
+            real(real32) :: rst
+        end function
+
+        module function median_real64(x) result(rst)
+            real(real64), intent(inout) :: x(:)
+            real(real64) :: rst
+        end function
+
+        module function median_real32(x) result(rst)
+            real(real32), intent(inout) :: x(:)
+            real(real32) :: rst
+        end function
+
+        module function r_squared_real64(x, xm, err) result(rst)
+            real(real64), intent(in) :: x(:), xm(:)
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: rst
+        end function
+
+        module function r_squared_real32(x, xm, err) result(rst)
+            real(real32), intent(in) :: x(:), xm(:)
+            class(errors), intent(inout), optional, target :: err
+            real(real32) :: rst
+        end function
+
+        module function adjusted_r_squared_real64(p, x, xm, err) result(rst)
+            integer(int32), intent(in) :: p
+            real(real64), intent(in) :: x(:), xm(:)
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: rst
+        end function
+
+        module function adjusted_r_squared_real32(p, x, xm, err) result(rst)
+            integer(int32), intent(in) :: p
+            real(real32), intent(in) :: x(:), xm(:)
+            class(errors), intent(inout), optional, target :: err
+        end function
+
+        pure module function quantile_real64(x, q) result(rst)
+            real(real64), intent(in) :: x(:), q
+            real(real64) :: rst
+        end function
+
+        pure module function quantile_real32(x, q) result(rst)
+            real(real32), intent(in) :: x(:), q
+            real(real32) :: rst
+        end function
+
+        pure module function confidence_interval_real64(dist, alpha, s, n) &
+            result(rst)
+            class(distribution), intent(in) :: dist
+            real(real64), intent(in) :: alpha, s
+            integer(int32), intent(in) :: n
+            real(real64) :: rst
+        end function
+
+        pure module function confidence_interval_real32(dist, alpha, s, n) &
+            result(rst)
+            class(distribution), intent(in) :: dist
+            real(real32), intent(in) :: alpha, s
+            integer(int32), intent(in) :: n
+            real(real32) :: rst
+        end function
+
+        pure module function confidence_interval_real64_array(dist, alpha, x) &
+            result(rst)
+            class(distribution), intent(in) :: dist
+            real(real64), intent(in) :: alpha, x(:)
+            real(real64) :: rst
+        end function
+
+        pure module function confidence_interval_real32_array(dist, alpha, x) &
+            result(rst)
+            class(distribution), intent(in) :: dist
+            real(real32), intent(in) :: alpha, x(:)
+            real(real32) :: rst
+        end function
+    end interface
+
+    ! statistics_tests.f90
+    interface
+        module subroutine t_test_equal_var_real64(x1, x2, stat, p, dof)
+            real(real64), intent(in) :: x1(:), x2(:)
+            real(real64), intent(out) :: stat, p, dof
+        end subroutine
+
+        module subroutine t_test_equal_var_real32(x1, x2, stat, p, dof)
+            real(real32), intent(in) :: x1(:), x2(:)
+            real(real32), intent(out) :: stat, p, dof
+        end subroutine
+
+        module subroutine t_test_unequal_var_real64(x1, x2, stat, p, dof)
+            real(real64), intent(in) :: x1(:), x2(:)
+            real(real64), intent(out) :: stat, p, dof
+        end subroutine
+
+        module subroutine t_test_unequal_var_real32(x1, x2, stat, p, dof)
+            real(real32), intent(in) :: x1(:), x2(:)
+            real(real32), intent(out) :: stat, p, dof
+        end subroutine
+
+        module subroutine t_test_paired_real64(x1, x2, stat, p, dof, err)
+            real(real64), intent(in) :: x1(:), x2(:)
+            real(real64), intent(out) :: stat, p, dof
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine t_test_paired_real32(x1, x2, stat, p, dof, err)
+            real(real32), intent(in) :: x1(:), x2(:)
+            real(real32), intent(out) :: stat, p, dof
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine f_test_real64(x1, x2, stat, p, dof1, dof2)
+            real(real64), intent(in) :: x1(:), x2(:)
+            real(real64), intent(out) :: stat, p, dof1, dof2
+        end subroutine
+
+        module subroutine f_test_real32(x1, x2, stat, p, dof1, dof2)
+            real(real32), intent(in) :: x1(:), x2(:)
+            real(real32), intent(out) :: stat, p, dof1, dof2
+        end subroutine
+    end interface
+
+    ! statistics_anova.f90
+    interface
+        module function anova_1_factor(x) result(rst)
+            real(real64), intent(in) :: x(:,:)
+            type(single_factor_anova_table) :: rst
+        end function
+
+        module function anova_2_factor(x) result(rst)
+            real(real64), intent(in) :: x(:,:,:)
+            type(two_factor_anova_table) :: rst
+        end function
+
+        module function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
+            integer(int32), intent(in) :: nmodelparams
+            real(real64), intent(in) :: ymeas(:), ymod(:)
+            class(errors), intent(inout), optional, target :: err
+            type(single_factor_anova_table) :: rst
+        end function
+    end interface
+
+! ******************************************************************************
+! SPECIAL FUNCTIONS
+! ------------------------------------------------------------------------------
+    !> Computes the beta function.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function beta(real(real64) a, real(real64) b)
+    !! real(real32) function beta(real(real32) a, real(real32) b)
+    !! @endcode
+    !!
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !!
+    !! @return The value of the beta function at @p a and @p b.
+    !!
+    !! @remarks The beta function is related to the gamma function
+    !! by the following relationship \f$ \beta(a,b) = 
+    !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
+    interface beta
+        module procedure :: beta_real64
+        module procedure :: beta_real32
+    end interface
+
+    !> Computes the regularized beta function.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function regularized_beta(real(real64) a, real(real64) b, real(real64) x)
+    !! real(real32) function regularized_beta(real(real32) a, real(real32) b, real(real32) x)
+    !! @endcode
+    !!
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !! @param[in] x The upper limit of the integration.
+    !!
+    !! @return The value of the incomplete beta function.
+    !!
+    !! @remarks The regularized beta function is defined as the ratio between
+    !! the incomplete beta function and the beta function: \f$ I_{x}(a,b) = 
+    !! \frac{\beta(x;a,b)}{\beta(a,b)} \f$.
+    interface regularized_beta
+        module procedure :: regularized_beta_real64
+        module procedure :: regularized_beta_real32
+    end interface
+
+    !> Computes the incomplete beta function.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function incomplete_beta(real(real64) a, real(real64) b, real(real64) x)
+    !! real(real32) function incomplete_beta(real(real32) a, real(real32) b, real(real32) x)
+    !! @endcode
+    !!
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !! @param[in] x The upper limit of the integration.
+    !!
+    !! @return The value of the incomplete beta function.
+    !!
+    !! @remarks The incomplete beta function is defind as \f$ \beta(x;a,b) =
+    !! \int_{0}^{x} t^{a-1} (1 - t)^{b-1} dt \f$.
+    interface incomplete_beta
+        module procedure :: incomplete_beta_real64
+        module procedure :: incomplete_beta_real32
+    end interface
+
+    !> Computes the digamma function \f$ \psi(x) = 
+    !! \frac{d}{dx}\left( \ln \left( \Gamma \left( x \right) \right) 
+    !! \right) \f$.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) function digamma(real(real64) x)
+    !! real(real32) function digamma(real(real32) x)
+    !! @endcode
+    !!
+    !! @param[in] x The value at which to evaluate the function.
+    !! @return The function value.
+    interface digamma
+        module procedure :: digamma_real64
+        module procedure :: digamma_real32
+    end interface
+    
+    !> Computes the "upper" incomplete gamma function 
+    !! \f$ \Gamma(a, x) = \int_{x}^{\infty} t^{a-1} e^{-t} \,dt \f$.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) incomplete_gamma_upper(real(real64) a, real(real64) x)
+    !! real(real32) incomplete_gamma_upper(real(real32) a, real(real32) x)
+    !! @endcode
+    !!
+    !! @param[in] a The coefficient value.
+    !! @param[in] x The value at which to evaluate the function.
+    !! @return The function value.
+    interface incomplete_gamma_upper
+        module procedure :: incomplete_gamma_upper_real64
+        module procedure :: incomplete_gamma_upper_real32
+    end interface
+
+    !> Computes the "lower" incomplete gamma function 
+    !! \f$ \gamma(a, x) = \int_{0}^{x} t^{a-1} e^{-t} \,dt \f$.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! real(real64) incomplete_gamma_lower(real(real64) a, real(real64) x)
+    !! real(real32) incomplete_gamma_lower(real(real32) a, real(real32) x)
+    !! @endcode
+    !!
+    !! @param[in] a The coefficient value.
+    !! @param[in] x The value at which to evaluate the function.
+    !! @return The function value.
+    interface incomplete_gamma_lower
+        module procedure :: incomplete_gamma_lower_real64
+        module procedure :: incomplete_gamma_lower_real32
+    end interface
+
+    ! special_functions_beta.f90
+    interface
+        pure elemental module function beta_real64(a, b) result(rst)
+            real(real64), intent(in) :: a, b
+            real(real64) :: rst
+        end function
+
+        pure elemental module function beta_real32(a, b) result(rst)
+            real(real32), intent(in) :: a, b
+            real(real32) :: rst
+        end function
+
+        pure elemental module function regularized_beta_real64(a, b, x) result(rst)
+            real(real64), intent(in) :: a, b, x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function regularized_beta_real32(a, b, x) result(rst)
+            real(real32), intent(in) :: a, b, x
+            real(real32) :: rst
+        end function
+
+        pure elemental module function incomplete_beta_real64(a, b, x) result(rst)
+            real(real64), intent(in) :: a, b, x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function incomplete_beta_real32(a, b, x) result(rst)
+            real(real32), intent(in) :: a, b, x
+            real(real32) :: rst
+        end function
+    end interface
+
+    ! special_functions_digamma.f90
+    interface
+        pure elemental module function digamma_real64(x) result(rst)
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function digamma_real32(x) result(rst)
+            real(real32), intent(in) :: x
+            real(real32) :: rst
+        end function
+    end interface
+
+    ! special_functions_gamma.f90
+    interface
+        pure elemental module function incomplete_gamma_upper_real64(a, x) &
+            result(rst)
+            real(real64), intent(in) :: a, x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function incomplete_gamma_upper_real32(a, x) &
+            result(rst)
+            real(real32), intent(in) :: a, x
+            real(real32) :: rst
+        end function
+
+        pure elemental module function incomplete_gamma_lower_real64(a, x) &
+            result(rst)
+            real(real64), intent(in) :: a, x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function incomplete_gamma_lower_real32(a, x) &
+            result(rst)
+            real(real32), intent(in) :: a, x
+            real(real32) :: rst
         end function
     end interface
 
