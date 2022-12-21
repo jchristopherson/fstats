@@ -629,8 +629,8 @@ module fstats
     !!  values.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
     !!
     !! @return The result.
     interface r_squared
@@ -652,8 +652,8 @@ module fstats
     !!  values.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
     !!
     !! @return The result.
     interface adjusted_r_squared
@@ -740,8 +740,8 @@ module fstats
     !! @param[out] dof The degrees of freedom.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p x1 and @p x2 are not the same length.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p x1 and @p x2 are not the same length.
     interface t_test_paired
         module procedure :: t_test_paired_real64
         module procedure :: t_test_paired_real32
@@ -802,10 +802,10 @@ module fstats
     !!  variable data.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p ymeas and @p ymod are not the same 
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p ymeas and @p ymod are not the same 
     !!      length.
-    !! - ML_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! @return A @ref single_factor_anova_table instance containing the ANOVA
     !!  results.
     interface anova
@@ -1264,9 +1264,9 @@ module fstats
     !!  @p intercept is false, K must equal order.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p c is not properly sized.
-    !! - ML_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p c is not properly sized.
+    !! - FS_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
     interface coefficient_matrix
         module procedure :: coefficient_matrix_real64
         module procedure :: coefficient_matrix_real32
@@ -1287,10 +1287,10 @@ module fstats
     !! @param[out] c The N-by-N covariance matrix.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not sized
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not sized
     !!      correctly.
-    !! - ML_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
     interface covariance_matrix
         module procedure :: covariance_matrix_real64
         module procedure :: covariance_matrix_real32
@@ -1326,11 +1326,11 @@ module fstats
     !!  confidence interval is calculated.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not approriately
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not approriately
     !!      sized.
-    !! - ML_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
-    !! - ML_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !! - FS_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
     interface linear_least_squares
         module procedure :: linear_least_squares_real64
         module procedure :: linear_least_squares_real32
@@ -1407,8 +1407,8 @@ module fstats
     !! @param[out] n The number of columns for the table.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_INVALID_INPUT_ERROR: Occurs if any items in @p vars are less than 1.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_INVALID_INPUT_ERROR: Occurs if any items in @p vars are less than 1.
     interface get_full_factorial_matrix_size
         module procedure :: get_full_factorial_matrix_size_int32
     end interface
@@ -1430,9 +1430,9 @@ module fstats
     !! size.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
-    !! - ML_NO_ERROR: No errors encountered.
-    !! - ML_INVALID_INPUT_ERROR: Occurs if any items in @p vars are less than 1.
-    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p tbl is not properly sized.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_INVALID_INPUT_ERROR: Occurs if any items in @p vars are less than 1.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p tbl is not properly sized.
     interface full_factorial
         module procedure :: full_factorial_int32
     end interface
