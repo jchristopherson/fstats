@@ -1389,5 +1389,68 @@ module fstats
         end subroutine
     end interface
 
+! ******************************************************************************
+! EXPERIMENTAL DESIGN
+! ------------------------------------------------------------------------------
+    !> Computes the appropriate size for a full-factorial design table.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! get_full_factorial_matrix_size(integer(int32) vars(:), integer(int32) m, integer(int32) n, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] vars An M-element array containing the M factors to study.  
+    !! Each of the M entries to the array is expected to contain the number of
+    !! options for that particular factor to explore.  This value must be 
+    !! greater than or equal to 1.
+    !! @param[out] m The number of rows for the table.
+    !! @param[out] n The number of columns for the table.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_INVALID_INPUT_ERROR: Occurs if any items in @p vars are less than 1.
+    interface get_full_factorial_matrix_size
+        module procedure :: get_full_factorial_matrix_size_int32
+    end interface
+
+    !> Computes a table with values scaled from 1 to N describing a 
+    !! full-factorial design.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! full_factorial(integer(int32) vars(:), integer(int32) tbl(:,:), optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] vars An M-element array containing the M factors to study.  
+    !! Each of the M entries to the array is expected to contain the number of
+    !! options for that particular factor to explore.  This value must be 
+    !! greater than or equal to 1.
+    !! @param[out] tbl A table where the design will be written.  Use 
+    !! @ref get_full_factorial_matrix_size to determine the appropriate table
+    !! size.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_INVALID_INPUT_ERROR: Occurs if any items in @p vars are less than 1.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p tbl is not properly sized.
+    interface full_factorial
+        module procedure :: full_factorial_int32
+    end interface
+
+    ! experimental_design_implementation.f90
+    interface
+        module subroutine get_full_factorial_matrix_size_int32(vars, m, n, err)
+            integer(int32), intent(in) :: vars(:)
+            integer(int32), intent(out) :: m, n
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine full_factorial_int32(vars, tbl, err)
+            integer(int32), intent(in) :: vars(:)
+            integer(int32), intent(out) :: tbl(:,:)
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+    end interface
+
 ! ------------------------------------------------------------------------------
 end module
