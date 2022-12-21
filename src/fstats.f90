@@ -37,6 +37,8 @@ module fstats
     public :: covariance_matrix
     public :: linear_least_squares
     public :: regression_statistics
+    public :: get_full_factorial_matrix_size
+    public :: full_factorial
     public :: FS_NO_ERROR
     public :: FS_ARRAY_SIZE_ERROR
 
