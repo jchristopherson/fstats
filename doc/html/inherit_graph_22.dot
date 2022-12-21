@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [label="fstats::t_test_unequal\l_variance",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1t__test__unequal__variance.html",tooltip="Computes the 2-tailed Student's T-Test for two data sets of assumed non-equivalent variances."];
+  Node0 [label="fstats::single_factor\l_anova_table",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfstats_1_1single__factor__anova__table.html",tooltip="Defines a single-factor ANOVA results table."];
 }

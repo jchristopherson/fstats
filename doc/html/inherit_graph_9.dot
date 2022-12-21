@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [label="fstats::f_test",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1f__test.html",tooltip="Computes the F-test and returns the probability (two-tailed) that the variances of two data sets are ..."];
+  Node0 [label="fstats::distribution\l_function",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1distribution__function.html",tooltip=" "];
 }

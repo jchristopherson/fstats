@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [label="fstats::r_squared",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1r__squared.html",tooltip="Computes the R-squared value for a data set."];
+  Node0 [label="fstats::mean",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1mean.html",tooltip="Computes the mean of the values in an array."];
 }

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['interaction_0',['interaction',['../structfstats_1_1two__factor__anova__table.html#ab307772b2bd4e123c1152ba726961730',1,'fstats::two_factor_anova_table']]]
+  ['f_5fstatistic_0',['f_statistic',['../structfstats_1_1anova__factor.html#a63c5d1b3af589a20ab37a661881cb762',1,'fstats::anova_factor']]]
 ];
