@@ -1,4 +1,10 @@
 var searchData=
 [
-  ['normal_5fdistribution_0',['normal_distribution',['../structfstats_1_1normal__distribution.html',1,'fstats']]]
+  ['main_5ffactor_0',['main_factor',['../structfstats_1_1single__factor__anova__table.html#aa0838592590e94244ce5ee97abe3d1e5',1,'fstats::single_factor_anova_table']]],
+  ['main_5ffactor_5f1_1',['main_factor_1',['../structfstats_1_1two__factor__anova__table.html#afb7fe71109729ed225d95f7b791c31c3',1,'fstats::two_factor_anova_table']]],
+  ['main_5ffactor_5f2_2',['main_factor_2',['../structfstats_1_1two__factor__anova__table.html#a97c73008d6e5bca59d41f63572283639',1,'fstats::two_factor_anova_table']]],
+  ['mean_3',['mean',['../interfacefstats_1_1mean.html',1,'fstats::mean'],['../structfstats_1_1distribution.html#a762b384722d04ed1b9a478159a544940',1,'fstats::distribution::mean()'],['../structfstats_1_1t__distribution.html#ad0e1485da3b447a059806a983cc5c243',1,'fstats::t_distribution::mean()'],['../structfstats_1_1normal__distribution.html#a91b8e2647d4d98e8972eaa66215e42e6',1,'fstats::normal_distribution::mean()'],['../structfstats_1_1f__distribution.html#a71cf631927d079a8bc0fc96526c3446e',1,'fstats::f_distribution::mean()']]],
+  ['mean_5fvalue_4',['mean_value',['../structfstats_1_1normal__distribution.html#aaf68d1081b5fafb85f7777f52d28594c',1,'fstats::normal_distribution']]],
+  ['median_5',['median',['../interfacefstats_1_1median.html',1,'fstats::median'],['../structfstats_1_1distribution.html#abbbfa590163a7faddb47eece6d872ade',1,'fstats::distribution::median()'],['../structfstats_1_1t__distribution.html#af7bbf6b3d66111eb243416e656b86364',1,'fstats::t_distribution::median()'],['../structfstats_1_1normal__distribution.html#ab6dd057ebfd1d3ef724152162e89df2f',1,'fstats::normal_distribution::median()'],['../structfstats_1_1f__distribution.html#ab4e7472bd36779a546cb4b063bae1c92',1,'fstats::f_distribution::median()']]],
+  ['mode_6',['mode',['../structfstats_1_1distribution.html#a7d7ef069f5403c38d87b22fb4589434c',1,'fstats::distribution::mode()'],['../structfstats_1_1t__distribution.html#aaa10d611f7f0604e675180ab61262fe9',1,'fstats::t_distribution::mode()'],['../structfstats_1_1normal__distribution.html#a14dca302a1cdc20fcbf016e08e8c347c',1,'fstats::normal_distribution::mode()'],['../structfstats_1_1f__distribution.html#abec73c75837735f2149fd61e6ba4d818',1,'fstats::f_distribution::mode()']]]
 ];

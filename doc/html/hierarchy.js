@@ -16,6 +16,8 @@ var hierarchy =
     [ "fstats::distribution_function", "interfacefstats_1_1distribution__function.html", null ],
     [ "fstats::distribution_property", "interfacefstats_1_1distribution__property.html", null ],
     [ "fstats::f_test", "interfacefstats_1_1f__test.html", null ],
+    [ "fstats::full_factorial", "interfacefstats_1_1full__factorial.html", null ],
+    [ "fstats::get_full_factorial_matrix_size", "interfacefstats_1_1get__full__factorial__matrix__size.html", null ],
     [ "fstats::incomplete_beta", "interfacefstats_1_1incomplete__beta.html", null ],
     [ "fstats::incomplete_gamma_lower", "interfacefstats_1_1incomplete__gamma__lower.html", null ],
     [ "fstats::incomplete_gamma_upper", "interfacefstats_1_1incomplete__gamma__upper.html", null ],

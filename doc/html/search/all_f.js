@@ -1,4 +1,12 @@
 var searchData=
 [
-  ['variance_0',['variance',['../interfacefstats_1_1variance.html',1,'fstats::variance'],['../structfstats_1_1anova__factor.html#a6740ec463a37979cdffc71e083e740d1',1,'fstats::anova_factor::variance()'],['../structfstats_1_1distribution.html#a010cee9937055beef5158486ee51f89a',1,'fstats::distribution::variance()'],['../structfstats_1_1t__distribution.html#ab6d21bd67da28ea87d4781026f8c48d8',1,'fstats::t_distribution::variance()'],['../structfstats_1_1normal__distribution.html#a30e4bc81365b8b22dfaeecf59d38f303',1,'fstats::normal_distribution::variance()'],['../structfstats_1_1f__distribution.html#ad4720e2d442152d0c8dd52b76f605800',1,'fstats::f_distribution::variance()']]]
+  ['t_5fdistribution_0',['t_distribution',['../structfstats_1_1t__distribution.html',1,'fstats']]],
+  ['t_5fstatistic_1',['t_statistic',['../structfstats_1_1regression__statistics.html#af808796255401dc705c1d8e50b96290b',1,'fstats::regression_statistics']]],
+  ['t_5ftest_5fequal_5fvariance_2',['t_test_equal_variance',['../interfacefstats_1_1t__test__equal__variance.html',1,'fstats']]],
+  ['t_5ftest_5fpaired_3',['t_test_paired',['../interfacefstats_1_1t__test__paired.html',1,'fstats']]],
+  ['t_5ftest_5funequal_5fvariance_4',['t_test_unequal_variance',['../interfacefstats_1_1t__test__unequal__variance.html',1,'fstats']]],
+  ['total_5fdof_5',['total_dof',['../structfstats_1_1single__factor__anova__table.html#aa58278a7b01f21137119cc24e367b114',1,'fstats::single_factor_anova_table::total_dof()'],['../structfstats_1_1two__factor__anova__table.html#a3a736fe1e11d4ee62dae903ee1dc25db',1,'fstats::two_factor_anova_table::total_dof()']]],
+  ['total_5fsum_5fof_5fsquares_6',['total_sum_of_squares',['../structfstats_1_1single__factor__anova__table.html#a7a4b7708d458658d33e6196a726c4855',1,'fstats::single_factor_anova_table::total_sum_of_squares()'],['../structfstats_1_1two__factor__anova__table.html#afe16a6364c0ff556c760c84b875faf19',1,'fstats::two_factor_anova_table::total_sum_of_squares()']]],
+  ['total_5fvariance_7',['total_variance',['../structfstats_1_1single__factor__anova__table.html#a37b9760a5fca45a6d878a330b7273753',1,'fstats::single_factor_anova_table::total_variance()'],['../structfstats_1_1two__factor__anova__table.html#a7da30b158ed462d005c633c435dfa3a0',1,'fstats::two_factor_anova_table::total_variance()']]],
+  ['two_5ffactor_5fanova_5ftable_8',['two_factor_anova_table',['../structfstats_1_1two__factor__anova__table.html',1,'fstats']]]
 ];

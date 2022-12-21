@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [label="fstats::quantile",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1quantile.html",tooltip="Computes the specified quantile of a data set using the SAS Method 4 per the paper: http://www...."];
+  Node0 [label="fstats::mean",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1mean.html",tooltip="Computes the mean of the values in an array."];
 }

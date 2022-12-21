@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>fstats: fstats::standard_deviation Interface Reference</title>
+<title>fstats: fstats::full_factorial Interface Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,7 +71,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('interfacefstats_1_1standard__deviation.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('interfacefstats_1_1full__factorial.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -98,27 +98,33 @@ $(document).ready(function(){initNavTree('interfacefstats_1_1standard__deviation
 
 <div class="header">
   <div class="summary">
-<a href="interfacefstats_1_1standard__deviation-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">fstats::standard_deviation Interface Reference</div></div>
+<a href="interfacefstats_1_1full__factorial-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">fstats::full_factorial Interface Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Computes the sample standard deviation of the values in an array.  
- <a href="interfacefstats_1_1standard__deviation.html#details">More...</a></p>
+<p>Computes a table with values scaled from 1 to N describing a full-factorial design.  
+ <a href="interfacefstats_1_1full__factorial.html#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Computes the sample standard deviation of the values in an array. </p>
-<dl class="section user"><dt>Syntax</dt><dd><div class="fragment"><div class="line"><span class="keyword">real(real64) </span><span class="keyword">function </span>standard_deviation(real(real64) x(:))</div>
-<div class="line"><span class="keyword">real(real32) </span><span class="keyword">function </span>standard_deviation(real(real32) x(:))</div>
+<div class="textblock"><p >Computes a table with values scaled from 1 to N describing a full-factorial design. </p>
+<dl class="section user"><dt>Syntax</dt><dd><div class="fragment"><div class="line">full_factorial(<span class="keywordtype">integer(int32)</span> vars(:), <span class="keywordtype">integer(int32)</span> tbl(:,:), <span class="keywordtype">optional</span> <span class="keywordtype">class</span>(errors) err)</div>
 </div><!-- fragment --></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array on which to operate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">vars</td><td>An M-element array containing the M factors to study. <br  />
+ Each of the M entries to the array is expected to contain the number of options for that particular factor to explore. This value must be greater than or equal to 1. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">tbl</td><td>A table where the design will be written. Use <a class="el" href="interfacefstats_1_1get__full__factorial__matrix__size.html">get_full_factorial_matrix_size</a> to determine the appropriate table size. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">err</td><td>A mechanism for communicating errors and warnings to the caller. Possible warning and error codes are as follows.<ul>
+<li>FS_NO_ERROR: No errors encountered.</li>
+<li>FS_INVALID_INPUT_ERROR: Occurs if any items in <code>vars</code> are less than 1.</li>
+<li>FS_ARRAY_SIZE_ERROR: Occurs if <code>tbl</code> is not properly sized. </li>
+</ul>
+</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The result. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00599">599</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l01438">1438</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 </div><hr/>The documentation for this interface was generated from the following file:<ul>
 <li>D:/Code/fstats/src/<a class="el" href="fstats_8f90_source.html">fstats.f90</a></li>
 </ul>
@@ -127,7 +133,7 @@ $(document).ready(function(){initNavTree('interfacefstats_1_1standard__deviation
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>fstats</b></li><li class="navelem"><a class="el" href="interfacefstats_1_1standard__deviation.html">standard_deviation</a></li>
+    <li class="navelem"><b>fstats</b></li><li class="navelem"><a class="el" href="interfacefstats_1_1full__factorial.html">full_factorial</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

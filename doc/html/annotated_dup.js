@@ -14,6 +14,8 @@ var annotated_dup =
       [ "distribution_property", "interfacefstats_1_1distribution__property.html", null ],
       [ "f_distribution", "structfstats_1_1f__distribution.html", "structfstats_1_1f__distribution" ],
       [ "f_test", "interfacefstats_1_1f__test.html", null ],
+      [ "full_factorial", "interfacefstats_1_1full__factorial.html", null ],
+      [ "get_full_factorial_matrix_size", "interfacefstats_1_1get__full__factorial__matrix__size.html", null ],
       [ "incomplete_beta", "interfacefstats_1_1incomplete__beta.html", null ],
       [ "incomplete_gamma_lower", "interfacefstats_1_1incomplete__gamma__lower.html", null ],
       [ "incomplete_gamma_upper", "interfacefstats_1_1incomplete__gamma__upper.html", null ],

@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [label="fstats::incomplete\l_gamma_upper",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1incomplete__gamma__upper.html",tooltip="Computes the \"upper\" incomplete gamma function ."];
+  Node0 [label="fstats::two_factor\l_anova_table",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfstats_1_1two__factor__anova__table.html",tooltip="Defines a two-factor ANOVA results table."];
 }
