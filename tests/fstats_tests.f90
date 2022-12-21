@@ -2,6 +2,7 @@ program tests
     use iso_fortran_env
     use fstats_distribution_tests
     use fstats_statistics_tests
+    use fstats_regression_tests
     implicit none
 
     ! Variables
@@ -61,6 +62,12 @@ program tests
     if (.not.local) overall = .false.
 
     local = incomplete_gamma_test_1()
+    if (.not.local) overall = .false.
+
+    local = coefficient_matrix_test_1()
+    if (.not.local) overall = .false.
+
+    local = regression_test_1()
     if (.not.local) overall = .false.
 
     ! End

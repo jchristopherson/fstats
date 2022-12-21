@@ -33,6 +33,10 @@ module fstats
     public :: digamma
     public :: incomplete_gamma_upper
     public :: incomplete_gamma_lower
+    public :: coefficient_matrix
+    public :: covariance_matrix
+    public :: linear_least_squares
+    public :: regression_statistics
     public :: FS_NO_ERROR
     public :: FS_ARRAY_SIZE_ERROR
 
@@ -41,6 +45,8 @@ module fstats
 ! ------------------------------------------------------------------------------
     integer(int32), parameter :: FS_NO_ERROR = 0
     integer(int32), parameter :: FS_ARRAY_SIZE_ERROR = 10000
+    integer(int32), parameter :: FS_INVALID_INPUT_ERROR = 10001
+    integer(int32), parameter :: FS_OUT_OF_MEMORY_ERROR = 10002
 
 ! ******************************************************************************
 ! DISTRIBUTIONS
@@ -1204,6 +1210,183 @@ module fstats
             real(real32), intent(in) :: a, x
             real(real32) :: rst
         end function
+    end interface
+
+! ******************************************************************************
+! REGRESSION
+! ------------------------------------------------------------------------------
+    !> A container for regression-related statistical information.
+    type regression_statistics
+        !> The standard error for the model coefficient.
+        !!
+        !! \f$ se(\beta_{i}) = \sqrt{\sigma^{2} C_{ii}} \f$
+        real(real64) :: standard_error
+        !> The T-statistic for the model coefficient.
+        !!
+        !! \f$ t_o = \frac{ \beta_{i} }{se(\beta_{i})} \f$
+        real(real64) :: t_statistic
+        !> The probability that the coefficient is not statistically important.
+        !! A statistically important coefficient will have a low probability 
+        !! (p-value), typically 0.05 or lower; however, a p-value of up to ~0.2
+        !! may be acceptable dependent upon the problem.  Typically any p-value
+        !! larger than ~0.2 indicates the parameter is not statistically
+        !! important for the model.
+        !!
+        !! \f$ p = t_{|t_o|, df_{residual}} \f$
+        real(real64) :: probability
+        !> The confidence interval for the parameter at the level determined by
+        !! the regression process.
+        !!
+        !! \f$ c = t_{\alpha, df} se(\beta_{i}) \f$
+        real(real64) :: confidence_interval
+    end type
+
+    !> Computes the coefficient matrix \f$ X \f$ to the linear least-squares 
+    !! regression problem of \f$ X \beta = y \f$, where \f$ X \f$ is the 
+    !! coefficient matrix computed here, \f$ \beta \f$ is the vector of 
+    !! coefficients to be determined, and \f$ y \f$ is the vector of measured 
+    !! dependent variables.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine coefficient_matrix(integer(int32) order, logical intercept, real(real64) x(:), real(real64) c(:,:), optional class(errors) err)
+    !! subroutine coefficient_matrix(integer(int32) order, logical intercept, real(real32) x(:), real(real32) c(:,:), optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] order The order of the equation to fit.  This value must be
+    !!  at least one (linear equation), but can be higher as desired.
+    !! @param[in] intercept Set to true if the intercept is being computed
+    !!  as part of the regression; else, false.
+    !! @param[in] x An N-element array containing the independent variable
+    !!  measurement points.
+    !! @param[out] c An N-by-K matrix where the results will be written.  K
+    !!  must equal order + 1 in the event @p intercept is true; however, if
+    !!  @p intercept is false, K must equal order.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if @p c is not properly sized.
+    !! - ML_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+    interface coefficient_matrix
+        module procedure :: coefficient_matrix_real64
+        module procedure :: coefficient_matrix_real32
+    end interface
+
+    !> Computes the covariance matrix C where 
+    !! \f$ C = \left( X^{T} X \right)^{-1} \f$ where \f$ X \f$ is computed
+    !! by @ref coefficient_matrix.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine covariance_matrix(real(real64) x(:,:), real(real64) c(:,:), optional class(errors) err)
+    !! subroutine covariance_matrix(real(real32) x(:,:), real(real32) c(:,:), optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] x An M-by-N matrix containing the formatted independent data
+    !!  matrix \f$ X \f$ as computed by @ref coefficient_matrix.
+    !! @param[out] c The N-by-N covariance matrix.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not sized
+    !!      correctly.
+    !! - ML_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    interface covariance_matrix
+        module procedure :: covariance_matrix_real64
+        module procedure :: covariance_matrix_real32
+    end interface
+
+    !> Computes a linear least-squares regression to fit a set of data.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine linear_least_squares(integer(int32) order, lobical intercept, real(real64) x(:), real(real64) y(:), real(real64) coeffs(:), real(real64) ymod(:), real(real64) resid, optional type(regression_statistics) stats(:), optional real(real64) alpha, optional class(errors) err)
+    !! subroutine linear_least_squares(integer(int32) order, lobical intercept, real(real32) x(:), real(real32) y(:), real(real32) coeffs(:), real(real32) ymod(:), real(real32) resid, optional type(regression_statistics) stats(:), optional real(real32) alpha, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] order The order of the equation to fit.  This value must be
+    !!  at least one (linear equation), but can be higher as desired.
+    !! @param[in] intercept Set to true if the intercept is being computed
+    !!  as part of the regression; else, false.
+    !! @param[in] x An N-element array containing the independent variable
+    !!  measurement points.
+    !! @param[in] y An N-element array containing the dependent variable
+    !!  measurement points.
+    !! @param[out] coeffs An ORDER+1 element array where the coefficients will
+    !!  be written.
+    !! @param[out] ymod An N-element array where the modeled data will be 
+    !!  written.
+    !! @param[out] resid An N-element array where the residual error data
+    !!  will be written (modeled - actual).
+    !! @param[out] stats An M-element array of @ref regression_statistics items
+    !!  where M = ORDER + 1 when @p intercept is set to true; however, if 
+    !!  @p intercept is set to false, M = ORDER.
+    !! @param[in] alpha The significance level at which to evaluate the
+    !!  confidence intervals.  The default value is 0.05 such that a 95% 
+    !!  confidence interval is calculated.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - ML_NO_ERROR: No errors encountered.
+    !! - ML_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not approriately
+    !!      sized.
+    !! - ML_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+    !! - ML_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    interface linear_least_squares
+        module procedure :: linear_least_squares_real64
+        module procedure :: linear_least_squares_real32
+    end interface
+
+    ! regression_implementation.f90
+    interface
+        module subroutine coefficient_matrix_real64(order, intercept, x, c, err)
+            integer(int32), intent(in) :: order
+            logical, intent(in) :: intercept
+            real(real64), intent(in) :: x(:)
+            real(real64), intent(out) :: c(:,:)
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine coefficient_matrix_real32(order, intercept, x, c, err)
+            integer(int32), intent(in) :: order
+            logical, intent(in) :: intercept
+            real(real32), intent(in) :: x(:)
+            real(real32), intent(out) :: c(:,:)
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine covariance_matrix_real64(x, c, err)
+            real(real64), intent(in) :: x(:,:)
+            real(real64), intent(out) :: c(:,:)
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine covariance_matrix_real32(x, c, err)
+            real(real32), intent(in) :: x(:,:)
+            real(real32), intent(out) :: c(:,:)
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine linear_least_squares_real64(order, intercept, x, y, &
+            coeffs, ymod, resid, stats, alpha, err)
+            integer(int32), intent(in) :: order
+            logical, intent(in) :: intercept
+            real(real64), intent(in) :: x(:), y(:)
+            real(real64), intent(out) :: coeffs(:), ymod(:), resid(:)
+            type(regression_statistics), intent(out), optional :: stats(:)
+            real(real64), intent(in), optional :: alpha
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine linear_least_squares_real32(order, intercept, x, y, &
+            coeffs, ymod, resid, stats, alpha, err)
+            integer(int32), intent(in) :: order
+            logical, intent(in) :: intercept
+            real(real32), intent(in) :: x(:), y(:)
+            real(real32), intent(out) :: coeffs(:), ymod(:), resid(:)
+            type(regression_statistics), intent(out), optional :: stats(:)
+            real(real32), intent(in), optional :: alpha
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
     end interface
 
 ! ------------------------------------------------------------------------------
