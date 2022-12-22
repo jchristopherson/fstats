@@ -1,0 +1,3 @@
+# Full Factorial Example
+add_executable(full_factorial_example full_factorial_example.f90)
+target_link_libraries(full_factorial_example fstats)
