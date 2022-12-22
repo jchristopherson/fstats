@@ -857,7 +857,9 @@ module fstats
     !!  results.
     !!
     !! @par Example
-    !! The following example illustrates a single-factor ANOVA.
+    !! The following example illustrates a single-factor ANOVA on the following
+    !! data set.
+    !! @image html Single_Factor_ANOVA_Data_Set.png
     !! @code{.f90}
     !! program example
     !!     use iso_fortran_env

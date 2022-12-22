@@ -142,7 +142,10 @@ $(document).ready(function(){initNavTree('interfacefstats_1_1anova.html',''); in
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="structfstats_1_1single__factor__anova__table.html">single_factor_anova_table</a> instance containing the ANOVA results.</dd></dl>
-<dl class="section user"><dt>Example</dt><dd>The following example illustrates a single-factor ANOVA. <div class="fragment"><div class="line"><span class="keyword">program</span> example</div>
+<dl class="section user"><dt>Example</dt><dd>The following example illustrates a single-factor ANOVA on the following data set. <div class="image">
+<img src="Single_Factor_ANOVA_Data_Set.png" alt=""/>
+</div>
+ <div class="fragment"><div class="line"><span class="keyword">program</span> example</div>
 <div class="line">    <span class="keywordtype">use </span>iso_fortran_env</div>
 <div class="line">    <span class="keywordtype">use </span>fstats</div>
 <div class="line">    <span class="keywordtype">implicit none</span></div>
@@ -187,7 +190,7 @@ $(document).ready(function(){initNavTree('interfacefstats_1_1anova.html',''); in
 <div class="line"> </div>
 <div class="line">    print <span class="stringliteral">&#39;(AF6.1)&#39;</span>, <span class="stringliteral">&quot;Overall Mean: &quot;</span>, tbl%overall_mean</div>
 <div class="line"><span class="keyword">end program</span></div>
-<div class="ttc" id="ainterfacefstats_1_1anova_html"><div class="ttname"><a href="interfacefstats_1_1anova.html">fstats::anova</a></div><div class="ttdoc">Performs an analysis of variance (ANOVA) on the supplied data set.</div><div class="ttdef"><b>Definition:</b> <a href="fstats_8f90_source.html#l00926">fstats.f90:926</a></div></div>
+<div class="ttc" id="ainterfacefstats_1_1anova_html"><div class="ttname"><a href="interfacefstats_1_1anova.html">fstats::anova</a></div><div class="ttdoc">Performs an analysis of variance (ANOVA) on the supplied data set.</div><div class="ttdef"><b>Definition:</b> <a href="fstats_8f90_source.html#l00928">fstats.f90:928</a></div></div>
 </div><!-- fragment --> The above program produces the following output. <div class="fragment"><div class="line">Description     DOF     Sum of Sq.      Variance        F-Stat  P-Value</div>
 <div class="line">Main Factor:    1.      352.8           352.8           2.147   0.160</div>
 <div class="line">Within:         18.     2958.2          164.3</div>
@@ -206,7 +209,7 @@ $(document).ready(function(){initNavTree('interfacefstats_1_1anova.html',''); in
 </ul>
 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00926">926</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00928">928</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 </div><hr/>The documentation for this interface was generated from the following file:<ul>
 <li>D:/Code/fstats/src/<a class="el" href="fstats_8f90_source.html">fstats.f90</a></li>
 </ul>
