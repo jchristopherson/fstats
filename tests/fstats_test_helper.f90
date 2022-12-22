@@ -13,6 +13,7 @@ module fstats_test_helper
         module procedure :: is_equal_array_real32
         module procedure :: is_equal_mtx_real64
         module procedure :: is_equal_mtx_real32
+        module procedure :: is_equal_mtx_int32
     end interface
 
 contains
@@ -161,6 +162,32 @@ contains
         do j = 1, n
             do i = 1, m
                 if (abs(x(i,j) - y(i,j)) > t) then
+                    rst = .false.
+                    return
+                end if
+            end do
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function is_equal_mtx_int32(x, y) result(rst)
+        ! Arguments
+        integer(int32), intent(in) :: x(:,:), y(:,:)
+        logical :: rst
+
+        ! Process
+        integer(int32) :: i, j, m, n
+
+        m = size(x, 1)
+        n = size(x, 2)
+        rst = .true.
+        if (size(y, 1) /= m .or. size(y, 2) /= n) then
+            rst = .false.
+            return
+        end if
+        do j = 1, n
+            do i = 1, m
+                if (x(i,j) /= y(i, j)) then
                     rst = .false.
                     return
                 end if

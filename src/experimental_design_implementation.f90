@@ -23,7 +23,7 @@ module subroutine get_full_factorial_matrix_size_int32(vars, m, n, err)
     n = 0
 
     ! Ensure every value is greater than 1
-    do i = 1, nvars
+    do i = 1, size(vars)
         if (vars(i) < 1) then
             write(errmsg, 100) "A value less than 1 was found at index ", &
                 i, " of the input array.  All values must be greater " // &
@@ -36,7 +36,7 @@ module subroutine get_full_factorial_matrix_size_int32(vars, m, n, err)
 
     ! Process
     m = product(vars)
-    n = nvars
+    n = size(vars)
 
     ! Formatting
 100 format(A, I0, A)
