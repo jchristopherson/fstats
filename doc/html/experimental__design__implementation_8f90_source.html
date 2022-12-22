@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('experimental__design__implementation_8
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    n = 0</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment">! Ensure every value is greater than 1</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordflow">do</span> i = 1, nvars</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordflow">do</span> i = 1, <span class="keyword">size</span>(vars)</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keywordflow">if</span> (vars(i) &lt; 1) <span class="keywordflow">then</span></div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keyword">write</span>(errmsg, 100) <span class="stringliteral">&quot;A value less than 1 was found at index &quot;</span>, &amp;</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                i, <span class="stringliteral">&quot; of the input array.  All values must be greater &quot;</span> // &amp;</div>
@@ -138,7 +138,7 @@ $(document).ready(function(){initNavTree('experimental__design__implementation_8
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="comment">! Process</span></div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    m = product(vars)</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    n = nvars</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    n = <span class="keyword">size</span>(vars)</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="comment">! Formatting</span></div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>100 <span class="keyword">format</span>(a, i0, a)</div>
