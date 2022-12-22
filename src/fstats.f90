@@ -581,6 +581,10 @@ module fstats
     !!
     !! @param[in] x The N-element array on which to operate.
     !! @return The result.
+    !!
+    !! @par Remarks
+    !! The variance computed is the sample variance such that the variance
+    !! \f$ s^2 \f$ is computed as \f$ s^2 = \frac{\Sigma \left( x_{i} - \bar{x} \right)^2}{n - 1} \f$.
     interface variance
         module procedure :: variance_real64
         module procedure :: variance_real32
@@ -596,6 +600,11 @@ module fstats
     !!
     !! @param[in] x The N-element array on which to operate.
     !! @return The result.
+    !!
+    !! @par Remarks
+    !! The variance computed is the sample standard deviation such that the 
+    !! standard deviation \f$ s \f$ is computed as 
+    !! \f$ s = \sqrt{ \frac{\Sigma \left( x_{i} - \bar{x} \right)^2}{n - 1} } \f$.
     interface standard_deviation
         module procedure :: standard_deviation_real64
         module procedure :: standard_deviation_real32
@@ -635,6 +644,16 @@ module fstats
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
     !!
     !! @return The result.
+    !!
+    !! @par Remarks
+    !! The R-squared value is computed by determining the sum of the squares
+    !! of the residuals: \f$ SS_{res} = \Sigma \left( y_i - f_i \right)^2 \f$,
+    !! and the total sum of the squares: 
+    !! \f$ SS_{tot} = \Sigma \left( y_i - \bar{y} \right)^2 \f$.  The R-squared
+    !! value is then: \f$ R^2 = 1 - \frac{SS_{res}}{SS_{tot}} \f$.
+    !!
+    !! @par See Also:
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2)
     interface r_squared
         module procedure :: r_squared_real64
         module procedure :: r_squared_real32
@@ -658,14 +677,23 @@ module fstats
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p x and @p xm are not the same size.
     !!
     !! @return The result.
+    !!
+    !! @par
+    !! The adjusted R-squared provides a mechanism for tempering the effects
+    !! of extra explanatory variables on the traditional R-squared calculation.
+    !! It is computed by noting the sample size \f$ n \f$ and the number of
+    !! variables \f$ p \f$: 
+    !! \f$ \bar{R}^2 = 1 - \left( 1 - R^2 \right) \frac{n - 1}{n - p} \f$.
+    !!
+    !! @par See Also:
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2)
+    !! - @ref r_squared
     interface adjusted_r_squared
         module procedure :: adjusted_r_squared_real64
         module procedure :: adjusted_r_squared_real32
     end interface
 
-    !> Computes the specified quantile of a data set using the SAS Method 4 per
-    !! the paper:
-    !! http://www.haiweb.org/medicineprices/manual/quartiles_iTSS.pdf
+    !> Computes the specified quantile of a data set using the SAS Method 4.
     !!
     !! @par Syntax
     !! @code{.f90}
@@ -678,6 +706,9 @@ module fstats
     !!  quantile).
     !!
     !! @return The result.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Quantile)
     interface quantile
         module procedure :: quantile_real64
         module procedure :: quantile_real32
@@ -699,6 +730,9 @@ module fstats
     !!  have come from the same two underlying populations that have the same
     !!  mean.
     !! @param[out] dof The degrees of freedom.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-test)
     interface t_test_equal_variance
         module procedure :: t_test_equal_var_real64
         module procedure :: t_test_equal_var_real32
@@ -720,6 +754,9 @@ module fstats
     !!  have come from the same two underlying populations that have the same
     !!  mean.
     !! @param[out] dof The degrees of freedom.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-test)
     interface t_test_unequal_variance
         module procedure :: t_test_unequal_var_real64
         module procedure :: t_test_unequal_var_real32
@@ -744,6 +781,9 @@ module fstats
     !!  to the caller.  Possible warning and error codes are as follows.
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p x1 and @p x2 are not the same length.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-test)
     interface t_test_paired
         module procedure :: t_test_paired_real64
         module procedure :: t_test_paired_real32
@@ -765,6 +805,9 @@ module fstats
     !!  equivalent variance.
     !! @param[out] dof1 The degrees of freedom of the first data set.
     !! @param[out] dof2 The degrees of freedom of the second data set.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/F-test)
     interface f_test
         module procedure :: f_test_real64
         module procedure :: f_test_real32
@@ -810,6 +853,13 @@ module fstats
     !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! @return A @ref single_factor_anova_table instance containing the ANOVA
     !!  results.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Analysis_of_variance)
+    !! - [SPC Excel Single Factor ANOVA](https://www.spcforexcel.com/knowledge/root-cause-analysis/single-factor-anova)
+    !! - [SPC Excel Gage R&R](https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1)
+    !! - [SPC Excel Understanding Regression Statistics](https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1)
+    !! - [NIST - Two Way ANOVA](https://www.itl.nist.gov/div898/handbook/prc/section4/prc427.htm)
     interface anova
         module procedure :: anova_1_factor
         module procedure :: anova_2_factor
@@ -843,6 +893,9 @@ module fstats
     !! @param[in] alpha The probability value of interest.
     !! @param[in] x An N-element array containing the data to analyze.
     !! @return The confidence interval.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Confidence_interval)
     interface confidence_interval
         module procedure :: confidence_interval_real64
         module procedure :: confidence_interval_real32
@@ -956,10 +1009,7 @@ module fstats
             real(real32), intent(in) :: alpha, x(:)
             real(real32) :: rst
         end function
-    end interface
-
-    ! statistics_tests.f90
-    interface
+        
         module subroutine t_test_equal_var_real64(x1, x2, stat, p, dof)
             real(real64), intent(in) :: x1(:), x2(:)
             real(real64), intent(out) :: stat, p, dof
@@ -1001,10 +1051,7 @@ module fstats
             real(real32), intent(in) :: x1(:), x2(:)
             real(real32), intent(out) :: stat, p, dof1, dof2
         end subroutine
-    end interface
-
-    ! statistics_anova.f90
-    interface
+        
         module function anova_1_factor(x) result(rst)
             real(real64), intent(in) :: x(:,:)
             type(single_factor_anova_table) :: rst
@@ -1042,6 +1089,9 @@ module fstats
     !! @remarks The beta function is related to the gamma function
     !! by the following relationship \f$ \beta(a,b) = 
     !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Beta_function)
     interface beta
         module procedure :: beta_real64
         module procedure :: beta_real32
@@ -1064,6 +1114,9 @@ module fstats
     !! @remarks The regularized beta function is defined as the ratio between
     !! the incomplete beta function and the beta function: \f$ I_{x}(a,b) = 
     !! \frac{\beta(x;a,b)}{\beta(a,b)} \f$.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Beta_function)
     interface regularized_beta
         module procedure :: regularized_beta_real64
         module procedure :: regularized_beta_real32
@@ -1085,6 +1138,9 @@ module fstats
     !!
     !! @remarks The incomplete beta function is defind as \f$ \beta(x;a,b) =
     !! \int_{0}^{x} t^{a-1} (1 - t)^{b-1} dt \f$.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Beta_function#Incomplete_beta_function)
     interface incomplete_beta
         module procedure :: incomplete_beta_real64
         module procedure :: incomplete_beta_real32
@@ -1102,6 +1158,9 @@ module fstats
     !!
     !! @param[in] x The value at which to evaluate the function.
     !! @return The function value.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Digamma_function)
     interface digamma
         module procedure :: digamma_real64
         module procedure :: digamma_real32
@@ -1119,6 +1178,9 @@ module fstats
     !! @param[in] a The coefficient value.
     !! @param[in] x The value at which to evaluate the function.
     !! @return The function value.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Incomplete_gamma_function)
     interface incomplete_gamma_upper
         module procedure :: incomplete_gamma_upper_real64
         module procedure :: incomplete_gamma_upper_real32
@@ -1136,6 +1198,9 @@ module fstats
     !! @param[in] a The coefficient value.
     !! @param[in] x The value at which to evaluate the function.
     !! @return The function value.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Incomplete_gamma_function)
     interface incomplete_gamma_lower
         module procedure :: incomplete_gamma_lower_real64
         module procedure :: incomplete_gamma_lower_real32
@@ -1269,6 +1334,9 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p c is not properly sized.
     !! - FS_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
     interface coefficient_matrix
         module procedure :: coefficient_matrix_real64
         module procedure :: coefficient_matrix_real32
@@ -1293,6 +1361,10 @@ module fstats
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not sized
     !!      correctly.
     !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Covariance_matrix)
+    !! - [Wikipedia - Regression](https://en.wikipedia.org/wiki/Linear_regression)
     interface covariance_matrix
         module procedure :: covariance_matrix_real64
         module procedure :: covariance_matrix_real32
@@ -1333,6 +1405,10 @@ module fstats
     !!      sized.
     !! - FS_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
     !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !!
+    !! @par See Also
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
+    !! - [SPC Excel Understanding Regression Statistics](https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1)
     interface linear_least_squares
         module procedure :: linear_least_squares_real64
         module procedure :: linear_least_squares_real32
