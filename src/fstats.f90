@@ -41,6 +41,8 @@ module fstats
     public :: full_factorial
     public :: FS_NO_ERROR
     public :: FS_ARRAY_SIZE_ERROR
+    public :: FS_INVALID_INPUT_ERROR
+    public :: FS_OUT_OF_MEMORY_ERROR
 
 ! ******************************************************************************
 ! ERROR CODES
@@ -1474,7 +1476,7 @@ module fstats
     !!
     !! @par Syntax
     !! @code{.f90}
-    !! get_full_factorial_matrix_size(integer(int32) vars(:), integer(int32) m, integer(int32) n, optional class(errors) err)
+    !! subroutine get_full_factorial_matrix_size(integer(int32) vars(:), integer(int32) m, integer(int32) n, optional class(errors) err)
     !! @endcode
     !!
     !! @param[in] vars An M-element array containing the M factors to study.  
@@ -1496,7 +1498,7 @@ module fstats
     !!
     !! @par Syntax
     !! @code{.f90}
-    !! full_factorial(integer(int32) vars(:), integer(int32) tbl(:,:), optional class(errors) err)
+    !! subroutine full_factorial(integer(int32) vars(:), integer(int32) tbl(:,:), optional class(errors) err)
     !! @endcode
     !!
     !! @param[in] vars An M-element array containing the M factors to study.  
@@ -1511,6 +1513,62 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_INVALID_INPUT_ERROR: Occurs if any items in @p vars are less than 1.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p tbl is not properly sized.
+    !!
+    !! @par Example
+    !! The following example illustrates how to construct a full-factorial 
+    !! design consisting of 3 distinct factors with different design options for
+    !! each factor.
+    !! @code{.f90}
+    !! program example
+    !!     use iso_fortran_env
+    !!     use fstats
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     integer(int32) :: i, vars(3), tbl(24, 3)
+    !!
+    !!     ! Define the number of design points for each of the 3 factors to study
+    !!     vars = [2, 4, 3]
+    !!
+    !!     ! Determine the design table
+    !!     call full_factorial(vars, tbl)
+    !!
+    !!     ! Display the table
+    !!     do i = 1, size(tbl, 1)
+    !!         print *, tbl(i,:)
+    !!     end do
+    !! end program
+    !! @endcode
+    !! The above program produces the following output.
+    !! @code{.txt}
+    !! 1           1           1
+    !! 1           1           2
+    !! 1           1           3
+    !! 1           2           1
+    !! 1           2           2
+    !! 1           2           3
+    !! 1           3           1
+    !! 1           3           2
+    !! 1           3           3
+    !! 1           4           1
+    !! 1           4           2
+    !! 1           4           3
+    !! 2           1           1
+    !! 2           1           2
+    !! 2           1           3
+    !! 2           2           1
+    !! 2           2           2
+    !! 2           2           3
+    !! 2           3           1
+    !! 2           3           2
+    !! 2           3           3
+    !! 2           4           1
+    !! 2           4           2
+    !! 2           4           3
+    !! @endcode
+    !! The resulting table is simply integer values representing each design
+    !! point.  It is up to the user to associate these integer values with
+    !! meaningful design parameters.
     interface full_factorial
         module procedure :: full_factorial_int32
     end interface
