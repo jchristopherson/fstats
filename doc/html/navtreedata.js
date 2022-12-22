@@ -25,6 +25,10 @@
 var NAVTREE =
 [
   [ "fstats", "index.html", [
+    [ "Introduction", "index.html#intro_sec", null ],
+    [ "Modules", "namespaces.html", [
+      [ "Modules List", "namespaces.html", "namespaces_dup" ]
+    ] ],
     [ "Data Types List", "annotated.html", [
       [ "Data Types List", "annotated.html", "annotated_dup" ],
       [ "Data Types", "classes.html", null ],

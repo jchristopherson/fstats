@@ -1,6 +1,6 @@
 var annotated_dup =
 [
-    [ "fstats", null, [
+    [ "fstats", "namespacefstats.html", [
       [ "adjusted_r_squared", "interfacefstats_1_1adjusted__r__squared.html", null ],
       [ "anova", "interfacefstats_1_1anova.html", null ],
       [ "anova_factor", "structfstats_1_1anova__factor.html", "structfstats_1_1anova__factor" ],

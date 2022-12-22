@@ -10,7 +10,6 @@
 !! @par Regression Example
 !! The following example illustrates fitting a cubic polynomial to a set 
 !! of data points.
-!! @image html Polynomial_Data_Set.png
 !! @code{.f90}
 !! program example
 !!     use iso_fortran_env
