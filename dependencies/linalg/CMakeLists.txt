@@ -17,6 +17,7 @@ else()
     FetchContent_Declare(
         linalg
         GIT_REPOSITORY "https://github.com/jchristopherson/linalg"
+        OVERRIDE_FIND_PACKAGE
     )
 
     FetchContent_MakeAvailable(linalg)
@@ -32,7 +33,7 @@ else()
         endif()
     endif()
     
-    set(ferror_INCLUDE_DIR ${linalg_BINARY_DIR}/include)
+    set(linalg_INCLUDE_DIR ${linalg_BINARY_DIR}/include)
 endif()
 
 # Make a parent-scope variable for the library
