@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(
     fstats
-    LANGUAGES Fortran C
+    LANGUAGES Fortran
     VERSION 1.0.0
 )
 
