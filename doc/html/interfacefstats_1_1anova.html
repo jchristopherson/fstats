@@ -142,6 +142,61 @@ $(document).ready(function(){initNavTree('interfacefstats_1_1anova.html',''); in
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="structfstats_1_1single__factor__anova__table.html">single_factor_anova_table</a> instance containing the ANOVA results.</dd></dl>
+<dl class="section user"><dt>Example</dt><dd>The following example illustrates a single-factor ANOVA. <div class="fragment"><div class="line"><span class="keyword">program</span> example</div>
+<div class="line">    <span class="keywordtype">use </span>iso_fortran_env</div>
+<div class="line">    <span class="keywordtype">use </span>fstats</div>
+<div class="line">    <span class="keywordtype">implicit none</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">! Local Variables</span></div>
+<div class="line">    <span class="keywordtype">character</span>, <span class="keywordtype">parameter</span> :: tab = achar(9)</div>
+<div class="line"><span class="keywordtype">    real</span>(real64) :: x(10, 2)</div>
+<div class="line">    <span class="keywordtype">type</span>(single_factor_anova_table) :: tbl</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">! Define the data</span></div>
+<div class="line">    x = reshape( &amp;</div>
+<div class="line">        [ &amp;</div>
+<div class="line">            3.086d3, 3.082d3, 3.069d3, 3.072d3, 3.045d3, 3.070d3, 3.079d3, &amp;</div>
+<div class="line">            3.050d3, 3.062d3, 3.062d3, 3.075d3, 3.061d3, 3.063d3, 3.038d3, &amp;</div>
+<div class="line">            3.070d3, 3.062d3, 3.070d3, 3.049d3, 3.042d3, 3.063d3 &amp;</div>
+<div class="line">        ], &amp;</div>
+<div class="line">        [10, 2] &amp;</div>
+<div class="line">    )</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">! Perform the ANOVA</span></div>
+<div class="line">    tbl = <a class="code hl_interface" href="interfacefstats_1_1anova.html">anova</a>(x)</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">! Print out the table</span></div>
+<div class="line">    print <span class="stringliteral">&#39;(A)&#39;</span>, <span class="stringliteral">&quot;Description&quot;</span> // tab // <span class="stringliteral">&quot;DOF&quot;</span> // tab // <span class="stringliteral">&quot;Sum of Sq.&quot;</span> // &amp;</div>
+<div class="line">        tab // <span class="stringliteral">&quot;Variance&quot;</span> // tab // <span class="stringliteral">&quot;F-Stat&quot;</span> // tab // <span class="stringliteral">&quot;P-Value&quot;</span></div>
+<div class="line">    print <span class="stringliteral">&#39;(AF2.0AF5.1AF5.1AF5.3AF5.3)&#39;</span>, <span class="stringliteral">&quot;Main Factor: &quot;</span> // tab, &amp;</div>
+<div class="line">        tbl%main_factor%dof, tab, &amp;</div>
+<div class="line">        tbl%main_factor%sum_of_squares, tab // tab, &amp;</div>
+<div class="line">        tbl%main_factor%variance, tab // tab, &amp;</div>
+<div class="line">        tbl%main_factor%f_statistic, tab, &amp;</div>
+<div class="line">        tbl%main_factor%probability</div>
+<div class="line"> </div>
+<div class="line">    print <span class="stringliteral">&#39;(AF3.0AF6.1AF5.1)&#39;</span>, <span class="stringliteral">&quot;Within: &quot;</span> // tab, &amp;</div>
+<div class="line">        tbl%within_factor%dof, tab, &amp;</div>
+<div class="line">        tbl%within_factor%sum_of_squares, tab // tab, &amp;</div>
+<div class="line">        tbl%within_factor%variance</div>
+<div class="line"> </div>
+<div class="line">    print <span class="stringliteral">&#39;(AF3.0AF6.1AF5.1)&#39;</span>, <span class="stringliteral">&quot;Total: &quot;</span> // tab // tab, &amp;</div>
+<div class="line">        tbl%total_dof, tab, &amp;</div>
+<div class="line">        tbl%total_sum_of_squares, tab // tab, &amp;</div>
+<div class="line">        tbl%total_variance</div>
+<div class="line"> </div>
+<div class="line">    print <span class="stringliteral">&#39;(AF6.1)&#39;</span>, <span class="stringliteral">&quot;Overall Mean: &quot;</span>, tbl%overall_mean</div>
+<div class="line"><span class="keyword">end program</span></div>
+<div class="ttc" id="ainterfacefstats_1_1anova_html"><div class="ttname"><a href="interfacefstats_1_1anova.html">fstats::anova</a></div><div class="ttdoc">Performs an analysis of variance (ANOVA) on the supplied data set.</div><div class="ttdef"><b>Definition:</b> <a href="fstats_8f90_source.html#l00926">fstats.f90:926</a></div></div>
+</div><!-- fragment --> The above program produces the following output. <div class="fragment"><div class="line">Description     DOF     Sum of Sq.      Variance        F-Stat  P-Value</div>
+<div class="line">Main Factor:    1.      352.8           352.8           2.147   0.160</div>
+<div class="line">Within:         18.     2958.2          164.3</div>
+<div class="line">Total:          19.     3311.0          174.3</div>
+<div class="line">Overall Mean: 3063.5</div>
+</div><!-- fragment --> For comparison, the output from <a href="https://jasp-stats.org/">JASP</a> on the same data set is as follows. <div class="image">
+<img src="Single_Factor_ANOVA_JASP_Output.png" alt=""/>
+</div>
+</dd></dl>
 <dl class="section user"><dt>See Also</dt><dd><ul>
 <li><a href="https://en.wikipedia.org/wiki/Analysis_of_variance">Wikipedia</a></li>
 <li><a href="https://www.spcforexcel.com/knowledge/root-cause-analysis/single-factor-anova">SPC Excel Single Factor ANOVA</a></li>
@@ -151,7 +206,7 @@ $(document).ready(function(){initNavTree('interfacefstats_1_1anova.html',''); in
 </ul>
 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00865">865</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00926">926</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 </div><hr/>The documentation for this interface was generated from the following file:<ul>
 <li>D:/Code/fstats/src/<a class="el" href="fstats_8f90_source.html">fstats.f90</a></li>
 </ul>
