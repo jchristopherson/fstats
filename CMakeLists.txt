@@ -6,9 +6,6 @@ project(
     VERSION 1.0.0
 )
 
-# Utilize the GNU directory structure
-include(GNUInstallDirs)
-
 # Get helper macros and functions
 include("${PROJECT_SOURCE_DIR}/cmake/helper.cmake")
 
@@ -40,10 +37,10 @@ link_library(${PROJECT_NAME} ${linalg_LIBRARY} ${linalg_INCLUDE_DIR})
 add_subdirectory(install)
 
 # Testing
-option(BUILD_FSTATS_TESTING "Build tests")
+option(BUILD_TESTING "Build tests")
 include(CTest)
-message(STATUS "Build tests: ${BUILD_FSTATS_TESTING}")
-if (BUILD_FSTATS_TESTING)
+message(STATUS "Build tests: ${BUILD_TESTING}")
+if (BUILD_TESTING)
     enable_testing()
     add_subdirectory(tests)
 endif()

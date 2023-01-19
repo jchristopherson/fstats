@@ -34,6 +34,11 @@ else()
     endif()
     
     set(linalg_INCLUDE_DIR ${linalg_BINARY_DIR}/include)
+    configure_file(
+        "${linalg_SOURCE_DIR}/include/linalg.h"
+        "${linalg_INCLUDE_DIR}/linalg.h"
+        COPYONLY
+    )
 endif()
 
 # Make a parent-scope variable for the library
