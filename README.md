@@ -8,7 +8,7 @@ FSTATS is a modern Fortran statistical library containing routines for computing
 This library can be built using CMake.  For instructions see [Running CMake](https://cmake.org/runningcmake/).
 
 ## Documentation
-Documentation can be found [here](http://htmlpreview.github.io/?https://github.com/jchristopherson/fstats/blob/master/doc/html/index.html)
+Documentation can be found [here](https://jchristopherson.github.io/fstats/).
 
 ## External Libraries
 Here is a list of external code libraries utilized by this library.
