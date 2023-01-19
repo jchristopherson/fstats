@@ -1,6 +1,9 @@
 # fstats
 FSTATS is a modern Fortran statistical library containing routines for computing basic statistical properties, hypothesis testing, regression, special functions, and even experimental design.
 
+## Status
+[![CMake](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml/badge.svg)](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml)
+
 ## Building FSTATS
 This library can be built using CMake.  For instructions see [Running CMake](https://cmake.org/runningcmake/).
 
