@@ -179,10 +179,13 @@ module fstats
     public :: regression_statistics
     public :: get_full_factorial_matrix_size
     public :: full_factorial
+    public :: regression_function
+    public :: jacobian
     public :: FS_NO_ERROR
     public :: FS_ARRAY_SIZE_ERROR
     public :: FS_INVALID_INPUT_ERROR
     public :: FS_OUT_OF_MEMORY_ERROR
+    public :: FS_UNDERDEFINED_PROBLEM_ERROR
 
 ! ******************************************************************************
 ! ERROR CODES
@@ -191,6 +194,7 @@ module fstats
     integer(int32), parameter :: FS_ARRAY_SIZE_ERROR = 10000
     integer(int32), parameter :: FS_INVALID_INPUT_ERROR = 10001
     integer(int32), parameter :: FS_OUT_OF_MEMORY_ERROR = 10002
+    integer(int32), parameter :: FS_UNDERDEFINED_PROBLEM_ERROR = 10003
 
 ! ******************************************************************************
 ! DISTRIBUTIONS
@@ -1924,5 +1928,49 @@ module fstats
         end subroutine
     end interface
 
+! ******************************************************************************
+! NONLINEAR REGRESSION
+! ------------------------------------------------------------------------------
+    interface
+        subroutine regression_function(xdata, ydata, params, resid, stop)
+            use iso_fortran_env, only : real64
+            real(real64), intent(in), dimension(:) :: xdata, ydata, params
+            real(real64), intent(out), dimension(:) :: resid
+            logical, intent(out) :: stop
+        end subroutine
+        
+        module subroutine regression_jacobian_1(fun, xdata, ydata, params, &
+            jac, stop, f0, f1, step, err)
+            procedure(regression_function), intent(in), pointer :: fun
+            real(real64), intent(in) :: xdata(:), ydata(:), params(:)
+            real(real64), intent(out) :: jac(:,:)
+            logical, intent(out) :: stop
+            real(real64), intent(in), optional, target :: f0(:)
+            real(real64), intent(out), optional, target :: f1(:)
+            real(real64), intent(in), optional :: step
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+    end interface
+
+    !> @brief Computes the Jacobian matrix for a nonlinear regression problem.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine jacobian(pointer procedure(regression_function) fun, real(real64) xdata(:), real(real64) ydata(:), real(real64) params(:), real(real64) jac(:,:), logical stop, optional real(real64) f0(:), optional real(real64) f1(:), optional real(real64) step, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] fun
+    !! @param[in] xdata
+    !! @param[in] ydata
+    !! @param[in] params
+    !! @param[out] jac
+    !! @param[out] stop
+    !! @param[in] f0
+    !! @param[out] f1
+    !! @param[in] step
+    !! @param[in,out] err
+    interface jacobian
+        module procedure :: regression_jacobian_1
+    end interface
 ! ------------------------------------------------------------------------------
 end module

@@ -1045,7 +1045,7 @@ module function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
     allocate(ypack(2 * n), stat = flag)
     if (flag /= 0) then
         write(errmsg, 101) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("qr_factor_real64", &
+        call errmgr%report_error("anova_model_fit", &
             trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
         return
     end if

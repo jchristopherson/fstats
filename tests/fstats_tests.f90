@@ -4,6 +4,7 @@ program tests
     use fstats_statistics_tests
     use fstats_regression_tests
     use fstats_experimental_design_tests
+    use fstats_nonlinear_regression_tests
     implicit none
 
     ! Variables
@@ -76,6 +77,13 @@ program tests
     if (.not.local) overall = .false.
 
     local = full_factorial_test_1()
+    if (.not.local) overall = .false.
+
+    ! Nonlinear Regression
+    local = test_prototype_function_call()
+    if (.not.local) overall = .false.
+
+    local = test_jacobian()
     if (.not.local) overall = .false.
 
     ! End
