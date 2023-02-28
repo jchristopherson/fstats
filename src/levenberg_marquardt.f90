@@ -1,6 +1,7 @@
 submodule (fstats) levenberg_marquardt
 ! REFERENCES:
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
+    use linalg
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, ydata, params, &
@@ -139,11 +140,29 @@ contains
 102     format(A, I0, A)
     end subroutine
 
+! ------------------------------------------------------------------------------
+
 
 ! ******************************************************************************
 ! PRIVATE ROUTINES
 ! ------------------------------------------------------------------------------
-    subroutine jacobian_finite_diff(fun, xdata, ydata, params, f0, jac, f1, stop, step, work)
+    ! Computes the Jacobian matrix via a forward difference.
+    !
+    ! Inputs:
+    ! - fun: The function to evaluate
+    ! - xdata: The independent coordinate data to fit (M-by-1)
+    ! - ydata: The dependent coordinate data to fit (M-by-1)
+    ! - params: The model parameters (N-by-1)
+    ! - f0: The current model estimate (M-by-1)
+    ! - step: The differentiation step size
+    !
+    ! Outputs:
+    ! - jac: The Jacobian matrix (M-by-N)
+    ! - f1: A workspace array for the model output (M-by-1)
+    ! - stop: A flag allowing the user to terminate model execution
+    ! - work: A workspace array for the model parameters (N-by-1)
+    subroutine jacobian_finite_diff(fun, xdata, ydata, params, f0, jac, f1, &
+        stop, step, work)
         ! Arguments
         procedure(regression_function), intent(in), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), params(:)
@@ -171,6 +190,94 @@ contains
 
             jac(:,i) = (f1 - f0) / step
             work(i) = params(i)
+        end do
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Computes a rank-1 update to the Jacobian matrix
+    !
+    ! Inputs:
+    ! - pOld: previous set of parameters (N-by-1)
+    ! - yOld: model evaluation at previous set of parameters (M-by-1)
+    ! - jac: current Jacobian estimate (M-by-N)
+    ! - p: current set of parameters (N-by-1)
+    ! - y: model evaluation at current set of parameters (M-by-1)
+    ! 
+    ! Outputs:
+    ! - jac: updated Jacobian matrix (M-by-N) (dy * dp**T + J)
+    ! - dp: p - pOld (N-by-1)
+    ! - dy: (y - yOld - J * dp) / (dp' * dp) (M-by-1)
+    subroutine broyden_update(pOld, yOld, jac, p, y, dp, dy)
+        ! Arguments
+        real(real64), intent(in) :: pOld(:), yOld(:), p(:), y(:)
+        real(real64), intent(inout) :: jac(:,:)
+        real(real64), intent(out) :: dp(:), dy(:)
+
+        ! Local Variables
+        real(real64) :: h2
+
+        ! Process
+        dp = p - pOld
+        h2 = dot_product(dp, dp)
+        dy = y - yOld - matmul(jac, dp)
+        call recip_mult_array(h2, dy)   ! compute dy / h2
+        call rank1_update(1.0d0, dy, dp, jac)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Updates the Levenberg-Marquardt matrix by either computing a new Jacobian
+    ! matrix or performing a rank-1 update to the existing Jacobian matrix.
+    !
+    ! Inputs:
+    ! - fun: The function to evaluate
+    ! - xdata: The independent coordinate data to fit (M-by-1)
+    ! - ydata: The dependent coordinate data to fit (M-by-1)
+    ! - pOld: previous set of parameters (N-by-1)
+    ! - yOld: model evaluation at previous set of parameters (M-by-1)
+    ! - dX2: The previous change in the Chi-squared criteria
+    ! - jac: current Jacobian estimate (M-by-N)
+    ! - p: current set of parameters (N-by-1)
+    ! - weights: A weighting vector (N-by-1)
+    ! - neval: Current number of function evaluations
+    !
+    ! Outputs:
+    ! - JtWJ: linearized Hessian matrix (inverse of the covariance matrix) (N-by-N)
+    ! - JtWdy: linearized fitting vector (N-by-M)
+    ! - X2: Updated Chi-squared criteria
+    ! - yNew: model evaluated with parameters of p (M-by-1)
+    ! - jac: updated Jacobian matrix (M-by-N)
+    ! - neval: updated count of function evaluations
+    subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, neval, JtwJ, JtWdy, X2, yNew)
+        ! Arguments
+        procedure(regression_function), pointer :: fun
+        real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), p(:), weights(:)
+        real(real64), intent(in) :: dX2
+        real(real64), intent(inout) :: jac(:,:)
+        integer(int32), intent(inout) :: neval
+        real(real64), intent(out) :: JtWJ(:,:), JtWdy(:,:)
+        real(real64), intent(out) :: X2
+
+        ! Local Variables
+
+        ! Process
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Extracts the diagonal (D - MIN(M,N)) from a matrix (X - M-by-N).
+    subroutine extract_diagonal(x, d)
+        ! Arguments
+        real(real64), intent(in) :: x(:,:)
+        real(real64), intent(out) :: d(:)
+
+        ! Local Variables
+        integer(int32) :: i, m, n, mn
+
+        ! Process
+        m = size(x, 1)
+        n = size(x, 2)
+        mn = min(m, n)
+        do i = 1, mn
+            d(i) = x(i,i)
         end do
     end subroutine
 
