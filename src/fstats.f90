@@ -179,6 +179,8 @@ module fstats
     public :: regression_statistics
     public :: get_full_factorial_matrix_size
     public :: full_factorial
+    public :: iteration_controls
+    public :: convergence_info
     public :: regression_function
     public :: jacobian
     public :: FS_NO_ERROR
@@ -186,6 +188,9 @@ module fstats
     public :: FS_INVALID_INPUT_ERROR
     public :: FS_OUT_OF_MEMORY_ERROR
     public :: FS_UNDERDEFINED_PROBLEM_ERROR
+    public :: FS_LEVENBERG_MARQUARDT_UPDATE
+    public :: FS_QUADRATIC_UPDATE
+    public :: FS_NIELSEN_UPDATE
 
 ! ******************************************************************************
 ! ERROR CODES
@@ -195,6 +200,13 @@ module fstats
     integer(int32), parameter :: FS_INVALID_INPUT_ERROR = 10001
     integer(int32), parameter :: FS_OUT_OF_MEMORY_ERROR = 10002
     integer(int32), parameter :: FS_UNDERDEFINED_PROBLEM_ERROR = 10003
+
+! ******************************************************************************
+! CONSTANTS
+! ------------------------------------------------------------------------------
+    integer(int32), parameter :: FS_LEVENBERG_MARQUARDT_UPDATE = 1
+    integer(int32), parameter :: FS_QUADRATIC_UPDATE = 2
+    integer(int32), parameter :: FS_NIELSEN_UPDATE = 3
 
 ! ******************************************************************************
 ! DISTRIBUTIONS
@@ -1931,18 +1943,63 @@ module fstats
 ! ******************************************************************************
 ! NONLINEAR REGRESSION
 ! ------------------------------------------------------------------------------
+    !> @brief Provides a collection of iteration control parameters.
+    type iteration_controls
+        !> Defines the maximum number of iterations allowed.
+        integer(int32) :: max_iteration_count
+        !> Defines the maximum number of function evaluations allowed.
+        integer(int32) :: max_function_evaluations
+        !> Defines a tolerance on the gradient of the fitted function.
+        real(real64) :: gradient_tolerance
+        !> Defines a tolerance on the change in parameter values.
+        real(real64) :: change_in_solution_tolerance
+        !> Defines a tolerance on the metric associated with the residual error.
+        real(real64) :: residual_tolerance
+        !> Defines how many iterations can pass before a re-evaluation of the
+        !! Jacobian matrix is forced.
+        integer(int32) :: max_iteration_between_updates
+    end type
+
+    !> @brief Provides information regarding convergence status.
+    type convergence_info
+        !> True if convergence on the gradient was achieved; else, false.
+        logical :: converge_on_gradient
+        !> The value of the gradient test parameter.
+        real(real64) :: gradient_value
+        !> True if convergence on the change in solution was achieved; else,
+        !! false.
+        logical :: converge_on_solution_change
+        !> The value of the change in solution parameter.
+        real(real64) :: solution_change_value
+        !> True if convergence on the residual error parameter was achieved; 
+        !! else, false.
+        logical :: converge_on_residual_parameter
+        !> The value of the residual error parameter.
+        real(real64) :: residual_value
+        !> True if the solution did not converge in the allowed number of 
+        !! iterations.
+        logical :: reach_iteration_limit
+        !> The iteration count.
+        integer(int32) :: iteration_count
+        !> True if the solution did not converge in the allowed number of
+        !! function evaluations.
+        logical :: reach_function_evaluation_limit
+        !> The function evaluation count.
+        integer(int32) :: function_evaluation_count
+    end type
+
     interface
-        subroutine regression_function(xdata, ydata, params, resid, stop)
+        subroutine regression_function(xdata, params, resid, stop)
             use iso_fortran_env, only : real64
-            real(real64), intent(in), dimension(:) :: xdata, ydata, params
+            real(real64), intent(in), dimension(:) :: xdata, params
             real(real64), intent(out), dimension(:) :: resid
             logical, intent(out) :: stop
         end subroutine
         
-        module subroutine regression_jacobian_1(fun, xdata, ydata, params, &
+        module subroutine regression_jacobian_1(fun, xdata, params, &
             jac, stop, f0, f1, step, err)
             procedure(regression_function), intent(in), pointer :: fun
-            real(real64), intent(in) :: xdata(:), ydata(:), params(:)
+            real(real64), intent(in) :: xdata(:), params(:)
             real(real64), intent(out) :: jac(:,:)
             logical, intent(out) :: stop
             real(real64), intent(in), optional, target :: f0(:)

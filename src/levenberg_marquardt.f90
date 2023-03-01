@@ -4,11 +4,11 @@ submodule (fstats) levenberg_marquardt
     use linalg
 contains
 ! ------------------------------------------------------------------------------
-    module subroutine regression_jacobian_1(fun, xdata, ydata, params, &
+    module subroutine regression_jacobian_1(fun, xdata, params, &
         jac, stop, f0, f1, step, err)
         ! Arguments
         procedure(regression_function), intent(in), pointer :: fun
-        real(real64), intent(in) :: xdata(:), ydata(:), params(:)
+        real(real64), intent(in) :: xdata(:), params(:)
         real(real64), intent(out) :: jac(:,:)
         logical, intent(out) :: stop
         real(real64), intent(in), optional, target :: f0(:)
@@ -40,12 +40,6 @@ contains
         n = size(params)
 
         ! Input Size Checking
-        if (size(ydata) /= m) then
-            actual = size(ydata)
-            expected = m
-            index = 1
-            go to 10
-        end if
         if (size(jac, 1) /= m .or. size(jac, 2) /= n) then
             go to 15
         end if
@@ -64,7 +58,7 @@ contains
             allocate(f0a(m), stat = flag)
             if (flag /= 0) go to 20
             f0p(1:m) => f0a
-            call fun(xdata, ydata, params, f0p, stop)
+            call fun(xdata, params, f0p, stop)
             if (stop) return
         end if
         if (present(f1)) then
@@ -88,7 +82,7 @@ contains
         if (flag /= 0) go to 20
 
         ! Compute the Jacobian
-        call jacobian_finite_diff(fun, xdata, ydata, params, f0p, jac, f1p, &
+        call jacobian_finite_diff(fun, xdata, params, f0p, jac, f1p, &
             stop, h, work)
 
         ! End
@@ -132,7 +126,6 @@ contains
         call errmgr%report_error("regression_jacobian_1", &
             trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
         return
-        return
 
         ! Formatting
 100     format(A, I0, A, I0, A)
@@ -151,7 +144,6 @@ contains
     ! Inputs:
     ! - fun: The function to evaluate
     ! - xdata: The independent coordinate data to fit (M-by-1)
-    ! - ydata: The dependent coordinate data to fit (M-by-1)
     ! - params: The model parameters (N-by-1)
     ! - f0: The current model estimate (M-by-1)
     ! - step: The differentiation step size
@@ -161,11 +153,11 @@ contains
     ! - f1: A workspace array for the model output (M-by-1)
     ! - stop: A flag allowing the user to terminate model execution
     ! - work: A workspace array for the model parameters (N-by-1)
-    subroutine jacobian_finite_diff(fun, xdata, ydata, params, f0, jac, f1, &
+    subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
         stop, step, work)
         ! Arguments
         procedure(regression_function), intent(in), pointer :: fun
-        real(real64), intent(in) :: xdata(:), ydata(:), params(:)
+        real(real64), intent(in) :: xdata(:), params(:)
         real(real64), intent(in) :: f0(:)
         real(real64), intent(out) :: jac(:,:)
         real(real64), intent(out) :: f1(:), work(:)
@@ -185,7 +177,7 @@ contains
         work = params
         do i = 1, n
             work(i) = work(i) + step
-            call fun(xdata, ydata, work, f1, stop)
+            call fun(xdata, work, f1, stop)
             if (stop) return
 
             jac(:,i) = (f1 - f0) / step
@@ -280,14 +272,14 @@ contains
         w2(1:n) => work(m+1:n+m)
 
         ! Perform the next function evaluation
-        call fun(xdata, ydata, p, yNew, stop)
+        call fun(xdata, p, yNew, stop)
         neval = neval + 1
         if (stop) return
 
         ! Update or recompute the Jacobian matrix
         if (dX2 > 0 .or. update) then
             ! Recompute the Jacobian
-            call jacobian_finite_diff(fun, xdata, ydata, p, yNew, jac, w1, &
+            call jacobian_finite_diff(fun, xdata, p, yNew, jac, w1, &
                 stop, step, w2)
             neval = neval + n
             if (stop) return
@@ -398,16 +390,166 @@ contains
         end do
 
         ! Update the residual error
-        call fun(xdata, ydata, pNew, yNew, stop)
+        call fun(xdata, pNew, yNew, stop)
         neval = neval + 1
         deltaY = ydata - yNew
         if (stop) return
 
-        ! TO DO: Ensure deltaY is finite
-
         ! Update the Chi-squared estimate
         X2 = dot_product(deltaY, deltaY * weights)
     end subroutine
+
+! ------------------------------------------------------------------------------
+    ! A Levenberg-Marquardt solver.
+    !
+    ! Inputs:
+    ! - fun: The function to evaluate
+    ! - xdata: The independent coordinate data to fit (M-by-1)
+    ! - ydata: The dependent coordinate data to fit (M-by-1)
+    ! - p: current set of parameters (N-by-1)
+    ! - weights:
+    ! - maxP:
+    ! - minP:
+    ! - controls:
+    !
+    ! Outputs:
+    ! - p:
+    ! - y:
+    ! - resid:
+    !
+    ! - stop:
+    ! - err: An error handling object
+    subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, y, resid, stop, err)
+        ! Arguments
+        procedure(regression_function) :: fun
+        real(real64), intent(in) :: xdata(:), ydata(:), weights(:), maxP(:), &
+            minP(:)
+        real(real64), intent(inout) :: p(:)
+        class(iteration_controls), intent(in) :: controls
+        real(real64), intent(out) :: y(:), resid(:)
+
+        logical, intent(out) :: stop
+        class(errors), intent(inout) :: err
+
+        ! Local Variables
+        integer(int32) :: m, n, flag, neval, niter
+        real(real64), allocatable :: pOld(:), yOld(:), J(:,:), JtWJ(:,:), &
+            JtWdy(:)
+        character(len = :), allocatable :: errmsg
+
+        ! Initialization
+        m = size(xdata)
+        n = size(p)
+        niter = 0
+        stop = .false.
+
+        ! Local Memory Allocation
+        allocate(pOld(n), source = 0.0d0, stat = flag)
+        if (flag == 0) allocate(yOld(m), source = 0.0d0, stat = flag)
+        if (flag == 0) allocate(J(m, n), stat = flag)
+        if (flag == 0) allocate(JtWJ(n, n), stat = flag)
+        if (flag == 0) allocate(JtWdy(n), stat = flag)
+        if (flag /= 0) go to 10
+
+        ! Perform an initial function evaluation
+        call fun(xdata, p, y, stop)
+        neval = 1
+
+        ! Evaluate the problem matrices
+
+
+
+
+
+        ! End
+        return
+
+        ! Memory Error Handling
+10      continue
+        allocate(character(len = 512) :: errmsg)
+        write(errmsg, 100) "Memory allocation error code ", flag, "."
+        call err%report_error("lm_solve", &
+            trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
+        return
+
+        ! Formatting
+100     format(A, I0, A)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Checks the Levenberg-Marquardt solution against the convergence criteria.
+    !
+    ! Inputs:
+    ! - controls: the solution controls and convergence criteria
+    ! - dof: the statistical degrees of freedom of the system (M - N)
+    ! - resid: the residual error (M-by-1)
+    ! - niter: the number of iterations
+    ! - neval: the number of function evaluations
+    ! - JtWdy: linearized fitting vector (N-by-1)
+    ! - h: the change in parameter (solution) values (N-by-1)
+    ! - p: the parameter (solution) values (N-by-1)
+    ! - X2: the Chi-squared estimate
+    !
+    ! Outputs:
+    ! - info: The convergence information.
+    ! - rst: True if convergence was achieved; else, false.
+    function lm_check_convergence(controls, dof, resid, niter, neval, &
+        JtWdy, h, p, X2, info) result(rst)
+        ! Arguments
+        class(iteration_controls), intent(in) :: controls
+        real(real64), intent(in) :: resid(:), JtWdy(:), h(:), p(:), X2
+        integer(int32), intent(in) :: dof, niter, neval
+        class(convergence_info), intent(out) :: info
+        logical :: rst
+
+        ! Initialization
+        rst = .false.
+
+        ! Iteration Checks
+        info%iteration_count = niter
+        if (niter >= controls%max_iteration_count) then
+            info%reach_iteration_limit = .true.
+            rst = .true.
+        else
+            info%reach_iteration_limit = .false.
+        end if
+
+        info%function_evaluation_count = neval
+        if (neval >= controls%max_function_evaluations) then
+            info%reach_function_evaluation_limit = .true.
+            rst = .true.
+        else
+            info%reach_function_evaluation_limit = .false.
+        end if
+
+        info%gradient_value = maxval(abs(JtWdy))
+        if (info%gradient_value < controls%gradient_tolerance .and. niter > 2) &
+        then
+            info%converge_on_gradient = .true.
+            rst = .true.
+        else
+            info%converge_on_gradient = .false.
+        end if
+
+        info%solution_change_value = maxval(abs(h) / (abs(p) + 1.0d-12))
+        if (info%solution_change_value < &
+            controls%change_in_solution_tolerance .and. niter > 2) &
+        then
+            info%converge_on_solution_change = .true.
+            rst = .true.
+        else
+            info%converge_on_solution_change = .false.
+        end if
+
+        info%residual_value = X2 / dof
+        if (info%residual_value < controls%residual_tolerance .and. niter > 2) &
+        then
+            info%converge_on_residual_parameter = .true.
+            rst = .true.
+        else
+            info%converge_on_residual_parameter = .false.
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
     ! Extracts the diagonal (D - MIN(M,N)) from a matrix (X - M-by-N).
