@@ -180,6 +180,7 @@ module fstats
     public :: get_full_factorial_matrix_size
     public :: full_factorial
     public :: iteration_controls
+    public :: lm_solver_options
     public :: convergence_info
     public :: regression_function
     public :: jacobian
@@ -1955,6 +1956,8 @@ module fstats
         real(real64) :: change_in_solution_tolerance
         !> Defines a tolerance on the metric associated with the residual error.
         real(real64) :: residual_tolerance
+        !> Defines a tolerance to ensure adequate improvement on each iteration.
+        real(real64) :: iteration_improvement_tolerance
         !> Defines how many iterations can pass before a re-evaluation of the
         !! Jacobian matrix is forced.
         integer(int32) :: max_iteration_between_updates
@@ -1986,6 +1989,22 @@ module fstats
         logical :: reach_function_evaluation_limit
         !> The function evaluation count.
         integer(int32) :: function_evaluation_count
+    end type
+
+    !> @brief Options to control the Levenberg-Marquardt solver.
+    type lm_solver_options
+        !> The solver method to utilize.
+        !! - FS_LEVENBERG_MARQUARDT_UPDATE:
+        !! - FS_QUADRATIC_UPDATE:
+        !! - FS_NIELSEN_UDPATE:
+        integer(int32) :: method
+        !> The step size used for the finite difference calculations of the
+        !! Jacobian matrix.
+        real(real64) :: finite_difference_step_size
+        !> The factor to use when increasing the damping parameter.
+        real(real64) :: damping_increase_factor
+        !> The factor to use when decreasing the damping parameter.
+        real(real64) :: damping_decrease_factor
     end type
 
     interface

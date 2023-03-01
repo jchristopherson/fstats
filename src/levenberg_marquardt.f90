@@ -363,7 +363,7 @@ contains
         ! Solve the linear system to determine the change in parameters
         ! A is N-by-N and is stored in JtWJ
         ! b is N-by-1
-        if (update == 1) then
+        if (update == FS_LEVENBERG_MARQUARDT_UPDATE) then
             ! Compute: h = A \ b
             ! A = J**T * W * J + lambda * diag(J**T * W * J)
             ! b = J**T * W * dy
@@ -411,44 +411,60 @@ contains
     ! - maxP:
     ! - minP:
     ! - controls:
+    ! - opt:
     !
     ! Outputs:
     ! - p:
     ! - y:
     ! - resid:
+    ! - JtWJ:
     !
     ! - stop:
     ! - err: An error handling object
-    subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, y, resid, stop, err)
+    subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, opt, y, resid, JtWJ, info, stop, err)
         ! Arguments
-        procedure(regression_function) :: fun
+        procedure(regression_function), intent(in), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), weights(:), maxP(:), &
             minP(:)
         real(real64), intent(inout) :: p(:)
         class(iteration_controls), intent(in) :: controls
-        real(real64), intent(out) :: y(:), resid(:)
-
+        class(lm_solver_options), intent(in) :: opt
+        real(real64), intent(out) :: y(:), resid(:), JtWJ(:,:)
+        class(convergence_info), intent(out) :: info
         logical, intent(out) :: stop
         class(errors), intent(inout) :: err
 
         ! Local Variables
-        integer(int32) :: m, n, flag, neval, niter
-        real(real64), allocatable :: pOld(:), yOld(:), J(:,:), JtWJ(:,:), &
-            JtWdy(:)
+        logical :: update
+        integer(int32) :: i, m, n, dof, flag, neval, niter
+        real(real64) :: dX2, X2, X2Old, X2Try, lambda, alpha, dpJh, rho, nu, &
+            step
+        real(real64), allocatable :: pOld(:), yOld(:), J(:,:), JtWdy(:), &
+            work(:), mwork(:,:), pTry(:), yTemp(:), JtWJc(:,:), h(:)
+        integer(int32), allocatable :: iwork(:)
         character(len = :), allocatable :: errmsg
 
         ! Initialization
+        update = .false.
         m = size(xdata)
         n = size(p)
+        dof = m - n
         niter = 0
+        step = opt%finite_difference_step_size
         stop = .false.
 
         ! Local Memory Allocation
         allocate(pOld(n), source = 0.0d0, stat = flag)
         if (flag == 0) allocate(yOld(m), source = 0.0d0, stat = flag)
         if (flag == 0) allocate(J(m, n), stat = flag)
-        if (flag == 0) allocate(JtWJ(n, n), stat = flag)
         if (flag == 0) allocate(JtWdy(n), stat = flag)
+        if (flag == 0) allocate(work(m + n), stat = flag)
+        if (flag == 0) allocate(mwork(n, m), stat = flag)
+        if (flag == 0) allocate(pTry(n), stat = flag)
+        if (flag == 0) allocate(h(m), stat = flag)
+        if (flag == 0) allocate(yTemp(m), stat = flag)
+        if (flag == 0) allocate(JtWJc(n, n), stat = flag)
+        if (flag == 0) allocate(iwork(n), stat = flag)
         if (flag /= 0) go to 10
 
         ! Perform an initial function evaluation
@@ -456,12 +472,123 @@ contains
         neval = 1
 
         ! Evaluate the problem matrices
+        call lm_matrix(fun, xdata, ydata, pOld, yOld, 1.0d0, J, p, weights, &
+            neval, .true., step, JtWJ, JtWdy, X2, y, stop, work, mwork)
+        if (stop) go to 5
+        X2Old = X2
+        JtWJc = JtWJ
 
+        ! Determine an initial value for lambda
+        if (opt%method == FS_LEVENBERG_MARQUARDT_UPDATE) then
+            lambda = 1.0d-2
+        else
+            call extract_diagonal(JtWJ, work(1:n))
+            lambda = 1.0d-2 * maxval(work(1:n))
+            nu = 2.0d0
+        end if
 
+        ! Main Loop
+        main : do while (niter < controls%max_iteration_count)
+            ! Compute the linear solution at the current solution estimate and
+            ! update the new parameter estimates
+            call lm_iter(fun, xdata, ydata, p, neval, niter, opt%method, &
+                lambda, maxP, minP, weights, JtWJc, JtWdy, h, pTry, resid, &
+                yTemp, X2Try, stop, iwork, err)
+            if (stop) go to 5
+            if (err%has_error_occurred()) return
 
+            ! Perform a quadratic line update in the H direction
+            if (opt%method == FS_QUADRATIC_UPDATE) then
+                dpJh = dot_product(JtWdy, h)
+                alpha = dpJh / (0.5d0 * (X2Try - X2) + 2.0d0 * dpJh)
+                h = alpha * h
 
+                do i = 1, n
+                    pTry(i) = min(max(minP(i), p(i) + h(i)), maxP(i))
+                end do
+
+                call fun(xdata, pTry, yTemp, stop)
+                if (stop) go to 5
+                neval = neval + 1
+                resid = ydata - yTemp
+                X2Try = dot_product(resid, resid * weights)
+            end if
+
+            ! Compare the improvement in Chi-squared vs. the theoretical
+            ! improvement of a single LM update
+            if (opt%method == FS_LEVENBERG_MARQUARDT_UPDATE) then
+                call extract_diagonal(JtWJ, work(1:n))
+                work(1:n) = lambda * work(1:n) * h + JtWdy
+            else
+                work(1:n) = lambda * h + JtWdy
+            end if
+            rho = (X2 - X2Try) / abs(dot_product(h, work(1:n)))
+            if (rho > controls%iteration_improvement_tolerance) then
+                ! Things are getting better at an acceptable rate
+                dX2 = X2 - X2Old
+                X2Old = X2
+                pOld = P
+                yOld = y
+                p = pTry
+
+                ! Recompute the matrices
+                call lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, J, p, &
+                    weights, neval, update, step, JtWJ, JtWdy, X2, y, stop, &
+                    work, mwork)
+                if (stop) go to 5
+                JtWJc = JtWJ
+
+                ! Decrease lambda
+                select case (opt%method)
+                case (FS_LEVENBERG_MARQUARDT_UPDATE)
+                    lambda = max(lambda / opt%damping_decrease_factor, 1.0d-7)
+                case (FS_QUADRATIC_UPDATE)
+                    lambda = max(lambda / (1.0d0 + alpha), 1.0d-7)
+                case (FS_NIELSEN_UPDATE)
+                    lambda = lambda * max(1.0d0 / 3.0d0, &
+                        1.0d0 - (2.0d0 * rho - 1.0d0)**3)
+                    nu = 2.0d0
+                end select
+            else
+                ! The iteration is not improving
+                X2 = X2Old
+                if (mod(niter, 2 * n) /= 0) then
+                    ! Force a rank-1 update of the system matrices
+                    call lm_matrix(fun, xdata, ydata, pOld, yOld, -1.0d0, J, &
+                        p, weights, neval, update, step, JtWJ, JtWdy, dX2, &
+                        y, stop, work, mwork)
+                    if (stop) go to 5
+                    JtWJc = JtWJ
+                end if
+
+                ! Increase lambda
+                select case (opt%method)
+                case (FS_LEVENBERG_MARQUARDT_UPDATE)
+                    lambda = min(lambda * opt%damping_increase_factor, 1.0d7)
+                case (FS_QUADRATIC_UPDATE)
+                    lambda = lambda + abs((X2Try - X2) / 2.0d0 / alpha)
+                case (FS_NIELSEN_UPDATE)
+                    lambda = lambda * nu
+                    nu = 2.0d0 * nu
+                end select
+            end if
+
+            ! Determine the matrix update scheme
+            update = mod(niter, 2 * n) > 0
+
+            ! Test for convergence
+            if (lm_check_convergence(controls, dof, resid, niter, neva, &
+                JtWdy, h, p, X2, info)) &
+            then
+                exit main
+            end if
+        end do main
 
         ! End
+        return
+
+        ! User Requested End
+5       continue
         return
 
         ! Memory Error Handling
