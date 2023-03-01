@@ -255,7 +255,7 @@ contains
     ! - work: A workspace array (N+M-by-1)
     ! - mwork: A workspace matrix (N-by-M)
     subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
-        neval, update, step, JtwJ, JtWdy, X2, yNew, stop, work, mwork)
+        neval, update, step, JtWJ, JtWdy, X2, yNew, stop, work, mwork)
         ! Arguments
         procedure(regression_function), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), &
@@ -264,14 +264,14 @@ contains
         real(real64), intent(inout) :: jac(:,:)
         integer(int32), intent(inout) :: neval
         logical, intent(in) :: update
-        real(real64), intent(out) :: JtWJ(:,:), JtWdy(:,:)
-        real(real64), intent(out) :: X2, mwork(:,:)
+        real(real64), intent(out) :: JtWJ(:,:), JtWdy(:)
+        real(real64), intent(out) :: X2, mwork(:,:), yNew(:)
         logical, intent(out) :: stop
         real(real64), intent(out), target :: work(:)
 
         ! Local Variables
         integer(int32) :: m, n
-        real(real64), target :: w1(:), w2(:)
+        real(real64), pointer :: w1(:), w2(:)
 
         ! Initialization
         m = size(xdata)
@@ -302,13 +302,13 @@ contains
 
         ! Compute J**T * (W .* dY)
         w1 = w1 * weights
-        call mtx_mult(.true., .false., 1.0d0, jac, w1, 0.0d0, JtWdy)
+        call mtx_mult(.true., 1.0d0, jac, w1, 0.0d0, JtWdy)
 
         ! Update the Hessian
         ! First: J**T * W = MWORK
         ! Second: (J**T * W) * J
         call diag_mtx_mult(.false., .true., 1.0d0, weights, jac, 0.0d0, mwork)
-        call mtx_mult(.false., .false., 1.0d0, mwork, jac, 0.0d0, hess)
+        call mtx_mult(.false., .false., 1.0d0, mwork, jac, 0.0d0, JtWJ)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -318,58 +318,95 @@ contains
     ! - fun: The function to evaluate
     ! - xdata: The independent coordinate data to fit (M-by-1)
     ! - ydata: The dependent coordinate data to fit (M-by-1)
-    ! - pOld: previous set of parameters (N-by-1)
-    ! - yOld: model evaluation at previous set of parameters (M-by-1)
-    ! - dX2: The previous change in the Chi-squared criteria
-    ! - jac: current Jacobian estimate (M-by-N)
     ! - p: current set of parameters (N-by-1)
-    ! - weights: A weighting vector (M-by-1)
     ! - neval: current number of function evaluations
     ! - niter: current iteration number
     ! - update: set to 1 to use Marquardt's modification; else, 
     ! - step: the differentiation step size
-    !
-    ! Outputs:
+    ! - lambda:
+    ! - maxP: maximum limits on the parameters.  Use huge() or larger for no constraints (N-by-1)
+    ! - minP: minimum limits on the parameters.  Use -huge() or smaller for no constraints (N-by-1)
+    ! - weights: A weighting vector (M-by-1)
     ! - JtWJ: linearized Hessian matrix (inverse of the covariance matrix) (N-by-N)
     ! - JtWdy: linearized fitting vector (N-by-1)
-    ! - X2: updated Chi-squared criteria
-    ! - yNew: model evaluated with parameters of p (M-by-1)
-    ! - jac: updated Jacobian matrix (M-by-N)
+    !
+    ! Outputs:
+    ! - JtWJ: overwritten LU factorization of the original matrix (N-by-N)
+    ! - h: The new estimate of the change in parameter (N-by-1)
+    ! - pNew: The new parameter estimates (N-by-1)
+    ! - deltaY: The new difference between data and model (M-by-1)
+    ! - yNew: model evaluated with parameters of pNew (M-by-1)
     ! - neval: updated count of function evaluations
     ! - niter: updated current iteration number
+    ! - X2: updated Chi-squared criteria
     ! - stop: A flag allowing the user to terminate model execution
-    ! - work: A workspace array (N+M-by-1)
-    ! - mwork: A workspace matrix (N-by-M)
-    subroutine lm_iter(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
-        neval, niter, update, step, JtwJ, JtWdy, X2, yNew, stop, work, mwork)
+    ! - iwork: A workspace array (N-by-1)
+    ! - err: An error handling mechanism
+    subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
+        maxP, minP, weights, JtWJ, JtWdy, h, pNew, deltaY, yNew, X2, stop, &
+        iwork, err)
         ! Arguments
         procedure(regression_function), pointer :: fun
-        real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), &
-            p(:), weights(:)
-        real(real64), intent(in) :: dX2, step
-        real(real64), intent(inout) :: jac(:,:)
+        real(real64), intent(in) :: xdata(:), ydata(:), p(:), maxP(:), &
+            minP(:), weights(:), JtWdy(:)
+        real(real64), intent(in) :: lambda
         integer(int32), intent(inout) :: neval, niter
         integer(int32), intent(in) :: update
-        real(real64), intent(out) :: JtWJ(:,:), JtWdy(:,:)
-        real(real64), intent(out) :: X2, mwork(:,:)
+        real(real64), intent(inout) :: JtWJ(:,:)
+        real(real64), intent(out) :: h(:), pNew(:), deltaY(:), yNew(:)
+        real(real64), intent(out) :: X2
         logical, intent(out) :: stop
-        real(real64), intent(out), target :: work(:)
+        integer(int32), intent(out) :: iwork(:)
+        class(errors), intent(inout) :: err
 
         ! Local Variables
+        integer(int32) :: i, n
+
+        ! Initialization
+        n = size(p)
 
         ! Increment the iteration counter
         niter = niter + 1
 
         ! Solve the linear system to determine the change in parameters
+        ! A is N-by-N and is stored in JtWJ
+        ! b is N-by-1
         if (update == 1) then
             ! Compute: h = A \ b
             ! A = J**T * W * J + lambda * diag(J**T * W * J)
             ! b = J**T * W * dy
+            do i = 1, n
+                JtWJ(i,i) = JtWJ(i,i) * (1.0d0 + lambda)
+                h(i) = JtWdy(i)
+            end do
         else
             ! Compute: h = A \ b
             ! A = J**T * W * J + lambda * I
             ! b = J**T * W * dy
+            do i = 1, n
+                JtWJ(i,i) = JtWJ(i,i) + lambda
+                h(i) = JtWdy(i)
+            end do
         end if
+        call lu_factor(JtWJ, iwork, err)        ! overwrites JtWJ with [L\U]
+        if (err%has_error_occurred()) return    ! if JtWJ is singular
+        call solve_lu(JtWJ, iwork, h)           ! solution stored in h
+
+        ! Compute the new attempted solution, and apply any constraints
+        do i = 1, n
+            pNew(i) = min(max(minP(i), h(i) + p(i)), maxP(i))
+        end do
+
+        ! Update the residual error
+        call fun(xdata, ydata, pNew, yNew, stop)
+        neval = neval + 1
+        deltaY = ydata - yNew
+        if (stop) return
+
+        ! TO DO: Ensure deltaY is finite
+
+        ! Update the Chi-squared estimate
+        X2 = dot_product(deltaY, deltaY * weights)
     end subroutine
 
 ! ------------------------------------------------------------------------------
