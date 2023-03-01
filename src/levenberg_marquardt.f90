@@ -166,7 +166,7 @@ contains
         ! Arguments
         procedure(regression_function), intent(in), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), params(:)
-        real(real64), intent(inout) :: f0(:)
+        real(real64), intent(in) :: f0(:)
         real(real64), intent(out) :: jac(:,:)
         real(real64), intent(out) :: f1(:), work(:)
         logical, intent(out) :: stop
@@ -237,29 +237,139 @@ contains
     ! - dX2: The previous change in the Chi-squared criteria
     ! - jac: current Jacobian estimate (M-by-N)
     ! - p: current set of parameters (N-by-1)
-    ! - weights: A weighting vector (N-by-1)
+    ! - weights: A weighting vector (M-by-1)
     ! - neval: Current number of function evaluations
+    ! - update: Set to true to force an update of the Jacobian; else, set to
+    !       false to let the program choose based upon the change in the 
+    !       Chi-squared parameter.
+    ! - step: The differentiation step size
     !
     ! Outputs:
     ! - JtWJ: linearized Hessian matrix (inverse of the covariance matrix) (N-by-N)
-    ! - JtWdy: linearized fitting vector (N-by-M)
+    ! - JtWdy: linearized fitting vector (N-by-1)
     ! - X2: Updated Chi-squared criteria
     ! - yNew: model evaluated with parameters of p (M-by-1)
     ! - jac: updated Jacobian matrix (M-by-N)
     ! - neval: updated count of function evaluations
-    subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, neval, JtwJ, JtWdy, X2, yNew)
+    ! - stop: A flag allowing the user to terminate model execution
+    ! - work: A workspace array (N+M-by-1)
+    ! - mwork: A workspace matrix (N-by-M)
+    subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
+        neval, update, step, JtwJ, JtWdy, X2, yNew, stop, work, mwork)
         ! Arguments
         procedure(regression_function), pointer :: fun
-        real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), p(:), weights(:)
-        real(real64), intent(in) :: dX2
+        real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), &
+            p(:), weights(:)
+        real(real64), intent(in) :: dX2, step
         real(real64), intent(inout) :: jac(:,:)
         integer(int32), intent(inout) :: neval
+        logical, intent(in) :: update
         real(real64), intent(out) :: JtWJ(:,:), JtWdy(:,:)
-        real(real64), intent(out) :: X2
+        real(real64), intent(out) :: X2, mwork(:,:)
+        logical, intent(out) :: stop
+        real(real64), intent(out), target :: work(:)
+
+        ! Local Variables
+        integer(int32) :: m, n
+        real(real64), target :: w1(:), w2(:)
+
+        ! Initialization
+        m = size(xdata)
+        n = size(p)
+        w1(1:m) => work(1:m)
+        w2(1:n) => work(m+1:n+m)
+
+        ! Perform the next function evaluation
+        call fun(xdata, ydata, p, yNew, stop)
+        neval = neval + 1
+        if (stop) return
+
+        ! Update or recompute the Jacobian matrix
+        if (dX2 > 0 .or. update) then
+            ! Recompute the Jacobian
+            call jacobian_finite_diff(fun, xdata, ydata, p, yNew, jac, w1, &
+                stop, step, w2)
+            neval = neval + n
+            if (stop) return
+        else
+            ! Simply perform a rank-1 update to the Jacobian
+            call broyden_update(pOld, yOld, jac, p, yNew, w2, w1)
+        end if
+
+        ! Update the Chi-squared estimate
+        w1 = ydata - yNew
+        X2 = dot_product(w1, w1 * weights)
+
+        ! Compute J**T * (W .* dY)
+        w1 = w1 * weights
+        call mtx_mult(.true., .false., 1.0d0, jac, w1, 0.0d0, JtWdy)
+
+        ! Update the Hessian
+        ! First: J**T * W = MWORK
+        ! Second: (J**T * W) * J
+        call diag_mtx_mult(.false., .true., 1.0d0, weights, jac, 0.0d0, mwork)
+        call mtx_mult(.false., .false., 1.0d0, mwork, jac, 0.0d0, hess)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Performs a single iteration of the Levenberg-Marquardt algorithm.
+    !
+    ! Inputs:
+    ! - fun: The function to evaluate
+    ! - xdata: The independent coordinate data to fit (M-by-1)
+    ! - ydata: The dependent coordinate data to fit (M-by-1)
+    ! - pOld: previous set of parameters (N-by-1)
+    ! - yOld: model evaluation at previous set of parameters (M-by-1)
+    ! - dX2: The previous change in the Chi-squared criteria
+    ! - jac: current Jacobian estimate (M-by-N)
+    ! - p: current set of parameters (N-by-1)
+    ! - weights: A weighting vector (M-by-1)
+    ! - neval: current number of function evaluations
+    ! - niter: current iteration number
+    ! - update: set to 1 to use Marquardt's modification; else, 
+    ! - step: the differentiation step size
+    !
+    ! Outputs:
+    ! - JtWJ: linearized Hessian matrix (inverse of the covariance matrix) (N-by-N)
+    ! - JtWdy: linearized fitting vector (N-by-1)
+    ! - X2: updated Chi-squared criteria
+    ! - yNew: model evaluated with parameters of p (M-by-1)
+    ! - jac: updated Jacobian matrix (M-by-N)
+    ! - neval: updated count of function evaluations
+    ! - niter: updated current iteration number
+    ! - stop: A flag allowing the user to terminate model execution
+    ! - work: A workspace array (N+M-by-1)
+    ! - mwork: A workspace matrix (N-by-M)
+    subroutine lm_iter(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
+        neval, niter, update, step, JtwJ, JtWdy, X2, yNew, stop, work, mwork)
+        ! Arguments
+        procedure(regression_function), pointer :: fun
+        real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), &
+            p(:), weights(:)
+        real(real64), intent(in) :: dX2, step
+        real(real64), intent(inout) :: jac(:,:)
+        integer(int32), intent(inout) :: neval, niter
+        integer(int32), intent(in) :: update
+        real(real64), intent(out) :: JtWJ(:,:), JtWdy(:,:)
+        real(real64), intent(out) :: X2, mwork(:,:)
+        logical, intent(out) :: stop
+        real(real64), intent(out), target :: work(:)
 
         ! Local Variables
 
-        ! Process
+        ! Increment the iteration counter
+        niter = niter + 1
+
+        ! Solve the linear system to determine the change in parameters
+        if (update == 1) then
+            ! Compute: h = A \ b
+            ! A = J**T * W * J + lambda * diag(J**T * W * J)
+            ! b = J**T * W * dy
+        else
+            ! Compute: h = A \ b
+            ! A = J**T * W * J + lambda * I
+            ! b = J**T * W * dy
+        end if
     end subroutine
 
 ! ------------------------------------------------------------------------------
