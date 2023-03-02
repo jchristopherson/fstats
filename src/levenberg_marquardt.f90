@@ -2,6 +2,18 @@ submodule (fstats) levenberg_marquardt
 ! REFERENCES:
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
     use linalg
+
+! TO DO:
+! - Clean up code and put the rest of a single iteration of lm_solve into
+!   the lm_iter routine
+! - Finish error handling in the primary lm routine
+! - Implement Jacobian update counter
+! - Add field in the convergence_info for user-requested stop
+! - Add equals operators for custom types and update optional argument portion
+!   of the primary lm routine's code
+! - Implement solution statistics code - may need to create a unique subroutine
+!   and call the same routine as used by the linear least squares code
+! - Update comments/documentation on public facing routines in fstats.f90
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, params, &
