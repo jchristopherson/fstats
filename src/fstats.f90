@@ -184,6 +184,7 @@ module fstats
     public :: convergence_info
     public :: regression_function
     public :: jacobian
+    public :: nonlinear_least_squares
     public :: FS_NO_ERROR
     public :: FS_ARRAY_SIZE_ERROR
     public :: FS_INVALID_INPUT_ERROR
@@ -2030,6 +2031,21 @@ module fstats
             real(real64), intent(in), optional :: step
             class(errors), intent(inout), optional, target :: err
         end subroutine
+
+        module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
+            resid, weights, maxp, minp, stats, controls, settings, info, err)
+            procedure(regression_function), pointer :: fun
+            real(real64), intent(in) :: x(:), y(:)
+            real(real64), intent(inout) :: params(:)
+            real(real64), intent(out) :: ymod(:), resid(:)
+            real(real64), intent(in), optional, target :: weights(:), maxp(:), &
+                minp(:)
+            type(regression_statistics), intent(out), optional :: stats(:)
+            type(iteration_controls), intent(in), optional :: controls
+            type(lm_solver_options), intent(in), optional :: settings
+            type(convergence_info), intent(out), optional, target :: info
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
     end interface
 
     !> @brief Computes the Jacobian matrix for a nonlinear regression problem.
@@ -2051,6 +2067,10 @@ module fstats
     !! @param[in,out] err
     interface jacobian
         module procedure :: regression_jacobian_1
+    end interface
+
+    interface nonlinear_least_squares
+        module procedure :: nonlinear_least_squares_1
     end interface
 ! ------------------------------------------------------------------------------
 end module

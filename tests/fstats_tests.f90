@@ -86,6 +86,9 @@ program tests
     local = test_jacobian()
     if (.not.local) overall = .false.
 
+    local = test_nl_least_squares()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
         call exit(0)

@@ -134,36 +134,51 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    subroutine nonlinear_least_squares_1(x, y, params, ymod, resid, stats, &
-        controls, settings, info, err)
+    module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
+        resid, weights, maxp, minp, stats, controls, settings, info, err)
         ! Arguments
+        procedure(regression_function), pointer :: fun
         real(real64), intent(in) :: x(:), y(:)
         real(real64), intent(inout) :: params(:)
         real(real64), intent(out) :: ymod(:), resid(:)
+        real(real64), intent(in), optional, target :: weights(:), maxp(:), &
+            minp(:)
         type(regression_statistics), intent(out), optional :: stats(:)
         type(iteration_controls), intent(in), optional :: controls
         type(lm_solver_options), intent(in), optional :: settings
-        type(convergence_info), intent(out), optional :: info
+        type(convergence_info), intent(out), optional, target :: info
         class(errors), intent(inout), optional, target :: err
 
         ! Parameters
-        real(real64), parameter :: too_small = 2.0d0 * epsilon(2.0d0)
+        real(real64), parameter :: too_small = 1.0d-14
         integer(int32), parameter :: min_iter_count = 2
         integer(int32), parameter :: min_fun_count = 10
         integer(int32), parameter :: min_update_count = 1
 
         ! Local Variables
-        integer(int32) :: m, n, actual, expected, index
+        logical :: stop
+        integer(int32) :: m, n, actual, expected, index, flag
+        real(real64), pointer :: w(:), pmax(:), pmin(:)
+        real(real64), allocatable, target :: defaultWeights(:), maxparam(:), &
+            minparam(:), JtWJ(:,:)
         type(iteration_controls) :: tol
         type(lm_solver_options) :: opt
         type(convergence_info) :: cInfo
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = :), allocatable :: errmsg
+        type(convergence_info), target :: defaultinfo
+        type(convergence_info), pointer :: inf
         
         ! Initialization
+        stop = .false.
         m = size(x)
         n = size(params)
+        if (present(info)) then
+            inf => info
+        else
+            inf => defaultinfo
+        end if
         if (present(err)) then
             errmgr => err
         else
@@ -235,6 +250,60 @@ contains
             go to 40
         end if
 
+        ! Optional Array Arguments (weights, parameter limits, etc.)
+        if (present(weights)) then
+            if (size(weights) < m) then
+                actual = size(weights)
+                expected = m
+                index = 4
+                go to 10
+            end if
+            w(1:m) => weights(1:m)
+        else
+            allocate(defaultWeights(m), source = 1.0d0, stat = flag)
+            if (flag /= 0) go to 60
+            w(1:m) => defaultWeights(1:m)
+        end if
+
+        if (present(maxp)) then
+            if (size(maxp) /= n) then
+                actual = size(maxp)
+                expected = n
+                index = 5
+                go to 10
+            end if
+            pmax(1:n) => maxp(1:n)
+        else
+            allocate(maxparam(n), source = huge(1.0d0), stat = flag)
+            if (flag /= 0) go to 60
+            pmax(1:n) => maxparam(1:n)
+        end if
+
+        if (present(minp)) then
+            if (size(minp) /= n) then
+                actual = size(minp)
+                expected = n
+                index = 6
+                go to 10
+            end if
+            pmin(1:n) => minp(1:n)
+        else
+            allocate(minparam(n), source = -huge(1.0d0), stat = flag)
+            if (flag /= 0) go to 60
+            pmin(1:n) => minparam(1:n)
+        end if
+
+        ! Local Memory Allocations
+        allocate(JtWJ(n, n), stat = flag)
+        if (flag /= 0) go to 60
+
+        ! Process
+        call lm_solve(fun, x, y, params, w, pmax, pmin, tol, opt, ymod, &
+            resid, JtWJ, inf, stop, errmgr)
+
+        ! TO DO: Statistical Parameters
+        if (present(stats)) then
+        end if
 
         ! End
         return
@@ -254,6 +323,18 @@ contains
         case (3)
             write(errmsg, 100) &
                 "The residual error array was expected to be of size ", &
+                expected, ", but was found to be of size ", actual, "."
+        case (4)
+            write(errmsg, 100) &
+                "The weighting factor array was expected to be of size ", &
+                expected, ", but was found to be of size ", actual, "."
+        case (5)
+            write(errmsg, 100) &
+                "The max parameter limit array was expected to be of size", &
+                expected, ", but was found to be of size ", actual, "."
+        case (6)
+            write(errmsg, 100) &
+                "The min parameter limit array was expected to be of size", &
                 expected, ", but was found to be of size ", actual, "."
         end select
         call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
@@ -308,6 +389,14 @@ contains
         end select
         call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
             FS_TOO_FEW_ITERATION_ERROR)
+        return
+
+        ! Settings Error Handling
+50      continue
+        return
+
+        ! Memory Error Handler
+60      continue
         return
 
         ! Formatting
@@ -641,7 +730,7 @@ contains
         if (flag == 0) allocate(work(m + n), stat = flag)
         if (flag == 0) allocate(mwork(n, m), stat = flag)
         if (flag == 0) allocate(pTry(n), stat = flag)
-        if (flag == 0) allocate(h(m), stat = flag)
+        if (flag == 0) allocate(h(n), stat = flag)
         if (flag == 0) allocate(yTemp(m), stat = flag)
         if (flag == 0) allocate(JtWJc(n, n), stat = flag)
         if (flag == 0) allocate(iwork(n), stat = flag)
@@ -888,9 +977,9 @@ contains
         tol%max_function_evaluations = 5000
         tol%max_iteration_between_updates = 10
         tol%gradient_tolerance = 1.0d-8
-        tol%residual_tolerance = 1.0d-6
+        tol%residual_tolerance = 0.5d-2
         tol%change_in_solution_tolerance = 1.0d-6
-        tol%iteration_improvement_tolerance = 1.0d-3
+        tol%iteration_improvement_tolerance = 1.0d-1
     end subroutine
 
 ! ------------------------------------------------------------------------------
