@@ -121,7 +121,7 @@ contains
 
         ! Memroy Allocation Error Handling
 20      continue
-        allocate(character(len = 512) :: errmsg)
+        allocate(character(len = 256) :: errmsg)
         write(errmsg, 102) "Memory allocation error code ", flag, "."
         call errmgr%report_error("regression_jacobian_1", &
             trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
@@ -134,7 +134,186 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    subroutine nonlinear_least_squares_1(x, y, params, ymod, resid, stats, &
+        controls, settings, info, err)
+        ! Arguments
+        real(real64), intent(in) :: x(:), y(:)
+        real(real64), intent(inout) :: params(:)
+        real(real64), intent(out) :: ymod(:), resid(:)
+        type(regression_statistics), intent(out), optional :: stats(:)
+        type(iteration_controls), intent(in), optional :: controls
+        type(lm_solver_options), intent(in), optional :: settings
+        type(convergence_info), intent(out), optional :: info
+        class(errors), intent(inout), optional, target :: err
 
+        ! Parameters
+        real(real64), parameter :: too_small = 2.0d0 * epsilon(2.0d0)
+        integer(int32), parameter :: min_iter_count = 2
+        integer(int32), parameter :: min_fun_count = 10
+        integer(int32), parameter :: min_update_count = 1
+
+        ! Local Variables
+        integer(int32) :: m, n, actual, expected, index
+        type(iteration_controls) :: tol
+        type(lm_solver_options) :: opt
+        type(convergence_info) :: cInfo
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = :), allocatable :: errmsg
+        
+        ! Initialization
+        m = size(x)
+        n = size(params)
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+        if (present(controls)) then
+            ! TO DO:
+            ! Need to define equals operator yet
+        else
+            call lm_set_default_tolerances(tol)
+        end if
+        if (present(settings)) then
+            ! TO DO:
+            ! Need to define equals operator yet
+        else
+            call lm_set_default_settings(opt)
+        end if
+
+        ! Input Checking
+        if (size(y) /= m) then
+            actual = size(y)
+            expected = m
+            index = 1
+            go to 10
+        end if
+        if (size(ymod) /= m) then
+            actual = size(ymod)
+            expected = m
+            index = 2
+            go to 10
+        end if
+        if (size(resid) /= m) then
+            actual = size(resid)
+            expected = m
+            index = 3
+            go to 10
+        end if
+        if (m < n) go to 20
+
+        ! Tolerance Checking
+        if (tol%gradient_tolerance < too_small) then
+            index = 1
+            go to 30
+        end if
+        if (tol%change_in_solution_tolerance < too_small) then
+            index = 2
+            go to 30
+        end if
+        if (tol%residual_tolerance < too_small) then
+            index = 3
+            go to 30
+        end if
+        if (tol%iteration_improvement_tolerance < too_small) then
+            index = 4
+            go to 30
+        end if
+
+        ! Iteration Count Checking
+        if (tol%max_iteration_count < min_iter_count) then
+            index = 1
+            go to 40
+        end if
+        if (tol%max_function_evaluations < min_fun_count) then
+            index = 2
+            go to 40
+        end if
+        if (tol%max_iteration_between_updates < min_update_count) then
+            index = 3
+            go to 40
+        end if
+
+
+        ! End
+        return
+
+        ! Array Size Error Handling
+10      continue
+        allocate(character(len = 512) :: errmsg)
+        select case (index)
+        case (1)
+            write(errmsg, 100) "The dependent variable data array (", actual, &
+                ") is not the same length as the independent data array (", &
+                expected, ")."
+        case (2)
+            write(errmsg, 100) &
+                "The function value array was expected to be of size ", &
+                expected, ", but was found to be of size ", actual, "."
+        case (3)
+            write(errmsg, 100) &
+                "The residual error array was expected to be of size ", &
+                expected, ", but was found to be of size ", actual, "."
+        end select
+        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
+            FS_ARRAY_SIZE_ERROR)
+        return
+
+        ! Underdefind Problem Error Handling
+20      continue
+        allocate(character(len = 512) :: errmsg)
+        write(errmsg, 100) "The problem is under-determined.  The number " // &
+            "of equations was found to be ", m, &
+            ", but must be at least equal to the number of unknowns ", n, "."
+        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
+            FS_UNDERDEFINED_PROBLEM_ERROR)
+        return
+
+        ! Tolerance Too Small Error Handling
+30      continue
+        allocate(character(len = 256) :: errmsg)
+        select case (index)
+        case (1)
+            write(errmsg, '(A)') &
+                "The gradient tolerance was found to be too small."
+        case (2)
+            write(errmsg, '(A)') &
+                "The change in solution tolerance was found to be too small."
+        case (3)
+            write(errmsg, '(A)') &
+                "The residual error tolerance was found to be too small."
+        case (4)
+            write(errmsg, '(A)') &
+                "The iteration improvement tolerance was found to be too small."
+        end select
+        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
+            FS_TOLERANCE_TOO_SMALL_ERROR)
+        return
+
+        ! Too Few Iteration Error Handling
+40      continue
+        allocate(character(len = 256) :: errmsg)
+        select case (index)
+        case (1)
+            write(errmsg, 101) "Too few iterations were specified.  " // &
+                "A minimum of ", min_iter_count, " is expected."
+        case (2)
+            write(errmsg, 101) "Too few function evaluations were " // &
+                "specified.  A minimum of ", min_fun_count, " is expected."
+        case (3)
+            write(errmsg, 101) "Too few iterations between updates " // &
+                "were specified.  A minimum of ", min_update_count, &
+                " is expected."
+        end select
+        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
+            FS_TOO_FEW_ITERATION_ERROR)
+        return
+
+        ! Formatting
+100     format(A, I0, A, I0, A)
+101     format(A, I0, A)
+    end subroutine
 
 ! ******************************************************************************
 ! PRIVATE ROUTINES
@@ -315,10 +494,10 @@ contains
     ! - niter: current iteration number
     ! - update: set to 1 to use Marquardt's modification; else, 
     ! - step: the differentiation step size
-    ! - lambda:
+    ! - lambda: LM damping parameter
     ! - maxP: maximum limits on the parameters.  Use huge() or larger for no constraints (N-by-1)
     ! - minP: minimum limits on the parameters.  Use -huge() or smaller for no constraints (N-by-1)
-    ! - weights: A weighting vector (M-by-1)
+    ! - weights: a weighting vector (M-by-1)
     ! - JtWJ: linearized Hessian matrix (inverse of the covariance matrix) (N-by-N)
     ! - JtWdy: linearized fitting vector (N-by-1)
     !
@@ -407,21 +586,22 @@ contains
     ! - xdata: The independent coordinate data to fit (M-by-1)
     ! - ydata: The dependent coordinate data to fit (M-by-1)
     ! - p: current set of parameters (N-by-1)
-    ! - weights:
-    ! - maxP:
-    ! - minP:
-    ! - controls:
-    ! - opt:
+    ! - weights: a weighting vector (M-by-1)
+    ! - maxP: maximum limits on the parameters.  Use huge() or larger for no constraints (N-by-1)
+    ! - minP: minimum limits on the parameters.  Use -huge() or smaller for no constraints (N-by-1)
+    ! - controls: an iteration_controls instance containing solution tolerances
     !
     ! Outputs:
-    ! - p:
-    ! - y:
-    ! - resid:
-    ! - JtWJ:
-    !
-    ! - stop:
+    ! - p: solution (N-by-1)
+    ! - y: model results at p (M-by-1)
+    ! - resid: residual (ydata - y) (M-by-1)
+    ! - JtWJ: linearized Hessian matrix (inverse of the covariance matrix) (N-by-N)
+    ! - opt: a convergence_info object containing information regarding 
+    !       convergence of the iteration
+    ! - stop: A flag allowing the user to terminate model execution
     ! - err: An error handling object
-    subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, opt, y, resid, JtWJ, info, stop, err)
+    subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
+        opt, y, resid, JtWJ, info, stop, err)
         ! Arguments
         procedure(regression_function), intent(in), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), weights(:), maxP(:), &
@@ -577,7 +757,7 @@ contains
             update = mod(niter, 2 * n) > 0
 
             ! Test for convergence
-            if (lm_check_convergence(controls, dof, resid, niter, neva, &
+            if (lm_check_convergence(controls, dof, resid, niter, neval, &
                 JtWdy, h, p, X2, info)) &
             then
                 exit main
@@ -695,6 +875,35 @@ contains
         do i = 1, mn
             d(i) = x(i,i)
         end do
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Sets up default tolerances.
+    subroutine lm_set_default_tolerances(tol)
+        ! Arguments
+        type(iteration_controls), intent(out) :: tol
+
+        ! Set defaults
+        tol%max_iteration_count = 500
+        tol%max_function_evaluations = 5000
+        tol%max_iteration_between_updates = 10
+        tol%gradient_tolerance = 1.0d-8
+        tol%residual_tolerance = 1.0d-6
+        tol%change_in_solution_tolerance = 1.0d-6
+        tol%iteration_improvement_tolerance = 1.0d-3
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Sets up default solver settings.
+    subroutine lm_set_default_settings(x)
+        ! Arguments
+        type(lm_solver_options), intent(out) :: x
+
+        ! Set defaults
+        x%method = FS_LEVENBERG_MARQUARDT_UPDATE
+        x%finite_difference_step_size = sqrt(epsilon(1.0d0))
+        x%damping_increase_factor = 11.0d0
+        x%damping_decrease_factor = 9.0d0
     end subroutine
 
 ! ------------------------------------------------------------------------------

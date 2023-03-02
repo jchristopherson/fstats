@@ -189,6 +189,8 @@ module fstats
     public :: FS_INVALID_INPUT_ERROR
     public :: FS_OUT_OF_MEMORY_ERROR
     public :: FS_UNDERDEFINED_PROBLEM_ERROR
+    public :: FS_TOLERANCE_TOO_SMALL_ERROR
+    public :: FS_TOO_FEW_ITERATION_ERROR
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
@@ -201,6 +203,8 @@ module fstats
     integer(int32), parameter :: FS_INVALID_INPUT_ERROR = 10001
     integer(int32), parameter :: FS_OUT_OF_MEMORY_ERROR = 10002
     integer(int32), parameter :: FS_UNDERDEFINED_PROBLEM_ERROR = 10003
+    integer(int32), parameter :: FS_TOLERANCE_TOO_SMALL_ERROR = 10004
+    integer(int32), parameter :: FS_TOO_FEW_ITERATION_ERROR = 10005
 
 ! ******************************************************************************
 ! CONSTANTS
@@ -1596,8 +1600,8 @@ module fstats
     !!
     !! @par Syntax
     !! @code{.f90}
-    !! subroutine linear_least_squares(integer(int32) order, lobical intercept, real(real64) x(:), real(real64) y(:), real(real64) coeffs(:), real(real64) ymod(:), real(real64) resid, optional type(regression_statistics) stats(:), optional real(real64) alpha, optional class(errors) err)
-    !! subroutine linear_least_squares(integer(int32) order, lobical intercept, real(real32) x(:), real(real32) y(:), real(real32) coeffs(:), real(real32) ymod(:), real(real32) resid, optional type(regression_statistics) stats(:), optional real(real32) alpha, optional class(errors) err)
+    !! subroutine linear_least_squares(integer(int32) order, logical intercept, real(real64) x(:), real(real64) y(:), real(real64) coeffs(:), real(real64) ymod(:), real(real64) resid, optional type(regression_statistics) stats(:), optional real(real64) alpha, optional class(errors) err)
+    !! subroutine linear_least_squares(integer(int32) order, logical intercept, real(real32) x(:), real(real32) y(:), real(real32) coeffs(:), real(real32) ymod(:), real(real32) resid, optional type(regression_statistics) stats(:), optional real(real32) alpha, optional class(errors) err)
     !! @endcode
     !!
     !! @param[in] order The order of the equation to fit.  This value must be
