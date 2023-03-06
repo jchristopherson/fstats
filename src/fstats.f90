@@ -195,6 +195,7 @@ module fstats
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
+    public :: assignment(=)
 
 ! ******************************************************************************
 ! ERROR CODES
@@ -214,6 +215,15 @@ module fstats
     integer(int32), parameter :: FS_QUADRATIC_UPDATE = 2
     integer(int32), parameter :: FS_NIELSEN_UPDATE = 3
 
+! ******************************************************************************
+! OPERATORS
+! ------------------------------------------------------------------------------
+    interface assignment (=)
+        module procedure :: ic_equal
+        module procedure :: ci_equal
+        module procedure :: lso_equal
+    end interface
+    
 ! ******************************************************************************
 ! DISTRIBUTIONS
 ! ------------------------------------------------------------------------------
@@ -1774,6 +1784,31 @@ module fstats
         module procedure :: linear_least_squares_real32
     end interface
 
+    !> @brief Computes statistics for the quality of fit for a regression model.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! type(regression_statistics) function calculate_regression_statistics(real(real64) resid(:), real(real64) params(:), real(real64) c(:,:), optional real(real64) alpha, optional class(errors) err)
+    !! type(regression_statistics) function calculate_regression_statistics(real(real32) resid(:), real(real32) params(:), real(real32) c(:,:), optional real(real32) alpha, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] resid An M-element array containing the model residual errors.
+    !! @param[in] params An N-element array containing the model parameters.
+    !! @param[in] c The N-by-N covariance matrix.
+    !! @param[in] alpha An optional input describing the probability level of 
+    !!  the confidence interval analysis.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p c is not sized correctly.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! @return A @ref regression_statistics object containing the analysis
+    !!  results.
+    interface calculate_regression_statistics
+        module procedure :: calculate_regression_stats_r64
+        module procedure :: calculate_regression_stats_r32
+    end interface
+
     ! regression_implementation.f90
     interface
         module subroutine coefficient_matrix_real64(order, intercept, x, c, err)
@@ -1825,6 +1860,22 @@ module fstats
             real(real32), intent(in), optional :: alpha
             class(errors), intent(inout), optional, target :: err
         end subroutine
+
+        module function calculate_regression_stats_r64(resid, params, c, &
+            alpha, err) result(rst)
+            real(real64), intent(in) :: resid(:), params(:), c(:,:)
+            real(real64), intent(in), optional :: alpha
+            class(errors), intent(inout), optional, target :: err
+            type(regression_statistics), allocatable :: rst(:)
+        end function
+
+        module function calculate_regression_stats_r32(resid, params, c, &
+            alpha, err) result(rst)
+            real(real32), intent(in) :: resid(:), params(:), c(:,:)
+            real(real32), intent(in), optional :: alpha
+            class(errors), intent(inout), optional, target :: err
+            type(regression_statistics), allocatable :: rst(:)
+        end function
     end interface
 
 ! ******************************************************************************
@@ -1994,6 +2045,8 @@ module fstats
         logical :: reach_function_evaluation_limit
         !> The function evaluation count.
         integer(int32) :: function_evaluation_count
+        !> True if the user requested the stop; else, false.
+        logical :: user_requested_stop
     end type
 
     !> @brief Options to control the Levenberg-Marquardt solver.
@@ -2033,7 +2086,8 @@ module fstats
         end subroutine
 
         module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
-            resid, weights, maxp, minp, stats, controls, settings, info, err)
+            resid, weights, maxp, minp, stats, alpha, controls, settings, &
+            info, err)
             procedure(regression_function), pointer :: fun
             real(real64), intent(in) :: x(:), y(:)
             real(real64), intent(inout) :: params(:)
@@ -2041,10 +2095,26 @@ module fstats
             real(real64), intent(in), optional, target :: weights(:), maxp(:), &
                 minp(:)
             type(regression_statistics), intent(out), optional :: stats(:)
+            real(real64), intent(in), optional :: alpha
             type(iteration_controls), intent(in), optional :: controls
             type(lm_solver_options), intent(in), optional :: settings
             type(convergence_info), intent(out), optional, target :: info
             class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine ic_equal(x, y)
+            type(iteration_controls), intent(inout) :: x
+            type(iteration_controls), intent(in) :: y
+        end subroutine
+
+        module subroutine ci_equal(x, y)
+            type(convergence_info), intent(inout) :: x
+            type(convergence_info), intent(in) :: y
+        end subroutine
+
+        module subroutine lso_equal(x, y)
+            type(lm_solver_options), intent(inout) :: x
+            type(lm_solver_options), intent(in) :: y
         end subroutine
     end interface
 
@@ -2052,23 +2122,83 @@ module fstats
     !!
     !! @par Syntax
     !! @code{.f90}
-    !! subroutine jacobian(pointer procedure(regression_function) fun, real(real64) xdata(:), real(real64) ydata(:), real(real64) params(:), real(real64) jac(:,:), logical stop, optional real(real64) f0(:), optional real(real64) f1(:), optional real(real64) step, optional class(errors) err)
+    !! subroutine jacobian(pointer procedure(regression_function) fun, real(real64) xdata(:), real(real64) params(:), real(real64) jac(:,:), logical stop, optional real(real64) f0(:), optional real(real64) f1(:), optional real(real64) step, optional class(errors) err)
     !! @endcode
     !!
-    !! @param[in] fun
-    !! @param[in] xdata
-    !! @param[in] ydata
-    !! @param[in] params
-    !! @param[out] jac
-    !! @param[out] stop
-    !! @param[in] f0
-    !! @param[out] f1
-    !! @param[in] step
-    !! @param[in,out] err
+    !! @param[in] fun A pointer to the @ref regression_function to evaluate.
+    !! @param[in] xdata The M-element array containing x-coordinate data.
+    !! @param[in] params The N-element array containing the model parameters.
+    !! @param[out] jac The M-by-N matrix where the Jacobian will be written.
+    !! @param[out] stop A value that the user can set in @p fun forcing the
+    !!  evaluation process to stop prior to completion.
+    !! @param[in] f0 An optional M-element array containing the model values
+    !!  using the current parameters as defined in @p m.  This input can be
+    !!  used to prevent the routine from performing a function evaluation at the
+    !!  model parameter state defined in @p params.
+    !! @param[out] f1 An optional M-element workspace array used for function
+    !!  evaluations.
+    !! @param[in] step The differentiation step size.  The default is the
+    !!  square root of machine precision.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
+    !!      sized.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
     interface jacobian
         module procedure :: regression_jacobian_1
     end interface
 
+    !> @brief Performs a nonlinear regression to fit a model using a version
+    !! of the Levenberg-Marquardt algorithm.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine nonlinear_least_squares(pointer procedure(regression_function) fun, real(real64) x(:), real(real64) y(:), real(real64) params(:), real(real64) ymod(:), real(real64) resid(:), optional real(real64) weights(:), optional real(real64) maxp(:), optional real(real64) minp(:), optional type(regression_statistics) stats(:), optional real(real64) alpha, optional type(iteration_controls) controls, optional type(lm_solver_options) settings, optional type(convergence_info) info, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] fun A pointer to the @ref regression_function to evaluate.
+    !! @param[in] x The M-element array containing x-coordinate data.
+    !! @param[in] y The M-element array containing y-coordinate data.
+    !! @param[in,out] params On input, the N-element array containing the
+    !!  initial estimate of the model parameters.  On output, the computed 
+    !!  model parameters.
+    !! @param[out] ymod An M-element array where the modeled dependent data will
+    !!  be written.
+    !! @param[out] resid An M-element array where the model residuals will be
+    !!  written.
+    !! @param[in] weights An optional M-element array allowing the weighting of
+    !!  individual points.
+    !! @param[in] maxp An optional N-element array that can be used as upper
+    !!  limits on the parameter values.  If no upper limit is requested for a
+    !!  particular parameter, utilize a very large value.  The internal default
+    !!  is to utilize huge() as a value.
+    !! @param[in] minp An optional N-element array that can be used as lower
+    !!  limits on the parameter values.  If no lower limit is requested for a
+    !!  particalar parameter, utilize a very large magnitude, but negative,
+    !!  value.  The internal default is to utilize -huge() as a value.
+    !! @arapam[out] stats An optional N-element array that, if supplied, will
+    !!  be used to return statistics about the fit for each parameter.
+    !! @param[in] alpha An optional input describing the probability level of 
+    !!  the confidence interval analysis assuming that statistics for each
+    !!  parameter are being calculated.
+    !! @param[in] controls An optional input providing custom iteration 
+    !!  controls.
+    !! @param[in] settings An optional input providing custom settings for the 
+    !!  solver.
+    !! @param[out] info An optional output that can be used to gain information
+    !!  about the iterative solution and the nature of the convergence.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
+    !!      sized.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_UNDERDEFINED_PROBLEM_ERROR: Occurs if the problem posed is 
+    !!      underdetetermined (M < N).
+    !! - FS_TOLERANCE_TOO_SMALL_ERROR: Occurs if any supplied tolerances are
+    !!      too small to be practical.
+    !! - FS_TOO_FEW_ITERATION_ERROR: Occurs if too few iterations are allowed.
     interface nonlinear_least_squares
         module procedure :: nonlinear_least_squares_1
     end interface

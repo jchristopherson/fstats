@@ -6,14 +6,7 @@ submodule (fstats) levenberg_marquardt
 ! TO DO:
 ! - Clean up code and put the rest of a single iteration of lm_solve into
 !   the lm_iter routine
-! - Finish error handling in the primary lm routine
 ! - Implement Jacobian update counter
-! - Add field in the convergence_info for user-requested stop
-! - Add equals operators for custom types and update optional argument portion
-!   of the primary lm routine's code
-! - Implement solution statistics code - may need to create a unique subroutine
-!   and call the same routine as used by the linear least squares code
-! - Update comments/documentation on public facing routines in fstats.f90
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, params, &
@@ -147,7 +140,7 @@ contains
 
 ! ------------------------------------------------------------------------------
     module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
-        resid, weights, maxp, minp, stats, controls, settings, info, err)
+        resid, weights, maxp, minp, stats, alpha, controls, settings, info, err)
         ! Arguments
         procedure(regression_function), pointer :: fun
         real(real64), intent(in) :: x(:), y(:)
@@ -156,6 +149,7 @@ contains
         real(real64), intent(in), optional, target :: weights(:), maxp(:), &
             minp(:)
         type(regression_statistics), intent(out), optional :: stats(:)
+        real(real64), intent(in), optional :: alpha
         type(iteration_controls), intent(in), optional :: controls
         type(lm_solver_options), intent(in), optional :: settings
         type(convergence_info), intent(out), optional, target :: info
@@ -197,14 +191,12 @@ contains
             errmgr => deferr
         end if
         if (present(controls)) then
-            ! TO DO:
-            ! Need to define equals operator yet
+            tol = controls
         else
             call lm_set_default_tolerances(tol)
         end if
         if (present(settings)) then
-            ! TO DO:
-            ! Need to define equals operator yet
+            opt = settings
         else
             call lm_set_default_settings(opt)
         end if
@@ -273,7 +265,7 @@ contains
             w(1:m) => weights(1:m)
         else
             allocate(defaultWeights(m), source = 1.0d0, stat = flag)
-            if (flag /= 0) go to 60
+            if (flag /= 0) go to 50
             w(1:m) => defaultWeights(1:m)
         end if
 
@@ -287,7 +279,7 @@ contains
             pmax(1:n) => maxp(1:n)
         else
             allocate(maxparam(n), source = huge(1.0d0), stat = flag)
-            if (flag /= 0) go to 60
+            if (flag /= 0) go to 50
             pmax(1:n) => maxparam(1:n)
         end if
 
@@ -301,20 +293,34 @@ contains
             pmin(1:n) => minp(1:n)
         else
             allocate(minparam(n), source = -huge(1.0d0), stat = flag)
-            if (flag /= 0) go to 60
+            if (flag /= 0) go to 50
             pmin(1:n) => minparam(1:n)
         end if
 
         ! Local Memory Allocations
         allocate(JtWJ(n, n), stat = flag)
-        if (flag /= 0) go to 60
+        if (flag /= 0) go to 50
 
         ! Process
         call lm_solve(fun, x, y, params, w, pmax, pmin, tol, opt, ymod, &
             resid, JtWJ, inf, stop, errmgr)
 
-        ! TO DO: Statistical Parameters
+        ! Statistical Parameters
         if (present(stats)) then
+            if (size(stats) /= n) then
+                actual = size(stats)
+                expected = n
+                index = 7
+                go to 10
+            end if
+
+            ! Compute the covariance matrix
+            call mtx_inverse(JtWJ, err = errmgr)
+            if (errmgr%has_error_occurred()) return
+
+            ! Compute the statistics
+            stats = calculate_regression_statistics(resid, params, JtWJ, &
+                alpha, errmgr)
         end if
 
         ! End
@@ -347,6 +353,10 @@ contains
         case (6)
             write(errmsg, 100) &
                 "The min parameter limit array was expected to be of size", &
+                expected, ", but was found to be of size ", actual, "."
+        case (7)
+            write(errmsg, 100) &
+                "The fit statistics array was expected to be of size ", &
                 expected, ", but was found to be of size ", actual, "."
         end select
         call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
@@ -403,17 +413,59 @@ contains
             FS_TOO_FEW_ITERATION_ERROR)
         return
 
-        ! Settings Error Handling
-50      continue
-        return
-
         ! Memory Error Handler
-60      continue
+50      continue
+        allocate(character(len = 256) :: errmsg)
+        write(errmsg, 101) "Memory allocation error code ", flag, "."
+        call errmgr%report_error("nonlinear_least_squares_1", &
+            trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
         return
 
         ! Formatting
 100     format(A, I0, A, I0, A)
 101     format(A, I0, A)
+    end subroutine
+
+! ******************************************************************************
+! OPERATORS
+! ------------------------------------------------------------------------------
+    module subroutine ic_equal(x, y)
+        type(iteration_controls), intent(inout) :: x
+        type(iteration_controls), intent(in) :: y
+        x%max_iteration_count = y%max_iteration_count
+        x%max_function_evaluations = y%max_function_evaluations
+        x%gradient_tolerance = y%gradient_tolerance
+        x%change_in_solution_tolerance = y%change_in_solution_tolerance
+        x%residual_tolerance = y%residual_tolerance
+        x%iteration_improvement_tolerance = y%iteration_improvement_tolerance
+        x%max_iteration_between_updates = y%max_iteration_between_updates
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    module subroutine ci_equal(x, y)
+        type(convergence_info), intent(inout) :: x
+        type(convergence_info), intent(in) :: y
+        x%converge_on_gradient = y%converge_on_gradient
+        x%gradient_value = y%gradient_value
+        x%converge_on_solution_change = y%converge_on_solution_change
+        x%solution_change_value = y%solution_change_value
+        x%converge_on_residual_parameter = y%converge_on_residual_parameter
+        x%residual_value = y%residual_value
+        x%reach_iteration_limit = y%reach_iteration_limit
+        x%iteration_count = y%iteration_count
+        x%reach_function_evaluation_limit = y%reach_function_evaluation_limit
+        x%function_evaluation_count = y%function_evaluation_count
+        x%user_requested_stop = y%user_requested_stop
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    module subroutine lso_equal(x, y)
+        type(lm_solver_options), intent(inout) :: x
+        type(lm_solver_options), intent(in) :: y
+        x%method = y%method
+        x%finite_difference_step_size = y%finite_difference_step_size
+        x%damping_increase_factor = y%damping_increase_factor
+        x%damping_decrease_factor = y%damping_decrease_factor
     end subroutine
 
 ! ******************************************************************************
@@ -733,6 +785,7 @@ contains
         niter = 0
         step = opt%finite_difference_step_size
         stop = .false.
+        info%user_requested_stop = .false.
 
         ! Local Memory Allocation
         allocate(pOld(n), source = 0.0d0, stat = flag)
@@ -870,6 +923,7 @@ contains
 
         ! User Requested End
 5       continue
+        info%user_requested_stop = .true.
         return
 
         ! Memory Error Handling
