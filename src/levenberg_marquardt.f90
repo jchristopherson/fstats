@@ -4,8 +4,6 @@ submodule (fstats) levenberg_marquardt
     use linalg
 
 ! TO DO:
-! - Clean up code and put the rest of a single iteration of lm_solve into
-!   the lm_iter routine
 ! - Implement Jacobian update counter
 contains
 ! ------------------------------------------------------------------------------
