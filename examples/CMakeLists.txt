@@ -9,3 +9,7 @@ target_link_libraries(anova_example_1 fstats)
 # Regression Example
 add_executable(regression_example regression_example.f90)
 target_link_libraries(regression_example fstats)
+
+# Nonlinear Regression Example
+add_executable(nl_regression_example nl_regression_example.f90)
+target_link_libraries(nl_regression_example fstats)
