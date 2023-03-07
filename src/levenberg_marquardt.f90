@@ -138,7 +138,8 @@ contains
 
 ! ------------------------------------------------------------------------------
     module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
-        resid, weights, maxp, minp, stats, alpha, controls, settings, info, err)
+        resid, weights, maxp, minp, stats, alpha, controls, settings, info, &
+        status, err)
         ! Arguments
         procedure(regression_function), pointer :: fun
         real(real64), intent(in) :: x(:), y(:)
@@ -151,6 +152,7 @@ contains
         type(iteration_controls), intent(in), optional :: controls
         type(lm_solver_options), intent(in), optional :: settings
         type(convergence_info), intent(out), optional, target :: info
+        procedure(iteration_update), intent(in), pointer, optional :: status
         class(errors), intent(inout), optional, target :: err
 
         ! Parameters
@@ -191,12 +193,12 @@ contains
         if (present(controls)) then
             tol = controls
         else
-            call lm_set_default_tolerances(tol)
+            call tol%set_to_default()
         end if
         if (present(settings)) then
             opt = settings
         else
-            call lm_set_default_settings(opt)
+            call opt%set_to_default()
         end if
 
         ! Input Checking
@@ -301,7 +303,7 @@ contains
 
         ! Process
         call lm_solve(fun, x, y, params, w, pmax, pmin, tol, opt, ymod, &
-            resid, JtWJ, inf, stop, errmgr)
+            resid, JtWJ, inf, stop, errmgr, status)
 
         ! Statistical Parameters
         if (present(stats)) then
@@ -422,6 +424,37 @@ contains
         ! Formatting
 100     format(A, I0, A, I0, A)
 101     format(A, I0, A)
+    end subroutine
+
+! ******************************************************************************
+! SETTINGS DEFAULTS
+! ------------------------------------------------------------------------------
+    ! Sets up default tolerances.
+    module subroutine lm_set_default_tolerances(x)
+        ! Arguments
+        class(iteration_controls), intent(inout) :: x
+
+        ! Set defaults
+        x%max_iteration_count = 500
+        x%max_function_evaluations = 5000
+        x%max_iteration_between_updates = 10
+        x%gradient_tolerance = 1.0d-8
+        x%residual_tolerance = 0.5d-2
+        x%change_in_solution_tolerance = 1.0d-6
+        x%iteration_improvement_tolerance = 1.0d-1
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! Sets up default solver settings.
+    module subroutine lm_set_default_settings(x)
+        ! Arguments
+        class(lm_solver_options), intent(inout) :: x
+
+        ! Set defaults
+        x%method = FS_LEVENBERG_MARQUARDT_UPDATE
+        x%finite_difference_step_size = sqrt(epsilon(1.0d0))
+        x%damping_increase_factor = 11.0d0
+        x%damping_decrease_factor = 9.0d0
     end subroutine
 
 ! ******************************************************************************
@@ -662,12 +695,11 @@ contains
     ! - niter: updated current iteration number
     ! - X2: updated Chi-squared criteria
     ! - stop: A flag allowing the user to terminate model execution
-    ! - work: A workspace array (M-by-1)
     ! - iwork: A workspace array (N-by-1)
     ! - err: An error handling mechanism
     subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
         maxP, minP, weights, JtWJ, JtWdy, h, pNew, deltaY, yNew, X2, X2Old, &
-        alpha, stop, work, iwork, err)
+        alpha, stop, iwork, err, status)
         ! Arguments
         procedure(regression_function), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), p(:), maxP(:), &
@@ -679,9 +711,9 @@ contains
         real(real64), intent(out) :: h(:), pNew(:), deltaY(:), yNew(:)
         real(real64), intent(out) :: X2, alpha
         logical, intent(out) :: stop
-        real(real64), intent(out) :: work(:)
         integer(int32), intent(out) :: iwork(:)
         class(errors), intent(inout) :: err
+        procedure(iteration_update), intent(in), pointer, optional :: status
 
         ! Local Variables
         integer(int32) :: i, n
@@ -734,18 +766,23 @@ contains
         ! Perform a quadratic line update in the H direction, if necessary
         if (update == FS_QUADRATIC_UPDATE) then
             dpJh = dot_product(JtWdy, h)
-            alpha = dpJh / (0.5d0 * (X2 - X2Old) + 2.0d0 * dpJh)
+            alpha = abs(dpJh / (0.5d0 * (X2 - X2Old) + 2.0d0 * dpJh))
             h = alpha * h
 
             do i = 1, n
                 pNew(i) = min(max(minP(i), p(i) + h(i)), maxP(i))
             end do
 
-            call fun(xdata, pNew, work(1:m), stop)
+            call fun(xdata, pNew, yNew, stop)
             if (stop) return
             neval = neval + 1
-            deltaY = ydata - work(1:m)
+            deltaY = ydata - yNew
             X2 = dot_product(deltaY, deltaY * weights)
+        end if
+
+        ! Update the status of the iteration, if needed
+        if (present(status)) then
+            call status(niter, yNew, deltaY, pNew, h)
         end if
     end subroutine
 
@@ -772,7 +809,7 @@ contains
     ! - stop: A flag allowing the user to terminate model execution
     ! - err: An error handling object
     subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
-        opt, y, resid, JtWJ, info, stop, err)
+        opt, y, resid, JtWJ, info, stop, err, status)
         ! Arguments
         procedure(regression_function), intent(in), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), weights(:), maxP(:), &
@@ -784,6 +821,7 @@ contains
         class(convergence_info), intent(out) :: info
         logical, intent(out) :: stop
         class(errors), intent(inout) :: err
+        procedure(iteration_update), intent(in), pointer, optional :: status
 
         ! Local Variables
         logical :: update
@@ -844,7 +882,7 @@ contains
             ! update the new parameter estimates
             call lm_iter(fun, xdata, ydata, p, neval, niter, opt%method, &
                 lambda, maxP, minP, weights, JtWJc, JtWdy, h, pTry, resid, &
-                yTemp, X2Try, X2Old, alpha, stop, work(1:m), iwork, err)
+                yTemp, X2Try, X2Old, alpha, stop, iwork, err, status)
             if (stop) go to 5
             if (err%has_error_occurred()) return
 
@@ -1060,35 +1098,6 @@ contains
         do i = 1, mn
             d(i) = x(i,i)
         end do
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    ! Sets up default tolerances.
-    subroutine lm_set_default_tolerances(tol)
-        ! Arguments
-        type(iteration_controls), intent(out) :: tol
-
-        ! Set defaults
-        tol%max_iteration_count = 500
-        tol%max_function_evaluations = 5000
-        tol%max_iteration_between_updates = 10
-        tol%gradient_tolerance = 1.0d-8
-        tol%residual_tolerance = 0.5d-2
-        tol%change_in_solution_tolerance = 1.0d-6
-        tol%iteration_improvement_tolerance = 1.0d-1
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    ! Sets up default solver settings.
-    subroutine lm_set_default_settings(x)
-        ! Arguments
-        type(lm_solver_options), intent(out) :: x
-
-        ! Set defaults
-        x%method = FS_LEVENBERG_MARQUARDT_UPDATE
-        x%finite_difference_step_size = sqrt(epsilon(1.0d0))
-        x%damping_increase_factor = 11.0d0
-        x%damping_decrease_factor = 9.0d0
     end subroutine
 
 ! ------------------------------------------------------------------------------

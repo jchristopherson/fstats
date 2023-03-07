@@ -183,6 +183,7 @@ module fstats
     public :: lm_solver_options
     public :: convergence_info
     public :: regression_function
+    public :: iteration_update
     public :: jacobian
     public :: nonlinear_least_squares
     public :: FS_NO_ERROR
@@ -2017,6 +2018,16 @@ module fstats
         !> Defines how many iterations can pass before a re-evaluation of the
         !! Jacobian matrix is forced.
         integer(int32) :: max_iteration_between_updates
+    contains
+        !> @brief Sets the object to its default values.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_to_default(class(iteration_controls) x)
+        !! @endcode
+        !!
+        !! @param[in,out] x The @ref iteration_controls object.
+        procedure, public :: set_to_default => lm_set_default_tolerances
     end type
 
     !> @brief Provides information regarding convergence status.
@@ -2063,6 +2074,16 @@ module fstats
         real(real64) :: damping_increase_factor
         !> The factor to use when decreasing the damping parameter.
         real(real64) :: damping_decrease_factor
+    contains
+        !> @brief Sets the object to its default values.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_to_default(class(lm_solver_options) x)
+        !! @endcode
+        !!
+        !! @param[in,out] x The @ref lm_solver_options object.
+        procedure, public :: set_to_default => lm_set_default_settings
     end type
 
     interface
@@ -2071,6 +2092,12 @@ module fstats
             real(real64), intent(in), dimension(:) :: xdata, params
             real(real64), intent(out), dimension(:) :: resid
             logical, intent(out) :: stop
+        end subroutine
+
+        subroutine iteration_update(iter, funvals, resid, params, step)
+            use iso_fortran_env, only : int32, real64
+            integer(int32), intent(in) :: iter
+            real(real64), intent(in) :: funvals(:), resid(:), params(:), step(:)
         end subroutine
         
         module subroutine regression_jacobian_1(fun, xdata, params, &
@@ -2087,7 +2114,7 @@ module fstats
 
         module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
             resid, weights, maxp, minp, stats, alpha, controls, settings, &
-            info, err)
+            info, status, err)
             procedure(regression_function), pointer :: fun
             real(real64), intent(in) :: x(:), y(:)
             real(real64), intent(inout) :: params(:)
@@ -2099,6 +2126,7 @@ module fstats
             type(iteration_controls), intent(in), optional :: controls
             type(lm_solver_options), intent(in), optional :: settings
             type(convergence_info), intent(out), optional, target :: info
+            procedure(iteration_update), intent(in), pointer, optional :: status
             class(errors), intent(inout), optional, target :: err
         end subroutine
 
@@ -2115,6 +2143,14 @@ module fstats
         module subroutine lso_equal(x, y)
             type(lm_solver_options), intent(inout) :: x
             type(lm_solver_options), intent(in) :: y
+        end subroutine
+
+        module subroutine lm_set_default_tolerances(x)
+            class(iteration_controls), intent(inout) :: x
+        end subroutine
+
+        module subroutine lm_set_default_settings(x)
+            class(lm_solver_options), intent(inout) :: x
         end subroutine
     end interface
 
@@ -2154,7 +2190,7 @@ module fstats
     !!
     !! @par Syntax
     !! @code{.f90}
-    !! subroutine nonlinear_least_squares(pointer procedure(regression_function) fun, real(real64) x(:), real(real64) y(:), real(real64) params(:), real(real64) ymod(:), real(real64) resid(:), optional real(real64) weights(:), optional real(real64) maxp(:), optional real(real64) minp(:), optional type(regression_statistics) stats(:), optional real(real64) alpha, optional type(iteration_controls) controls, optional type(lm_solver_options) settings, optional type(convergence_info) info, optional class(errors) err)
+    !! subroutine nonlinear_least_squares(pointer procedure(regression_function) fun, real(real64) x(:), real(real64) y(:), real(real64) params(:), real(real64) ymod(:), real(real64) resid(:), optional real(real64) weights(:), optional real(real64) maxp(:), optional real(real64) minp(:), optional type(regression_statistics) stats(:), optional real(real64) alpha, optional type(iteration_controls) controls, optional type(lm_solver_options) settings, optional type(convergence_info) info, optional pointer procedure(iteration_update) status, optional class(errors) err)
     !! @endcode
     !!
     !! @param[in] fun A pointer to the @ref regression_function to evaluate.
@@ -2188,6 +2224,8 @@ module fstats
     !!  solver.
     !! @param[out] info An optional output that can be used to gain information
     !!  about the iterative solution and the nature of the convergence.
+    !! @param[in] status An optional pointer to a routine that can be used to
+    !!  extract iteration information.
     !! @param[in,out] err A mechanism for communicating errors and warnings
     !!  to the caller.  Possible warning and error codes are as follows.
     !! - FS_NO_ERROR: No errors encountered.
@@ -2373,5 +2411,6 @@ module fstats
     interface nonlinear_least_squares
         module procedure :: nonlinear_least_squares_1
     end interface
+
 ! ------------------------------------------------------------------------------
 end module

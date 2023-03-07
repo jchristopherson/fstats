@@ -118,7 +118,6 @@ contains
         procedure(regression_function), pointer :: fun
         real(real64) :: xp(21), yp(21), params(4), ymod(21), resid(21), ans(4)
         type(lm_solver_options) :: opt
-        type(iteration_controls) :: tols
 
         ! Data to fit
         xp = [0.0d0, 0.1d0, 0.2d0, 0.3d0, 0.4d0, 0.5d0, 0.6d0, 0.7d0, 0.8d0, &
@@ -164,26 +163,17 @@ contains
             print '(A)', "TEST FAILED: test_nl_least_squares 1-2"
         end if
 
-        ! Now test the quadratic update option - needs more work, but does not
-        ! converge to the appropriate minimum
-        
-        ! opt%method = FS_QUADRATIC_UPDATE
-        ! tols%max_iteration_count = 10000
-        ! tols%max_function_evaluations = 100000
-        ! tols%gradient_tolerance = 1.0d-6
-        ! tols%change_in_solution_tolerance = 1.0d-11
-        ! tols%residual_tolerance = 0.05d0
-        ! tols%iteration_improvement_tolerance = 0.1d0
-        ! tols%max_iteration_between_updates = 10
-        ! params = 1.0d0
-        ! call nonlinear_least_squares(fun, xp, yp, params, ymod, resid, &
-        !     settings = opt, controls = tols)
+        ! Now test the quadratic update option
+        opt%method = FS_QUADRATIC_UPDATE
+        params = 1.0d0
+        call nonlinear_least_squares(fun, xp, yp, params, ymod, resid, &
+            settings = opt)
 
-        ! ! Check the result
-        ! if (.not.is_equal(params, ans, tol)) then
-        !     rst = .false.
-        !     print '(A)', "TEST FAILED: test_nl_least_squares 1-3"
-        ! end if
+        ! Check the result
+        if (.not.is_equal(params, ans, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_nl_least_squares 1-3"
+        end if
     end function
 
 ! ------------------------------------------------------------------------------
