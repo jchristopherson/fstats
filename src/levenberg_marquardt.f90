@@ -664,27 +664,30 @@ contains
     ! - niter: updated current iteration number
     ! - X2: updated Chi-squared criteria
     ! - stop: A flag allowing the user to terminate model execution
+    ! - work: A workspace array (M-by-1)
     ! - iwork: A workspace array (N-by-1)
     ! - err: An error handling mechanism
     subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
-        maxP, minP, weights, JtWJ, JtWdy, h, pNew, deltaY, yNew, X2, stop, &
-        iwork, err)
+        maxP, minP, weights, JtWJ, JtWdy, h, pNew, deltaY, yNew, X2, X2Old, &
+        alpha, stop, work, iwork, err)
         ! Arguments
         procedure(regression_function), pointer :: fun
         real(real64), intent(in) :: xdata(:), ydata(:), p(:), maxP(:), &
             minP(:), weights(:), JtWdy(:)
-        real(real64), intent(in) :: lambda
+        real(real64), intent(in) :: lambda, X2Old
         integer(int32), intent(inout) :: neval, niter
         integer(int32), intent(in) :: update
         real(real64), intent(inout) :: JtWJ(:,:)
         real(real64), intent(out) :: h(:), pNew(:), deltaY(:), yNew(:)
-        real(real64), intent(out) :: X2
+        real(real64), intent(out) :: X2, alpha
         logical, intent(out) :: stop
+        real(real64), intent(out) :: work(:)
         integer(int32), intent(out) :: iwork(:)
         class(errors), intent(inout) :: err
 
         ! Local Variables
         integer(int32) :: i, n
+        real(real64) :: dpJh
 
         ! Initialization
         n = size(p)
@@ -729,6 +732,23 @@ contains
 
         ! Update the Chi-squared estimate
         X2 = dot_product(deltaY, deltaY * weights)
+
+        ! Perform a quadratic line update in the H direction, if necessary
+        if (update == FS_QUADRATIC_UPDATE) then
+            dpJh = dot_product(JtWdy, h)
+            alpha = dpJh / (0.5d0 * (X2 - X2Old) + 2.0d0 * dpJh)
+            h = alpha * h
+
+            do i = 1, n
+                pNew(i) = min(max(minP(i), p(i) + h(i)), maxP(i))
+            end do
+
+            call fun(xdata, pNew, work(1:m), stop)
+            if (stop) return
+            neval = neval + 1
+            deltaY = ydata - work(1:m)
+            X2 = dot_product(deltaY, deltaY * weights)
+        end if
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -770,8 +790,7 @@ contains
         ! Local Variables
         logical :: update
         integer(int32) :: i, m, n, dof, flag, neval, niter
-        real(real64) :: dX2, X2, X2Old, X2Try, lambda, alpha, dpJh, rho, nu, &
-            step
+        real(real64) :: dX2, X2, X2Old, X2Try, lambda, alpha, nu, step
         real(real64), allocatable :: pOld(:), yOld(:), J(:,:), JtWdy(:), &
             work(:), mwork(:,:), pTry(:), yTemp(:), JtWJc(:,:), h(:)
         integer(int32), allocatable :: iwork(:)
@@ -827,85 +846,17 @@ contains
             ! update the new parameter estimates
             call lm_iter(fun, xdata, ydata, p, neval, niter, opt%method, &
                 lambda, maxP, minP, weights, JtWJc, JtWdy, h, pTry, resid, &
-                yTemp, X2Try, stop, iwork, err)
+                yTemp, X2Try, X2Old, alpha, stop, work(1:m), iwork, err)
             if (stop) go to 5
             if (err%has_error_occurred()) return
 
-            ! Perform a quadratic line update in the H direction
-            if (opt%method == FS_QUADRATIC_UPDATE) then
-                dpJh = dot_product(JtWdy, h)
-                alpha = dpJh / (0.5d0 * (X2Try - X2) + 2.0d0 * dpJh)
-                h = alpha * h
-
-                do i = 1, n
-                    pTry(i) = min(max(minP(i), p(i) + h(i)), maxP(i))
-                end do
-
-                call fun(xdata, pTry, yTemp, stop)
-                if (stop) go to 5
-                neval = neval + 1
-                resid = ydata - yTemp
-                X2Try = dot_product(resid, resid * weights)
-            end if
-
-            ! Compare the improvement in Chi-squared vs. the theoretical
-            ! improvement of a single LM update
-            if (opt%method == FS_LEVENBERG_MARQUARDT_UPDATE) then
-                call extract_diagonal(JtWJ, work(1:n))
-                work(1:n) = lambda * work(1:n) * h + JtWdy
-            else
-                work(1:n) = lambda * h + JtWdy
-            end if
-            rho = (X2 - X2Try) / abs(dot_product(h, work(1:n)))
-            if (rho > controls%iteration_improvement_tolerance) then
-                ! Things are getting better at an acceptable rate
-                dX2 = X2 - X2Old
-                X2Old = X2
-                pOld = P
-                yOld = y
-                p = pTry
-
-                ! Recompute the matrices
-                call lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, J, p, &
-                    weights, neval, update, step, JtWJ, JtWdy, X2, y, stop, &
-                    work, mwork)
-                if (stop) go to 5
-                JtWJc = JtWJ
-
-                ! Decrease lambda
-                select case (opt%method)
-                case (FS_LEVENBERG_MARQUARDT_UPDATE)
-                    lambda = max(lambda / opt%damping_decrease_factor, 1.0d-7)
-                case (FS_QUADRATIC_UPDATE)
-                    lambda = max(lambda / (1.0d0 + alpha), 1.0d-7)
-                case (FS_NIELSEN_UPDATE)
-                    lambda = lambda * max(1.0d0 / 3.0d0, &
-                        1.0d0 - (2.0d0 * rho - 1.0d0)**3)
-                    nu = 2.0d0
-                end select
-            else
-                ! The iteration is not improving
-                X2 = X2Old
-                if (mod(niter, 2 * n) /= 0) then
-                    ! Force a rank-1 update of the system matrices
-                    call lm_matrix(fun, xdata, ydata, pOld, yOld, -1.0d0, J, &
-                        p, weights, neval, update, step, JtWJ, JtWdy, dX2, &
-                        y, stop, work, mwork)
-                    if (stop) go to 5
-                    JtWJc = JtWJ
-                end if
-
-                ! Increase lambda
-                select case (opt%method)
-                case (FS_LEVENBERG_MARQUARDT_UPDATE)
-                    lambda = min(lambda * opt%damping_increase_factor, 1.0d7)
-                case (FS_QUADRATIC_UPDATE)
-                    lambda = lambda + abs((X2Try - X2) / 2.0d0 / alpha)
-                case (FS_NIELSEN_UPDATE)
-                    lambda = lambda * nu
-                    nu = 2.0d0 * nu
-                end select
-            end if
+            ! Update the Chi-squared estimate, update the damping parameter
+            ! lambda, and, if necessary, update the matrices
+            call lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
+                X2Old, X2, X2Try, lambda, alpha, nu, JtWdy, JtWJ, J, weights, &
+                niter, neval, update, step, work, mwork, controls, opt, stop)
+            if (stop) go to 5
+            JtWJc = JtWJ
 
             ! Determine the matrix update scheme
             update = mod(niter, 2 * n) > 0
@@ -936,6 +887,87 @@ contains
 
         ! Formatting
 100     format(A, I0, A)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !
+    subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
+        X2old, X2, X2try, lambda, alpha, nu, JtWdy, JtWJ, J, weights, niter, &
+        neval, update, step, work, mwork, controls, opt, stop)
+        ! Arguments
+        procedure(regression_function), intent(in), pointer :: fun
+        real(real64), intent(in) :: xdata(:), ydata(:), X2try, h(:), step, &
+            pTry(:), weights(:), alpha
+        real(real64), intent(inout) :: pOld(:), p(:), yOld(:), y(:), lambda, &
+            JtWdy(:), dX2, X2, X2old, JtWJ(:,:), J(:,:), nu
+        real(real64), intent(out) :: work(:), mwork(:,:)
+        integer(int32), intent(in) :: niter
+        integer(int32), intent(inout) :: neval
+        logical, intent(inout) :: update
+        class(iteration_controls), intent(in) :: controls
+        class(lm_solver_options), intent(in) :: opt
+        logical, intent(out) :: stop
+
+        ! Local Variables
+        integer(int32) :: n
+        real(real64) :: rho
+
+        ! Initialization
+        n = size(p)
+
+        ! Process
+        if (opt%method == FS_LEVENBERG_MARQUARDT_UPDATE) then
+            call extract_diagonal(JtWJ, work(1:n))
+            work(1:n) = lambda * work(1:n) * h + JtWdy
+        else
+            work(1:n) = lambda * h + JtWdy
+        end if
+        rho = (X2 - X2try) / abs(dot_product(h, work(1:n)))
+        if (rho > controls%iteration_improvement_tolerance) then
+            ! Things are getting better at an acceptable rate
+            dX2 = X2 - X2old
+            X2old = X2
+            pOld = p
+            yOld = y
+            p = pTry
+
+            ! Recompute the matrices
+            call lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, J, p, weights, &
+                neval, update, step, JtWJ, JtWdy, X2, y, stop, work, mwork)
+            if (stop) return
+
+            ! Decrease lambda
+            select case (opt%method)
+            case (FS_LEVENBERG_MARQUARDT_UPDATE)
+                lambda = max(lambda / opt%damping_decrease_factor, 1.0d-7)
+            case (FS_QUADRATIC_UPDATE)
+                lambda = max(lambda / (1.0d0 + alpha), 1.0d-7)
+            case (FS_NIELSEN_UPDATE)
+                lambda = lambda * max(1.0d0 / 3.0d0, &
+                    1.0d0 - (2.0d0 * rho - 1.0d0**3))
+                nu = 2.0d0
+            end select
+        else
+            ! The iteration is not improving in a satisfactory manner
+            X2 = X2old
+            if (mod(niter, 2 * n) /= 0) then
+                call lm_matrix(fun, xdata, ydata, pOld, yOld, -1.0d0, J, p, &
+                    weights, neval, update, step, JtWJ, JtWdy, dX2, y, stop, &
+                    work, mwork)
+                if (stop) return
+            end if
+
+            ! Increase lambda
+            select case (opt%method)
+            case (FS_LEVENBERG_MARQUARDT_UPDATE)
+                lambda = min(lambda * opt%damping_increase_factor, 1.0d7)
+            case (FS_QUADRATIC_UPDATE)
+                lambda = lambda + abs((X2try - X2) / 2.0d0 / alpha)
+            case (FS_NIELSEN_UPDATE)
+                lambda = lambda * nu
+                nu = 2.0d0 * nu
+            end select
+        end if
     end subroutine
 
 ! ------------------------------------------------------------------------------
