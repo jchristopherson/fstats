@@ -118,6 +118,7 @@ contains
         procedure(regression_function), pointer :: fun
         real(real64) :: xp(21), yp(21), params(4), ymod(21), resid(21), ans(4)
         type(lm_solver_options) :: opt
+        type(iteration_controls) :: tols
 
         ! Data to fit
         xp = [0.0d0, 0.1d0, 0.2d0, 0.3d0, 0.4d0, 0.5d0, 0.6d0, 0.7d0, 0.8d0, &
@@ -149,10 +150,8 @@ contains
         end if
 
         ! Test with a different options set
+        call opt%set_to_default()
         opt%method = FS_NIELSEN_UPDATE
-        opt%finite_difference_step_size = 1.0d-6
-        opt%damping_increase_factor = 10.0d0
-        opt%damping_decrease_factor = 5.0d0
         params = 1.0d0
         call nonlinear_least_squares(fun, xp, yp, params, ymod, resid, &
             settings = opt)
@@ -164,10 +163,12 @@ contains
         end if
 
         ! Now test the quadratic update option
+        call tols%set_to_default()
+        tols%change_in_solution_tolerance = 1.0e-11
         opt%method = FS_QUADRATIC_UPDATE
         params = 1.0d0
         call nonlinear_least_squares(fun, xp, yp, params, ymod, resid, &
-            settings = opt)
+            settings = opt, controls = tols)
 
         ! Check the result
         if (.not.is_equal(params, ans, tol)) then

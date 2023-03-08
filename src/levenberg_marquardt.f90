@@ -3,8 +3,6 @@ submodule (fstats) levenberg_marquardt
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
     use linalg
 
-! TO DO:
-! - Implement Jacobian update counter
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, params, &
@@ -609,6 +607,7 @@ contains
     ! - stop: A flag allowing the user to terminate model execution
     ! - work: A workspace array (N+M-by-1)
     ! - mwork: A workspace matrix (N-by-M)
+    ! - update: Reset to false if a Jacobian evaluation was performed.
     subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
         neval, update, step, JtWJ, JtWdy, X2, yNew, stop, work, mwork)
         ! Arguments
@@ -618,7 +617,7 @@ contains
         real(real64), intent(in) :: dX2, step
         real(real64), intent(inout) :: jac(:,:)
         integer(int32), intent(inout) :: neval
-        logical, intent(in) :: update
+        logical, intent(inout) :: update
         real(real64), intent(out) :: JtWJ(:,:), JtWdy(:)
         real(real64), intent(out) :: X2, mwork(:,:), yNew(:)
         logical, intent(out) :: stop
@@ -646,6 +645,7 @@ contains
                 stop, step, w2)
             neval = neval + n
             if (stop) return
+            update = .false.
         else
             ! Simply perform a rank-1 update to the Jacobian
             call broyden_update(pOld, yOld, jac, p, yNew, w2, w1)
@@ -825,7 +825,7 @@ contains
 
         ! Local Variables
         logical :: update
-        integer(int32) :: i, m, n, dof, flag, neval, niter
+        integer(int32) :: i, m, n, dof, flag, neval, niter, nupdate
         real(real64) :: dX2, X2, X2Old, X2Try, lambda, alpha, nu, step
         real(real64), allocatable :: pOld(:), yOld(:), J(:,:), JtWdy(:), &
             work(:), mwork(:,:), pTry(:), yTemp(:), JtWJc(:,:), h(:)
@@ -833,7 +833,7 @@ contains
         character(len = :), allocatable :: errmsg
 
         ! Initialization
-        update = .false.
+        update = .true.
         m = size(xdata)
         n = size(p)
         dof = m - n
@@ -862,7 +862,7 @@ contains
 
         ! Evaluate the problem matrices
         call lm_matrix(fun, xdata, ydata, pOld, yOld, 1.0d0, J, p, weights, &
-            neval, .true., step, JtWJ, JtWdy, X2, y, stop, work, mwork)
+            neval, update, step, JtWJ, JtWdy, X2, y, stop, work, mwork)
         if (stop) go to 5
         X2Old = X2
         JtWJc = JtWJ
@@ -895,7 +895,13 @@ contains
             JtWJc = JtWJ
 
             ! Determine the matrix update scheme
-            update = mod(niter, 2 * n) > 0
+            nupdate = nupdate + 1
+            if (opt%method == FS_QUADRATIC_UPDATE) then
+                update = mod(niter, 2 * n) > 0
+            else if (nupdate >= controls%max_iteration_between_updates) then
+                update = .true.
+                nupdate = 0
+            end if
 
             ! Test for convergence
             if (lm_check_convergence(controls, dof, resid, niter, neval, &
