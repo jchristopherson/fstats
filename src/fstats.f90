@@ -715,7 +715,7 @@ module fstats
         !! @param[in] x The value at which to evaluate the function.
         !! @return The value of the function.
         !!
-        !! @remarks The CDF for a F distribution is given as 
+        !! @remarks The CDF for a Chi-squared distribution is given as 
         !! \f$ F(x) = \frac{ \gamma \left( \frac{k}{2}, \frac{x}{2} \right) }
         !! { \Gamma \left( \frac{k}{2} \right)} \f$
         !! where \f$ \gamma \f$ is the 
