@@ -110,13 +110,12 @@ $(document).ready(function(){initNavTree('structfstats_1_1t__distribution.html',
 <div class="dynheader">
 Inheritance diagram for fstats::t_distribution:</div>
 <div class="dyncontent">
-<div class="center"><img src="structfstats_1_1t__distribution__inherit__graph.png" border="0" usemap="#afstats_1_1t__distribution_inherit__map" alt="Inheritance graph"/></div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for fstats::t_distribution:</div>
-<div class="dyncontent">
-<div class="center"><img src="structfstats_1_1t__distribution__coll__graph.png" border="0" usemap="#afstats_1_1t__distribution_coll__map" alt="Collaboration graph"/></div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="structfstats_1_1t__distribution.png" usemap="#fstats::t_5Fdistribution_map" alt=""/>
+  <map id="fstats::t_5Fdistribution_map" name="fstats::t_5Fdistribution_map">
+<area href="structfstats_1_1distribution.html" title="Defines a probability distribution." alt="fstats::distribution" shape="rect" coords="0,0,118,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -167,7 +166,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Defines Student's T-Distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00283">283</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00317">317</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 </div><h2 class="groupheader">Member Function/Subroutine Documentation</h2>
 <a id="a6f6bbe9bf1d9c6af4f7110decc702268" name="a6f6bbe9bf1d9c6af4f7110decc702268"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f6bbe9bf1d9c6af4f7110decc702268">&#9670;&#160;</a></span>cdf()</h2>
@@ -194,7 +193,7 @@ Public Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The value of the function.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The CDF for Student's T-Distribution is given as \( F(t) = \int_{-\infty}^{t} f(u) \,du = 1 - \frac{1}{2} I_{x(t)} \left( \frac{\nu}{2}, \frac{1}{2} \right) \) where \( x(t) = \frac{\nu}{\nu + t^2} \), \( I \) is the <a href="https://en.wikipedia.org/wiki/Beta_function#Incomplete_beta_function">regularized incomplete beta function</a>, and \( \nu \) is the number of degrees of freedom. This formula is valid for \( t &gt; 0 \). For values of \( t &lt; 0 \), the symmetry of the function can be exploited. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00322">322</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00356">356</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -221,7 +220,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The mean value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00332">332</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00366">366</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -248,7 +247,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The median value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00342">342</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00376">376</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -275,7 +274,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The mode value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00352">352</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00386">386</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -304,7 +303,7 @@ Public Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The value of the function.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The PDF for Student's T-Distribution is given as \( f(t) = \frac{ \Gamma \left( \frac{\nu + 1}{2} \right) }{ \sqrt{\nu \pi} \Gamma \left( \frac{\nu}{2} \right) } \left( 1 + \frac{t^2}{\nu} \right)^{-(\nu + 1) / 2} \) where \( \nu \) is the number of degrees of freedom. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00301">301</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00335">335</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -331,7 +330,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The variance value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00362">362</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00396">396</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -350,7 +349,7 @@ Public Attributes</h2></td></tr>
 
 <p>The number of degrees of freedom. </p>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00285">285</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00319">319</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>

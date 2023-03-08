@@ -362,21 +362,23 @@ module subroutine linear_least_squares_real64(order, intercept, x, y, coeffs, &
     if (.not.present(stats)) return
     
     ! Start the process of computing statistics
-    df = npts - ncols
-    ssr = norm2(resid)**2   ! sum of the squares of the residual
-    var = ssr / df
-    dist%dof = df
-    talpha = confidence_interval(dist, alph, one, 1)
-    do i = 1, ncols
-        stats(i)%standard_error = sqrt(var * c(i,i))
-        stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
-        stats(i)%probability = regularized_beta( &
-            half * df, &
-            half, &
-            df / (df + (stats(i)%t_statistic)**2) &
-        )
-        stats(i)%confidence_interval = talpha * stats(i)%standard_error
-    end do
+    ! df = npts - ncols
+    ! ssr = norm2(resid)**2   ! sum of the squares of the residual
+    ! var = ssr / df
+    ! dist%dof = df
+    ! talpha = confidence_interval(dist, alph, one, 1)
+    ! do i = 1, ncols
+    !     stats(i)%standard_error = sqrt(var * c(i,i))
+    !     stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
+    !     stats(i)%probability = regularized_beta( &
+    !         half * df, &
+    !         half, &
+    !         df / (df + (stats(i)%t_statistic)**2) &
+    !     )
+    !     stats(i)%confidence_interval = talpha * stats(i)%standard_error
+    ! end do
+    stats = calculate_regression_statistics(resid, coeffs(1:ncols), c, alph, &
+        errmgr)
 
     ! Formatting
 100 format(A, I0, A, I0, A)
@@ -504,26 +506,152 @@ module subroutine linear_least_squares_real32(order, intercept, x, y, coeffs, &
     if (.not.present(stats)) return
     
     ! Start the process of computing statistics
-    df = npts - ncols
-    ssr = norm2(resid)**2   ! sum of the squares of the residual
-    var = ssr / df
-    dist%dof = df
-    talpha = confidence_interval(dist, alph, one, 1)
-    do i = 1, ncols
-        stats(i)%standard_error = sqrt(var * c(i,i))
-        stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
-        stats(i)%probability = regularized_beta( &
-            half * df, &
-            half, &
-            real(df / (df + (stats(i)%t_statistic)**2), real32) &
-        )
-        stats(i)%confidence_interval = talpha * stats(i)%standard_error
-    end do
+    ! df = npts - ncols
+    ! ssr = norm2(resid)**2   ! sum of the squares of the residual
+    ! var = ssr / df
+    ! dist%dof = df
+    ! talpha = confidence_interval(dist, alph, one, 1)
+    ! do i = 1, ncols
+    !     stats(i)%standard_error = sqrt(var * c(i,i))
+    !     stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
+    !     stats(i)%probability = regularized_beta( &
+    !         half * df, &
+    !         half, &
+    !         real(df / (df + (stats(i)%t_statistic)**2), real32) &
+    !     )
+    !     stats(i)%confidence_interval = talpha * stats(i)%standard_error
+    ! end do
+    stats = calculate_regression_statistics(resid, coeffs(1:ncols), c, alph, &
+        errmgr)
 
     ! Formatting
 100 format(A, I0, A, I0, A)
 101 format(A, I0, A)
 end subroutine
+
+! ------------------------------------------------------------------------------
+module function calculate_regression_stats_r64(resid, params, c, alpha, err) &
+    result(rst)
+    ! Arguments
+    real(real64), intent(in) :: resid(:), params(:), c(:,:)
+    real(real64), intent(in), optional :: alpha
+    class(errors), intent(inout), optional, target :: err
+    type(regression_statistics), allocatable :: rst(:)
+
+    ! Parameters
+    real(real64), parameter :: p05 = 0.05d0
+    real(real64), parameter :: half = 0.5d0
+    real(real64), parameter :: one = 1.0d0
+
+    ! Local Variables
+    integer(int32) :: i, m, n, dof, flag
+    real(real64) :: a, ssr, var, talpha
+    type(t_distribution) :: dist
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Initialization
+    m = size(resid)
+    n = size(params)
+    dof = m - n
+    if (present(alpha)) then
+        a = alpha
+    else
+        a = p05
+    end if
+    allocate(rst(n), stat = flag)
+    if (flag /= 0) then
+    end if
+
+    ! Input Checking
+    if (size(c, 1) /= n .or. size(c, 2) /= n) then
+    end if
+
+    ! Process
+    ssr = norm2(resid)**2   ! sum of the squares of the residual
+    var = ssr / dof
+    dist%dof = real(dof, real64)
+    talpha = confidence_interval(dist, a, one, 1)
+    do i = 1, n
+        rst(i)%standard_error = sqrt(var * c(i,i))
+        rst(i)%t_statistic = params(i) / rst(i)%standard_error
+        rst(i)%probability = regularized_beta( &
+            half * dof, &
+            half, &
+            real(dof, real64) / (dof + (rst(i)%t_statistic)**2) &
+        )
+        rst(i)%confidence_interval = talpha * rst(i)%standard_error
+    end do
+end function
+
+! --------------------
+module function calculate_regression_stats_r32(resid, params, c, alpha, err) &
+    result(rst)
+    ! Arguments
+    real(real32), intent(in) :: resid(:), params(:), c(:,:)
+    real(real32), intent(in), optional :: alpha
+    class(errors), intent(inout), optional, target :: err
+    type(regression_statistics), allocatable :: rst(:)
+
+    ! Parameters
+    real(real32), parameter :: p05 = 0.05
+    real(real64), parameter :: half = 0.5d0
+    real(real32), parameter :: one = 1.0
+
+    ! Local Variables
+    integer(int32) :: i, m, n, dof, flag
+    real(real32) :: a, ssr, var, talpha
+    type(t_distribution) :: dist
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Initialization
+    m = size(resid)
+    n = size(params)
+    dof = m - n
+    if (present(alpha)) then
+        a = alpha
+    else
+        a = p05
+    end if
+    allocate(rst(n), stat = flag)
+    if (flag /= 0) then
+    end if
+
+    ! Input Checking
+    if (size(c, 1) /= n .or. size(c, 2) /= n) then
+    end if
+
+    ! Process
+    ssr = norm2(resid)**2   ! sum of the squares of the residual
+    var = ssr / dof
+    dist%dof = real(dof, real32)
+    talpha = confidence_interval(dist, a, one, 1)
+    do i = 1, n
+        rst(i)%standard_error = sqrt(var * c(i,i))
+        rst(i)%t_statistic = params(i) / rst(i)%standard_error
+        rst(i)%probability = regularized_beta( &
+            half * dof, &
+            half, &
+            real(dof, real64) / (dof + (rst(i)%t_statistic)**2) &
+        )
+        rst(i)%confidence_interval = talpha * rst(i)%standard_error
+    end do
+end function
 
 ! ******************************************************************************
 ! PRIVATE ROUTINES

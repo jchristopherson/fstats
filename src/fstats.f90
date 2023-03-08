@@ -151,6 +151,7 @@ module fstats
     public :: t_distribution
     public :: normal_distribution
     public :: f_distribution
+    public :: chi_squared_distribution
     public :: mean
     public :: variance
     public :: standard_deviation
@@ -179,10 +180,24 @@ module fstats
     public :: regression_statistics
     public :: get_full_factorial_matrix_size
     public :: full_factorial
+    public :: iteration_controls
+    public :: lm_solver_options
+    public :: convergence_info
+    public :: regression_function
+    public :: iteration_update
+    public :: jacobian
+    public :: nonlinear_least_squares
     public :: FS_NO_ERROR
     public :: FS_ARRAY_SIZE_ERROR
     public :: FS_INVALID_INPUT_ERROR
     public :: FS_OUT_OF_MEMORY_ERROR
+    public :: FS_UNDERDEFINED_PROBLEM_ERROR
+    public :: FS_TOLERANCE_TOO_SMALL_ERROR
+    public :: FS_TOO_FEW_ITERATION_ERROR
+    public :: FS_LEVENBERG_MARQUARDT_UPDATE
+    public :: FS_QUADRATIC_UPDATE
+    public :: FS_NIELSEN_UPDATE
+    public :: assignment(=)
 
 ! ******************************************************************************
 ! ERROR CODES
@@ -191,7 +206,26 @@ module fstats
     integer(int32), parameter :: FS_ARRAY_SIZE_ERROR = 10000
     integer(int32), parameter :: FS_INVALID_INPUT_ERROR = 10001
     integer(int32), parameter :: FS_OUT_OF_MEMORY_ERROR = 10002
+    integer(int32), parameter :: FS_UNDERDEFINED_PROBLEM_ERROR = 10003
+    integer(int32), parameter :: FS_TOLERANCE_TOO_SMALL_ERROR = 10004
+    integer(int32), parameter :: FS_TOO_FEW_ITERATION_ERROR = 10005
 
+! ******************************************************************************
+! CONSTANTS
+! ------------------------------------------------------------------------------
+    integer(int32), parameter :: FS_LEVENBERG_MARQUARDT_UPDATE = 1
+    integer(int32), parameter :: FS_QUADRATIC_UPDATE = 2
+    integer(int32), parameter :: FS_NIELSEN_UPDATE = 3
+
+! ******************************************************************************
+! OPERATORS
+! ------------------------------------------------------------------------------
+    interface assignment (=)
+        module procedure :: ic_equal
+        module procedure :: ci_equal
+        module procedure :: lso_equal
+    end interface
+    
 ! ******************************************************************************
 ! DISTRIBUTIONS
 ! ------------------------------------------------------------------------------
@@ -641,6 +675,127 @@ module fstats
         
         pure module function fd_variance(this) result(rst)
             class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+    end interface
+
+    !> @brief Defines a Chi-squared distribution.
+    !!
+    !! @par Remarks
+    !! For additional information see the following references.
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Chi-squared_distribution)
+    type, extends(distribution) :: chi_squared_distribution
+        !> The number of degrees of freedom.
+        integer(int32) :: dof
+    contains
+        !> Computes the probability density function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function pdf(class(chi_squared_distribution) this, real(real64 )x)
+        !! @endcode
+        !! 
+        !! @param[in] this The chi_squared_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !! @return The value of the function.
+        !!
+        !! @remarks The PDF for a Chi-squared distribution is given as 
+        !! \f$ f(x) = \frac{x^{k/2 - 1} \exp{-x / 2}} {2^{k / 2} 
+        !! \Gamma \left( \frac{k}{2} \right)} \f$, where \f$ k \f$ is the 
+        !! number of degrees of freedom.
+        procedure, public :: pdf => cs_pdf
+        !> Computes the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function cdf(class(chi_squared_distribution) this, real(real64 )x)
+        !! @endcode
+        !! 
+        !! @param[in] this The chi_squared_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !! @return The value of the function.
+        !!
+        !! @remarks The CDF for a Chi-squared distribution is given as 
+        !! \f$ F(x) = \frac{ \gamma \left( \frac{k}{2}, \frac{x}{2} \right) }
+        !! { \Gamma \left( \frac{k}{2} \right)} \f$
+        !! where \f$ \gamma \f$ is the 
+        !! <a href = "https://en.wikipedia.org/wiki/Incomplete_gamma_function">
+        !! lower incomplete gamma function</a>, and \f$ k \f$ is the number of 
+        !! degrees of freedom.
+        procedure, public :: cdf => cs_cdf
+        !> Computes the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function mean(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => cs_mean
+        !> Computes the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function median(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The median value.
+        procedure, public :: median => cs_median
+        !> Computes the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function mode(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => cs_mode
+        !> Computes the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function variance(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => cs_variance
+    end type
+
+    ! distributions_chisquared.f90
+    interface
+        pure module elemental function cs_pdf(this, x) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module elemental function cs_cdf(this, x) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function cs_mean(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function cs_median(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function cs_mode(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function cs_variance(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
             real(real64) :: rst
         end function
     end interface
@@ -1579,8 +1734,8 @@ module fstats
     !!
     !! @par Syntax
     !! @code{.f90}
-    !! subroutine linear_least_squares(integer(int32) order, lobical intercept, real(real64) x(:), real(real64) y(:), real(real64) coeffs(:), real(real64) ymod(:), real(real64) resid, optional type(regression_statistics) stats(:), optional real(real64) alpha, optional class(errors) err)
-    !! subroutine linear_least_squares(integer(int32) order, lobical intercept, real(real32) x(:), real(real32) y(:), real(real32) coeffs(:), real(real32) ymod(:), real(real32) resid, optional type(regression_statistics) stats(:), optional real(real32) alpha, optional class(errors) err)
+    !! subroutine linear_least_squares(integer(int32) order, logical intercept, real(real64) x(:), real(real64) y(:), real(real64) coeffs(:), real(real64) ymod(:), real(real64) resid, optional type(regression_statistics) stats(:), optional real(real64) alpha, optional class(errors) err)
+    !! subroutine linear_least_squares(integer(int32) order, logical intercept, real(real32) x(:), real(real32) y(:), real(real32) coeffs(:), real(real32) ymod(:), real(real32) resid, optional type(regression_statistics) stats(:), optional real(real32) alpha, optional class(errors) err)
     !! @endcode
     !!
     !! @param[in] order The order of the equation to fit.  This value must be
@@ -1752,6 +1907,31 @@ module fstats
         module procedure :: linear_least_squares_real32
     end interface
 
+    !> @brief Computes statistics for the quality of fit for a regression model.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! type(regression_statistics) function calculate_regression_statistics(real(real64) resid(:), real(real64) params(:), real(real64) c(:,:), optional real(real64) alpha, optional class(errors) err)
+    !! type(regression_statistics) function calculate_regression_statistics(real(real32) resid(:), real(real32) params(:), real(real32) c(:,:), optional real(real32) alpha, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] resid An M-element array containing the model residual errors.
+    !! @param[in] params An N-element array containing the model parameters.
+    !! @param[in] c The N-by-N covariance matrix.
+    !! @param[in] alpha An optional input describing the probability level of 
+    !!  the confidence interval analysis.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if @p c is not sized correctly.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! @return A @ref regression_statistics object containing the analysis
+    !!  results.
+    interface calculate_regression_statistics
+        module procedure :: calculate_regression_stats_r64
+        module procedure :: calculate_regression_stats_r32
+    end interface
+
     ! regression_implementation.f90
     interface
         module subroutine coefficient_matrix_real64(order, intercept, x, c, err)
@@ -1803,6 +1983,22 @@ module fstats
             real(real32), intent(in), optional :: alpha
             class(errors), intent(inout), optional, target :: err
         end subroutine
+
+        module function calculate_regression_stats_r64(resid, params, c, &
+            alpha, err) result(rst)
+            real(real64), intent(in) :: resid(:), params(:), c(:,:)
+            real(real64), intent(in), optional :: alpha
+            class(errors), intent(inout), optional, target :: err
+            type(regression_statistics), allocatable :: rst(:)
+        end function
+
+        module function calculate_regression_stats_r32(resid, params, c, &
+            alpha, err) result(rst)
+            real(real32), intent(in) :: resid(:), params(:), c(:,:)
+            real(real32), intent(in), optional :: alpha
+            class(errors), intent(inout), optional, target :: err
+            type(regression_statistics), allocatable :: rst(:)
+        end function
     end interface
 
 ! ******************************************************************************
@@ -1922,6 +2118,420 @@ module fstats
             integer(int32), intent(out) :: tbl(:,:)
             class(errors), intent(inout), optional, target :: err
         end subroutine
+    end interface
+
+! ******************************************************************************
+! NONLINEAR REGRESSION
+! ------------------------------------------------------------------------------
+    !> @brief Provides a collection of iteration control parameters.
+    type iteration_controls
+        !> Defines the maximum number of iterations allowed.
+        integer(int32) :: max_iteration_count
+        !> Defines the maximum number of function evaluations allowed.
+        integer(int32) :: max_function_evaluations
+        !> Defines a tolerance on the gradient of the fitted function.
+        real(real64) :: gradient_tolerance
+        !> Defines a tolerance on the change in parameter values.
+        real(real64) :: change_in_solution_tolerance
+        !> Defines a tolerance on the metric associated with the residual error.
+        real(real64) :: residual_tolerance
+        !> Defines a tolerance to ensure adequate improvement on each iteration.
+        real(real64) :: iteration_improvement_tolerance
+        !> Defines how many iterations can pass before a re-evaluation of the
+        !! Jacobian matrix is forced.
+        integer(int32) :: max_iteration_between_updates
+    contains
+        !> @brief Sets the object to its default values.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_to_default(class(iteration_controls) x)
+        !! @endcode
+        !!
+        !! @param[in,out] x The @ref iteration_controls object.
+        procedure, public :: set_to_default => lm_set_default_tolerances
+    end type
+
+    !> @brief Provides information regarding convergence status.
+    type convergence_info
+        !> True if convergence on the gradient was achieved; else, false.
+        logical :: converge_on_gradient
+        !> The value of the gradient test parameter.
+        real(real64) :: gradient_value
+        !> True if convergence on the change in solution was achieved; else,
+        !! false.
+        logical :: converge_on_solution_change
+        !> The value of the change in solution parameter.
+        real(real64) :: solution_change_value
+        !> True if convergence on the residual error parameter was achieved; 
+        !! else, false.
+        logical :: converge_on_residual_parameter
+        !> The value of the residual error parameter.
+        real(real64) :: residual_value
+        !> True if the solution did not converge in the allowed number of 
+        !! iterations.
+        logical :: reach_iteration_limit
+        !> The iteration count.
+        integer(int32) :: iteration_count
+        !> True if the solution did not converge in the allowed number of
+        !! function evaluations.
+        logical :: reach_function_evaluation_limit
+        !> The function evaluation count.
+        integer(int32) :: function_evaluation_count
+        !> True if the user requested the stop; else, false.
+        logical :: user_requested_stop
+    end type
+
+    !> @brief Options to control the Levenberg-Marquardt solver.
+    type lm_solver_options
+        !> The solver method to utilize.
+        !! - FS_LEVENBERG_MARQUARDT_UPDATE:
+        !! - FS_QUADRATIC_UPDATE:
+        !! - FS_NIELSEN_UDPATE:
+        integer(int32) :: method
+        !> The step size used for the finite difference calculations of the
+        !! Jacobian matrix.
+        real(real64) :: finite_difference_step_size
+        !> The factor to use when increasing the damping parameter.
+        real(real64) :: damping_increase_factor
+        !> The factor to use when decreasing the damping parameter.
+        real(real64) :: damping_decrease_factor
+    contains
+        !> @brief Sets the object to its default values.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_to_default(class(lm_solver_options) x)
+        !! @endcode
+        !!
+        !! @param[in,out] x The @ref lm_solver_options object.
+        procedure, public :: set_to_default => lm_set_default_settings
+    end type
+
+    interface
+        subroutine regression_function(xdata, params, resid, stop)
+            use iso_fortran_env, only : real64
+            real(real64), intent(in), dimension(:) :: xdata, params
+            real(real64), intent(out), dimension(:) :: resid
+            logical, intent(out) :: stop
+        end subroutine
+
+        subroutine iteration_update(iter, funvals, resid, params, step)
+            use iso_fortran_env, only : int32, real64
+            integer(int32), intent(in) :: iter
+            real(real64), intent(in) :: funvals(:), resid(:), params(:), step(:)
+        end subroutine
+        
+        module subroutine regression_jacobian_1(fun, xdata, params, &
+            jac, stop, f0, f1, step, err)
+            procedure(regression_function), intent(in), pointer :: fun
+            real(real64), intent(in) :: xdata(:), params(:)
+            real(real64), intent(out) :: jac(:,:)
+            logical, intent(out) :: stop
+            real(real64), intent(in), optional, target :: f0(:)
+            real(real64), intent(out), optional, target :: f1(:)
+            real(real64), intent(in), optional :: step
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
+            resid, weights, maxp, minp, stats, alpha, controls, settings, &
+            info, status, err)
+            procedure(regression_function), pointer :: fun
+            real(real64), intent(in) :: x(:), y(:)
+            real(real64), intent(inout) :: params(:)
+            real(real64), intent(out) :: ymod(:), resid(:)
+            real(real64), intent(in), optional, target :: weights(:), maxp(:), &
+                minp(:)
+            type(regression_statistics), intent(out), optional :: stats(:)
+            real(real64), intent(in), optional :: alpha
+            type(iteration_controls), intent(in), optional :: controls
+            type(lm_solver_options), intent(in), optional :: settings
+            type(convergence_info), intent(out), optional, target :: info
+            procedure(iteration_update), intent(in), pointer, optional :: status
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine ic_equal(x, y)
+            type(iteration_controls), intent(inout) :: x
+            type(iteration_controls), intent(in) :: y
+        end subroutine
+
+        module subroutine ci_equal(x, y)
+            type(convergence_info), intent(inout) :: x
+            type(convergence_info), intent(in) :: y
+        end subroutine
+
+        module subroutine lso_equal(x, y)
+            type(lm_solver_options), intent(inout) :: x
+            type(lm_solver_options), intent(in) :: y
+        end subroutine
+
+        module subroutine lm_set_default_tolerances(x)
+            class(iteration_controls), intent(inout) :: x
+        end subroutine
+
+        module subroutine lm_set_default_settings(x)
+            class(lm_solver_options), intent(inout) :: x
+        end subroutine
+    end interface
+
+    !> @brief Computes the Jacobian matrix for a nonlinear regression problem.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine jacobian(pointer procedure(regression_function) fun, real(real64) xdata(:), real(real64) params(:), real(real64) jac(:,:), logical stop, optional real(real64) f0(:), optional real(real64) f1(:), optional real(real64) step, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] fun A pointer to the @ref regression_function to evaluate.
+    !! @param[in] xdata The M-element array containing x-coordinate data.
+    !! @param[in] params The N-element array containing the model parameters.
+    !! @param[out] jac The M-by-N matrix where the Jacobian will be written.
+    !! @param[out] stop A value that the user can set in @p fun forcing the
+    !!  evaluation process to stop prior to completion.
+    !! @param[in] f0 An optional M-element array containing the model values
+    !!  using the current parameters as defined in @p m.  This input can be
+    !!  used to prevent the routine from performing a function evaluation at the
+    !!  model parameter state defined in @p params.
+    !! @param[out] f1 An optional M-element workspace array used for function
+    !!  evaluations.
+    !! @param[in] step The differentiation step size.  The default is the
+    !!  square root of machine precision.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
+    !!      sized.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    interface jacobian
+        module procedure :: regression_jacobian_1
+    end interface
+
+    !> @brief Performs a nonlinear regression to fit a model using a version
+    !! of the Levenberg-Marquardt algorithm.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! subroutine nonlinear_least_squares(pointer procedure(regression_function) fun, real(real64) x(:), real(real64) y(:), real(real64) params(:), real(real64) ymod(:), real(real64) resid(:), optional real(real64) weights(:), optional real(real64) maxp(:), optional real(real64) minp(:), optional type(regression_statistics) stats(:), optional real(real64) alpha, optional type(iteration_controls) controls, optional type(lm_solver_options) settings, optional type(convergence_info) info, optional pointer procedure(iteration_update) status, optional class(errors) err)
+    !! @endcode
+    !!
+    !! @param[in] fun A pointer to the @ref regression_function to evaluate.
+    !! @param[in] x The M-element array containing x-coordinate data.
+    !! @param[in] y The M-element array containing y-coordinate data.
+    !! @param[in,out] params On input, the N-element array containing the
+    !!  initial estimate of the model parameters.  On output, the computed 
+    !!  model parameters.
+    !! @param[out] ymod An M-element array where the modeled dependent data will
+    !!  be written.
+    !! @param[out] resid An M-element array where the model residuals will be
+    !!  written.
+    !! @param[in] weights An optional M-element array allowing the weighting of
+    !!  individual points.
+    !! @param[in] maxp An optional N-element array that can be used as upper
+    !!  limits on the parameter values.  If no upper limit is requested for a
+    !!  particular parameter, utilize a very large value.  The internal default
+    !!  is to utilize huge() as a value.
+    !! @param[in] minp An optional N-element array that can be used as lower
+    !!  limits on the parameter values.  If no lower limit is requested for a
+    !!  particalar parameter, utilize a very large magnitude, but negative,
+    !!  value.  The internal default is to utilize -huge() as a value.
+    !! @arapam[out] stats An optional N-element array that, if supplied, will
+    !!  be used to return statistics about the fit for each parameter.
+    !! @param[in] alpha An optional input describing the probability level of 
+    !!  the confidence interval analysis assuming that statistics for each
+    !!  parameter are being calculated.
+    !! @param[in] controls An optional input providing custom iteration 
+    !!  controls.
+    !! @param[in] settings An optional input providing custom settings for the 
+    !!  solver.
+    !! @param[out] info An optional output that can be used to gain information
+    !!  about the iterative solution and the nature of the convergence.
+    !! @param[in] status An optional pointer to a routine that can be used to
+    !!  extract iteration information.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
+    !!      sized.
+    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_UNDERDEFINED_PROBLEM_ERROR: Occurs if the problem posed is 
+    !!      underdetetermined (M < N).
+    !! - FS_TOLERANCE_TOO_SMALL_ERROR: Occurs if any supplied tolerances are
+    !!      too small to be practical.
+    !! - FS_TOO_FEW_ITERATION_ERROR: Occurs if too few iterations are allowed.
+    !!
+    !! @par Example
+    !! The following example illustrates the use of the nonlinear_least_squares
+    !! routine for fitting a polynomial.  For comparison, the 
+    !! @ref linear_least_squares routine is also employed.
+    !!
+    !! @code{.f90}
+    !! module nl_example
+    !!     use iso_fortran_env
+    !! contains
+    !!     subroutine exfun(x, p, f, stop)
+    !!         ! Arguments
+    !!         real(real64), intent(in) :: x(:), p(:)
+    !!         real(real64), intent(out) :: f(:)
+    !!         logical, intent(out) :: stop
+    !!
+    !!         ! Function
+    !!         f = p(4) * x**3 + p(3) * x**2 + p(2) * x + p(1)
+    !!
+    !!         ! Do not stop
+    !!         stop = .false.
+    !!     end subroutine
+    !! end module
+    !!
+    !! program example
+    !!     use iso_fortran_env
+    !!     use fstats
+    !!     use nl_example
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     character, parameter :: tab = achar(9)
+    !!     character, parameter :: nl = new_line('a')
+    !!     integer(int32) :: i
+    !!     procedure(regression_function), pointer :: fun
+    !!     real(real64) :: xp(21), yp(21), params(4), ymod(21), resid(21), &
+    !!         ylmod(21), lresid(21), lparams(4)
+    !!     type(convergence_info) :: info
+    !!     type(regression_statistics) :: stats(4), lstats(4)
+    !!
+    !!     ! Data to fit
+    !!     xp = [0.0d0, 0.1d0, 0.2d0, 0.3d0, 0.4d0, 0.5d0, 0.6d0, 0.7d0, 0.8d0, &
+    !!         0.9d0, 1.0d0, 1.1d0, 1.2d0, 1.3d0, 1.4d0, 1.5d0, 1.6d0, 1.7d0, &
+    !!         1.8d0, 1.9d0, 2.0d0]
+    !!     yp = [1.216737514d0, 1.250032542d0, 1.305579195d0, 1.040182335d0, &
+    !!         1.751867738d0, 1.109716707d0, 2.018141531d0, 1.992418729d0, &
+    !!         1.807916923d0, 2.078806005d0, 2.698801324d0, 2.644662712d0, &
+    !!         3.412756702d0, 4.406137221d0, 4.567156645d0, 4.999550779d0, &
+    !!         5.652854194d0, 6.784320119d0, 8.307936836d0, 8.395126494d0, &
+    !!         10.30252404d0]
+    !!
+    !!     ! Assign the function pointer and define an initial solution estimate
+    !!     fun => exfun
+    !!     params = 1.0d0
+    !!
+    !!     ! Solve the problem
+    !!     call nonlinear_least_squares(fun, xp, yp, params, ymod, resid, &
+    !!         info = info, stats = stats)
+    !!
+    !!     ! Display the results
+    !!     print '(A)', "Model:"
+    !!     print 100, (tab // "params(", i, "): ", params(i), i = 1, size(params))
+    !!
+    !!     print '(A)', "Statistics:"
+    !!     print 101, ( &
+    !!         "Coefficient ", i, ":" // nl // &
+    !!         tab // "Standard Error: ", stats(i)%standard_error, nl // &
+    !!         tab // "Confidence Interval: +/-", stats(i)%confidence_interval, nl // &
+    !!         tab // "T-Statistic: ", stats(i)%t_statistic, nl // &
+    !!         tab // "P-Value: ", stats(i)%probability, &
+    !!         i = 1, size(stats) &
+    !!     )
+    !!
+    !!     print '(A)', "Convergence Information:"
+    !!     print 102, tab // "Iteration Count: ", info%iteration_count
+    !!     print 102, tab // "Function Evaluation Count: ", &
+    !!         info%function_evaluation_count
+    !!     print 103, tab // "Converge on Gradient: ", &
+    !!         info%converge_on_gradient, " (", info%gradient_value, ")"
+    !!     print 103, tab // "Converge on Solution Change: ", &
+    !!         info%converge_on_solution_change, " (", info%solution_change_value, ")"
+    !!     print 103, tab // "Converge on Parameter Change: ", &
+    !!         info%converge_on_residual_parameter, " (", info%residual_value, ")"
+    !!
+    !!     ! As our model is simply a 3rd order polynomial, the linear_least_squares
+    !!     ! routine can also be used.  As a comparison, here's the 
+    !!     ! linear_least_squares solution
+    !!     call linear_least_squares(3, .true., xp, yp, lparams, ylmod, lresid, lstats)
+    !!
+    !!     ! Print the linear model results
+    !!     print '(A)', nl // "Linear Model:"
+    !!     print 100, (tab // "params(", i, "): ", lparams(i), i = 1, size(lparams))
+    !!
+    !!     print '(A)', "Statistics:"
+    !!     print 101, ( &
+    !!         "Coefficient ", i, ":" // nl // &
+    !!         tab // "Standard Error: ", lstats(i)%standard_error, nl // &
+    !!         tab // "Confidence Interval: +/-", lstats(i)%confidence_interval, nl // &
+    !!         tab // "T-Statistic: ", lstats(i)%t_statistic, nl // &
+    !!         tab // "P-Value: ", lstats(i)%probability, &
+    !!         i = 1, size(lstats) &
+    !!     )
+    !!
+    !! 100 format(A, I0, A, F8.5)
+    !! 101 format(A, I0, A, F6.3, A, F6.3, A, F6.3, A, F6.3)
+    !! 102 format(A, I0)
+    !! 103 format(A, L1, A, E9.3, A)
+    !! end program
+    !! @endcode
+    !! The above program produces the following results.
+    !! @code{.txt}
+    !! Model:
+    !!         params(1):  1.18661
+    !!         params(2):  0.44661
+    !!         params(3): -0.12232
+    !!         params(4):  1.06476
+    !! Statistics:
+    !! Coefficient 1:
+    !!         Standard Error:  0.230
+    !!         Confidence Interval: +/- 0.485
+    !!         T-Statistic:  5.158
+    !!         P-Value:  0.000
+    !! Coefficient 2:
+    !!         Standard Error:  1.021
+    !!         Confidence Interval: +/- 2.154
+    !!         T-Statistic:  0.437
+    !!         P-Value:  0.667
+    !! Coefficient 3:
+    !!         Standard Error:  1.204
+    !!         Confidence Interval: +/- 2.540
+    !!         T-Statistic: -0.102
+    !!         P-Value:  0.920
+    !! Coefficient 4:
+    !!         Standard Error:  0.395
+    !!         Confidence Interval: +/- 0.834
+    !!         T-Statistic:  2.694
+    !!         P-Value:  0.015
+    !! Convergence Information:
+    !!         Iteration Count: 9
+    !!         Function Evaluation Count: 47
+    !!         Converge on Gradient: F (0.215E-07)
+    !!         Converge on Solution Change: T (0.466E-07)
+    !!         Converge on Parameter Change: F (0.973E-01)
+    !!
+    !! Linear Model:
+    !!         params(1):  1.18661
+    !!         params(2):  0.44661
+    !!         params(3): -0.12232
+    !!         params(4):  1.06476
+    !! Statistics:
+    !! Coefficient 1:
+    !!         Standard Error:  0.230
+    !!         Confidence Interval: +/- 0.485
+    !!         T-Statistic:  5.158
+    !!         P-Value:  0.000
+    !! Coefficient 2:
+    !!         Standard Error:  1.021
+    !!         Confidence Interval: +/- 2.154
+    !!         T-Statistic:  0.437
+    !!         P-Value:  0.667
+    !! Coefficient 3:
+    !!         Standard Error:  1.204
+    !!         Confidence Interval: +/- 2.540
+    !!         T-Statistic: -0.102
+    !!         P-Value:  0.920
+    !! Coefficient 4:
+    !!         Standard Error:  0.395
+    !!         Confidence Interval: +/- 0.834
+    !!         T-Statistic:  2.694
+    !!         P-Value:  0.015
+    !! @endcode
+    interface nonlinear_least_squares
+        module procedure :: nonlinear_least_squares_1
     end interface
 
 ! ------------------------------------------------------------------------------

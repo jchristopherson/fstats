@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [label="fstats::covariance\l_matrix",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1covariance__matrix.html",tooltip="Computes the covariance matrix C where  where  is computed by coefficient_matrix."];
+  Node0 [label="fstats::convergence_info",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfstats_1_1convergence__info.html",tooltip="Provides information regarding convergence status."];
 }

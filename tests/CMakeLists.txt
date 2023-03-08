@@ -5,6 +5,7 @@ set(fstats_test_sources
     fstats_statistics_tests.f90
     fstats_regression_tests.f90
     fstats_experimental_design_tests.f90
+    fstats_nonlinear_regression_tests.f90
 )
 
 add_executable(fstats_tests ${fstats_test_sources})
