@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['overall_5fmean_0',['overall_mean',['../structfstats_1_1single__factor__anova__table.html#abae944a48d235615a06ded054d42e84e',1,'fstats::single_factor_anova_table::overall_mean()'],['../structfstats_1_1two__factor__anova__table.html#aac1c835631f4ae6139381f41843a7c90',1,'fstats::two_factor_anova_table::overall_mean()']]]
+  ['nonlinear_5fleast_5fsquares_0',['nonlinear_least_squares',['../interfacefstats_1_1nonlinear__least__squares.html',1,'fstats']]],
+  ['normal_5fdistribution_1',['normal_distribution',['../structfstats_1_1normal__distribution.html',1,'fstats']]]
 ];
