@@ -5,6 +5,7 @@ var annotated_dup =
       [ "anova", "interfacefstats_1_1anova.html", null ],
       [ "anova_factor", "structfstats_1_1anova__factor.html", "structfstats_1_1anova__factor" ],
       [ "beta", "interfacefstats_1_1beta.html", null ],
+      [ "chi_squared_distribution", "structfstats_1_1chi__squared__distribution.html", "structfstats_1_1chi__squared__distribution" ],
       [ "coefficient_matrix", "interfacefstats_1_1coefficient__matrix.html", null ],
       [ "confidence_interval", "interfacefstats_1_1confidence__interval.html", null ],
       [ "convergence_info", "structfstats_1_1convergence__info.html", "structfstats_1_1convergence__info" ],

@@ -8,5 +8,5 @@ var searchData=
   ['distribution_5',['distribution',['../structfstats_1_1distribution.html',1,'fstats']]],
   ['distribution_5ffunction_6',['distribution_function',['../interfacefstats_1_1distribution__function.html',1,'fstats']]],
   ['distribution_5fproperty_7',['distribution_property',['../interfacefstats_1_1distribution__property.html',1,'fstats']]],
-  ['dof_8',['dof',['../structfstats_1_1t__distribution.html#ae5cd31c3ca13c025e4e820bd4a8f228f',1,'fstats::t_distribution::dof()'],['../structfstats_1_1anova__factor.html#a6794ca71d7db204a30931b5a0d7d5d56',1,'fstats::anova_factor::dof()']]]
+  ['dof_8',['dof',['../structfstats_1_1t__distribution.html#ae5cd31c3ca13c025e4e820bd4a8f228f',1,'fstats::t_distribution::dof()'],['../structfstats_1_1chi__squared__distribution.html#a3f39c875e3725bce0c1d8f36494b6c63',1,'fstats::chi_squared_distribution::dof()'],['../structfstats_1_1anova__factor.html#a6794ca71d7db204a30931b5a0d7d5d56',1,'fstats::anova_factor::dof()']]]
 ];

@@ -10,6 +10,7 @@ var hierarchy =
     [ "fstats::covariance_matrix", "interfacefstats_1_1covariance__matrix.html", null ],
     [ "fstats::digamma", "interfacefstats_1_1digamma.html", null ],
     [ "fstats::distribution", "structfstats_1_1distribution.html", [
+      [ "fstats::chi_squared_distribution", "structfstats_1_1chi__squared__distribution.html", null ],
       [ "fstats::f_distribution", "structfstats_1_1f__distribution.html", null ],
       [ "fstats::normal_distribution", "structfstats_1_1normal__distribution.html", null ],
       [ "fstats::t_distribution", "structfstats_1_1t__distribution.html", null ]

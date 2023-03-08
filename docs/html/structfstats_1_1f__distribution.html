@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">fstats<span id="projectnumber">&#160;1.1.0</span>
+   <div id="projectname">fstats<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A modern Fortran statistical library.</div>
   </td>
@@ -110,13 +110,12 @@ $(document).ready(function(){initNavTree('structfstats_1_1f__distribution.html',
 <div class="dynheader">
 Inheritance diagram for fstats::f_distribution:</div>
 <div class="dyncontent">
-<div class="center"><img src="structfstats_1_1f__distribution__inherit__graph.png" border="0" usemap="#afstats_1_1f__distribution_inherit__map" alt="Inheritance graph"/></div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for fstats::f_distribution:</div>
-<div class="dyncontent">
-<div class="center"><img src="structfstats_1_1f__distribution__coll__graph.png" border="0" usemap="#afstats_1_1f__distribution_coll__map" alt="Collaboration graph"/></div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="structfstats_1_1f__distribution.png" usemap="#fstats::f_5Fdistribution_map" alt=""/>
+  <map id="fstats::f_5Fdistribution_map" name="fstats::f_5Fdistribution_map">
+<area href="structfstats_1_1distribution.html" title="Defines a probability distribution." alt="fstats::distribution" shape="rect" coords="0,0,119,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -170,7 +169,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Defines an F-distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00562">562</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00563">563</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 </div><h2 class="groupheader">Member Function/Subroutine Documentation</h2>
 <a id="a666c88c00c6b7052a1a846b73dd77bc6" name="a666c88c00c6b7052a1a846b73dd77bc6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a666c88c00c6b7052a1a846b73dd77bc6">&#9670;&#160;</a></span>cdf()</h2>
@@ -197,7 +196,7 @@ Public Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The value of the function.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The CDF for a F distribution is given as \( F(x) = I_{d_1 x/(d_1 x + d_2)} \left( \frac{d_1}{2}, \frac{d_2}{2} \right) \) where \( I \) is the <a href="https://en.wikipedia.org/wiki/Beta_function#Incomplete_beta_function">regularized incomplete beta function</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00603">603</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00604">604</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -224,7 +223,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The mean value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00613">613</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00614">614</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -251,7 +250,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The median value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00623">623</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00624">624</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -278,7 +277,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The mode value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00633">633</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00634">634</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -309,7 +308,7 @@ Public Attributes</h2></td></tr>
  \sqrt{ \frac{ (d_1 x)^{d_1} d_{2}^{d_2} }{ (d_1 x + d_2)^{d_1 + d_2} } } 
  \frac{1}{x \beta \left( \frac{d_1}{2}, \frac{d_2}{2} \right) } \) where \( \beta \) is the <a href="https://en.wikipedia.org/wiki/Beta_function">beta function</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00586">586</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00587">587</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -336,7 +335,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The variance value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00643">643</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00644">644</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -355,7 +354,7 @@ Public Attributes</h2></td></tr>
 
 <p>The measure of degrees of freedom for the first data set. </p>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00564">564</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00565">565</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
@@ -373,7 +372,7 @@ Public Attributes</h2></td></tr>
 
 <p>The measure of degrees of freedom for the second data set. </p>
 
-<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00566">566</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fstats_8f90_source.html#l00567">567</a> of file <a class="el" href="fstats_8f90_source.html">fstats.f90</a>.</p>
 
 </div>
 </div>
