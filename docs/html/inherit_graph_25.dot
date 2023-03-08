@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [label="fstats::standard_deviation",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1standard__deviation.html",tooltip="Computes the sample standard deviation of the values in an array."];
+  Node0 [label="fstats::nonlinear_least\l_squares",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interfacefstats_1_1nonlinear__least__squares.html",tooltip="Performs a nonlinear regression to fit a model using a version of the Levenberg-Marquardt algorithm."];
 }

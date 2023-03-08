@@ -47,7 +47,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"annotated.html",
+"structfstats_1_1two__factor__anova__table.html#aac1c835631f4ae6139381f41843a7c90"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

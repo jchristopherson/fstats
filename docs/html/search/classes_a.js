@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['quantile_0',['quantile',['../interfacefstats_1_1quantile.html',1,'fstats']]]
+  ['nonlinear_5fleast_5fsquares_0',['nonlinear_least_squares',['../interfacefstats_1_1nonlinear__least__squares.html',1,'fstats']]],
+  ['normal_5fdistribution_1',['normal_distribution',['../structfstats_1_1normal__distribution.html',1,'fstats']]]
 ];

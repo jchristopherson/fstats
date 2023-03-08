@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">fstats<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">fstats<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A modern Fortran statistical library.</div>
   </td>
@@ -1147,7 +1147,7 @@ $(document).ready(function(){initNavTree('statistics__implementation_8f90_source
 <div class="line"><a id="l01045" name="l01045"></a><span class="lineno"> 1045</span>    <span class="keyword">allocate</span>(ypack(2 * n), stat = flag)</div>
 <div class="line"><a id="l01046" name="l01046"></a><span class="lineno"> 1046</span>    <span class="keywordflow">if</span> (flag /= 0) <span class="keywordflow">then</span></div>
 <div class="line"><a id="l01047" name="l01047"></a><span class="lineno"> 1047</span>        <span class="keyword">write</span>(errmsg, 101) <span class="stringliteral">&quot;Memory allocation error code &quot;</span>, flag, <span class="stringliteral">&quot;.&quot;</span></div>
-<div class="line"><a id="l01048" name="l01048"></a><span class="lineno"> 1048</span>        <span class="keyword">call </span>errmgr%report_error(<span class="stringliteral">&quot;qr_factor_real64&quot;</span>, &amp;</div>
+<div class="line"><a id="l01048" name="l01048"></a><span class="lineno"> 1048</span>        <span class="keyword">call </span>errmgr%report_error(<span class="stringliteral">&quot;anova_model_fit&quot;</span>, &amp;</div>
 <div class="line"><a id="l01049" name="l01049"></a><span class="lineno"> 1049</span>            trim(errmsg), ml_out_of_memory_error)</div>
 <div class="line"><a id="l01050" name="l01050"></a><span class="lineno"> 1050</span>        <span class="keywordflow">return</span></div>
 <div class="line"><a id="l01051" name="l01051"></a><span class="lineno"> 1051</span><span class="keywordflow">    end if</span></div>

@@ -5,6 +5,7 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "distributions_t.f90", "distributions__t_8f90_source.html", null ],
     [ "experimental_design_implementation.f90", "experimental__design__implementation_8f90_source.html", null ],
     [ "fstats.f90", "fstats_8f90_source.html", null ],
+    [ "levenberg_marquardt.f90", "levenberg__marquardt_8f90_source.html", null ],
     [ "regression_implementation.f90", "regression__implementation_8f90_source.html", null ],
     [ "special_functions_beta.f90", "special__functions__beta_8f90_source.html", null ],
     [ "special_functions_digamma.f90", "special__functions__digamma_8f90_source.html", null ],
