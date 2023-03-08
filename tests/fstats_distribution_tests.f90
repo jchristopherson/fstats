@@ -111,4 +111,40 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function chi_squared_distribution_test_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: dof = 5
+        integer(int32), parameter :: n = 9
+        real(real64) :: x(n), pdf(n), cdf(n), pdfans(n), cdfans(n)
+        type(chi_squared_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+        dist%dof = dof
+        x = [0.0d0, 0.5d0, 1.0d0, 1.5d0, 2.0d0, 2.5d0, 3.0d0, 3.5d0, 4.0d0]
+        pdfans = [0.0d0, 0.036615940789d0, 0.080656908173d0, 0.115399742104d0, &
+            0.138369165807d0, 0.150601993890d0, 0.154180329804d0, &
+            0.151312753472d0, 0.143975910702d0]
+        cdfans = [0.0d0, 0.007876706767d0, 0.037434226753d0, 0.086930185456d0, &
+            0.150854963915d0, 0.223504928877d0, 0.300014164121d0, &
+            0.376612372250d0, 0.450584048647d0]
+
+        ! Tests
+        pdf = dist%pdf(x)
+        if (.not.is_equal(pdf, pdfans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Chi-squared distribution PDF test."
+        end if
+
+        cdf = dist%cdf(x)
+        if (.not.is_equal(cdf, cdfans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Chi-squared distribution CDF test."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

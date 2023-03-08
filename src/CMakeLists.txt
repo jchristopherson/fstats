@@ -13,5 +13,6 @@ set(FSTATS_SOURCES
     ${dir}/regression_implementation.f90
     ${dir}/experimental_design_implementation.f90
     ${dir}/levenberg_marquardt.f90
+    ${dir}/distributions_chisquared.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)

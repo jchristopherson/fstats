@@ -151,6 +151,7 @@ module fstats
     public :: t_distribution
     public :: normal_distribution
     public :: f_distribution
+    public :: chi_squared_distribution
     public :: mean
     public :: variance
     public :: standard_deviation
@@ -674,6 +675,127 @@ module fstats
         
         pure module function fd_variance(this) result(rst)
             class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+    end interface
+
+    !> @brief Defines a Chi-squared distribution.
+    !!
+    !! @par Remarks
+    !! For additional information see the following references.
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Chi-squared_distribution)
+    type, extends(distribution) :: chi_squared_distribution
+        !> The number of degrees of freedom.
+        integer(int32) :: dof
+    contains
+        !> Computes the probability density function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function pdf(class(chi_squared_distribution) this, real(real64 )x)
+        !! @endcode
+        !! 
+        !! @param[in] this The chi_squared_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !! @return The value of the function.
+        !!
+        !! @remarks The PDF for a Chi-squared distribution is given as 
+        !! \f$ f(x) = \frac{x^{k/2 - 1} \exp{-x / 2}} {2^{k / 2} 
+        !! \Gamma \left( \frac{k}{2} \right)} \f$, where \f$ k \f$ is the 
+        !! number of degrees of freedom.
+        procedure, public :: pdf => cs_pdf
+        !> Computes the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function cdf(class(chi_squared_distribution) this, real(real64 )x)
+        !! @endcode
+        !! 
+        !! @param[in] this The chi_squared_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !! @return The value of the function.
+        !!
+        !! @remarks The CDF for a F distribution is given as 
+        !! \f$ F(x) = \frac{ \gamma \left( \frac{k}{2}, \frac{x}{2} \right) }
+        !! { \Gamma \left( \frac{k}{2} \right)} \f$
+        !! where \f$ \gamma \f$ is the 
+        !! <a href = "https://en.wikipedia.org/wiki/Incomplete_gamma_function">
+        !! lower incomplete gamma function</a>, and \f$ k \f$ is the number of 
+        !! degrees of freedom.
+        procedure, public :: cdf => cs_cdf
+        !> Computes the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function mean(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => cs_mean
+        !> Computes the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function median(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The median value.
+        procedure, public :: median => cs_median
+        !> Computes the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function mode(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => cs_mode
+        !> Computes the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function variance(class(chi_squared_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The chi_squared_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => cs_variance
+    end type
+
+    ! distributions_chisquared.f90
+    interface
+        pure module elemental function cs_pdf(this, x) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module elemental function cs_cdf(this, x) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function cs_mean(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function cs_median(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function cs_mode(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function cs_variance(this) result(rst)
+            class(chi_squared_distribution), intent(in) :: this
             real(real64) :: rst
         end function
     end interface
