@@ -2237,7 +2237,7 @@ module fstats
         module subroutine nonlinear_least_squares_1(fun, x, y, params, ymod, &
             resid, weights, maxp, minp, stats, alpha, controls, settings, &
             info, status, err)
-            procedure(regression_function), pointer :: fun
+            procedure(regression_function), intent(in), pointer :: fun
             real(real64), intent(in) :: x(:), y(:)
             real(real64), intent(inout) :: params(:)
             real(real64), intent(out) :: ymod(:), resid(:)

@@ -139,7 +139,7 @@ contains
         resid, weights, maxp, minp, stats, alpha, controls, settings, info, &
         status, err)
         ! Arguments
-        procedure(regression_function), pointer :: fun
+        procedure(regression_function), intent(in), pointer :: fun
         real(real64), intent(in) :: x(:), y(:)
         real(real64), intent(inout) :: params(:)
         real(real64), intent(out) :: ymod(:), resid(:)
