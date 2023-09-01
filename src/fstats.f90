@@ -187,28 +187,12 @@ module fstats
     public :: iteration_update
     public :: jacobian
     public :: nonlinear_least_squares
-    public :: FS_NO_ERROR
-    public :: FS_ARRAY_SIZE_ERROR
-    public :: FS_INVALID_INPUT_ERROR
-    public :: FS_OUT_OF_MEMORY_ERROR
-    public :: FS_UNDERDEFINED_PROBLEM_ERROR
-    public :: FS_TOLERANCE_TOO_SMALL_ERROR
     public :: FS_TOO_FEW_ITERATION_ERROR
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
     public :: assignment(=)
 
-! ******************************************************************************
-! ERROR CODES
-! ------------------------------------------------------------------------------
-    integer(int32), parameter :: FS_NO_ERROR = 0
-    integer(int32), parameter :: FS_ARRAY_SIZE_ERROR = 10000
-    integer(int32), parameter :: FS_INVALID_INPUT_ERROR = 10001
-    integer(int32), parameter :: FS_OUT_OF_MEMORY_ERROR = 10002
-    integer(int32), parameter :: FS_UNDERDEFINED_PROBLEM_ERROR = 10003
-    integer(int32), parameter :: FS_TOLERANCE_TOO_SMALL_ERROR = 10004
-    integer(int32), parameter :: FS_TOO_FEW_ITERATION_ERROR = 10005
 
 ! ******************************************************************************
 ! CONSTANTS

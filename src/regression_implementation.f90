@@ -1,5 +1,6 @@
 submodule (fstats) regression_implementation
     use linalg
+    use fstats_errors
 contains
 ! ------------------------------------------------------------------------------
 module subroutine coefficient_matrix_real64(order, intercept, x, c, err)

@@ -2,7 +2,7 @@ submodule (fstats) levenberg_marquardt
 ! REFERENCES:
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
     use linalg
-
+    use fstats_errors
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, params, &
