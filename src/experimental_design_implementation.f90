@@ -1,4 +1,5 @@
 submodule (fstats) experimental_design_implementation
+    use fstats_errors
 contains
 ! ------------------------------------------------------------------------------
 module subroutine get_full_factorial_matrix_size_int32(vars, m, n, err)
@@ -53,7 +54,6 @@ module subroutine full_factorial_int32(vars, tbl, err)
     integer(int32) :: i, col, stride, last, val, m, n
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     if (present(err)) then
@@ -66,10 +66,8 @@ module subroutine full_factorial_int32(vars, tbl, err)
     call get_full_factorial_matrix_size(vars, m, n, errmgr)
     if (errmgr%has_error_occurred()) return
     if (size(tbl, 1) /= m .or. size(tbl, 2) /= n) then
-        write(errmsg, 100) "The table size was expected to be ", m, "-by-", &
-            n, ", but was found to be ", size(tbl, 1), "-by-", size(tbl, 2), "."
-        call errmgr%report_error("full_factorial_int32", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
+        call report_matrix_size_error(errmgr, "full_factorial_int32", &
+            "tbl", m, n, size(tbl, 1), size(tbl, 2))
         return
     end if
 
@@ -85,9 +83,6 @@ module subroutine full_factorial_int32(vars, tbl, err)
             if (val > vars(col)) val = 1
         end do
     end do
-
-    ! Formatting
-100 format(A, I0, A, I0, A, I0, A, I0, A)
 end subroutine
 
 ! ------------------------------------------------------------------------------

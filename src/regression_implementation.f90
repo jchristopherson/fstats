@@ -1,5 +1,6 @@
 submodule (fstats) regression_implementation
     use linalg
+    use fstats_errors
 contains
 ! ------------------------------------------------------------------------------
 module subroutine coefficient_matrix_real64(order, intercept, x, c, err)
@@ -17,7 +18,6 @@ module subroutine coefficient_matrix_real64(order, intercept, x, c, err)
     integer(int32) :: i, start, npts, ncols
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     if (present(err)) then
@@ -36,11 +36,8 @@ module subroutine coefficient_matrix_real64(order, intercept, x, c, err)
         return
     end if
     if (size(c, 1) /= npts .or. size(c, 2) /= ncols) then
-        write(errmsg, 100) "The output matrix was expected to by ", npts, &
-            "-by-", ncols, ", but was found to be ", size(c, 1), "-by-", &
-            size(c, 2), "."
-        call errmgr%report_error("coefficient_matrix_real64", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
+        call report_matrix_size_error(errmgr, "coefficient_matrix_real64", &
+            "c", npts, ncols, size(c, 1), size(c, 2))
         return
     end if
 
@@ -57,9 +54,6 @@ module subroutine coefficient_matrix_real64(order, intercept, x, c, err)
     do i = start, ncols
         c(:,i) = c(:,i-1) * x
     end do
-
-    ! Formatting
-100 format(A, I0, A, I0, A, I0, A, I0, A)
 end subroutine
 
 ! --------------------
@@ -78,7 +72,6 @@ module subroutine coefficient_matrix_real32(order, intercept, x, c, err)
     integer(int32) :: i, start, npts, ncols
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     if (present(err)) then
@@ -97,11 +90,8 @@ module subroutine coefficient_matrix_real32(order, intercept, x, c, err)
         return
     end if
     if (size(c, 1) /= npts .or. size(c, 2) /= ncols) then
-        write(errmsg, 100) "The output matrix was expected to by ", npts, &
-            "-by-", ncols, ", but was found to be ", size(c, 1), "-by-", &
-            size(c, 2), "."
-        call errmgr%report_error("coefficient_matrix_real32", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
+        call report_matrix_size_error(errmgr, "coefficient_matrix_real32", &
+            "c", npts, ncols, size(c, 1), size(c, 2))
         return
     end if
 
@@ -118,9 +108,6 @@ module subroutine coefficient_matrix_real32(order, intercept, x, c, err)
     do i = start, ncols
         c(:,i) = c(:,i-1) * x
     end do
-
-    ! Formatting
-100 format(A, I0, A, I0, A, I0, A, I0, A)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -137,7 +124,6 @@ module subroutine covariance_matrix_real64(x, c, err)
     ! Local Variables
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     integer(int32) :: npts, ncoeffs, flag
     real(real64), allocatable :: xtx(:,:)
     
@@ -152,20 +138,15 @@ module subroutine covariance_matrix_real64(x, c, err)
 
     ! Input Checking
     if (size(c, 1) /= ncoeffs .or. size(c, 2) /= ncoeffs) then
-        write(errmsg, 100) "The covariance matrix was expected to be ", &
-            ncoeffs, "-by-", ncoeffs, ", but was found to be ", size(c, 1), &
-            "-by-", size(c, 2), "."
-        call errmgr%report_error("covariance_matrix_real64", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
+        call report_matrix_size_error(errmgr, "covariance_matrix_real64", &
+            "c", ncoeffs, ncoeffs, size(c, 1), size(c, 2))
         return
     end if
 
     ! Local Memory Allocation
     allocate(xtx(ncoeffs, ncoeffs), stat = flag)
     if (flag /= 0) then
-        write(errmsg, 101) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("covariance_matrix_real64", &
-            trim(errmsg), FS_OUT_OF_MEMORY_ERROR)
+        call report_memory_error(errmgr, "covariance_matrix_real64", flag)
         return
     end if
 
@@ -176,10 +157,6 @@ module subroutine covariance_matrix_real64(x, c, err)
     ! Compute the inverse of X**T * X to obtain the covariance matrix
     call mtx_pinverse(xtx, c, err = errmgr)
     if (errmgr%has_error_occurred()) return
-
-    ! Formatting
-100 format(A, I0, A, I0, A, I0, A, I0, A)
-101 format(A, I0, A)
 end subroutine
 
 ! --------------------
@@ -196,7 +173,6 @@ module subroutine covariance_matrix_real32(x, c, err)
     ! Local Variables
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     integer(int32) :: npts, ncoeffs, flag
     real(real32), allocatable :: xtx(:,:)
     
@@ -211,20 +187,15 @@ module subroutine covariance_matrix_real32(x, c, err)
 
     ! Input Checking
     if (size(c, 1) /= ncoeffs .or. size(c, 2) /= ncoeffs) then
-        write(errmsg, 100) "The covariance matrix was expected to be ", &
-            ncoeffs, "-by-", ncoeffs, ", but was found to be ", size(c, 1), &
-            "-by-", size(c, 2), "."
-        call errmgr%report_error("covariance_matrix_real32", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
+        call report_matrix_size_error(errmgr, "covariance_matrix_real32", &
+            "c", ncoeffs, ncoeffs, size(c, 1), size(c, 2))
         return
     end if
 
     ! Local Memory Allocation
     allocate(xtx(ncoeffs, ncoeffs), stat = flag)
     if (flag /= 0) then
-        write(errmsg, 101) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("covariance_matrix_real32", &
-            trim(errmsg), FS_OUT_OF_MEMORY_ERROR)
+        call report_memory_error(errmgr, "covariance_matrix_real64", flag)
         return
     end if
 
@@ -235,10 +206,6 @@ module subroutine covariance_matrix_real32(x, c, err)
     ! Compute the inverse of X**T * X to obtain the covariance matrix
     call r32_inverse(xtx, c, errmgr)
     if (errmgr%has_error_occurred()) return
-
-    ! Formatting
-100 format(A, I0, A, I0, A, I0, A, I0, A)
-101 format(A, I0, A)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -265,7 +232,6 @@ module subroutine linear_least_squares_real64(order, intercept, x, y, coeffs, &
     type(t_distribution) :: dist
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     if (present(err)) then
@@ -287,40 +253,30 @@ module subroutine linear_least_squares_real64(order, intercept, x, y, coeffs, &
         return
     end if
     if (size(y) /= npts) then
-        write(errmsg, 100) &
-            "The dependent data array was expected to be of length ", npts, &
-            ", but was found to be of length ", size(y), "."
-        call errmgr%report_error("linear_least_squares_real64", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real64", &
+            "y", npts, size(y))
+        return
     end if
     if (size(coeffs) /= ncoeffs) then
-        write(errmsg, 100) &
-            "The coefficient array was expected to be of length ", ncoeffs, &
-            ", but was found to be of length ", size(coeffs), "."
-        call errmgr%report_error("linear_least_squares_real64", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real64", &
+            "coeffs", ncoeffs, size(coeffs))
+        return
     end if
     if (size(ymod) /= npts) then
-        write(errmsg, 100) &
-            "The modeled data array was expected to be of length ", npts, &
-            ", but was found to be of length ", size(ymod), "."
-        call errmgr%report_error("linear_least_squares_real64", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real64", &
+            "ymod", npts, size(ymod))
+        return
     end if
     if (size(resid) /= npts) then
-        write(errmsg, 100) &
-            "The residuals array was expected to be of length ", npts, &
-            ", but was found to be of length ", size(resid), "."
-        call errmgr%report_error("linear_least_squares_real64", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real64", &
+            "resid", npts, size(resid))
+        return
     end if
     if (present(stats)) then
         if (size(stats) /= ncols) then
-            write(errmsg, 100) &
-                "The statistics array was expected to be of length ", ncols, &
-                ", but was found to be of length ", size(stats), "."
-            call errmgr%report_error("linear_least_squares_real64", &
-                trim(errmsg), FS_ARRAY_SIZE_ERROR)
+            call report_array_size_error(errmgr, &
+                "linear_least_squares_real64", "stats", ncols, size(stats))
+            return
         end if
     end if
 
@@ -329,9 +285,7 @@ module subroutine linear_least_squares_real64(order, intercept, x, y, coeffs, &
     if (flag == 0) allocate(c(ncols, ncols), stat = flag)
     if (flag == 0) allocate(cxt(ncols, npts), stat = flag)
     if (flag /= 0) then
-        write(errmsg, 101) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("linear_least_squares_real64", &
-            trim(errmsg), FS_OUT_OF_MEMORY_ERROR)
+        call report_memory_error(errmgr, "linear_least_squares_real64", flag)
         return
     end if
 
@@ -362,27 +316,8 @@ module subroutine linear_least_squares_real64(order, intercept, x, y, coeffs, &
     if (.not.present(stats)) return
     
     ! Start the process of computing statistics
-    ! df = npts - ncols
-    ! ssr = norm2(resid)**2   ! sum of the squares of the residual
-    ! var = ssr / df
-    ! dist%dof = df
-    ! talpha = confidence_interval(dist, alph, one, 1)
-    ! do i = 1, ncols
-    !     stats(i)%standard_error = sqrt(var * c(i,i))
-    !     stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
-    !     stats(i)%probability = regularized_beta( &
-    !         half * df, &
-    !         half, &
-    !         df / (df + (stats(i)%t_statistic)**2) &
-    !     )
-    !     stats(i)%confidence_interval = talpha * stats(i)%standard_error
-    ! end do
     stats = calculate_regression_statistics(resid, coeffs(1:ncols), c, alph, &
         errmgr)
-
-    ! Formatting
-100 format(A, I0, A, I0, A)
-101 format(A, I0, A)
 end subroutine
 
 ! --------------------
@@ -409,7 +344,6 @@ module subroutine linear_least_squares_real32(order, intercept, x, y, coeffs, &
     type(t_distribution) :: dist
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     if (present(err)) then
@@ -431,40 +365,30 @@ module subroutine linear_least_squares_real32(order, intercept, x, y, coeffs, &
         return
     end if
     if (size(y) /= npts) then
-        write(errmsg, 100) &
-            "The dependent data array was expected to be of length ", npts, &
-            ", but was found to be of length ", size(y), "."
-        call errmgr%report_error("linear_least_squares_real32", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real32", &
+            "y", npts, size(y))
+        return
     end if
     if (size(coeffs) /= ncoeffs) then
-        write(errmsg, 100) &
-            "The coefficient array was expected to be of length ", ncoeffs, &
-            ", but was found to be of length ", size(coeffs), "."
-        call errmgr%report_error("linear_least_squares_real32", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real32", &
+            "coeffs", ncoeffs, size(coeffs))
+        return
     end if
     if (size(ymod) /= npts) then
-        write(errmsg, 100) &
-            "The modeled data array was expected to be of length ", npts, &
-            ", but was found to be of length ", size(ymod), "."
-        call errmgr%report_error("linear_least_squares_real32", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real32", &
+            "ymod", npts, size(ymod))
+        return
     end if
     if (size(resid) /= npts) then
-        write(errmsg, 100) &
-            "The residuals array was expected to be of length ", npts, &
-            ", but was found to be of length ", size(resid), "."
-        call errmgr%report_error("linear_least_squares_real32", &
-            trim(errmsg), FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "linear_least_squares_real32", &
+            "resid", npts, size(resid))
+        return
     end if
     if (present(stats)) then
         if (size(stats) /= ncols) then
-            write(errmsg, 100) &
-                "The statistics array was expected to be of length ", ncols, &
-                ", but was found to be of length ", size(stats), "."
-            call errmgr%report_error("linear_least_squares_real32", &
-                trim(errmsg), FS_ARRAY_SIZE_ERROR)
+            call report_array_size_error(errmgr, &
+                "linear_least_squares_real32", "stats", ncols, size(stats))
+            return
         end if
     end if
 
@@ -473,9 +397,7 @@ module subroutine linear_least_squares_real32(order, intercept, x, y, coeffs, &
     if (flag == 0) allocate(c(ncols, ncols), stat = flag)
     if (flag == 0) allocate(cxt(ncols, npts), stat = flag)
     if (flag /= 0) then
-        write(errmsg, 101) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("linear_least_squares_real32", &
-            trim(errmsg), FS_OUT_OF_MEMORY_ERROR)
+        call report_memory_error(errmgr, "linear_least_squares_real32", flag)
         return
     end if
 
@@ -506,27 +428,8 @@ module subroutine linear_least_squares_real32(order, intercept, x, y, coeffs, &
     if (.not.present(stats)) return
     
     ! Start the process of computing statistics
-    ! df = npts - ncols
-    ! ssr = norm2(resid)**2   ! sum of the squares of the residual
-    ! var = ssr / df
-    ! dist%dof = df
-    ! talpha = confidence_interval(dist, alph, one, 1)
-    ! do i = 1, ncols
-    !     stats(i)%standard_error = sqrt(var * c(i,i))
-    !     stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
-    !     stats(i)%probability = regularized_beta( &
-    !         half * df, &
-    !         half, &
-    !         real(df / (df + (stats(i)%t_statistic)**2), real32) &
-    !     )
-    !     stats(i)%confidence_interval = talpha * stats(i)%standard_error
-    ! end do
     stats = calculate_regression_statistics(resid, coeffs(1:ncols), c, alph, &
         errmgr)
-
-    ! Formatting
-100 format(A, I0, A, I0, A)
-101 format(A, I0, A)
 end subroutine
 
 ! ------------------------------------------------------------------------------

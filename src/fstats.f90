@@ -187,28 +187,12 @@ module fstats
     public :: iteration_update
     public :: jacobian
     public :: nonlinear_least_squares
-    public :: FS_NO_ERROR
-    public :: FS_ARRAY_SIZE_ERROR
-    public :: FS_INVALID_INPUT_ERROR
-    public :: FS_OUT_OF_MEMORY_ERROR
-    public :: FS_UNDERDEFINED_PROBLEM_ERROR
-    public :: FS_TOLERANCE_TOO_SMALL_ERROR
-    public :: FS_TOO_FEW_ITERATION_ERROR
+    public :: allan_variance
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
     public :: assignment(=)
 
-! ******************************************************************************
-! ERROR CODES
-! ------------------------------------------------------------------------------
-    integer(int32), parameter :: FS_NO_ERROR = 0
-    integer(int32), parameter :: FS_ARRAY_SIZE_ERROR = 10000
-    integer(int32), parameter :: FS_INVALID_INPUT_ERROR = 10001
-    integer(int32), parameter :: FS_OUT_OF_MEMORY_ERROR = 10002
-    integer(int32), parameter :: FS_UNDERDEFINED_PROBLEM_ERROR = 10003
-    integer(int32), parameter :: FS_TOLERANCE_TOO_SMALL_ERROR = 10004
-    integer(int32), parameter :: FS_TOO_FEW_ITERATION_ERROR = 10005
 
 ! ******************************************************************************
 ! CONSTANTS
@@ -1147,7 +1131,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p ymeas and @p ymod are not the same 
     !!      length.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! @return A @ref single_factor_anova_table instance containing the ANOVA
     !!  results.
     !!
@@ -1720,7 +1704,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not sized
     !!      correctly.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !! - FS_MEMORY_ERROR: Occurs if there is insufficient memory.
     !!
     !! @par See Also
     !! - [Wikipedia](https://en.wikipedia.org/wiki/Covariance_matrix)
@@ -1764,7 +1748,7 @@ module fstats
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not approriately
     !!      sized.
     !! - FS_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !! - FS_MEMORY_ERROR: Occurs if there is insufficient memory.
     !!
     !! @par Example
     !! The following example illustrates fitting a cubic polynomial to a set 
@@ -1924,7 +1908,7 @@ module fstats
     !!  to the caller.  Possible warning and error codes are as follows.
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p c is not sized correctly.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! @return A @ref regression_statistics object containing the analysis
     !!  results.
     interface calculate_regression_statistics
@@ -2302,7 +2286,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
     !!      sized.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     interface jacobian
         module procedure :: regression_jacobian_1
     end interface
@@ -2353,7 +2337,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
     !!      sized.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! - FS_UNDERDEFINED_PROBLEM_ERROR: Occurs if the problem posed is 
     !!      underdetetermined (M < N).
     !! - FS_TOLERANCE_TOO_SMALL_ERROR: Occurs if any supplied tolerances are
@@ -2532,6 +2516,119 @@ module fstats
     !! @endcode
     interface nonlinear_least_squares
         module procedure :: nonlinear_least_squares_1
+    end interface
+
+! ******************************************************************************
+! ALLAN VARIANCE
+! ------------------------------------------------------------------------------
+
+    ! allan.f90
+    interface
+        module function allan_variance_1(x, dt, err) result(rst)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in), optional :: dt
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:,:) :: rst
+        end function
+    end interface
+
+    !> @brief Computes the Allan variance of a data set.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! allocatable real(real64)(:) function allan_variance( &
+    !!  real(real64) x(:), &
+    !!  optional real(real64) dt, &
+    !!  optional class(errors) err &
+    !! )
+    !! @endcode
+    !!
+    !! @param[in] x The N-element data set to analyze.
+    !! @param[in] dt An optional input specifying the time increment between 
+    !!  samples in @p x.  If not specified, this value is set to 1.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !!
+    !! @return An M-by-2 array containing the results where M is N / 2 - 1
+    !! if N is even; else, M is (N - 1) / 2 - 1 if N is odd.  The first column
+    !! contains the averaging times associated with the M results stored in the
+    !! second column.
+    !!
+    !! @par Remarks
+    !! This implementation computes the fully overlapped Allan variance using 
+    !! the method presented by Yadav et. al.
+    !! @par
+    !! Yadav, Shrikanth & Shastri, Saurav & Chakravarthi, Ghanashyam & Kumar, 
+    !! Viraj & Rao, Divya & Agrawal, Vinod. (2018). A Fast, Parallel Algorithm 
+    !! for Fully Overlapped Allan Variance and Total Variance for Analysis and 
+    !! Modeling of Noise in Inertial Sensors. IEEE Sensors Letters. PP. 1-1. 
+    !! 10.1109/LSENS.2018.2829799.
+    !!
+    !! @par Example
+    !! The following example illustrates how to compute the Allan variance from
+    !! a data set.  The data set is read from file using the
+    !! <a href = "https://github.com/jacobwilliams/fortran-csv-module">
+    !! Fortran CSV Module</a> library and plotted using the 
+    !! <a href = "https://github.com/jchristopherson/fplot">FPLOT</a> library.
+    !! @code{.f90}
+    !! program example
+    !!     use iso_fortran_env
+    !!     use fstats
+    !!     use fplot_core
+    !!     use csv_module
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     real(real64) :: dt
+    !!     real(real64), allocatable, dimension(:) :: t, x
+    !!     real(real64), allocatable, dimension(:,:) :: v
+    !!     logical :: ok
+    !!     type(csv_file) :: file
+    !!     type(plot_2d) :: plt
+    !!     type(plot_data_2d) :: pd
+    !!     class(plot_axis), pointer :: xAxis, yAxis
+    !!
+    !!     ! Read in the data
+    !!     call file%read("examples/data/noise_data.csv", header_row = 1, status_ok = ok)
+    !!     if (.not.ok) then
+    !!         print "(A)", "Could not open the data file."
+    !!         stop
+    !!     end if
+    !!     call file%get(1, t, ok)
+    !!     if (.not.ok) then
+    !!         print "(A)", "Could not extract the time data."
+    !!         stop
+    !!     end if
+    !!     call file%get(2, x, ok)
+    !!     if (.not.ok) then
+    !!         print "(A)", "Could not extract the signal data."
+    !!         stop
+    !!     end if
+    !!     dt = t(2) - t(1)
+    !!
+    !!     ! Compute the Allan variance
+    !!     v = allan_variance(x, dt)
+    !!
+    !!     ! Plot the results
+    !!     call plt%initialize()
+    !!     xAxis => plt%get_x_axis()
+    !!     yAxis => plt%get_y_axis()
+    !!     call xAxis%set_is_log_scaled(.true.)
+    !!     call yAxis%set_is_log_scaled(.true.)
+    !!     call yAxis%set_use_default_tic_label_format(.false.)
+    !!     call yAxis%set_tic_label_format("%0.0e")
+    !!     call xAxis%set_title("Averaging Time")
+    !!     call yAxis%set_title("Variance")
+    !!     call pd%define_data(v(:,1), v(:,2))
+    !!     call plt%push(pd)
+    !!     call plt%draw()
+    !! end program
+    !! @endcode
+    !! @image html allan_variance_example.png
+    interface allan_variance
+        module procedure :: allan_variance_1
     end interface
 
 ! ------------------------------------------------------------------------------

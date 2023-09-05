@@ -2,7 +2,7 @@ submodule (fstats) levenberg_marquardt
 ! REFERENCES:
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
     use linalg
-
+    use fstats_errors
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, params, &
@@ -19,12 +19,11 @@ contains
 
         ! Local Variables
         real(real64) :: h
-        integer(int32) :: m, n, flag, expected, actual, index
+        integer(int32) :: m, n, flag, expected, actual
         real(real64), pointer :: f1p(:), f0p(:)
         real(real64), allocatable, target :: f1a(:), f0a(:), work(:)
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
-        character(len = :), allocatable :: errmsg
         
         ! Initialization
         if (present(err)) then
@@ -42,15 +41,16 @@ contains
 
         ! Input Size Checking
         if (size(jac, 1) /= m .or. size(jac, 2) /= n) then
-            go to 15
+            call report_matrix_size_error(errmgr, "regression_jacobian_1", &
+                "JAC", m, n, size(jac, 1), size(jac, 2))
+            return
         end if
         if (present(f0)) then
             ! Check Size
             if (size(f0) /= m) then
-                actual = size(f0)
-                expected = m
-                index = 2
-                go to 10
+                call report_array_size_error(errmgr, "regression_jacobian_1", &
+                    "F0", m, size(f0))
+                return
             end if
             f0p(1:m) => f0
         else
@@ -65,10 +65,9 @@ contains
         if (present(f1)) then
             ! Check Size
             if (size(f1) /= m) then
-                actual = size(f1)
-                expected = m
-                index = 3
-                go to 10
+                call report_array_size_error(errmgr, "regression_jacobian_1", &
+                    "F1", m, size(f1))
+                return
             end if
             f1p(1:m) => f1
         else
@@ -89,49 +88,10 @@ contains
         ! End
         return
 
-        ! Array Size Error Handling
-10      continue
-        allocate(character(len = 512) :: errmsg)
-        select case (index)
-        case (1)
-            write(errmsg, 100) "The dependent variable data array (", actual, &
-                ") is not the same length as the independent data array (", &
-                expected, ")."
-        case (2)
-            write(errmsg, 100) &
-                "The function value array was expected to be of size ", &
-                expected, ", but was found to be of size ", actual, "."
-        case (3)
-            write(errmsg, 100) &
-                "The output function value array was expected to be of size ", &
-                expected, ", but was found to be of size ", actual, "."
-        end select
-        call errmgr%report_error("regression_jacobian_1", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
-        return
-
-        ! Jacobian Size Error Handling
-15      continue
-        allocate(character(len = 512) :: errmsg)
-        write(errmsg, 101) "The Jacobian matrix was expected to be of size ", &
-            m, "-by-", n, ", but was found to be ", size(jac, 1), "-by-", &
-            size(jac, 2), "."
-        call errmgr%report_error("regression_jacobian_1", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
-        return
-
         ! Memroy Allocation Error Handling
 20      continue
-        allocate(character(len = 256) :: errmsg)
-        write(errmsg, 102) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("regression_jacobian_1", &
-            trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
+        call report_memory_error(errmgr, "regression_jacobian_1", flag)
         return
-
-        ! Formatting
-100     format(A, I0, A, I0, A)
-101     format(A, I0, A, I0, A, I0, A, I0, A)
-102     format(A, I0, A)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -161,7 +121,7 @@ contains
 
         ! Local Variables
         logical :: stop
-        integer(int32) :: m, n, actual, expected, index, flag
+        integer(int32) :: m, n, actual, expected, flag
         real(real64), pointer :: w(:), pmax(:), pmin(:)
         real(real64), allocatable, target :: defaultWeights(:), maxparam(:), &
             minparam(:), JtWJ(:,:)
@@ -170,7 +130,6 @@ contains
         type(convergence_info) :: cInfo
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
-        character(len = :), allocatable :: errmsg
         type(convergence_info), target :: defaultinfo
         type(convergence_info), pointer :: inf
         
@@ -201,64 +160,81 @@ contains
 
         ! Input Checking
         if (size(y) /= m) then
-            actual = size(y)
-            expected = m
-            index = 1
-            go to 10
+            call report_array_size_error(errmgr, "nonlinear_least_squares_1", &
+                "y", m, size(y))
+            return
         end if
         if (size(ymod) /= m) then
-            actual = size(ymod)
-            expected = m
-            index = 2
-            go to 10
+            call report_array_size_error(errmgr, "nonlinear_least_squares_1", &
+                "ymod", m, size(ymod))
+            return
         end if
         if (size(resid) /= m) then
-            actual = size(resid)
-            expected = m
-            index = 3
-            go to 10
+            call report_array_size_error(errmgr, "nonlinear_least_squares_1", &
+                "resid", m, size(resid))
+            return
         end if
-        if (m < n) go to 20
+        if (m < n) then
+            call report_underdefined_error(errmgr, &
+                "nonlinear_least_squares_1", n, m)
+            return
+        end if
 
         ! Tolerance Checking
         if (tol%gradient_tolerance < too_small) then
-            index = 1
-            go to 30
+            call errmgr%report_error("nonlinear_least_squares_1", &
+                "The gradient tolerance was found to be too small.", &
+                FS_TOLERANCE_TOO_SMALL_ERROR)
+            return
         end if
         if (tol%change_in_solution_tolerance < too_small) then
-            index = 2
-            go to 30
+            call errmgr%report_error("nonlinear_least_squares_1", &
+                "The change in solution tolerance was found to be too small.", &
+                FS_TOLERANCE_TOO_SMALL_ERROR)
+            return
         end if
         if (tol%residual_tolerance < too_small) then
-            index = 3
-            go to 30
+            call errmgr%report_error("nonlinear_least_squares_1", &
+                "The residual error tolerance was found to be too small.", &
+                FS_TOLERANCE_TOO_SMALL_ERROR)
+            return
         end if
         if (tol%iteration_improvement_tolerance < too_small) then
-            index = 4
-            go to 30
+            call errmgr%report_error("nonlinear_least_squares_1", &
+                "The iteration improvement tolerance was found to be too small.", &
+                FS_TOLERANCE_TOO_SMALL_ERROR)
+            return
         end if
 
         ! Iteration Count Checking
         if (tol%max_iteration_count < min_iter_count) then
-            index = 1
-            go to 40
+            call report_iteration_count_error(errmgr, &
+                "nonlinear_least_squares_1", &
+                "Too few iterations were specified.", &
+                min_iter_count)
+            return
         end if
         if (tol%max_function_evaluations < min_fun_count) then
-            index = 2
-            go to 40
+            call report_iteration_count_error(errmgr, &
+                "nonlinear_least_squares_1", &
+                "Too few function evaluations were specified.", &
+                min_fun_count)
+            return
         end if
         if (tol%max_iteration_between_updates < min_update_count) then
-            index = 3
-            go to 40
+            call report_iteration_count_error(errmgr, &
+                "nonlinear_least_squares_1", &
+                "Too few iterations between updates were specified.", &
+                min_update_count)
+            return
         end if
 
         ! Optional Array Arguments (weights, parameter limits, etc.)
         if (present(weights)) then
             if (size(weights) < m) then
-                actual = size(weights)
-                expected = m
-                index = 4
-                go to 10
+                call report_array_size_error(errmgr, &
+                    "nonlinear_least_squares_1", "weights", m, size(weights))
+                return
             end if
             w(1:m) => weights(1:m)
         else
@@ -269,10 +245,9 @@ contains
 
         if (present(maxp)) then
             if (size(maxp) /= n) then
-                actual = size(maxp)
-                expected = n
-                index = 5
-                go to 10
+                call report_array_size_error(errmgr, &
+                    "nonlinear_least_squares_1", "maxp", n, size(maxp))
+                return
             end if
             pmax(1:n) => maxp(1:n)
         else
@@ -283,10 +258,9 @@ contains
 
         if (present(minp)) then
             if (size(minp) /= n) then
-                actual = size(minp)
-                expected = n
-                index = 6
-                go to 10
+                call report_array_size_error(errmgr, &
+                    "nonlinear_least_squares_1", "minp", n, size(minp))
+                return
             end if
             pmin(1:n) => minp(1:n)
         else
@@ -306,10 +280,9 @@ contains
         ! Statistical Parameters
         if (present(stats)) then
             if (size(stats) /= n) then
-                actual = size(stats)
-                expected = n
-                index = 7
-                go to 10
+                call report_array_size_error(errmgr, &
+                    "nonlinear_least_squares_1", "stats", n, size(stats))
+                return
             end if
 
             ! Compute the covariance matrix
@@ -324,104 +297,10 @@ contains
         ! End
         return
 
-        ! Array Size Error Handling
-10      continue
-        allocate(character(len = 512) :: errmsg)
-        select case (index)
-        case (1)
-            write(errmsg, 100) "The dependent variable data array (", actual, &
-                ") is not the same length as the independent data array (", &
-                expected, ")."
-        case (2)
-            write(errmsg, 100) &
-                "The function value array was expected to be of size ", &
-                expected, ", but was found to be of size ", actual, "."
-        case (3)
-            write(errmsg, 100) &
-                "The residual error array was expected to be of size ", &
-                expected, ", but was found to be of size ", actual, "."
-        case (4)
-            write(errmsg, 100) &
-                "The weighting factor array was expected to be of size ", &
-                expected, ", but was found to be of size ", actual, "."
-        case (5)
-            write(errmsg, 100) &
-                "The max parameter limit array was expected to be of size", &
-                expected, ", but was found to be of size ", actual, "."
-        case (6)
-            write(errmsg, 100) &
-                "The min parameter limit array was expected to be of size", &
-                expected, ", but was found to be of size ", actual, "."
-        case (7)
-            write(errmsg, 100) &
-                "The fit statistics array was expected to be of size ", &
-                expected, ", but was found to be of size ", actual, "."
-        end select
-        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
-        return
-
-        ! Underdefind Problem Error Handling
-20      continue
-        allocate(character(len = 512) :: errmsg)
-        write(errmsg, 100) "The problem is under-determined.  The number " // &
-            "of equations was found to be ", m, &
-            ", but must be at least equal to the number of unknowns ", n, "."
-        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
-            FS_UNDERDEFINED_PROBLEM_ERROR)
-        return
-
-        ! Tolerance Too Small Error Handling
-30      continue
-        allocate(character(len = 256) :: errmsg)
-        select case (index)
-        case (1)
-            write(errmsg, '(A)') &
-                "The gradient tolerance was found to be too small."
-        case (2)
-            write(errmsg, '(A)') &
-                "The change in solution tolerance was found to be too small."
-        case (3)
-            write(errmsg, '(A)') &
-                "The residual error tolerance was found to be too small."
-        case (4)
-            write(errmsg, '(A)') &
-                "The iteration improvement tolerance was found to be too small."
-        end select
-        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
-            FS_TOLERANCE_TOO_SMALL_ERROR)
-        return
-
-        ! Too Few Iteration Error Handling
-40      continue
-        allocate(character(len = 256) :: errmsg)
-        select case (index)
-        case (1)
-            write(errmsg, 101) "Too few iterations were specified.  " // &
-                "A minimum of ", min_iter_count, " is expected."
-        case (2)
-            write(errmsg, 101) "Too few function evaluations were " // &
-                "specified.  A minimum of ", min_fun_count, " is expected."
-        case (3)
-            write(errmsg, 101) "Too few iterations between updates " // &
-                "were specified.  A minimum of ", min_update_count, &
-                " is expected."
-        end select
-        call errmgr%report_error("nonlinear_least_squares_1", trim(errmsg), &
-            FS_TOO_FEW_ITERATION_ERROR)
-        return
-
         ! Memory Error Handler
 50      continue
-        allocate(character(len = 256) :: errmsg)
-        write(errmsg, 101) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("nonlinear_least_squares_1", &
-            trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
+        call report_memory_error(errmgr, "nonlinear_least_squares_1", flag)
         return
-
-        ! Formatting
-100     format(A, I0, A, I0, A)
-101     format(A, I0, A)
     end subroutine
 
 ! ******************************************************************************

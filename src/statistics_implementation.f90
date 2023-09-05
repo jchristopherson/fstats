@@ -1,6 +1,7 @@
 submodule (fstats) statistics_implementation
     use linalg, only : sort
     use ieee_arithmetic
+    use fstats_errors
 contains
 ! ------------------------------------------------------------------------------
 pure module function mean_real64(x) result(rst)
@@ -204,7 +205,6 @@ module function r_squared_real64(x, xm, err) result(rst)
     real(real64) :: esum, vt
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     if (present(err)) then
@@ -216,10 +216,9 @@ module function r_squared_real64(x, xm, err) result(rst)
     ! Input Check
     n = size(x)
     if (size(xm) /= n) then
-        write(errmsg, 100) "Expected the modeled array to be of length ", &
-            n, ", but found it to be of length ", size(xm), "."
-        call errmgr%report_error("r_squared_real64", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "r_squared_real64", "XM", n, &
+            size(xm))
+        return
     end if
 
     ! Process
@@ -229,9 +228,6 @@ module function r_squared_real64(x, xm, err) result(rst)
     end do
     vt = variance(x) * (n - one)
     rst = one - esum / vt
-
-    ! Formatting
-100 format(A, I0, A, I0, A)
 end function
 
 ! --------------------
@@ -250,7 +246,6 @@ module function r_squared_real32(x, xm, err) result(rst)
     real(real32) :: esum, vt
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     if (present(err)) then
@@ -262,10 +257,9 @@ module function r_squared_real32(x, xm, err) result(rst)
     ! Input Check
     n = size(x)
     if (size(xm) /= n) then
-        write(errmsg, 100) "Expected the modeled array to be of length ", &
-            n, ", but found it to be of length ", size(xm), "."
-        call errmgr%report_error("r_squared_real32", trim(errmsg), &
-            FS_ARRAY_SIZE_ERROR)
+        call report_array_size_error(errmgr, "r_squared_real32", "XM", n, &
+            size(xm))
+        return
     end if
 
     ! Process
@@ -275,9 +269,6 @@ module function r_squared_real32(x, xm, err) result(rst)
     end do
     vt = variance(x) * (n - one)
     rst = one - esum / vt
-
-    ! Formatting
-100 format(A, I0, A, I0, A)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -622,7 +613,6 @@ module subroutine t_test_paired_real64(x1, x2, stat, p, dof, err)
     ! Local Variables
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     real(real64) :: v1, v2, m1, m2, sd, cov, a, b, x
     integer(int32) :: n1, n2, n
     
@@ -638,11 +628,8 @@ module subroutine t_test_paired_real64(x1, x2, stat, p, dof, err)
 
     ! Input Checking
     if (n1 /= n2) then
-        write(errmsg, 100) &
-            "Both arrays must be the same size.  Array 1 contains ", n1, &
-            " elements and array 2 contains ", n2, "."
-        call errmgr%report_error("t_test_paired_real64", trim(errmsg), &
-            ML_ARRAY_SIZE_ERROR)
+        call report_arrays_not_same_size_error(errmgr, "t_test_paired_real64", &
+            "X1", "X2", n1, n2)
         return
     end if
 
@@ -665,9 +652,6 @@ module subroutine t_test_paired_real64(x1, x2, stat, p, dof, err)
     b = half
     x = dof / (dof + stat**2)
     p = regularized_beta(a, b, x)
-
-    ! Formatting
-100 format(A, I0, A, I0, A)
 end subroutine
 
 ! -------------------
@@ -686,7 +670,6 @@ module subroutine t_test_paired_real32(x1, x2, stat, p, dof, err)
     ! Local Variables
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     real(real32) :: v1, v2, m1, m2, sd, cov, a, b, x
     integer(int32) :: n1, n2, n
     
@@ -702,11 +685,8 @@ module subroutine t_test_paired_real32(x1, x2, stat, p, dof, err)
 
     ! Input Checking
     if (n1 /= n2) then
-        write(errmsg, 100) &
-            "Both arrays must be the same size.  Array 1 contains ", n1, &
-            " elements and array 2 contains ", n2, "."
-        call errmgr%report_error("t_test_paired_real32", trim(errmsg), &
-            ML_ARRAY_SIZE_ERROR)
+        call report_arrays_not_same_size_error(errmgr, "t_test_paired_real32", &
+            "X1", "X2", n1, n2)
         return
     end if
 
@@ -729,9 +709,6 @@ module subroutine t_test_paired_real32(x1, x2, stat, p, dof, err)
     b = half
     x = dof / (dof + stat**2)
     p = regularized_beta(a, b, x)
-
-    ! Formatting
-100 format(A, I0, A, I0, A)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -1019,7 +996,6 @@ module function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
     real(real64), allocatable :: ypack(:)
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
     n = size(ymeas)
@@ -1033,20 +1009,15 @@ module function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
 
     ! Input Checking
     if (size(ymod) /= n) then
-        write(errmsg, 100) &
-            "Both input arrays must be the same size.  Expected ", n, &
-            ", but found ", size(ymod), "."
-        call errmgr%report_error("anova_model_fit", trim(errmsg), &
-            ML_ARRAY_SIZE_ERROR)
+        call report_arrays_not_same_size_error(errmgr, "anova_model_fit", &
+            "YMEAS", "YMOD", n, size(ymod))
         return
     end if
 
     ! Memory Allocation
     allocate(ypack(2 * n), stat = flag)
     if (flag /= 0) then
-        write(errmsg, 101) "Memory allocation error code ", flag, "."
-        call errmgr%report_error("anova_model_fit", &
-            trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
+        call report_memory_error(errmgr, "anova_model_fit", flag)
         return
     end if
 
