@@ -187,7 +187,7 @@ module fstats
     public :: iteration_update
     public :: jacobian
     public :: nonlinear_least_squares
-    public :: FS_TOO_FEW_ITERATION_ERROR
+    public :: allan_variance
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
@@ -1131,7 +1131,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p ymeas and @p ymod are not the same 
     !!      length.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! @return A @ref single_factor_anova_table instance containing the ANOVA
     !!  results.
     !!
@@ -1704,7 +1704,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not sized
     !!      correctly.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !! - FS_MEMORY_ERROR: Occurs if there is insufficient memory.
     !!
     !! @par See Also
     !! - [Wikipedia](https://en.wikipedia.org/wiki/Covariance_matrix)
@@ -1748,7 +1748,7 @@ module fstats
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not approriately
     !!      sized.
     !! - FS_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+    !! - FS_MEMORY_ERROR: Occurs if there is insufficient memory.
     !!
     !! @par Example
     !! The following example illustrates fitting a cubic polynomial to a set 
@@ -1908,7 +1908,7 @@ module fstats
     !!  to the caller.  Possible warning and error codes are as follows.
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if @p c is not sized correctly.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! @return A @ref regression_statistics object containing the analysis
     !!  results.
     interface calculate_regression_statistics
@@ -2286,7 +2286,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
     !!      sized.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     interface jacobian
         module procedure :: regression_jacobian_1
     end interface
@@ -2337,7 +2337,7 @@ module fstats
     !! - FS_NO_ERROR: No errors encountered.
     !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not properly
     !!      sized.
-    !! - FS_OUT_OF_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     !! - FS_UNDERDEFINED_PROBLEM_ERROR: Occurs if the problem posed is 
     !!      underdetetermined (M < N).
     !! - FS_TOLERANCE_TOO_SMALL_ERROR: Occurs if any supplied tolerances are
@@ -2516,6 +2516,47 @@ module fstats
     !! @endcode
     interface nonlinear_least_squares
         module procedure :: nonlinear_least_squares_1
+    end interface
+
+! ******************************************************************************
+! ALLAN VARIANCE
+! ------------------------------------------------------------------------------
+
+    ! allan.f90
+    interface
+        module function allan_variance_1(x, dt, err) result(rst)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in), optional :: dt
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:,:) :: rst
+        end function
+    end interface
+
+    !> @brief Computes the Allan variance of a data set.
+    !!
+    !! @par Syntax
+    !! @code{.f90}
+    !! allocatable real(real64)(:) function allan_variance( &
+    !!  real(real64) x(:), &
+    !!  optional real(real64) dt, &
+    !!  optional class(errors) err &
+    !! )
+    !! @endcode
+    !!
+    !! @param[in] x The N-element data set to analyze.
+    !! @param[in] dt An optional input specifying the time increment between 
+    !!  samples in @p x.  If not specified, this value is set to 1.
+    !! @param[in,out] err A mechanism for communicating errors and warnings
+    !!  to the caller.  Possible warning and error codes are as follows.
+    !! - FS_NO_ERROR: No errors encountered.
+    !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
+    !!
+    !! @return An M-by-2 array containing the results where M is N / 2 - 1
+    !! if N is even; else, M is (N - 1) / 2 - 1 if N is odd.  The first column
+    !! contains the averaging times associated with the M results stored in the
+    !! second column.
+    interface allan_variance
+        module procedure :: allan_variance_1
     end interface
 
 ! ------------------------------------------------------------------------------
