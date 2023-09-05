@@ -2556,11 +2556,21 @@ module fstats
     !! contains the averaging times associated with the M results stored in the
     !! second column.
     !!
+    !! @par Remarks
+    !! This implementation computes the fully overlapped Allan variance using 
+    !! the method presented by Yadav et. al.
+    !! @par
+    !! Yadav, Shrikanth & Shastri, Saurav & Chakravarthi, Ghanashyam & Kumar, 
+    !! Viraj & Rao, Divya & Agrawal, Vinod. (2018). A Fast, Parallel Algorithm 
+    !! for Fully Overlapped Allan Variance and Total Variance for Analysis and 
+    !! Modeling of Noise in Inertial Sensors. IEEE Sensors Letters. PP. 1-1. 
+    !! 10.1109/LSENS.2018.2829799.
+    !!
     !! @par Example
     !! The following example illustrates how to compute the Allan variance from
     !! a data set.  The data set is read from file using the
     !! <a href = "https://github.com/jacobwilliams/fortran-csv-module">
-    !! Fortran CSV Module</a> code and plotted using the 
+    !! Fortran CSV Module</a> library and plotted using the 
     !! <a href = "https://github.com/jchristopherson/fplot">FPLOT</a> library.
     !! @code{.f90}
     !! program example
