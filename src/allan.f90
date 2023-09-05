@@ -48,8 +48,9 @@ module function allan_variance_1(x, dt, err) result(rst)
 
     ! Process
     do m = 1, nr
-        temp = sum((tall2 - tall1)**2)
+        temp = 0.0d0
         do j = 1, limit - 1
+            temp = temp + (tall2(j) - tall1(j))**2
             tall1(j) = tall1(j) + x(m + j)
             tall2(j) = tall2(j + 1) + x(2 * m + j + 1)
         end do
