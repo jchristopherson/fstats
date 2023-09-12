@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.24)
 project(
     fstats
     LANGUAGES Fortran
-    VERSION 1.0.0
+    VERSION 1.1.1
 )
 
 # Get helper macros and functions
