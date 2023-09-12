@@ -5,6 +5,7 @@ program tests
     use fstats_regression_tests
     use fstats_experimental_design_tests
     use fstats_nonlinear_regression_tests
+    use fstats_allan_tests
     implicit none
 
     ! Variables
@@ -92,10 +93,14 @@ program tests
     local = test_nl_least_squares()
     if (.not.local) overall = .false.
 
+    ! Allan Variance Tests
+    local = test_allan_variance()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
-        call exit(0)
+        stop 0
     else
-        call exit(1)
+        stop 1
     end if
 end program

@@ -2620,8 +2620,8 @@ module fstats
     !!     call yAxis%set_use_default_tic_label_format(.false.)
     !!     call yAxis%set_tic_label_format("%0.0e")
     !!     call xAxis%set_title("Averaging Time")
-    !!     call yAxis%set_title("Variance")
-    !!     call pd%define_data(v(:,1), v(:,2))
+    !!     call yAxis%set_title("Deviation")
+    !!     call pd%define_data(v(:,1), sqrt(v(:,2)))
     !!     call plt%push(pd)
     !!     call plt%draw()
     !! end program
