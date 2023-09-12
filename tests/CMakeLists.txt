@@ -2,15 +2,7 @@
 include("${PROJECT_SOURCE_DIR}/cmake/helper.cmake")
 
 # Dependencies
-add_subdirectory(fortran_csv_module)
 add_subdirectory(fortran_test_helper)
-
-# Copy necessary test files
-configure_file(
-    ${CMAKE_SOURCE_DIR}/tests/files/allan_test_data.csv
-    ${CMAKE_BINARY_DIR}/tests/allan_test_data.csv
-    COPYONLY
-)
 
 # Define the source files
 set(fstats_test_sources
@@ -27,7 +19,6 @@ set(fstats_test_sources
 # Build the tests
 add_executable(fstats_tests ${fstats_test_sources})
 link_library(fstats_tests ${PROJECT_NAME} ${PROJECT_INCLUDE_DIR})
-link_library(fstats_tests ${fortran-csv-module_LIBRARY} ${fortran-csv-module_INCLUDE_DIR})
 link_library(fstats_tests ${fortran_test_helper_LIBRARY} ${fortran_test_helper_INCLUDE_DIR})
 add_test(
     NAME fstats_tests
