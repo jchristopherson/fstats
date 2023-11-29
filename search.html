@@ -8,7 +8,8 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="./favicon.png">
 
-    <title> FSTATS </title>
+    <title>Search Results &ndash; FSTATS
+</title>
 
     <link href="./css/bootstrap.min.css" rel="stylesheet">
     <link href="./css/pygments.css" rel="stylesheet">
@@ -83,75 +84,29 @@
     </nav>
 
     <div class="container">
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <p>FSTATS is a modern Fortran statistical library containing routines for computing basic statistical properties, hypothesis testing, regression, special functions, and experimental design.</p>
-	<p> Find us on&hellip;</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="https://github.com/jchristopherson/fstats" role="button">GitHub</a>
-        </p>
-      </div>
-
-      <div class="row" id='text'>
-        <div class="col-md-8">
-          <h1>FSTATS</h1>
-          
+      <div class="row">
+        <div class="col-lg-12">
+			 <h1>Search Results</h1>
+             <div id="tipue_search_content"><div id="tipue_search_loading"></div></div>
         </div>
-        <div class="col-md-4">
-	  <div class="well">
-          <h2>Developer Info</h2>
-          <h4>Jason Christopherson</h4>
-          
-       </div>
-       </div>
       </div>
-        <div class="row">
-          <hr>
-          <div class="col-xs-6 col-sm-3">
-            <div>
-              <h3>Source Files</h3>
-              <ul><li><a href='./sourcefile/allan.f90.html'>allan.f90</a></li><li><a href='./sourcefile/distributions_chisquared.f90.html'>distributions_chisquared.f90</a></li><li><a href='./sourcefile/distributions_f.f90.html'>distributions_f.f90</a></li><li><a href='./sourcefile/distributions_normal.f90.html'>distributions_normal.f90</a></li><li><a href='./sourcefile/distributions_t.f90.html'>distributions_t.f90</a></li><li><a href='./sourcefile/experimental_design_implementation.f90.html'>experimental_design_implementation.f90</a></li><li><a href='./sourcefile/fstats.f90.html'>fstats.f90</a></li><li><a href='./sourcefile/fstats_errors.f90.html'>fstats_errors.f90</a></li><li><a href='./sourcefile/levenberg_marquardt.f90.html'>levenberg_marquardt.f90</a></li><li><a href='./sourcefile/regression_implementation.f90.html'>regression_implementation.f90</a></li></ul>
-            </div>
-            <div>
-              <ul>
-                <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-xs-6 col-sm-3">
-            <div>
-              <h3>Modules</h3>
-              <ul><li><a href='./module/fstats.html'>fstats</a></li><li><a href='./module/fstats_errors.html'>fstats_errors</a></li></ul>
-            </div>
-            <div>
-              <ul>
-                <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-xs-6 col-sm-3">
-            <div>
-              <h3>Procedures</h3>
-              <ul><li><a href='./interface/adjusted_r_squared.html'>adjusted_r_squared</a></li><li><a href='./interface/allan_variance.html'>allan_variance</a></li><li><a href='./interface/anova.html'>anova</a></li><li><a href='./interface/beta.html'>beta</a></li><li><a href='./interface/coefficient_matrix.html'>coefficient_matrix</a></li><li><a href='./interface/confidence_interval.html'>confidence_interval</a></li><li><a href='./interface/covariance_matrix.html'>covariance_matrix</a></li><li><a href='./interface/digamma.html'>digamma</a></li><li><a href='./interface/distribution_function.html'>distribution_function</a></li><li><a href='./interface/distribution_property.html'>distribution_property</a></li></ul>
-            </div>
-            <div>
-              <ul>
-                <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-xs-6 col-sm-3">
-            <div>
-              <h3>Derived Types</h3>
-              <ul><li><a href='./type/anova_factor.html'>anova_factor</a></li><li><a href='./type/chi_squared_distribution.html'>chi_squared_distribution</a></li><li><a href='./type/convergence_info.html'>convergence_info</a></li><li><a href='./type/distribution.html'>distribution</a></li><li><a href='./type/f_distribution.html'>f_distribution</a></li><li><a href='./type/iteration_controls.html'>iteration_controls</a></li><li><a href='./type/lm_solver_options.html'>lm_solver_options</a></li><li><a href='./type/normal_distribution.html'>normal_distribution</a></li><li><a href='./type/regression_statistics.html'>regression_statistics</a></li><li><a href='./type/single_factor_anova_table.html'>single_factor_anova_table</a></li></ul>
-            </div>
-            <div>
-              <ul>
-                <li><a href="./lists/types.html"><em>All derived types&hellip;</em></a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
+<!--
+    <script>
+      $(document).ready(function() {
+           $('#tipue_search_input').tipuesearch({
+             'mode' : 'static',
+             'show': 10,
+             'newWindow': false,
+             'descriptiveWords': 35,
+         });
+      });
+    </script>
+-->
+<script>
+$(document).ready(function() {
+     $('#tipue_search_input').tipuesearch();
+});
+</script>
       <hr>
     </div> <!-- /container -->
     <footer>
