@@ -1,6 +1,7 @@
 submodule (fstats) regression_implementation
     use linalg
     use fstats_errors
+    use external
     implicit none
 contains
 ! ------------------------------------------------------------------------------

@@ -16,5 +16,6 @@ set(FSTATS_SOURCES
     ${dir}/distributions_chisquared.f90
     ${dir}/allan.f90
     ${dir}/fstats_errors.f90
+    ${dir}/external.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
