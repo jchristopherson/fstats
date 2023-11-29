@@ -2,6 +2,7 @@ submodule (fstats) regression_implementation
     use linalg
     use fstats_errors
     use external
+    use blas
     implicit none
 contains
 ! ------------------------------------------------------------------------------
