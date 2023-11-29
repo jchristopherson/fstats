@@ -3,6 +3,7 @@ submodule (fstats) levenberg_marquardt
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
     use linalg
     use fstats_errors
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, params, &
@@ -720,6 +721,7 @@ contains
         step = opt%finite_difference_step_size
         stop = .false.
         info%user_requested_stop = .false.
+        nupdate = 0
 
         ! Local Memory Allocation
         allocate(pOld(n), source = 0.0d0, stat = flag)
@@ -803,7 +805,7 @@ contains
         allocate(character(len = 512) :: errmsg)
         write(errmsg, 100) "Memory allocation error code ", flag, "."
         call err%report_error("lm_solve", &
-            trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
+            trim(errmsg), FS_MEMORY_ERROR)
         return
 
         ! Formatting

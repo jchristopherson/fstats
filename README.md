@@ -3,9 +3,20 @@ FSTATS is a modern Fortran statistical library containing routines for computing
 
 ## Status
 [![CMake](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml/badge.svg)](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml)
+[![Actions Status](https://github.com/jchristopherson/fstats/workflows/fpm/badge.svg)](https://github.com/jchristopherson/fstats/actions)
 
 ## Building FSTATS
-This library can be built using CMake.  For instructions see [Running CMake](https://cmake.org/runningcmake/).
+[CMake](https://cmake.org/)This library can be built using CMake.  For instructions see [Running CMake](https://cmake.org/runningcmake/).
+
+[FPM](https://github.com/fortran-lang/fpm) can also be used to build this library using the provided fpm.toml.
+```txt
+fpm build
+```
+The FSTATS library can be used within your FPM project by adding the following to your fpm.toml file.
+```toml
+[dependencies]
+fstats = { git = "https://github.com/jchristopherson/fstats" }
+```
 
 ## Documentation
 Documentation can be found [here](https://jchristopherson.github.io/fstats/).
