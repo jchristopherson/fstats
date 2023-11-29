@@ -721,6 +721,7 @@ contains
         step = opt%finite_difference_step_size
         stop = .false.
         info%user_requested_stop = .false.
+        nupdate = 0
 
         ! Local Memory Allocation
         allocate(pOld(n), source = 0.0d0, stat = flag)
