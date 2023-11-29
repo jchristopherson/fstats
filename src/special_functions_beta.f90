@@ -1,4 +1,5 @@
 submodule (fstats) special_functions_beta
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 pure elemental module function beta_real64(a, b) result(rst)

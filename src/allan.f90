@@ -1,5 +1,6 @@
 submodule (fstats) allan
     use fstats_errors
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 ! REF: Yadav, Shrikanth & Shastri, Saurav & Chakravarthi, Ghanashyam & Kumar, 
