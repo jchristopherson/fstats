@@ -21,16 +21,14 @@ module fstats_errors
 
 contains
 ! ------------------------------------------------------------------------------
-    !> @brief Reports a memory allocation related error.
-    !!
-    !! @param[in,out] err The error handling object.
-    !! @param[in] fname The name of the routine in which the error occurred.
-    !! @param[in] code The error code returned by the allocation routine.
     subroutine report_memory_error(err, fname, code)
-        ! Arguments
+        !! Reports a memory allocation related error.
         class(errors), intent(inout) :: err
+            !! The error handling object.
         character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
         integer(int32), intent(in) :: code
+            !! The error code returned by the allocation routine.
 
         ! Variables
         character(len = MESSAGE_SIZE) :: msg
@@ -45,18 +43,18 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    !> @brief Reports an array size error.
-    !!
-    !! @param[in,out] err The error handling object.
-    !! @param[in] fname The name of the routine in which the error occurred.
-    !! @param[in] name The name of the array.
-    !! @param[in] expect The expected size of the array.
-    !! @param[in] actual The actual size of the array.
     subroutine report_array_size_error(err, fname, name, expect, actual)
-        ! Arguments
+        !! Reports an array size error.
         class(errors), intent(inout) :: err
-        character(len = *), intent(in) :: fname, name
-        integer(int32), intent(in) :: expect, actual
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *), intent(in) :: name
+            !! The name of the array.
+        integer(int32), intent(in) :: expect
+            !! The expected size of the array.
+        integer(int32), intent(in) :: actual
+            !! The actual size of the array.
 
         ! Variables
         character(len = MESSAGE_SIZE) :: msg
@@ -71,22 +69,23 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    !> @brief Reports a matrix size error.
-    !!
-    !! @param[in,out] err The error handling object.
-    !! @param[in] fname The name of the routine in which the error occurred.
-    !! @param[in] name The name of the matrix.
-    !! @param[in] expect_rows The expected number of rows.
-    !! @param[in] expect_cols The expected number of columns.
-    !! @param[in] actual_rows The actual number of rows.
-    !! @param[in] actual_cols The actual number of columns.
     subroutine report_matrix_size_error(err, fname, name, expect_rows, &
         expect_cols, actual_rows, actual_cols)
-        ! Arguments
+        !! Reports a matrix size error.
         class(errors), intent(inout) :: err
-        character(len = *), intent(in) :: fname, name
-        integer(int32), intent(in) :: expect_rows, expect_cols, actual_rows, &
-            actual_cols
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *), intent(in) :: name
+            !! The name of the matrix.
+        integer(int32), intent(in) :: expect_rows
+            !! The expected number of rows.
+        integer(int32), intent(in) :: expect_cols
+            !! The expected number of columns.
+        integer(int32), intent(in) :: actual_rows
+            !! The actual number of rows.
+        integer(int32), intent(in) :: actual_cols
+            !! The actual number of columns.
         
         ! Variables
         character(len = MESSAGE_SIZE) :: msg
@@ -102,21 +101,22 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    !> @brief Reports an error relating to two arrays not being the same size
-    !! when they should be the same size.
-    !!
-    !! @param[in,out] The error handling object.
-    !! @param[in] fname The name of the routine in which the error occurred.
-    !! @param[in] name1 The name of the first array.
-    !! @param[in] name2 The name of the second array.
-    !! @param[in] size1 The size of the first array.
-    !! @param[in] size2 The size of the second array.
     subroutine report_arrays_not_same_size_error(err, fname, name1, name2, &
         size1, size2)
-        ! Arguments
+        !! Reports an error relating to two arrays not being the same size
+        !! when they should be the same size.
         class(errors), intent(inout) :: err
-        character(len = *), intent(in) :: fname, name1, name2
-        integer(int32), intent(in) :: size1, size2
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *), intent(in) :: name1
+            !! The name of the first array.
+        character(len = *), intent(in) :: name2
+            !! The name of the second array.
+        integer(int32), intent(in) :: size1
+            !! The size of the first array.
+        integer(int32), intent(in) :: size2
+            !! The size of the second array.
 
         ! Local Variables
         character(len = MESSAGE_SIZE) :: msg
@@ -132,17 +132,16 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    !> @brief Reports an underdefined problem error.
-    !!
-    !! @param[in,out] The error handling object.
-    !! @param[in] fname The name of the routine in which the error occurred.
-    !! @param[in] expect The expected minimum number of equations.
-    !! @param[in] actual The actual number of equations.
     subroutine report_underdefined_error(err, fname, expect, actual)
-        ! Arguments
+        !! Reports an underdefined problem error.
         class(errors), intent(inout) :: err
+            !! The error handling object.
         character(len = *), intent(in) :: fname
-        integer(int32), intent(in) :: expect, actual
+            !! The name of the routine in which the error occurred.
+        integer(int32), intent(in) :: expect
+            !! The expected minimum number of equations.
+        integer(int32), intent(in) :: actual
+            !! The actual number of equations.
 
         ! Local Variables
         character(len = MESSAGE_SIZE) :: msg
@@ -159,17 +158,16 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    !> @brief Reports an iteration count error.
-    !!
-    !! @param[in,out] The error handling object.
-    !! @param[in] fname The name of the routine in which the error occurred.
-    !! @param[in] msg The error message.
-    !! @param[in] mincount The minimum iteration count expected.
     subroutine report_iteration_count_error(err, fname, msg, mincount)
-        ! Arguments
+        !! Reports an iteration count error.
         class(errors), intent(inout) :: err
-        character(len = *) :: fname, msg
+            !! The error handling object.
+        character(len = *) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *) :: msg
+            !! The error message.
         integer(int32), intent(in) :: mincount
+            !! The minimum iteration count expected.
 
         ! Local Variables
         character(len = MESSAGE_SIZE) :: emsg
