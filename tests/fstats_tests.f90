@@ -98,9 +98,7 @@ program tests
     if (.not.local) overall = .false.
 
     ! End
-    if (overall) then
-        stop 0
-    else
+    if (.not.overall) then
         stop 1
     end if
 end program
