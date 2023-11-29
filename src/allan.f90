@@ -53,7 +53,7 @@ module function allan_variance_1(x, dt, err) result(rst)
         do j = 1, limit - 1
             temp = temp + (tall2(j) - tall1(j))**2
             tall1(j) = tall1(j) + x(min(n, m + j))
-            tall2(j) = tall2(j + 1) + x(min(n, 2 * m + j + 1))
+            tall2(j) = tall2(min(n - 1, j + 1)) + x(min(n, 2 * m + j + 1))
         end do
         limit = limit - 2
         rst(m,1) = dt * m
