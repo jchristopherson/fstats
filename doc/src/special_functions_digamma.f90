@@ -1,5 +1,6 @@
 submodule (fstats) special_functions_digamma
     use ieee_arithmetic
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 pure elemental module function digamma_real64(x) result(rst)

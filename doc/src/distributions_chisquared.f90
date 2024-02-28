@@ -1,4 +1,5 @@
 submodule (fstats) distributions_chisquared
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 pure module elemental function cs_pdf(this, x) result(rst)

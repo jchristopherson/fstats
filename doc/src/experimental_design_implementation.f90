@@ -1,5 +1,6 @@
 submodule (fstats) experimental_design_implementation
     use fstats_errors
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 module subroutine get_full_factorial_matrix_size_int32(vars, m, n, err)
