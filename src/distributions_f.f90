@@ -1,5 +1,6 @@
 submodule (fstats) distributions_f
     use ieee_arithmetic
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 pure module elemental function fd_pdf(this, x) result(rst)
