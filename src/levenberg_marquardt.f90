@@ -1,7 +1,8 @@
 submodule (fstats) levenberg_marquardt
 ! REFERENCES:
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
-    use linalg, only : mtx_inverse, lu_factor, mtx_mult
+    use linalg, only : mtx_inverse, lu_factor, mtx_mult, solve_lu, &
+        diag_mtx_mult, rank1_update
     use fstats_errors
     implicit none
 contains
@@ -453,7 +454,7 @@ contains
         dp = p - pOld
         h2 = dot_product(dp, dp)
         dy = y - yOld - matmul(jac, dp)
-        call recip_mult_array(h2, dy)   ! compute dy / h2
+        dy = dy / h2
         call rank1_update(1.0d0, dy, dp, jac)
     end subroutine
 
