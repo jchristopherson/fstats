@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.24)
 project(
     fstats
     LANGUAGES Fortran
-    VERSION 1.1.2
+    VERSION 1.1.3
 )
 
 # Get helper macros and functions
@@ -27,9 +27,6 @@ add_fortran_library(
 )
 link_library(${PROJECT_NAME} ${ferror_LIBRARY} ${ferror_INCLUDE_DIR})
 link_library(${PROJECT_NAME} ${linalg_LIBRARY} ${linalg_INCLUDE_DIR})
-
-# Installation
-add_subdirectory(install)
 
 # Testing
 option(BUILD_TESTING "Build tests")

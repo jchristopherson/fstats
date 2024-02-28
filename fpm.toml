@@ -1,9 +1,9 @@
 name = "fstats"
-version = "1.1.2"
+version = "1.1.3"
 license = "GPL-3.0"
 author = "Jason Christopherson"
 maintainer = "Jason Christopherson"
-copyright = "Copyright 2022-2023, Jason Christopherson"
+copyright = "Copyright 2022-2024, Jason Christopherson"
 description = "A modern Fortran statistical library."
 homepage = "https://github.com/jchristopherson/fstats"
 
