@@ -1,5 +1,6 @@
 submodule (fstats) distributions_t
     use ieee_arithmetic
+    implicit none
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 contains
 ! ------------------------------------------------------------------------------

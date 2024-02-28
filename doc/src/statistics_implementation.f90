@@ -2,6 +2,7 @@ submodule (fstats) statistics_implementation
     use linalg, only : sort
     use ieee_arithmetic
     use fstats_errors
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 pure module function mean_real64(x) result(rst)
@@ -346,7 +347,7 @@ pure module function quantile_real64(x, q) result(rst)
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    real(real64) :: a, b, c
+    real(real64) :: a, b, c, tol
     integer(int32) :: n, ib
 
     ! Initialization
@@ -376,7 +377,7 @@ pure module function quantile_real32(x, q) result(rst)
     real(real32), parameter :: one = 1.0
 
     ! Local Variables
-    real(real32) :: a, b, c
+    real(real32) :: a, b, c, tol
     integer(int32) :: n, ib
 
     ! Initialization
@@ -614,7 +615,7 @@ module subroutine t_test_paired_real64(x1, x2, stat, p, dof, err)
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
     real(real64) :: v1, v2, m1, m2, sd, cov, a, b, x
-    integer(int32) :: n1, n2, n
+    integer(int32) :: i, n1, n2, n
     
     ! Initialization
     if (present(err)) then
@@ -671,7 +672,7 @@ module subroutine t_test_paired_real32(x1, x2, stat, p, dof, err)
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
     real(real32) :: v1, v2, m1, m2, sd, cov, a, b, x
-    integer(int32) :: n1, n2, n
+    integer(int32) :: i, n1, n2, n
     
     ! Initialization
     if (present(err)) then
@@ -881,7 +882,7 @@ module function anova_2_factor(x) result(rst)
 
     ! Local Variables
     integer(int32) :: i, j, jj, k, r, n
-    real(real64) :: factorMean
+    real(real64) :: factorMean, sum_all
     real(real64), allocatable :: xpack(:)
 
     ! Initialization
@@ -994,6 +995,7 @@ module function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
     ! Local Variables
     integer(int32) :: n, flag
     real(real64), allocatable :: ypack(:)
+    real(real64) :: sum_all
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
     

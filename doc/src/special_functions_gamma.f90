@@ -1,5 +1,6 @@
 submodule (fstats) special_functions_gamma
     use ieee_arithmetic
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
 ! REF: https://people.math.sc.edu/Burkardt/f_src/special_functions/special_functions.f90

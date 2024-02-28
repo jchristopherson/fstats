@@ -1,8 +1,10 @@
 submodule (fstats) levenberg_marquardt
 ! REFERENCES:
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
-    use linalg
+    use linalg, only : mtx_inverse, lu_factor, mtx_mult, solve_lu, &
+        diag_mtx_mult, rank1_update
     use fstats_errors
+    implicit none
 contains
 ! ------------------------------------------------------------------------------
     module subroutine regression_jacobian_1(fun, xdata, params, &
@@ -452,7 +454,7 @@ contains
         dp = p - pOld
         h2 = dot_product(dp, dp)
         dy = y - yOld - matmul(jac, dp)
-        call recip_mult_array(h2, dy)   ! compute dy / h2
+        dy = dy / h2
         call rank1_update(1.0d0, dy, dp, jac)
     end subroutine
 
@@ -720,6 +722,7 @@ contains
         step = opt%finite_difference_step_size
         stop = .false.
         info%user_requested_stop = .false.
+        nupdate = 0
 
         ! Local Memory Allocation
         allocate(pOld(n), source = 0.0d0, stat = flag)
@@ -803,7 +806,7 @@ contains
         allocate(character(len = 512) :: errmsg)
         write(errmsg, 100) "Memory allocation error code ", flag, "."
         call err%report_error("lm_solve", &
-            trim(errmsg), ML_OUT_OF_MEMORY_ERROR)
+            trim(errmsg), FS_MEMORY_ERROR)
         return
 
         ! Formatting
