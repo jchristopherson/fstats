@@ -1,7 +1,7 @@
 submodule (fstats) levenberg_marquardt
 ! REFERENCES:
 ! 1. https://people.duke.edu/~hpgavin/ExperimentalSystems/lm.pdf
-    use linalg
+    use linalg, only : mtx_inverse, lu_factor, mtx_mult
     use fstats_errors
     implicit none
 contains
