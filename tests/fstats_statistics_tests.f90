@@ -1015,4 +1015,44 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function trimmed_mean_test_1() result(rst)
+        use linalg, only : sort
+
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        integer(int32), parameter :: n = 100
+        integer(int32), parameter :: i1 = 5
+        integer(int32), parameter :: i2 = n - i1 + 1
+        real(real64), parameter :: p = 0.05d0
+
+        ! Local Variables
+        real(real64) :: x(n), tm, ans
+        real(real32) :: x32(n), tm32, ans32
+
+        ! Initialization
+        rst = .true.
+        call random_number(x)
+        call sort(x, .true.) ! sort into ascending order
+        x32 = real(x, real32)
+        ans = mean(x(i1:i2))
+        ans32 = mean(x32(i1:i2))
+
+        ! Test 1
+        tm = trimmed_mean(x, p = p)
+        if (.not.is_equal(tm, ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Trimmed Mean Test 1"
+        end if
+
+        ! Test 2
+        tm32 = trimmed_mean(x32, p = real(p, real32))
+        if (.not.is_equal(tm32, ans32)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Trimmed Mean Test 2"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

@@ -1057,10 +1057,66 @@ module function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
 101 format(A, I0, A)
 end function
 
+! ------------------------------------------------------------------------------
+module function trimmed_mean_real64(x, p) result(rst)
+    ! Arguments
+    real(real64), intent(inout), dimension(:) :: x
+    real(real64), intent(in), optional :: p
+    real(real64) :: rst
+
+    ! Local Variables
+    integer(int32) :: i1, i2, n
+    real(real64) :: pv
+
+    ! Initialization
+    if (present(p)) then
+        pv = abs(p)
+    else
+        pv = 0.05d0
+    end if
+
+    ! Sort the array into ascending order
+    call sort(x, .true.)
+
+    ! Find the limiting indices
+    n = size(x)
+    i1 = max(floor(n * pv, int32), 1)
+    i2 = min(n, n - i1 + 1)
+    rst = mean(x(i1:i2))
+end function
+
+! --------------------
+module function trimmed_mean_real32(x, p) result(rst)
+    ! Arguments
+    real(real32), intent(inout), dimension(:) :: x
+    real(real32), intent(in), optional :: p
+    real(real32) :: rst
+
+    ! Local Variables
+    integer(int32) :: i1, i2, n
+    real(real32) :: pv
+
+    ! Initialization
+    if (present(p)) then
+        pv = abs(p)
+    else
+        pv = 0.05
+    end if
+
+    ! Sort the array into ascending order
+    call r32_sort(x)
+
+    ! Find the limiting indices
+    n = size(x)
+    i1 = max(floor(n * pv, int32), 1)
+    i2 = min(n, n - i1 + 1)
+    rst = mean(x(i1:i2))
+end function
+
 ! ******************************************************************************
 ! PRIVATE ROUTINES
 ! ------------------------------------------------------------------------------
-! This is a hack as the linalg library doesn't support 32-bit real32ing point
+! This is a hack as the linalg library doesn't support 32-bit floating point
 ! routines
 subroutine r32_sort(x)
     ! Arguments

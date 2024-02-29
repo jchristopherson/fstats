@@ -97,6 +97,10 @@ program tests
     local = test_allan_variance()
     if (.not.local) overall = .false.
 
+    ! Trimmed Mean Tests
+    local = trimmed_mean_test_1()
+    if (.not.local) overall = .false.
+
     ! End
     if (.not.overall) then
         stop 1

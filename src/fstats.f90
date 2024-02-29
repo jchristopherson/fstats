@@ -49,6 +49,7 @@ module fstats
     public :: jacobian
     public :: nonlinear_least_squares
     public :: allan_variance
+    public :: trimmed_mean
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
@@ -691,6 +692,12 @@ module fstats
         module procedure :: confidence_interval_real32_array
     end interface
 
+    interface trimmed_mean
+        !! Computes the trimmed mean of a data set.
+        module procedure :: trimmed_mean_real64
+        module procedure :: trimmed_mean_real32
+    end interface
+
     ! statistics_implementation.f90
     interface
         pure module function mean_real64(x) result(rst)
@@ -1088,6 +1095,32 @@ module fstats
                 !!   same length.
                 !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
             type(single_factor_anova_table) :: rst
+        end function
+
+        module function trimmed_mean_real64(x, p) result(rst)
+            !! Computes the trimmed mean of a data set.
+            real(real64), intent(inout), dimension(:) :: x
+                !! An N-element array containing the data.  On output, the
+                !! array is sorted into ascending order.
+            real(real64), intent(in), optional :: p
+                !! An optional parameter specifying the percentage of values
+                !! from either end of the distribution to remove.  The default
+                !! is 0.05 such that the bottom 5% and top 5% are removed.
+            real(real64) :: rst
+                !! The trimmed mean.
+        end function
+
+        module function trimmed_mean_real32(x, p) result(rst)
+            !! Computes the trimmed mean of a data set.
+            real(real32), intent(inout), dimension(:) :: x
+                !! An N-element array containing the data.  On output, the
+                !! array is sorted into ascending order.
+            real(real32), intent(in), optional :: p
+                !! An optional parameter specifying the percentage of values
+                !! from either end of the distribution to remove.  The default
+                !! is 0.05 such that the bottom 5% and top 5% are removed.
+            real(real32) :: rst
+                !! The trimmed mean.
         end function
     end interface
 
