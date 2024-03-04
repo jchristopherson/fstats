@@ -427,6 +427,9 @@ pure module function confidence_interval_real64(dist, alpha, s, n) result(rst)
         rst = rst - dy
         if (abs(dy) < tol) exit
     end do
+
+    ! Determine the actual interval
+    rst = rst * s / sqrt(real(n, real64))
 end function
 
 ! ------------------
