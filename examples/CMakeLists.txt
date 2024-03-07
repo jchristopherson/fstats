@@ -29,5 +29,11 @@ configure_file(
 )
 add_executable(allan_example allan_example.f90)
 target_link_libraries(allan_example fstats)
-link_library(allan_example ${fplot_LIBRARY} ${fplot_INCLUDE_DIR})
-link_library(allan_example ${fortran-csv-module_LIBRARY} ${fortran-csv-module_INCLUDE_DIR})
+target_link_libraries(allan_example ${fplot_LIBRARY})
+target_include_directories(allan_example PUBLIC ${fplot_INCLUDE_DIR})
+target_link_libraries(allan_example ${fortran-csv-module_LIBRARY})
+target_include_directories(allan_example PUBLIC ${fortran-csv-module_INCLUDE_DIR})
+
+# Bootstrap Regression Example
+add_executable(bootstrap_regression_example bootstrap_regression_example.f90)
+target_link_libraries(bootstrap_regression_example fstats)
