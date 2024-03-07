@@ -13,6 +13,7 @@ module fstats
     public :: normal_distribution
     public :: f_distribution
     public :: chi_squared_distribution
+    public :: binomial_distribution
     public :: mean
     public :: variance
     public :: standard_deviation
@@ -50,6 +51,7 @@ module fstats
     public :: nonlinear_least_squares
     public :: allan_variance
     public :: trimmed_mean
+    public :: bootstrap_linear_least_squares
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
@@ -429,6 +431,90 @@ module fstats
         pure module function cs_variance(this) result(rst)
             !! Computes the variance of the distribution.
             class(chi_squared_distribution), intent(in) :: this
+                !! The chi_squared_distribution object.
+            real(real64) :: rst
+                !! The variance.
+        end function
+    end interface
+
+    type, extends(distribution) :: binomial_distribution
+        !! Defines a binomial distribution.  The binomial distribution describes
+        !! the probability p of getting k successes in n independent trials.
+        integer(int32) :: n
+            !! The number of independent trials.
+        real(real64) :: p
+            !! The success probability for each trial.  This parameter must
+            !! exist on the set [0, 1].
+    contains
+        procedure, public :: pdf => bd_pdf
+        procedure, public :: cdf => bd_cdf
+        procedure, public :: mean => bd_mean
+        procedure, public :: median => bd_median
+        procedure, public :: mode => bd_mode
+        procedure, public :: variance => bd_variance
+    end type
+
+    ! distributions_binomial.f90
+    interface
+        pure module elemental function bd_pdf(this, x) result(rst)
+            !! Computes the probability mass function.
+            !!
+            !! See [this](https://en.wikipedia.org/wiki/Binomial_distribution)
+            !! for a description of the probability mass function for this
+            !! distribution.
+            class(binomial_distribution), intent(in) :: this
+                !! The binomial_distribution object.
+            real(real64), intent(in) :: x
+                !! The value at which to evaluate the function.  This parameter
+                !! is the number k successes in the n independent trials.  As
+                !! such, this parameter must exist on the set [0, n].
+            real(real64) :: rst
+                !! The value of the function.
+        end function
+
+        pure module elemental function bd_cdf(this, x) result(rst)
+            !! Computes the cumulative distribution function.
+            !!
+            !! See [this](https://en.wikipedia.org/wiki/Binomial_distribution)
+            !! for a description of the cumulative distribution function for
+            !! this distribution.
+            class(binomial_distribution), intent(in) :: this
+                !! The binomial_distribution object.
+            real(real64), intent(in) :: x
+                !! The value at which to evaluate the function.  This parameter
+                !! is the number k successes in the n independent trials.  As
+                !! such, this parameter must exist on the set [0, n].
+            real(real64) :: rst
+                !! The value of the function.
+        end function
+
+        pure module function bd_mean(this) result(rst)
+            !! Computes the mean of the distribution.
+            class(binomial_distribution), intent(in) :: this
+                !! The binomial_distribution object.
+            real(real64) :: rst
+                !! The mean.
+        end function
+
+        pure module function bd_median(this) result(rst)
+            !! Computes the median of the distribution.
+            class(binomial_distribution), intent(in) :: this
+                !! The binomial_distribution object.
+            real(real64) :: rst
+                !! The median.
+        end function
+
+        pure module function bd_mode(this) result(rst)
+            !! Computes the mode of the distribution.
+            class(binomial_distribution), intent(in) :: this
+                !! The binomial_distribution object.
+            real(real64) :: rst
+                !! The mode.
+        end function
+
+        pure module function bd_variance(this) result(rst)
+            !! Computes the variance of the distribution.
+            class(binomial_distribution), intent(in) :: this
                 !! The chi_squared_distribution object.
             real(real64) :: rst
                 !! The variance.
@@ -2023,5 +2109,29 @@ module fstats
         module procedure :: allan_variance_1
     end interface
 
+! ******************************************************************************
+! BOOTSTRAPPING
 ! ------------------------------------------------------------------------------
+    ! bootstrapping.f90
+    interface
+        module subroutine bs_linear_least_squares_real64(order, intercept, &
+            x, y, coeffs, ymod, resid, nsamples, stats, bias, alpha, err)
+            integer(int32), intent(in) :: order
+            logical, intent(in) :: intercept
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in), dimension(:) :: y
+            real(real64), intent(out), dimension(:) :: coeffs
+            real(real64), intent(out), dimension(:) :: ymod
+            real(real64), intent(out), dimension(:) :: resid
+            integer(int32), intent(in), optional :: nsamples
+            type(regression_statistics), intent(out), optional, dimension(:) :: stats
+            real(real64), intent(out), optional, dimension(:) :: bias
+            real(real64), intent(in), optional :: alpha
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+    end interface
+
+    interface bootstrap_linear_least_squares
+        module procedure :: bs_linear_least_squares_real64
+    end interface
 end module

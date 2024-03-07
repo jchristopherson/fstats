@@ -27,6 +27,9 @@ program tests
     local = chi_squared_distribution_test_1()
     if (.not.local) overall = .false.
 
+    local = binomial_distribution_test_1()
+    if (.not.local) overall = .false.
+
     ! Statistics Tests
     local = mean_test_1()
     if (.not.local) overall = .false.
