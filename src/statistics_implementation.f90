@@ -1116,6 +1116,46 @@ module function trimmed_mean_real32(x, p) result(rst)
     rst = mean(x(i1:i2))
 end function
 
+! ------------------------------------------------------------------------------
+pure module function difference_real64(x) result(rst)
+    !! Computes the difference between elements in an array.
+    real(real64), intent(in), dimension(:) :: x
+        !! The N-element array on which to operate.
+    real(real64), allocatable, dimension(:) :: rst
+        !! The (N-1)-element array containing the differences between adjacent
+        !! elements.
+
+    ! Local Variables
+    integer(int32) :: i, n
+
+    ! Process
+    n = size(x)
+    allocate(rst(n-1))
+    do i = 1, n - 1
+        rst(i) = x(i+1) - x(i)
+    end do
+end function
+
+! --------------------
+pure module function difference_real32(x) result(rst)
+    !! Computes the difference between elements in an array.
+    real(real32), intent(in), dimension(:) :: x
+        !! The N-element array on which to operate.
+    real(real32), allocatable, dimension(:) :: rst
+        !! The (N-1)-element array containing the differences between adjacent
+        !! elements.
+
+    ! Local Variables
+    integer(int32) :: i, n
+
+    ! Process
+    n = size(x)
+    allocate(rst(n-1))
+    do i = 1, n - 1
+        rst(i) = x(i+1) - x(i)
+    end do
+end function
+
 ! ******************************************************************************
 ! PRIVATE ROUTINES
 ! ------------------------------------------------------------------------------
