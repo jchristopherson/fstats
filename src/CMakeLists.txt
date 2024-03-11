@@ -19,5 +19,6 @@ set(FSTATS_SOURCES
     ${dir}/external.f90
     ${dir}/bootstrapping.f90
     ${dir}/distributions_binomial.f90
+    ${dir}/sampling.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)

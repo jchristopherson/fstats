@@ -51,7 +51,10 @@ module fstats
     public :: nonlinear_least_squares
     public :: allan_variance
     public :: trimmed_mean
+    public :: difference
+    public :: bootstrap_regression_statistics
     public :: bootstrap_linear_least_squares
+    public :: box_muller_sample
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
@@ -784,6 +787,12 @@ module fstats
         module procedure :: trimmed_mean_real32
     end interface
 
+    interface difference
+        !! Computes the difference between elements in an array.
+        module procedure :: difference_real64
+        module procedure :: difference_real32
+    end interface
+
     ! statistics_implementation.f90
     interface
         pure module function mean_real64(x) result(rst)
@@ -1207,6 +1216,24 @@ module fstats
                 !! is 0.05 such that the bottom 5% and top 5% are removed.
             real(real32) :: rst
                 !! The trimmed mean.
+        end function
+
+        pure module function difference_real64(x) result(rst)
+            !! Computes the difference between elements in an array.
+            real(real64), intent(in), dimension(:) :: x
+                !! The N-element array on which to operate.
+            real(real64), allocatable, dimension(:) :: rst
+                !! The (N-1)-element array containing the differences between adjacent
+                !! elements.
+        end function
+
+        pure module function difference_real32(x) result(rst)
+            !! Computes the difference between elements in an array.
+            real(real32), intent(in), dimension(:) :: x
+                !! The N-element array on which to operate.
+            real(real32), allocatable, dimension(:) :: rst
+                !! The (N-1)-element array containing the differences between adjacent
+                !! elements.
         end function
     end interface
 
@@ -2112,6 +2139,31 @@ module fstats
 ! ******************************************************************************
 ! BOOTSTRAPPING
 ! ------------------------------------------------------------------------------
+
+    type bootstrap_regression_statistics
+        !! A container for regression-related statistical information as 
+        !! computed in a bootstrap, or equivalent, calculation.
+        real(real64) :: standard_error
+            !! The standard error for the model coefficient.
+        real(real64) :: t_statistic
+            !! The T-statistic for the model coefficient.
+            !!
+            !! $$ t_o = \frac{ \beta_{i} }{E_{s}(\beta_{i})} $$
+        real(real64) :: probability
+            !! The probability that the coefficient is not statistically 
+            !! important.  A statistically important coefficient will have a 
+            !! low probability (p-value), typically 0.05 or lower; however, a 
+            !! p-value of up to ~0.2 may be acceptable dependent upon the 
+            !! problem.  Typically any p-value larger than ~0.2 indicates the 
+            !! parameter is not statistically important for the model.
+            !!
+            !! $$ p = t_{|t_o|, df_{residual}} $$
+        real(real64) :: upper_confidence_interval
+            !! The upper limit of the confidence interval for the parameter.
+        real(real64) :: lower_confidence_interval
+            !! The lower limit of the confidence interval for the parameter.
+    end type
+
     ! bootstrapping.f90
     interface
         module subroutine bs_linear_least_squares_real64(order, intercept, &
@@ -2124,7 +2176,8 @@ module fstats
             real(real64), intent(out), dimension(:) :: ymod
             real(real64), intent(out), dimension(:) :: resid
             integer(int32), intent(in), optional :: nsamples
-            type(regression_statistics), intent(out), optional, dimension(:) :: stats
+            type(bootstrap_regression_statistics), intent(out), optional, &
+                dimension(:) :: stats
             real(real64), intent(out), optional, dimension(:) :: bias
             real(real64), intent(in), optional :: alpha
             class(errors), intent(inout), optional, target :: err
@@ -2133,5 +2186,68 @@ module fstats
 
     interface bootstrap_linear_least_squares
         module procedure :: bs_linear_least_squares_real64
+    end interface
+
+! ******************************************************************************
+! SAMPLING
+! ------------------------------------------------------------------------------
+    ! sampling.f90
+    interface
+        module function box_muller_sample_real64(mu, sigma) result(rst)
+            !! Generates a pair of independent, standard, normally distributed
+            !! random values using the Box-Muller transform.
+            real(real64), intent(in) :: mu
+                !! The mean of the distribution.
+            real(real64), intent(in) :: sigma
+                !! The standard deviation of the distribution.
+            real(real64) :: rst(2)
+                !! The pair of random values.
+        end function
+
+        module function box_muller_sample_real32(mu, sigma) result(rst)
+            !! Generates a pair of independent, standard, normally distributed
+            !! random values using the Box-Muller transform.
+            real(real32), intent(in) :: mu
+                !! The mean of the distribution.
+            real(real32), intent(in) :: sigma
+                !! The standard deviation of the distribution.
+            real(real32) :: rst(2)
+                !! The pair of random values.
+        end function
+
+        module function box_muller_array_real64(mu, sigma, n) result(rst)
+            !! Generates an array of normally distributed random values sampled
+            !! by the Box-Muller transform.
+            real(real64), intent(in) :: mu
+                !! The mean of the distribution.
+            real(real64), intent(in) :: sigma
+                !! The standard deviation of the distribution.
+            integer(int32), intent(in) :: n
+                !! The number of Box-Muller pairs to generate.
+            real(real64), allocatable, dimension(:) :: rst
+                !! A 2N-element array containing the N Box-Muller pairs.
+        end function
+
+        module function box_muller_array_real32(mu, sigma, n) result(rst)
+            !! Generates an array of normally distributed random values sampled
+            !! by the Box-Muller transform.
+            real(real32), intent(in) :: mu
+                !! The mean of the distribution.
+            real(real32), intent(in) :: sigma
+                !! The standard deviation of the distribution.
+            integer(int32), intent(in) :: n
+                !! The number of Box-Muller pairs to generate.
+            real(real32), allocatable, dimension(:) :: rst
+                !! A 2N-element array containing the N Box-Muller pairs.
+        end function
+    end interface
+
+    interface box_muller_sample
+        !! Generates random, normally distributed values via the Box-Muller 
+        !! transform.
+        module procedure :: box_muller_sample_real64
+        module procedure :: box_muller_sample_real32
+        module procedure :: box_muller_array_real64
+        module procedure :: box_muller_array_real32
     end interface
 end module
