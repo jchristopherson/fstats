@@ -37,3 +37,9 @@ target_include_directories(allan_example PUBLIC ${fortran-csv-module_INCLUDE_DIR
 # Bootstrap Regression Example
 add_executable(bootstrap_regression_example bootstrap_regression_example.f90)
 target_link_libraries(bootstrap_regression_example fstats)
+
+# Box-Muller Example
+add_executable(box_muller_example box_muller_example.f90)
+target_link_libraries(box_muller_example fstats)
+target_link_libraries(box_muller_example ${fplot_LIBRARY})
+target_include_directories(box_muller_example PUBLIC ${fplot_INCLUDE_DIR})
