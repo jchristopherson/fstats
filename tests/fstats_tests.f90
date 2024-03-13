@@ -79,6 +79,9 @@ program tests
     local = regression_test_1()
     if (.not.local) overall = .false.
 
+    local = bootstrap_regression_test_1()
+    if (.not.local) overall = .false.
+
     ! Experimental Design
     local = get_full_matrix_size_test_1()
     if (.not.local) overall = .false.

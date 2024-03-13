@@ -7,7 +7,7 @@ program example
     character, parameter :: tab = achar(9)
     character, parameter :: nl = new_line('a')
     integer(int32) :: i
-    real(real64) :: x(31), y(31), coeffs(4), ymodeled(31), residuals(31)
+    real(real64) :: x(31), y(31), coeffs(4), ymodeled(31), residuals(31), bias(4)
     type(regression_statistics) :: stats(4)
     type(bootstrap_regression_statistics) :: bstats(4)
 
@@ -102,7 +102,7 @@ program example
 
     ! Fit the data using the bootstrap approach
     call bootstrap_linear_least_squares(3, .true., x, y, coeffs, ymodeled, &
-        residuals, stats = bstats, nsamples = 5000)
+        residuals, stats = bstats, nsamples = 100000, bias = bias)
 
     ! Display the results
     print '(A)', new_line('') // "***** BOOTSTRAP METHOD *****"
@@ -114,12 +114,13 @@ program example
     
     ! Illustrate the statistics for each coefficient
     do i = 1, size(bstats)
-        print '(AI0AF6.3AF6.3AF6.3AF6.3AF6.3)', &
+        print '(AI0AF6.3AF6.3AF6.3AF6.3AF6.3AF6.3)', &
             "Coefficient ", i, ":" // nl // &
             tab // "Standard Error: ", bstats(i)%standard_error, nl // &
             tab // "Upper Confidence Interval: ", bstats(i)%upper_confidence_interval, nl // &
             tab // "Lower Confidence Interval: ", bstats(i)%lower_confidence_interval, nl // &
             tab // "T-Statistic: ", bstats(i)%t_statistic, nl // &
-            tab // "P-Value: ", bstats(i)%probability
+            tab // "P-Value: ", bstats(i)%probability, nl // &
+            tab // "Bias: ", bias(i)
     end do
 end program

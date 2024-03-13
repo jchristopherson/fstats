@@ -1,4 +1,6 @@
 submodule (fstats) bootstrapping
+    use fstats_errors
+    use omp_lib
     implicit none
 
 ! REFERENCES:
@@ -28,13 +30,13 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     ! Parameters
     real(real64), parameter :: zero = 0.0d0
     real(real64), parameter :: half = 0.5d0
-    real(real64), parameter :: one = 1.0d0
+    real(real64), parameter :: p05 = 5.0d-2
 
     ! Local Variables
     integer(int32) :: i, j, i1, i2, n, ns, nc, ncoeffs, flag
     real(real64) :: eps, alph, ms
-    real(real64), allocatable, dimension(:,:) :: allcoeffs, allresid, allf, &
-        ally
+    real(real64), allocatable, dimension(:) :: fLocal, yLocal, rLocal
+    real(real64), allocatable, dimension(:,:) :: allcoeffs
     type(t_distribution) :: dist
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
@@ -53,7 +55,7 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     if (present(alpha)) then
         alph = alpha
     else
-        alph = 0.05d0
+        alph = p05
     end if
     n = size(x)
     ncoeffs = order + 1
@@ -63,37 +65,54 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     if (intercept) nc = nc + 1
     dist%dof = real(ns - nc)
 
-    ! TO DO:
-    ! - Input Checking
-    ! - Verify the size of BIAS & ensure it's the appropriate size along with
-    !   COEFF
-
     ! Compute the fit
     call linear_least_squares(order, intercept, x, y, coeffs, &
         ymod, resid, alpha = alph, err = errmgr)
     if (errmgr%has_error_occurred()) return
     
     ! Memory Allocations
-    allocate(allcoeffs(ncoeffs, ns), allresid(n, ns), allf(n, ns), ally(n, ns - 1), &
-        stat = flag)
+    allocate(allcoeffs(ncoeffs, ns), source = zero, stat = flag)
     if (flag /= 0) then
-        ! TO DO: Memory Error
+        call report_memory_error(errmgr, "bs_linear_least_squares_real64", flag)
+        return
     end if
     allcoeffs(:,1) = coeffs
 
-    ! Establish the epsilon term - to do, come up with a better resampling approach
+    ! Establish the epsilon term
     eps = standard_deviation(y) / sqrt(real(n))
     call random_init(.false., .true.)
-    call random_number(ally)
-    ally = eps * (ally - half)
 
-    ! Cycle over each data set
+    ! Cycle over each data set and perform the fit
+#ifdef USEOPENMP
+!$OMP PARALLEL DO PRIVATE(fLocal, yLocal, rLocal) SHARED(allcoeffs)
     do i = 2, ns
+        ! Allocate local arrays on a per-thread basis
+        if (.not.allocated(fLocal)) allocate(fLocal(n))
+        if (.not.allocated(yLocal)) allocate(yLocal(n))
+        if (.not.allocated(rLocal)) allocate(rLocal(n))
+
+        ! Compute a random data set
+        call random_number(yLocal)
+        yLocal = eps * (yLocal - half) + y
+
         ! Compute the fit of the perturbed data set
-        ally(:,i-1) = ally(:,i-1) + y
-        call linear_least_squares(order, intercept, x, ally(:,i-1), &
-            allcoeffs(:,i), allf(:,i), allresid(:,i), alpha = alph)
+        call linear_least_squares(order, intercept, x, yLocal, &
+            allcoeffs(:,i), fLocal, rLocal, alpha = alph)
     end do
+!$OMP END PARALLEL DO
+#else
+    ! OpenMP is not available - run in a serial manner
+    allocate(fLocal(n), yLocal(n), rLocal(n))
+    do i = 2, ns
+        ! Compute a random data set
+        call random_number(yLocal)
+        yLocal = eps * (yLocal - half) + y
+
+        ! Compute the fit of the perturbed data set
+        call linear_least_squares(order, intercept, x, yLocal, &
+            allcoeffs(:,i), fLocal, rLocal, alpha = alph)
+    end do
+#endif
     
     ! Perform statistics calculations, if needed
     if (present(stats)) then
@@ -122,9 +141,14 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     ! Compute the bias for each parameter, if needed
     if (present(bias)) then
         ! Verify the size of the array
+        if (size(bias) /= ncoeffs) then
+            call report_array_size_error(errmgr, &
+                "bs_linear_least_squares_real64", "bias", ncoeffs, size(bias))
+            return
+        end if
 
         ! Perform the calculations
-        do i = 1, nc
+        do i = 1, ncoeffs
             bias(i) = coeffs(i) - mean(allcoeffs(i,:))
         end do
     end if
