@@ -2169,19 +2169,54 @@ module fstats
     interface
         module subroutine bs_linear_least_squares_real64(order, intercept, &
             x, y, coeffs, ymod, resid, nsamples, stats, bias, alpha, err)
+            !! Computes a linear least-squares regression to fit a set of data.
+            !! Bootstrapping is utilized to gain insight into the quality of 
+            !! the fit.
             integer(int32), intent(in) :: order
+                !! The order of the equation to fit.  This value must be at 
+                !! least one (linear equation), but can be higher as desired, 
+                !! as long as there is sufficient data.
             logical, intent(in) :: intercept
+                !! Set to true if the intercept is being computed as part of 
+                !! the regression; else, false.
             real(real64), intent(in), dimension(:) :: x
+                !! An N-element array containing the independent variable
+                !! measurement points.
             real(real64), intent(in), dimension(:) :: y
+                !! An N-element array containing the dependent variable
+                !! measurement points.
             real(real64), intent(out), dimension(:) :: coeffs
+                !! An ORDER+1 element array where the coefficients will
+                !! be written.
             real(real64), intent(out), dimension(:) :: ymod
+                !! An N-element array where the modeled data will be written.
             real(real64), intent(out), dimension(:) :: resid
+                !! An N-element array where the residual error data will be 
+                !! written (modeled - actual).
             integer(int32), intent(in), optional :: nsamples
+                !! The number of bootstrapping samples to utilize.  
             type(bootstrap_regression_statistics), intent(out), optional, &
                 dimension(:) :: stats
+                !! An M-element array of bootstrap_regression_statistics items 
+                !! where M = ORDER + 1 when intercept is set to true; however, 
+                !! if intercept is set to false, M = ORDER.
             real(real64), intent(out), optional, dimension(:) :: bias
+                !! An ORDER+1 element array where an estimate of the bias of
+                !! each coefficient is returned based upon the results of the
+                !! bootstrapping process.
             real(real64), intent(in), optional :: alpha
+                !! The significance level at which to evaluate the confidence 
+                !! intervals.  The default value is 0.05 such that a 95% 
+                !! confidence interval is calculated.
             class(errors), intent(inout), optional, target :: err
+                !! A mechanism for communicating errors and warnings to the 
+                !! caller.  Possible warning and error codes are as follows.
+                !! - FS_NO_ERROR: No errors encountered.
+                !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
+                !!      approriately sized.
+                !! - FS_INVALID_INPUT_ERROR: Occurs if order is less than 1.
+                !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
+                !!      error.
         end subroutine
     end interface
 

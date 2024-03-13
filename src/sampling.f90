@@ -68,10 +68,15 @@ module function rejection_sample(tdist, n, xmin, xmax) result(rst)
     integer(int32) :: i, j, jmax
     real(real64) :: u, c, g, f, rng
 
+    ! Quick Return
+    if (n < 1) then
+        allocate(rst(0), source = zero)
+    end if
+
     ! Process
     i = 0
     j = 0
-    jmax = 1000 * n  ! Guard against insanity
+    jmax = min(1000 * n, huge(j))  ! Guard against insanity
     rng = xmax - xmin
     c = c_start
     allocate(rst(n), source = zero)
@@ -101,14 +106,4 @@ module function rejection_sample(tdist, n, xmin, xmax) result(rst)
     end do
 end function
 
-! ******************************************************************************
-! MAXIMUM ENTROPY SAMPLING
-! ------------------------------------------------------------------------------
-
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
 end submodule

@@ -31,7 +31,7 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, j, i1, i2, n, ns, nc, flag
+    integer(int32) :: i, j, i1, i2, n, ns, nc, ncoeffs, flag
     real(real64) :: eps, alph, ms
     real(real64), allocatable, dimension(:,:) :: allcoeffs, allresid, allf, &
         ally
@@ -56,12 +56,17 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
         alph = 0.05d0
     end if
     n = size(x)
-    nc = order + 1
+    ncoeffs = order + 1
     nc = order
     i1 = floor(alph * ns, int32)
     i2 = ns - i1 + 1
     if (intercept) nc = nc + 1
     dist%dof = real(ns - nc)
+
+    ! TO DO:
+    ! - Input Checking
+    ! - Verify the size of BIAS & ensure it's the appropriate size along with
+    !   COEFF
 
     ! Compute the fit
     call linear_least_squares(order, intercept, x, y, coeffs, &
@@ -69,7 +74,7 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     if (errmgr%has_error_occurred()) return
     
     ! Memory Allocations
-    allocate(allcoeffs(nc, ns), allresid(n, ns), allf(n, ns), ally(n, ns - 1), &
+    allocate(allcoeffs(ncoeffs, ns), allresid(n, ns), allf(n, ns), ally(n, ns - 1), &
         stat = flag)
     if (flag /= 0) then
         ! TO DO: Memory Error
@@ -94,17 +99,20 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     if (present(stats)) then
         ! Update the relevant statistical metrics for each coefficient based
         ! upon the actual distribution
+        j = 1
+        if (intercept) j = 0
         do i = 1, nc
-            ms = trimmed_mean(allcoeffs(i,:), p = half * alph)
+            j = j + 1
+            ms = trimmed_mean(allcoeffs(j,:), p = half * alph)
             ! As we have a distribution of mean values, the standard deviation
             ! of this population yields the standard error estimate for the
             ! overall problem
-            stats(i)%standard_error = standard_deviation(allcoeffs(i,:))
+            stats(i)%standard_error = standard_deviation(allcoeffs(j,:))
             ! As before, this is a distribution of mean values.  The CI can
             ! be directly estimated by considering the values of the bottom
             ! alpha/2 and top alpha/2 terms.
-            stats(i)%upper_confidence_interval = allcoeffs(i,i2)
-            stats(i)%lower_confidence_interval = allcoeffs(i,i1)
+            stats(i)%upper_confidence_interval = allcoeffs(j,i2)
+            stats(i)%lower_confidence_interval = allcoeffs(j,i1)
             stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
             stats(i)%probability = regularized_beta(half * dist%dof, half, &
                 dist%dof / (dist%dof + (stats(i)%t_statistic)**2))
@@ -121,39 +129,6 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
         end do
     end if
 end subroutine
-
-! ******************************************************************************
-
-
-! ------------------------------------------------------------------------------
-! IID (Independent & Identical Distribution)
-subroutine iid_bootstrap()
-end subroutine
-
-! ------------------------------------------------------------------------------
-! Block (Good for time series)
-
-! ******************************************************************************
-! Maximum Entropy
-subroutine me_bootstrap_real64(x, xi, zt, xnew, p)
-    !! Uses the maximum entropy bootstrapping method to generate a new
-    !! data set based upon the supplied data set.
-    real(real64), intent(inout), dimension(:) :: x
-        !! An N-element array containing the original data set.  On output, the
-        !! array is sorted into ascending order.
-    integer(int32), intent(out), dimension(:) :: xi
-        !! An N-element array containing the sorted indices of the input X.
-    real(real64), intent(out), dimension(:) :: zt
-        !! An N-1 element array containing the intermediate values.
-    real(real64), intent(out), dimension(:,:) :: xnew
-        !! An N-by-M matrix containing the M duplicated data sets.
-    real(real64), intent(in), optional :: p
-        !! An optional parameter specifying the percentage of values
-        !! from either end of the distribution to remove.  The default
-        !! is 0.05 such that the bottom 5% and top 5% are removed.
-end subroutine
-
-! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end submodule

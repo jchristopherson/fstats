@@ -308,10 +308,10 @@ module subroutine linear_least_squares_real64(order, intercept, x, y, coeffs, &
     coeffs(1) = zero
     if (intercept) i = 1
     call DGEMM("N", "N", ncols, 1, npts, one, cxt, ncols, y, npts, zero, &
-        coeffs(i:ncoeffs), ncols)  ! (C * X**T) * Y
+        coeffs(i:), ncols)  ! (C * X**T) * Y
 
     ! Evaluate the model and compute the residuals
-    call DGEMM("N", "N", npts, 1, ncols, one, a, npts, coeffs(i:ncoeffs), &
+    call DGEMM("N", "N", npts, 1, ncols, one, a, npts, coeffs(i:), &
         ncols, zero, ymod, npts)
     resid = ymod - y
 
@@ -319,7 +319,7 @@ module subroutine linear_least_squares_real64(order, intercept, x, y, coeffs, &
     if (.not.present(stats)) return
     
     ! Start the process of computing statistics
-    stats = calculate_regression_statistics(resid, coeffs(1:ncols), c, alph, &
+    stats = calculate_regression_statistics(resid, coeffs(i:), c, alph, &
         errmgr)
 end subroutine
 
@@ -420,10 +420,10 @@ module subroutine linear_least_squares_real32(order, intercept, x, y, coeffs, &
     coeffs(1) = zero
     if (intercept) i = 1
     call SGEMM("N", "N", ncols, 1, npts, one, cxt, ncols, y, npts, zero, &
-        coeffs(i:ncoeffs), ncols)  ! (C * X**T) * Y
+        coeffs(i:), ncols)  ! (C * X**T) * Y
 
     ! Evaluate the model and compute the residuals
-    call SGEMM("N", "N", npts, 1, ncols, one, a, npts, coeffs(i:ncoeffs), &
+    call SGEMM("N", "N", npts, 1, ncols, one, a, npts, coeffs(i:), &
         ncols, zero, ymod, npts)
     resid = ymod - y
 
@@ -431,7 +431,7 @@ module subroutine linear_least_squares_real32(order, intercept, x, y, coeffs, &
     if (.not.present(stats)) return
     
     ! Start the process of computing statistics
-    stats = calculate_regression_statistics(resid, coeffs(1:ncols), c, alph, &
+    stats = calculate_regression_statistics(resid, coeffs(i:), c, alph, &
         errmgr)
 end subroutine
 
