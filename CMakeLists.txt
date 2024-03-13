@@ -6,17 +6,21 @@ project(
     VERSION 1.2.0
 )
 
-# Get helper macros and functions
-include("${PROJECT_SOURCE_DIR}/cmake/helper.cmake")
-
 # Confgiure everything
 add_subdirectory(configure)
 
 # Deal with the dependencies
 add_subdirectory(dependencies)
 
+# Get OpenMP
+find_package(OpenMP REQUIRED COMPONENTS Fortran)
+
 # Source
 add_subdirectory(src)
+set_source_files_properties(
+    ${FSTATS_SOURCES}
+    PROPERTIES Fortran_PREPROCESS ON
+)
 add_fortran_library(
     ${PROJECT_NAME}
     ${PROJECT_INCLUDE_DIR}
@@ -25,8 +29,14 @@ add_fortran_library(
     ${PROJECT_VERSION_MAJOR}
     ${FSTATS_SOURCES}
 )
-link_library(${PROJECT_NAME} ${ferror_LIBRARY} ${ferror_INCLUDE_DIR})
-link_library(${PROJECT_NAME} ${linalg_LIBRARY} ${linalg_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${ferror_LIBRARY} ${linalg_LIBRARY})
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${ferror_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${linalg_INCLUDE_DIR}>)
+if (OpenMP_Fortran_FOUND)
+    target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_Fortran)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE USEOPENMP=1)
+endif()
 
 # Testing
 option(BUILD_TESTING "Build tests")
