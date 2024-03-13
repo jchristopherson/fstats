@@ -8,6 +8,10 @@ submodule (fstats) bootstrapping
 ! - https://cran.r-project.org/web/packages/meboot/vignettes/meboot.pdf
 ! - https://gist.github.com/christianjauregui/314456688a3c2fead43a48be3a47dad6
 
+    interface compute_stats
+        module procedure :: compute_stats_real64
+    end interface
+
 contains
 ! ------------------------------------------------------------------------------
 module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
@@ -29,15 +33,14 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
 
     ! Parameters
     real(real64), parameter :: zero = 0.0d0
-    real(real64), parameter :: half = 0.5d0
     real(real64), parameter :: p05 = 5.0d-2
+    real(real64), parameter :: half = 5.0d-1
 
     ! Local Variables
-    integer(int32) :: i, j, i1, i2, n, ns, nc, ncoeffs, flag
+    integer(int32) :: i, j, n, ns, nc, ncoeffs, flag
     real(real64) :: eps, alph, ms
     real(real64), allocatable, dimension(:) :: fLocal, yLocal, rLocal
     real(real64), allocatable, dimension(:,:) :: allcoeffs
-    type(t_distribution) :: dist
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
     
@@ -60,10 +63,7 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     n = size(x)
     ncoeffs = order + 1
     nc = order
-    i1 = floor(alph * ns, int32)
-    i2 = ns - i1 + 1
     if (intercept) nc = nc + 1
-    dist%dof = real(ns - nc)
 
     ! Compute the fit
     call linear_least_squares(order, intercept, x, y, coeffs, &
@@ -116,26 +116,7 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
     
     ! Perform statistics calculations, if needed
     if (present(stats)) then
-        ! Update the relevant statistical metrics for each coefficient based
-        ! upon the actual distribution
-        j = 1
-        if (intercept) j = 0
-        do i = 1, nc
-            j = j + 1
-            ms = trimmed_mean(allcoeffs(j,:), p = half * alph)
-            ! As we have a distribution of mean values, the standard deviation
-            ! of this population yields the standard error estimate for the
-            ! overall problem
-            stats(i)%standard_error = standard_deviation(allcoeffs(j,:))
-            ! As before, this is a distribution of mean values.  The CI can
-            ! be directly estimated by considering the values of the bottom
-            ! alpha/2 and top alpha/2 terms.
-            stats(i)%upper_confidence_interval = allcoeffs(j,i2)
-            stats(i)%lower_confidence_interval = allcoeffs(j,i1)
-            stats(i)%t_statistic = coeffs(i) / stats(i)%standard_error
-            stats(i)%probability = regularized_beta(half * dist%dof, half, &
-                dist%dof / (dist%dof + (stats(i)%t_statistic)**2))
-        end do
+        call compute_stats(coeffs, allcoeffs, alph, intercept, stats)
     end if
 
     ! Compute the bias for each parameter, if needed
@@ -152,6 +133,57 @@ module subroutine bs_linear_least_squares_real64(order, intercept, x, y, &
             bias(i) = coeffs(i) - mean(allcoeffs(i,:))
         end do
     end if
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine compute_stats_real64(mdl, coeffs, alpha, intercept, stats)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: mdl
+    real(real64), intent(inout), dimension(:,:) :: coeffs
+    real(real64), intent(in) :: alpha
+    logical, intent(in) :: intercept
+    type(bootstrap_regression_statistics), intent(out), dimension(:) :: stats
+
+    ! Parameters
+    real(real64), parameter :: half = 0.5d0
+
+    ! Local Variables
+    integer(int32) :: i, j, i1, i2, ncoeffs, nc, nsamples
+    real(real64) :: ms
+    type(t_distribution) :: dist
+
+    ! Initialization
+    ncoeffs = size(coeffs, 1)
+    nsamples = size(coeffs, 2)
+    nc = ncoeffs
+    if (.not.intercept) nc = ncoeffs - 1
+    i1 = floor(half * alpha * nsamples, int32)
+    i2 = nsamples - i1 + 1
+    dist%dof = real(nsamples - nc)
+
+    ! Process
+    j = 1
+    if (intercept) j = 0
+    do i = 1, nc
+        j = j + 1
+        ms = trimmed_mean(coeffs(j,:), p = half * alpha)
+
+        ! As we have a distribution of mean values, the standard deviation
+        ! of this population yields the standard error estimate for the
+        ! overall problem
+        stats(i)%standard_error = standard_deviation(coeffs(j,:))
+
+        ! As before, this is a distribution of mean values.  The CI can
+        ! be directly estimated by considering the values of the bottom
+        ! alpha/2 and top alpha/2 terms.
+        stats(i)%upper_confidence_interval = coeffs(j,i2)
+        stats(i)%lower_confidence_interval = coeffs(j,i1)
+
+        ! Compute the remaining parameters
+        stats(i)%t_statistic = mdl(j) / stats(i)%standard_error
+        stats(i)%probability = regularized_beta(half * dist%dof, half, &
+            dist%dof / (dist%dof + (stats(i)%t_statistic)**2))
+    end do
 end subroutine
 
 ! ------------------------------------------------------------------------------
