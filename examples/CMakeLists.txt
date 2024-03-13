@@ -43,3 +43,9 @@ add_executable(box_muller_example box_muller_example.f90)
 target_link_libraries(box_muller_example fstats)
 target_link_libraries(box_muller_example ${fplot_LIBRARY})
 target_include_directories(box_muller_example PUBLIC ${fplot_INCLUDE_DIR})
+
+# Rejection Sampling Example
+add_executable(rejection_sample_example rejection_sample_example.f90)
+target_link_libraries(rejection_sample_example fstats)
+target_link_libraries(rejection_sample_example ${fplot_LIBRARY})
+target_include_directories(rejection_sample_example PUBLIC ${fplot_INCLUDE_DIR})

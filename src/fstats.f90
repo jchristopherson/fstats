@@ -55,6 +55,7 @@ module fstats
     public :: bootstrap_regression_statistics
     public :: bootstrap_linear_least_squares
     public :: box_muller_sample
+    public :: rejection_sample
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
@@ -2204,17 +2205,6 @@ module fstats
                 !! The pair of random values.
         end function
 
-        module function box_muller_sample_real32(mu, sigma) result(rst)
-            !! Generates a pair of independent, standard, normally distributed
-            !! random values using the Box-Muller transform.
-            real(real32), intent(in) :: mu
-                !! The mean of the distribution.
-            real(real32), intent(in) :: sigma
-                !! The standard deviation of the distribution.
-            real(real32) :: rst(2)
-                !! The pair of random values.
-        end function
-
         module function box_muller_array_real64(mu, sigma, n) result(rst)
             !! Generates an array of normally distributed random values sampled
             !! by the Box-Muller transform.
@@ -2228,17 +2218,19 @@ module fstats
                 !! A 2N-element array containing the N Box-Muller pairs.
         end function
 
-        module function box_muller_array_real32(mu, sigma, n) result(rst)
-            !! Generates an array of normally distributed random values sampled
-            !! by the Box-Muller transform.
-            real(real32), intent(in) :: mu
-                !! The mean of the distribution.
-            real(real32), intent(in) :: sigma
-                !! The standard deviation of the distribution.
+        module function rejection_sample(tdist, n, xmin, xmax) result(rst)
+            !! Uses rejection sampling to randomly sample a target distribution.
+            class(distribution), intent(in) :: tdist
+                !! The distribution to sample
             integer(int32), intent(in) :: n
-                !! The number of Box-Muller pairs to generate.
-            real(real32), allocatable, dimension(:) :: rst
-                !! A 2N-element array containing the N Box-Muller pairs.
+                !! The number of samples to make.
+            real(real64), intent(in) :: xmin
+                !! The minimum range to explore.
+            real(real64), intent(in) :: xmax
+                !! The maximum range to explore.
+            real(real64), allocatable, dimension(:) :: rst
+                !! An N-element array containing the N samples from the 
+                !! distribution.
         end function
     end interface
 
@@ -2246,8 +2238,6 @@ module fstats
         !! Generates random, normally distributed values via the Box-Muller 
         !! transform.
         module procedure :: box_muller_sample_real64
-        module procedure :: box_muller_sample_real32
         module procedure :: box_muller_array_real64
-        module procedure :: box_muller_array_real32
     end interface
 end module

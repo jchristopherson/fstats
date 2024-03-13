@@ -28,27 +28,6 @@ module function box_muller_sample_real64(mu, sigma) result(rst)
     rst = [real(z, real64), aimag(z)]
 end function
 
-! --------------------
-module function box_muller_sample_real32(mu, sigma) result(rst)
-    ! Arguments
-    real(real32), intent(in) :: mu
-    real(real32), intent(in) :: sigma
-    real(real32) :: rst(2)
-
-    ! Parameters
-    complex(real32), parameter :: j = (0.0, 1.0)
-
-    ! Local Variables
-    real(real32) :: u1, u2
-    complex(real32) :: z
-
-    ! Process
-    call random_number(u1)
-    call random_number(u2)
-    z = sqrt(-log(u1)) * exp(j * twopi_f * u2)
-    rst = [real(z, real32), aimag(z)]
-end function
-
 ! ------------------------------------------------------------------------------
 module function box_muller_array_real64(mu, sigma, n) result(rst)
     ! Arguments
@@ -71,31 +50,59 @@ module function box_muller_array_real64(mu, sigma, n) result(rst)
     end do
 end function
 
-! --------------------
-module function box_muller_array_real32(mu, sigma, n) result(rst)
+! ******************************************************************************
+! REJECTION SAMPLING
+! ------------------------------------------------------------------------------
+module function rejection_sample(tdist, n, xmin, xmax) result(rst)
     ! Arguments
-    real(real32), intent(in) :: mu
-    real(real32), intent(in) :: sigma
+    class(distribution), intent(in) :: tdist
     integer(int32), intent(in) :: n
-    real(real32), allocatable, dimension(:) :: rst
+    real(real64), intent(in) :: xmin, xmax
+    real(real64), allocatable, dimension(:) :: rst
+
+    ! Parameters
+    real(real64), parameter :: zero = 0.0d0
+    real(real64), parameter :: c_start = 1.01d0
 
     ! Local Variables
-    integer(int32) :: i
+    integer(int32) :: i, j, jmax
+    real(real64) :: u, c, g, f, rng
 
     ! Process
-    if (n < 1) then
-        allocate(rst(0))
-        return
-    end if
-    allocate(rst(2 * n))
-    do i = 1, n
-        rst(2*i-1:2*i) = box_muller_sample(mu, sigma)
+    i = 0
+    j = 0
+    jmax = 1000 * n  ! Guard against insanity
+    rng = xmax - xmin
+    c = c_start
+    allocate(rst(n), source = zero)
+    do while (i <= n)
+        ! Update the acceptance threshold
+        call random_number(u)
+
+        ! Sample from the proposal distribution
+        call random_number(g)
+        g = g * rng + xmin
+
+        ! Sample the target distribution
+        f = tdist%pdf(g)
+
+        ! Test
+        if (u <= f / (c * g)) then
+            i = i + 1
+            rst(i) = g
+        end if
+
+        ! Update C
+        c = max(c, f / g)
+
+        ! Update the infinite loop guard variable
+        j = j + 1
+        if (j == jmax) exit
     end do
 end function
 
-
 ! ******************************************************************************
-! MAXIMUM ENTROPY
+! MAXIMUM ENTROPY SAMPLING
 ! ------------------------------------------------------------------------------
 
 
