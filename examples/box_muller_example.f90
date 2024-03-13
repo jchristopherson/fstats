@@ -18,7 +18,6 @@ program example
     ! Plot Variables
     type(plot_2d) :: plt
     type(plot_data_histogram) :: pd
-    type(plot_data_2d) :: ld
 
     ! Perform the sampling
     call random_init(.false., .true.)   ! good to call once before sampling
