@@ -13,6 +13,7 @@ source-dir = "src"
 [dependencies]
 ferror = { git = "https://github.com/jchristopherson/ferror" }
 linalg = { git = "https://github.com/jchristopherson/linalg" }
+openmp = "*"
 
 [dev-dependencies]
 fortran_test_helper = { git = "https://github.com/jchristopherson/fortran_test_helper" }
