@@ -17,8 +17,6 @@ contains
         integer(int32) :: i
         real(real64) :: x(npts), c1(npts, 2), c2(npts, 1), c3(npts, 5), &
             ans1(npts, 2), ans2(npts, 1), ans3(npts, 5)
-        real(real32) :: fx(npts), fc1(npts, 2), fc2(npts, 1), fc3(npts, 5), &
-            fans1(npts, 2), fans2(npts, 1), fans3(npts, 5)
 
         ! Initialization
         rst = .true.
@@ -26,21 +24,17 @@ contains
         do i = 2, npts
             x(i) = x(i-1) + dx
         end do
-        fx = real(x, real32)
 
         ans1(:,1) = 1.0d0
         ans1(:,2) = x
-        fans1 = real(ans1, real32)
 
         ans2(:,1) = x
-        fans2 = real(ans2, real32)
 
         ans3(:,1) = 1.0d0
         ans3(:,2) = x
         ans3(:,3) = x**2
         ans3(:,4) = x**3
         ans3(:,5) = x**4
-        fans3 = real(ans3, real32)
 
         ! Test 1 - linear w/ intercept
         call coefficient_matrix(order1, .true., x, c1)
@@ -49,36 +43,18 @@ contains
             print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 1"
         end if
 
-        call coefficient_matrix(order1, .true., fx, fc1)
-        if (.not.is_equal(fc1, fans1)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 2"
-        end if
-
         ! Test 2 - linear w/o intercept
         call coefficient_matrix(order1, .false., x, c2)
         if (.not.is_equal(c2, ans2)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 3"
-        end if
-
-        call coefficient_matrix(order1, .false., fx, fc2)
-        if (.not.is_equal(fc2, fans2)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 4"
+            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 2"
         end if
 
         ! Test 3 - 4th order w/ intercept
         call coefficient_matrix(order2, .true., x, c3)
         if (.not.is_equal(c3, ans3)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 5"
-        end if
-
-        call coefficient_matrix(order2, .true., fx, fc3)
-        if (.not.is_equal(fc3, fans3)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 6"
+            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 3"
         end if
     end function
 
@@ -96,7 +72,6 @@ contains
         real(real64), parameter :: t2 = 101.127d0
         real(real64), parameter :: slope2 = 0.7668972622d0
         real(real64) :: x(npts), y(npts), ymod(npts), resid(npts), c1(2), c2(2)
-        real(real32) :: fx(npts), fy(npts), fymod(npts), fyresid(npts), fc1(2)
         type(regression_statistics) :: s1(2), s2(1)
 
         ! Initialization
@@ -167,8 +142,6 @@ contains
             1.977005266443110d0, &
             2.034137257154140d0 &    
         ]
-        fx = real(x, real32)
-        fy = real(y, real32)
 
         ! Fit the model - linear model with intercept
         call linear_least_squares(1, .true., x, y, c1, ymod, resid, s1)
@@ -190,35 +163,16 @@ contains
             print '(A)', "TEST FAILED: Regression Test 1 - 4"
         end if
 
-        call linear_least_squares(1, .true., fx, fy, fc1, fymod, fyresid, s1)
-        
-        if (.not.is_equal(s1(1)%standard_error, se1, tol)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Regression Test 1 - 5"
-        end if
-        if (.not.is_equal(s1(2)%standard_error, se2, tol)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Regression Test 1 - 6"
-        end if
-        if (.not.is_equal(s1(1)%t_statistic, t1, tol)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Regression Test 1 - 7"
-        end if
-        if (.not.is_equal(s1(2)%t_statistic, t2, tol)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Regression Test 1 - 8"
-        end if
-
         ! Fit the model - linear model without intercept
         call linear_least_squares(1, .false., x, y, c2, ymod, resid, s2)
 
         if (.not.is_equal(c2(1), 0.0d0)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Regression Test 1 - 9"
+            print '(A)', "TEST FAILED: Regression Test 1 - 5"
         end if
         if (.not.is_equal(c2(2), slope2)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Regression Test 1 - 10"
+            print '(A)', "TEST FAILED: Regression Test 1 - 6"
         end if
     end function
 

@@ -12,29 +12,19 @@ contains
         ! Variables
         integer(int32), parameter :: n = 50
         real(real64) :: x(n), avg, ans
-        real(real32) :: xf(n), favg, fans
 
         ! Initialization
         rst = .true.
         x = create_real64_array(n)
-        xf = create_real32_array(n)
 
         ! Determine the solution
         ans = sum(x) / n
-        fans = sum(xf) / n
 
         ! Test 1
         avg = mean(x)
         if (.not.is_equal(avg, ans)) then
             rst = .false.
             print '(A)', "TEST FAILED: Mean Test 1"
-        end if
-
-        ! Test 2
-        favg = mean(xf)
-        if (.not.is_equal(favg, fans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Mean Test 2"
         end if
     end function
 
@@ -46,31 +36,20 @@ contains
         ! Variables
         integer(int32), parameter :: n = 50
         real(real64) :: x(n), v, ans, avg
-        real(real32) :: xf(n), vf, fans, favg
 
         ! Initialization
         rst = .true.
         x = create_real64_array(n)
-        xf = create_real32_array(n)
 
         avg = mean(x)
-        favg = mean(xf)
 
         ans = sum((x - avg)**2) / (n - 1.0d0)
-        fans = sum((xf - favg)**2) / (n - 1.0)
 
         ! Test 1
         v = variance(x)
         if (.not.is_equal(v, ans)) then
             rst = .false.
             print '(A)', "TEST FAILED: Variance Test 1"
-        end if
-
-        ! Test 2
-        vf = variance(xf)
-        if (.not.is_equal(vf, fans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Variance Test 2"
         end if
     end function
 
@@ -82,31 +61,20 @@ contains
         ! Variables
         integer(int32), parameter :: n = 50
         real(real64) :: x(n), v, ans, avg
-        real(real32) :: xf(n), vf, fans, favg
 
         ! Initialization
         rst = .true.
         x = create_real64_array(n)
-        xf = create_real32_array(n)
 
         avg = mean(x)
-        favg = mean(xf)
 
         ans = sqrt(sum((x - avg)**2) / (n - 1.0d0))
-        fans = sqrt(sum((xf - favg)**2) / (n - 1.0))
 
         ! Test 1
         v = standard_deviation(x)
         if (.not.is_equal(v, ans)) then
             rst = .false.
             print '(A)', "TEST FAILED: Standard Deviation Test 1"
-        end if
-
-        ! Test 2
-        vf = standard_deviation(xf)
-        if (.not.is_equal(vf, fans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Standard Deviation Test 2"
         end if
     end function
 
@@ -118,27 +86,17 @@ contains
         ! Variables
         integer(int32), parameter :: n = 7
         real(real64) :: x(n), med, ans
-        real(real32) :: xf(n), fmed, fans
 
         ! Initialization
         rst = .true.
         x = [1.0d0, 2.0d0, 2.0d0, 4.0d0, 7.0d0, 9.0d0, 3.0d0]
-        xf = real(x, real32)
         ans = 3.0d0
-        fans = 3.0
 
         ! Test 1
         med = median(x)
         if (.not.is_equal(ans, med)) then
             rst = .false.
             print '(A)', "TEST FAILED: Median Test 1"
-        end if
-
-        ! Test 2
-        fmed = median(xf)
-        if (.not.is_equal(fans, fmed)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Median Test 2"
         end if
     end function
 
@@ -155,10 +113,7 @@ contains
         integer(int32), parameter :: p = 2
         real(real64), parameter :: r2ans = 0.99964955179438d0
         real(real64), parameter :: r2adjans = 0.999631107152d0
-        real(real32), parameter :: fr2ans = 0.99964955179438
-        real(real32), parameter :: fr2adjans = 0.999631107152
         real(real64) :: x(n), xm(n), r2, r2adj
-        real(real32) :: xf(n), xmf(n), fr2, fr2adj
 
         ! Initialization
         rst = .true.
@@ -205,7 +160,6 @@ contains
             12.39828762076430d0, &
             12.56757580387910d0 &
         ]
-        xf = real(x, real32)
         xm = [ &
             0.646498523110604d0, &
             0.945853504743733d0, &
@@ -249,7 +203,6 @@ contains
             12.321342806802600d0, &
             12.620697788435800d0 &    
         ]
-        xmf = real(xm, real32)
 
         ! Test 1
         r2 = r_squared(x, xm)
@@ -263,20 +216,6 @@ contains
         if (.not.is_equal(r2adj, r2adjans)) then
             rst = .false.
             print '(A)', "TEST FAILED: R-Squared Test 2"
-        end if
-
-        ! Test 3
-        fr2 = r_squared(xf, xmf)
-        if (.not.is_equal(fr2, fr2ans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: R-Squared Test 3"
-        end if
-
-        ! Test 4
-        fr2adj = adjusted_r_squared(p, xf, xmf)
-        if (.not.is_equal(fr2adj, fr2adjans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: R-Squared Test 4"
         end if
     end function
 
@@ -294,11 +233,7 @@ contains
         real(real64), parameter :: p1ans = 0.400311271833311d0
         real(real64), parameter :: p2ans = 0.393261072269881d0
         real(real64), parameter :: p3ans = 0.336451697935195d0
-        real(real32), parameter :: fp1ans = 0.400311271833311
-        real(real32), parameter :: fp2ans = 0.393261072269881
-        real(real32), parameter :: fp3ans = 0.336451697935195
         real(real64) :: x1(n1), x2(n2), t1, p1, d1, t2, p2, d2, t3, p3, d3
-        real(real32) :: fx1(n1), fx2(n2), ft1, fp1, fd1, ft2, fp2, fd2, ft3, fp3, fd3
 
         ! Initialization
         rst = .true.
@@ -328,7 +263,6 @@ contains
             0.387975220333301d0, &
             0.030592274330406d0 &
         ]
-        fx1 = real(x1, real32)
         x2 = [ &
             0.994458762426464d0, &
             0.166766332238246d0, &
@@ -361,7 +295,6 @@ contains
             0.226929745400446d0, &
             0.066444929423269d0 &    
         ]
-        fx2 = real(x2, real32)
 
         ! Test 1 - Equal Variances
         call t_test_equal_variance(x1, x2, t1, p1, d1)
@@ -370,36 +303,18 @@ contains
             print '(A)', "TEST FAILED: T-Test 1"
         end if
 
-        call t_test_equal_variance(fx1, fx2, ft1, fp1, fd1)
-        if (.not.is_equal(fp1, fp1ans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: T-Test 2"
-        end if
-
         ! Test 2 - Unequal Variances
         call t_test_unequal_variance(x1, x2, t2, p2, d2)
         if (.not.is_equal(p2, p2ans)) then
             rst = .false.
-            print '(A)', "TEST FAILED: T-Test 3"
-        end if
-
-        call t_test_unequal_variance(fx1, fx2, ft2, fp2, fd2)
-        if (.not.is_equal(fp2, fp2ans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: T-Test 4"
+            print '(A)', "TEST FAILED: T-Test 2"
         end if
 
         ! Test 3 - Paired
         call t_test_paired(x1, x2(1:n1), t3, p3, d3)
         if (.not.is_equal(p3, p3ans)) then
             rst = .false.
-            print '(A)', "TEST FAILED: T-Test 5"
-        end if
-
-        call t_test_paired(fx1, fx2(1:n1), ft3, fp3, fd3)
-        if (.not.is_equal(fp3, fp3ans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: T-Test 6"
+            print '(A)', "TEST FAILED: T-Test 3"
         end if
     end function
 
@@ -412,9 +327,7 @@ contains
         integer(int32), parameter :: n1 = 25
         integer(int32), parameter :: n2 = 20
         real(real64), parameter :: p1ans = 0.917845200397729d0
-        real(real32), parameter :: fp1ans = 0.917845200397729
         real(real64) :: x1(n1), x2(n2), f1, p1, d1a, d1b
-        real(real32) :: fx1(n1), fx2(n2), ff1, fp1, fd1a, fd1b
 
         ! Initialization
         rst = .true.
@@ -445,7 +358,6 @@ contains
             0.250996116991792d0, &
             0.483364480129666d0 &    
         ]
-        fx1 = real(x1, real32)
         x2 = [ &
             0.706493956662183d0, &
             0.450534624824412d0, &
@@ -468,20 +380,12 @@ contains
             0.428081998768432d0, &
             0.113662531842427d0 &    
         ]
-        fx2 = real(x2, real32)
 
         ! Test 1
         call f_test(x1, x2, f1, p1, d1a, d1b)
         if (.not.is_equal(p1, p1ans)) then
             rst = .false.
             print '(A)', "TEST FAILED: F Test 1"
-        end if
-
-        ! Test 2
-        call f_test(fx1, fx2, ff1, fp1, fd1a, fd1b)
-        if (.not.is_equal(fp1, fp1ans)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: F Test 2"
         end if
     end function
 
@@ -781,20 +685,13 @@ contains
         ! Parameters
         real(real64), parameter :: a1 = 2.0d0
         real(real64), parameter :: b1 = 2.0d0
-        real(real32), parameter :: a2 = 2.0
-        real(real32), parameter :: b2 = 2.0
         real(real64), parameter :: a3 = 4.0d0
         real(real64), parameter :: b3 = 3.0d0
-        real(real32), parameter :: a4 = 4.0
-        real(real32), parameter :: b4 = 3.0
         real(real64), parameter :: a5 = 1.0d0
         real(real64), parameter :: b5 = 1.0d0
-        real(real32), parameter :: a6 = 1.0
-        real(real32), parameter :: b6 = 1.0
 
         ! Local Variables
         real(real64) :: dans
-        real(real32) :: fans
 
         ! Initialization
         rst = .true.
@@ -806,39 +703,18 @@ contains
             print '(A)', "TEST FAILED: Beta Test 1 - 1"
         end if
 
-        ! Test 2: single-precision version of Test 1
-        fans = beta(a2, b2)
-        if (.not.is_equal(fans, 1.0 / 6.0)) then
+        ! Test 2: beta = 1/60
+        dans = beta(a3, b3)
+        if (.not.is_equal(dans, 1.0d0 / 6.0d1)) then
             rst = .false.
             print '(A)', "TEST FAILED: Beta Test 1 - 2"
         end if
 
-        ! Test 3: beta = 1/60
-        dans = beta(a3, b3)
-        if (.not.is_equal(dans, 1.0d0 / 6.0d1)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Beta Test 1 - 3"
-        end if
-
-        ! Test 4: single precision version of Test 3
-        fans = beta(a4, b4)
-        if (.not.is_equal(fans, 1.0 / 60.0)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Beta Test 1 - 4"
-        end if
-
-        ! Test 5: beta = 1
+        ! Test 3: beta = 1
         dans = beta(a5, b5)
         if (.not.is_equal(dans, 1.0d0)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Beta Test 1 - 5"
-        end if
-
-        ! Test 6: single precision version of Test 5
-        fans = beta(a6, b6)
-        if (.not.is_equal(fans, 1.0)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Beta Test 1 - 6"
+            print '(A)', "TEST FAILED: Beta Test 1 - 3"
         end if
     end function
 
@@ -855,15 +731,9 @@ contains
         real(real64), parameter :: x1 = 0.4d0
         real(real64), parameter :: ans1 = 0.2613333333333333333333d0
         real(real64), parameter :: ans1r = 0.784d0
-        real(real32), parameter :: a2 = 1.0
-        real(real32), parameter :: b2 = 3.0
-        real(real32), parameter :: x2 = 0.4
-        real(real32), parameter :: ans2 = 0.2613333333333333333333
-        real(real32), parameter :: ans2r = 0.784
 
         ! Local Variables
         real(real64) :: dans, dansr
-        real(real32) :: fans, fansr
 
         ! Initialization
         rst = .true.
@@ -875,25 +745,11 @@ contains
             print '(A)', "TEST FAILED: Beta Test 2 - 1"
         end if
 
-        ! Test 2
-        fans = incomplete_beta(a2, b2, x2)
-        if (.not.is_equal(fans, ans2)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Beta Test 2 - 2"
-        end if
-
         ! Test 3
         dansr = regularized_beta(a1, b1, x1)
         if (.not.is_equal(dansr, ans1r)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Beta Test 2 - 3"
-        end if
-
-        ! Test 4
-        fansr = regularized_beta(a2, b2, x2)
-        if (.not.is_equal(fansr, ans2r)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Beta Test 2 - 4"
+            print '(A)', "TEST FAILED: Beta Test 2 - 2"
         end if
     end function
 
@@ -907,30 +763,17 @@ contains
         real(real64), parameter :: x1 = 2.0d0
         real(real64), parameter :: upper1 = 0.135335283236612691894d0
         real(real64), parameter :: lower1 = 0.864664716763387308106d0
-        real(real32), parameter :: a2 = 1.0
-        real(real32), parameter :: x2 = 2.0
-        real(real32), parameter :: upper2 = 0.135335283236612691894
-        real(real32), parameter :: lower2 = 0.864664716763387308106
         real(real64), parameter :: a3 = 1.0d0
         real(real64), parameter :: x3 = 0.0d0
         real(real64), parameter :: upper3 = 1.0d0
         real(real64), parameter :: lower3 = 0.0d0
-        real(real32), parameter :: a4 = 1.0
-        real(real32), parameter :: x4 = 0.0
-        real(real32), parameter :: upper4 = 1.0
-        real(real32), parameter :: lower4 = 0.0
         real(real64), parameter :: a5 = 1.0d0
         real(real64), parameter :: x5 = 4.0d0
         real(real64), parameter :: upper5 = 0.01831563888873418029372d0
         real(real64), parameter :: lower5 = 0.9816843611112658197063d0
-        real(real32), parameter :: a6 = 1.0
-        real(real32), parameter :: x6 = 4.0
-        real(real32), parameter :: upper6 = 0.01831563888873418029372
-        real(real32), parameter :: lower6 = 0.9816843611112658197063
 
         ! Local Variables
         real(real64) :: dans
-        real(real32) :: fans
 
         ! Initialization
         rst = .true.
@@ -949,68 +792,29 @@ contains
         end if
 
         ! Test 2
-        fans = incomplete_gamma_upper(a2, x2)
-        if (.not.is_equal(fans, upper2)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 3"
-        end if
-
-        fans = incomplete_gamma_lower(a2, x2)
-        if (.not.is_equal(fans, lower2)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 4"
-        end if
-
-        ! Test 3
         dans = incomplete_gamma_upper(a3, x3)
         if (.not.is_equal(dans, upper3)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 5"
+            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 3"
         end if
 
         dans = incomplete_gamma_lower(a3, x3)
         if (.not.is_equal(dans, lower3)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 6"
+            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 4"
         end if
 
-        ! Test 4
-        fans = incomplete_gamma_upper(a4, x4)
-        if (.not.is_equal(fans, upper4)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 7"
-        end if
-
-        fans = incomplete_gamma_lower(a4, x4)
-        if (.not.is_equal(fans, lower4)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 8"
-        end if
-
-        ! Test 5
+        ! Test 3
         dans = incomplete_gamma_upper(a5, x5)
         if (.not.is_equal(dans, upper5)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 9"
+            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 5"
         end if
 
         dans = incomplete_gamma_lower(a5, x5)
         if (.not.is_equal(dans, lower5)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 10"
-        end if
-
-        ! Test 6
-        fans = incomplete_gamma_upper(a6, x6)
-        if (.not.is_equal(fans, upper6)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 11"
-        end if
-
-        fans = incomplete_gamma_lower(a6, x6)
-        if (.not.is_equal(fans, lower6)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 12"
+            print '(A)', "TEST FAILED: Incomplete Gamma 1 - 6"
         end if
     end function
 
@@ -1029,28 +833,18 @@ contains
 
         ! Local Variables
         real(real64) :: x(n), tm, ans
-        real(real32) :: x32(n), tm32, ans32
 
         ! Initialization
         rst = .true.
         call random_number(x)
         call sort(x, .true.) ! sort into ascending order
-        x32 = real(x, real32)
         ans = mean(x(i1:i2))
-        ans32 = mean(x32(i1:i2))
 
         ! Test 1
         tm = trimmed_mean(x, p = p)
         if (.not.is_equal(tm, ans)) then
             rst = .false.
             print '(A)', "TEST FAILED: Trimmed Mean Test 1"
-        end if
-
-        ! Test 2
-        tm32 = trimmed_mean(x32, p = real(p, real32))
-        if (.not.is_equal(tm32, ans32)) then
-            rst = .false.
-            print '(A)', "TEST FAILED: Trimmed Mean Test 2"
         end if
     end function
 

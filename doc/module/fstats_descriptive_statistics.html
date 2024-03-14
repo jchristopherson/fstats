@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="FSTATS is a modern Fortran statistical library containing routines for computing basic statistical properties, hypothesis testing, regression, special functions, and experimental design.">
+    <meta name="author" content="Jason Christopherson" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>fstats_descriptive_statistics &ndash; FSTATS</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+         <script src="../js/jquery-2.1.3.min.js"></script>
+         <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FSTATS </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+                 data-toggle="dropdown" role="button"
+                 aria-haspopup="true"
+                 aria-expanded="false">
+                 Contents <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                    <li><a href="../lists/files.html">Source Files</a></li>
+                  <li><a href="../lists/modules.html">Modules</a></li>
+                  <li><a href="../lists/procedures.html">Procedures</a></li>
+                  <li><a href="../lists/types.html">Derived Types</a></li>
+              </ul>
+            </li>
+                <li class="visible-xs hidden-sm visible-lg">
+                  <a href="../lists/files.html">Source Files</a>
+                </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/modules.html">Modules</a>
+              </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/procedures.html">Procedures</a>
+              </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/types.html">Derived Types</a>
+              </li>
+          </ul>
+            <form action="../search.html" class="navbar-form navbar-right" role="search">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+              </div>
+              <!--
+                  <button type="submit" class="btn btn-default">Submit</button>
+                  -->
+            </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+  <div class="row">
+    <h1>fstats_descriptive_statistics
+      <small>Module</small>
+      
+    </h1>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title="14.3% of total for modules and submodules.">326 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/fstats_descriptive_statistics.f90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+              <li><a href='../sourcefile/fstats_descriptive_statistics.f90.html'>fstats_descriptive_statistics.f90</a></li>
+          <li class="active">fstats_descriptive_statistics</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#inters-0">Interfaces</a>
+        </h3>
+      </div>
+      <div id="inters-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-confidence_interval">confidence_interval</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#funcs-0">Functions</a>
+        </h3>
+      </div>
+      <div id="funcs-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-adjusted_r_squared">adjusted_r_squared</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-mean">mean</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-median">median</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-quantile">quantile</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-r_squared">r_squared</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-standard_deviation">standard_deviation</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-trimmed_mean">trimmed_mean</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-variance">variance</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#subs-0">Subroutines</a>
+        </h3>
+      </div>
+      <div id="subs-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-f_test">f_test</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-t_test_equal_variance">t_test_equal_variance</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-t_test_paired">t_test_paired</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-t_test_unequal_variance">t_test_unequal_variance</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+            <ul class="list-inline">
+                <li>linalg</li>
+                <li>ferror</li>
+                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
+                <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
+            </ul>
+          </li>
+      </ul>
+    </div>
+
+      
+      <br>
+
+      <section class="visible-xs visible-sm hidden-md">
+          <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#inters-1">Interfaces</a>
+        </h3>
+      </div>
+      <div id="inters-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-confidence_interval">confidence_interval</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#funcs-1">Functions</a>
+        </h3>
+      </div>
+      <div id="funcs-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-adjusted_r_squared">adjusted_r_squared</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-mean">mean</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-median">median</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-quantile">quantile</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-r_squared">r_squared</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-standard_deviation">standard_deviation</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-trimmed_mean">trimmed_mean</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-variance">variance</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#subs-1">Subroutines</a>
+        </h3>
+      </div>
+      <div id="subs-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-f_test">f_test</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-t_test_equal_variance">t_test_equal_variance</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-t_test_paired">t_test_paired</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-t_test_unequal_variance">t_test_unequal_variance</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+
+
+      </section>
+      <br class="visible-xs visible-sm hidden-md">
+
+
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="interface-confidence_interval"></span>
+      <h3>public        interface <a href='../interface/confidence_interval.html'>confidence_interval</a> 
+      </h3>
+    </div>
+      <div class="panel-body">
+        <p>Computes the confidence interval for the specified distribution.</p>
+<p>See Also</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Confidence_interval">Wikipedia</a></li>
+</ul>
+      </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function confidence_interval_scalar(dist, alpha, s, n) result(rst)  
+
+    </h3>
+  <p>Computes the confidence interval for the specified distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dist</strong></td>
+            <td>
+                <p>The distribution object defining the probability distribution
+to establish the confidence level.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>The probability value of interest.  For instance, use a value of 0.05
+for a confidence level of 95%.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>s</strong></td>
+            <td>
+                <p>The sample standard deviation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>The number of samples in the data set.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function confidence_interval_array(dist, alpha, x) result(rst)  
+
+    </h3>
+  <p>Computes the confidence interval for the specified distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dist</strong></td>
+            <td>
+                <p>The distribution object defining the probability distribution
+to establish the confidence level.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>The probability value of interest.  For instance, use a value of 0.05
+for a confidence level of 95%.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+                <p>An N-element array containing the data to analyze.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+          </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+
+        <section>
+          <h2>Functions</h2>
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-adjusted_r_squared"></span><h3>public  function <a href='../proc/adjusted_r_squared.html'>adjusted_r_squared</a>(p, x, xm, err) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the adjusted R-squared value for a data set.</p><a href="../proc/adjusted_r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>The number of variables.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+<p>An N-element array containing the dependent variables from 
+the data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>xm</strong>(:)</td>
+            <td>
+<p>An N-element array containing the corresponding modeled 
+values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>A mechanism for communicating errors and warnings
+to the caller.  Possible warning and error codes are as 
+follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if x and xm are not the 
+  same size.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-mean"></span><h3>public pure function <a href='../proc/mean.html'>mean</a>(x) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the mean of the values in an array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+<p>The array of values to analyze.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-median"></span><h3>public  function <a href='../proc/median.html'>median</a>(x) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the median of the values in an array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+<p>The array of values to analyze.  On output, this array is sorted into
+ascending order.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-quantile"></span><h3>public pure function <a href='../proc/quantile.html'>quantile</a>(x, q) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the specified quantile of a data set using the SAS 
+Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+<p>An N-element array containing the data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>q</strong></td>
+            <td>
+<p>The quantile to compute (e.g. 0.25 computes the 25% quantile).</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-r_squared"></span><h3>public  function <a href='../proc/r_squared.html'>r_squared</a>(x, xm, err) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the R-squared value for a data set.</p><a href="../proc/r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+<p>An N-element array containing the dependent variables from 
+the data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>xm</strong>(:)</td>
+            <td>
+<p>An N-element array containing the corresponding modeled 
+values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>A mechanism for communicating errors and warnings
+to the caller.  Possible warning and error codes are as 
+follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if x and xm are not the 
+  same size.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-standard_deviation"></span><h3>public pure function <a href='../proc/standard_deviation.html'>standard_deviation</a>(x) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the sample standard deviation of the values in an array.</p><a href="../proc/standard_deviation.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+<p>The array of values to analyze.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-trimmed_mean"></span><h3>public  function <a href='../proc/trimmed_mean.html'>trimmed_mean</a>(x, p) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the trimmed mean of a data set.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>An N-element array containing the data.  On output, the
+array is sorted into ascending order.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>An optional parameter specifying the percentage of values
+from either end of the distribution to remove.  The default
+is 0.05 such that the bottom 5% and top 5% are removed.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The trimmed mean.</p>
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-variance"></span><h3>public pure function <a href='../proc/variance.html'>variance</a>(x) result(rst)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the sample variance of the values in an array.</p><a href="../proc/variance.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+<p>The array of values to analyze.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+        <section>
+          <h2>Subroutines</h2>
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-f_test"></span><h3>public  subroutine <a href='../proc/f_test.html'>f_test</a>(x1, x2, stat, p, dof1, dof2)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the F-test and returns the probability (two-tailed) that
+the variances of two data sets are not significantly different.</p><a href="../proc/f_test.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x1</strong>(:)</td>
+            <td>
+<p>An N-element array containing the first data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x2</strong>(:)</td>
+            <td>
+<p>An M-element array containing the second data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>stat</strong></td>
+            <td>
+<p>The F-statistic.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>The probability value that the two samples are likely to
+have come from the two underlying populations that 
+have the same variance.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof1</strong></td>
+            <td>
+<p>A measure of the degrees of freedom.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof2</strong></td>
+            <td>
+<p>A measure of the degrees of freedom.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-t_test_equal_variance"></span><h3>public  subroutine <a href='../proc/t_test_equal_variance.html'>t_test_equal_variance</a>(x1, x2, stat, p, dof)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the 2-tailed Student's T-Test for two data sets of 
+assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x1</strong>(:)</td>
+            <td>
+<p>An N-element array containing the first data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x2</strong>(:)</td>
+            <td>
+<p>An M-element array containing the second data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>stat</strong></td>
+            <td>
+<p>The Student-'s T-Test statistic.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>The probability value that the two samples are likely to
+have come from two underlying populations that 
+have the same mean.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof</strong></td>
+            <td>
+<p>The degrees of freedom.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-t_test_paired"></span><h3>public  subroutine <a href='../proc/t_test_paired.html'>t_test_paired</a>(x1, x2, stat, p, dof, err)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the 2-tailed Student's T-Test for two paired data sets.</p><a href="../proc/t_test_paired.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x1</strong>(:)</td>
+            <td>
+<p>An N-element array containing the first data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x2</strong>(:)</td>
+            <td>
+<p>An N-element array containing the second data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>stat</strong></td>
+            <td>
+<p>The Student-'s T-Test statistic.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>The probability value that the two samples are likely to
+have come from  two underlying populations that 
+have the same mean.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof</strong></td>
+            <td>
+<p>The degrees of freedom.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if x1 and x2 are not the same 
+  length.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-t_test_unequal_variance"></span><h3>public  subroutine <a href='../proc/t_test_unequal_variance.html'>t_test_unequal_variance</a>(x1, x2, stat, p, dof)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Computes the 2-tailed Student's T-Test for two data sets of 
+assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x1</strong>(:)</td>
+            <td>
+<p>An N-element array containing the first data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x2</strong>(:)</td>
+            <td>
+<p>An M-element array containing the second data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>stat</strong></td>
+            <td>
+<p>The Student-'s T-Test statistic.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>The probability value that the two samples are likely to
+have come from two underlying populations that 
+have the same mean.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof</strong></td>
+            <td>
+<p>The degrees of freedom.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-6 col-md-6"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2024 
+</p>
+          </div>
+          <div class="col-xs-6 col-md-6">
+            <p class="text-right">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2024-03-14 15:35              </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+         <!-- Placed at the end of the document so the pages load faster -->
+    <!--
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        -->
+        <script src="../js/bootstrap.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+        <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>
