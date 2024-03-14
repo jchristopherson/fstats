@@ -2,7 +2,6 @@ module fstats_regression
     use iso_fortran_env
     use linalg
     use fstats_errors
-    use external
     use blas
     use ferror
     use fstats_descriptive_statistics
