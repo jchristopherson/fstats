@@ -13,7 +13,7 @@ module fstats
     use fstats_allan
     use fstats_bootstrap
     use fstats_sampling
-    use ferror
+    use fstats_smoothing
     implicit none
     private
     public :: distribution
@@ -68,6 +68,7 @@ module fstats
     public :: bootstrap_nonlinear_least_squares
     public :: box_muller_sample
     public :: rejection_sample
+    public :: lowess
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE

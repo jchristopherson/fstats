@@ -49,3 +49,8 @@ add_executable(rejection_sample_example rejection_sample_example.f90)
 target_link_libraries(rejection_sample_example fstats)
 target_link_libraries(rejection_sample_example ${fplot_LIBRARY})
 target_include_directories(rejection_sample_example PUBLIC ${fplot_INCLUDE_DIR})
+
+# LOWESS Example
+add_executable(lowess_example lowess_example.f90)
+target_link_libraries(lowess_example fstats ${fplot_LIBRARY})
+target_include_directories(lowess_example PUBLIC ${fplot_INCLUDE_DIR})
