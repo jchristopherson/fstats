@@ -367,6 +367,15 @@ subroutine bootstrap_nonlinear_least_squares(fun, x, y, params, ymod, resid, &
 
     ! Perform the statistics calculations, if needed
     if (present(stats)) then
+        ! Verify the size of stats
+        if (size(stats) /= nparams) then
+            call report_array_size_error(errmgr, &
+                "bootstrap_nonlinear_least_squares", "stats", &
+                nparams, size(stats))
+            return
+        end if
+
+        ! Perform the calculations
         call compute_stats(params, allcoeffs, alph, .true., stats)
     end if
 
