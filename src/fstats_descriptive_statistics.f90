@@ -1,4 +1,5 @@
 module fstats_descriptive_statistics
+    use iso_fortran_env
     use linalg, only : sort
     use ieee_arithmetic
     use fstats_errors

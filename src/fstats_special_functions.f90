@@ -2,6 +2,13 @@ module fstats_special_functions
     use iso_fortran_env
     use ieee_arithmetic
     implicit none
+    private
+    public :: beta
+    public :: regularized_beta
+    public :: incomplete_beta
+    public :: incomplete_gamma_lower
+    public :: incomplete_gamma_upper
+    public :: digamma
 
 contains
 ! ------------------------------------------------------------------------------
