@@ -10,6 +10,7 @@ module fstats_bootstrap
     private
     public :: bootstrap_regression_statistics
     public :: bootstrap_linear_least_squares
+    public :: bootstrap_nonlinear_least_squares
 
 ! REFERENCES:
 ! - https://medium.com/@m21413108/bootstrapping-maximum-entropy-non-parametric-boot-python-3b1e23ea589d
@@ -41,6 +42,8 @@ module fstats_bootstrap
     end type
 
 contains
+! ******************************************************************************
+! LINEAR REGRESSION
 ! ------------------------------------------------------------------------------
 subroutine bootstrap_linear_least_squares(order, intercept, x, y, &
     coeffs, ymod, resid, nsamples, stats, bias, alpha, err)
@@ -78,7 +81,7 @@ subroutine bootstrap_linear_least_squares(order, intercept, x, y, &
     real(real64), intent(out), optional, dimension(:) :: bias
         !! An ORDER+1 element array where an estimate of the bias of
         !! each coefficient is returned based upon the results of the
-        !! bootstrapping process.
+        !! bootstrapping analysis.
     real(real64), intent(in), optional :: alpha
         !! The significance level at which to evaluate the confidence 
         !! intervals.  The default value is 0.05 such that a 95% 
@@ -100,7 +103,7 @@ subroutine bootstrap_linear_least_squares(order, intercept, x, y, &
 
     ! Local Variables
     integer(int32) :: i, j, n, ns, nc, ncoeffs, flag
-    real(real64) :: eps, alph, ms
+    real(real64) :: eps, alph
     real(real64), allocatable, dimension(:) :: fLocal, yLocal, rLocal
     real(real64), allocatable, dimension(:,:) :: allcoeffs
     class(errors), pointer :: errmgr
@@ -197,6 +200,195 @@ subroutine bootstrap_linear_least_squares(order, intercept, x, y, &
     end if
 end subroutine
 
+! ******************************************************************************
+! NONLINEAR REGRESSION
+! ------------------------------------------------------------------------------
+subroutine bootstrap_nonlinear_least_squares(fun, x, y, params, ymod, resid, &
+    nsamples, weights, maxp, minp, stats, alpha, controls, settings, info, &
+    bias, err)
+    !! Performs a nonlinear regression to fit a model using a version
+    !! of the Levenberg-Marquardt algorithm.  Bootstrapping is utilized to gain 
+    !! insight into the quality of the fit.
+    procedure(regression_function), intent(in), pointer :: fun
+        !! A pointer to the regression_function to evaluate.
+    real(real64), intent(in) :: x(:)
+        !! The M-element array containing independent data.
+    real(real64), intent(in) :: y(:)
+        !! The M-element array containing dependent data.
+    real(real64), intent(inout) :: params(:)
+        !! On input, the N-element array containing the initial estimate
+        !! of the model parameters.  On output, the computed model 
+        !! parameters.
+    real(real64), intent(out) :: ymod(:)
+        !! An M-element array where the modeled dependent data will
+        !! be written.
+    real(real64), intent(out) :: resid(:)
+        !! An M-element array where the model residuals will be
+        !! written.
+    integer(int32), intent(in), optional :: nsamples
+        !! The number of bootstrapping samples to utilize.  
+    real(real64), intent(in), optional, target :: weights(:)
+        !! An optional M-element array allowing the weighting of
+        !! individual points.
+    real(real64), intent(in), optional, target :: maxp(:)
+        !! An optional N-element array that can be used as upper limits 
+        !! on the parameter values.  If no upper limit is requested for
+        !! a particular parameter, utilize a very large value.  The 
+        !! internal default is to utilize huge() as a value.
+    real(real64), intent(in), optional, target :: minp(:)
+        !! An optional N-element array that can be used as lower limits 
+        !! on the parameter values.  If no lower limit is requested for
+        !! a particalar parameter, utilize a very large magnitude, but 
+        !! negative, value.  The internal default is to utilize -huge() 
+        !! as a value.
+    type(bootstrap_regression_statistics), intent(out), optional :: stats(:)
+        !! An optional N-element array that, if supplied, will be used 
+        !! to return statistics about the fit for each parameter.
+    real(real64), intent(in), optional :: alpha
+        !! The significance level at which to evaluate the confidence 
+        !! intervals.  The default value is 0.05 such that a 95% 
+        !! confidence interval is calculated.
+    type(iteration_controls), intent(in), optional :: controls
+        !! An optional input providing custom iteration controls.
+    type(lm_solver_options), intent(in), optional :: settings
+        !! An optional input providing custom settings for the solver.
+    type(convergence_info), intent(out), optional, target :: info
+        !! An optional output that can be used to gain information about
+        !! the iterative solution and the nature of the convergence.
+    real(real64), intent(out), optional, dimension(:) :: bias
+        !! An optional N-element array that, if supplied, will be used to 
+        !! provide an estimate of the bias of each model parameter based upon
+        !! the results of the bootstrapping analysis.
+    class(errors), intent(inout), optional, target :: err
+        !! A mechanism for communicating errors and warnings to the 
+        !! caller.  Possible warning and error codes are as follows.
+        !! - FS_NO_ERROR: No errors encountered.
+        !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
+        !!      properly sized.
+        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
+        !!      error.
+        !! - FS_UNDERDEFINED_PROBLEM_ERROR: Occurs if the problem posed 
+        !!      is underdetetermined (M < N).
+        !! - FS_TOLERANCE_TOO_SMALL_ERROR: Occurs if any supplied 
+        !!      tolerances are too small to be practical.
+        !! - FS_TOO_FEW_ITERATION_ERROR: Occurs if too few iterations 
+        !!      are allowed.
+
+    ! Parameters
+    real(real64), parameter :: zero = 0.0d0
+    real(real64), parameter :: p05 = 5.0d-2
+    real(real64), parameter :: half = 5.0d-1
+    
+    ! Local Variables
+    integer(int32) :: i, n, ns, nparams, flag
+    real(real64) :: eps, alph
+    real(real64), allocatable, dimension(:) :: fLocal, yLocal, rLocal
+    real(real64), allocatable, dimension(:,:) :: allcoeffs
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    if (present(nsamples)) then
+        ns = nsamples
+    else
+        ns = 1000
+    end if
+    if (present(alpha)) then
+        alph = alpha
+    else
+        alph = p05
+    end if
+    n = size(x)
+    nparams = size(params)
+
+    ! Compute the fit
+    call nonlinear_least_squares(fun, x, y, params, ymod, resid, &
+        weights = weights, maxp = maxp, minp = minp, alpha = alph, &
+        controls = controls, settings = settings, info = info, err = err)
+
+    ! Memory Allocations
+    allocate(allcoeffs(nparams, ns), source = zero, stat = flag)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "bootstrap_nonlinear_least_squares", &
+            flag)
+        return
+    end if
+    allcoeffs(:,1) = params
+    
+    ! Define initial guesses for each step.  Base upon the results of the 
+    ! initial analysis as this should provide a strong starting point for
+    ! subsequent analysis
+    do i = 1, nparams
+        allcoeffs(i,:) = params(i)
+    end do
+
+    ! Establish the epsilon term
+    eps = standard_deviation(y) / sqrt(real(n))
+    call random_init(.false., .true.)
+
+    ! Cycle over each data set and perform the fit
+#ifdef USEOPENMP
+!$OMP PARALLEL DO
+    do i = 2, ns
+        ! Allocate local arrays on a per-thread basis
+        if (.not.allocated(fLocal)) allocate(fLocal(n))
+        if (.not.allocated(yLocal)) allocate(yLocal(n))
+        if (.not.allocated(rLocal)) allocate(rLocal(n))
+
+        ! Compute a random data set
+        call random_number(yLocal)
+        yLocal = eps * (yLocal - half) + y
+
+        ! Compute the fit of the perturbed data set
+        call nonlinear_least_squares(fun, x, yLocal, allcoeffs(:,i), fLocal, &
+            rLocal, weights = weights, maxp = maxp, minp = minp, alpha = alph, &
+            controls = controls, settings = settings, info = info)
+    end do
+!$OMP END PARALLEL DO
+#else
+    ! OpenMP is not available - run in a serial manner
+    allocate(fLocal(n), yLocal(n), rLocal(n))
+    do i = 2, ns
+        ! Compute a random data set
+        call random_number(yLocal)
+        yLocal = eps * (yLocal - half) + y
+
+        ! Compute the fit of the perturbed data set
+        call nonlinear_least_squares(fun, x, yLocal, allcoeffs(:,i), fLocal, &
+            rLocal, weights = weights, maxp = maxp, minp = minp, alpha = alph, &
+            controls = controls, settings = settings, info = info)
+    end do
+#endif
+
+    ! Perform the statistics calculations, if needed
+    if (present(stats)) then
+        call compute_stats(params, allcoeffs, alph, .true., stats)
+    end if
+
+    ! Compute the bias for each parameter, if needed
+    if (present(bias)) then
+        ! Verify the size of the array
+        if (size(bias) /= nparams) then
+            call report_array_size_error(errmgr, &
+                "bootstrap_nonlinear_least_squares", "bias", &
+                nparams, size(bias))
+            return
+        end if
+
+        ! Perform the calculations
+        do i = 1, nparams
+            bias(i) = params(i) - mean(allcoeffs(i,:))
+        end do
+    end if
+end subroutine
+
+! ******************************************************************************
+! PRIVATE HELPER ROUTINES
 ! ------------------------------------------------------------------------------
 subroutine compute_stats(mdl, coeffs, alpha, intercept, stats)
     ! Arguments

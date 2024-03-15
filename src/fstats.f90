@@ -65,6 +65,7 @@ module fstats
     public :: factorial
     public :: bootstrap_regression_statistics
     public :: bootstrap_linear_least_squares
+    public :: bootstrap_nonlinear_least_squares
     public :: box_muller_sample
     public :: rejection_sample
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
