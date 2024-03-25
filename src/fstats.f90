@@ -63,6 +63,11 @@ module fstats
     public :: trimmed_mean
     public :: difference
     public :: factorial
+    public :: bootstrap_resampling_routine
+    public :: bootstrap_statistic_routine
+    public :: random_resample
+    public :: bootstrap_statistics
+    public :: bootstrap
     public :: bootstrap_regression_statistics
     public :: bootstrap_linear_least_squares
     public :: bootstrap_nonlinear_least_squares
