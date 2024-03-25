@@ -6,11 +6,13 @@ module fstats_bootstrap
     use fstats_descriptive_statistics
     use fstats_special_functions
     use fstats_regression
+    use linalg, only : sort
     implicit none
     private
     public :: bootstrap_resampling_routine
     public :: bootstrap_statistic_routine
     public :: random_resample
+    public :: scaled_random_resample
     public :: bootstrap_statistics
     public :: bootstrap
     public :: bootstrap_regression_statistics
@@ -98,6 +100,35 @@ subroutine random_resample(x, xn)
         !! An N-element array where the resampled data set will be written.
 
     ! Parameters
+    real(real64), parameter :: scale = 1.25d0
+
+    ! Local Variables
+    integer(int32) :: i, n
+    real(real64) :: xmin, xmax, rng
+
+    ! Process
+    n = size(x)
+    xmin = x(1)
+    xmax = x(1)
+    do i = 2, n
+        xmin = min(xmin, x(i))
+        xmax = max(xmax, x(i))
+    end do
+    rng = (xmax - xmin)
+    call random_number(xn)
+    xn = xn * rng + xmin
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine scaled_random_resample(x, xn)
+    !! A random resampling, scaled by the standard deviation of the original
+    !! data, but based upon a normal distribution.
+    real(real64), intent(in), dimension(:) :: x
+        !! The N-element array to resample.
+    real(real64), intent(out), dimension(size(x)) :: xn
+        !! An N-element array where the resampled data set will be written.
+
+    ! Parameters
     real(real64), parameter :: half = 0.5d0
 
     ! Local Variables
@@ -177,6 +208,9 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
     ! Use OpenMP to run operations in parallel
 !$OMP PARALLEL DO PRIVATE(xn) SHARED(rst)
     do i = 2, ns
+        ! Per-thread memory allocation
+        if (.not.allocated(xn)) allocate(xn(n))
+
         ! Resample the data
         call resample(x, xn)
 
@@ -197,6 +231,7 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
 #endif
 
     ! Compute the relevant quantities on the resampled statistic
+    call sort(rst%population, .true.)
     rst%upper_confidence_interval = rst%population(i2)
     rst%lower_confidence_interval = rst%population(i1)
     rst%bias = mean(rst%population) - rst%statistic_value
@@ -301,7 +336,7 @@ subroutine bootstrap_linear_least_squares(order, intercept, x, y, &
     if (present(method)) then
         resample => method
     else
-        resample => random_resample
+        resample => scaled_random_resample
     end if
     n = size(x)
     ncoeffs = order + 1
@@ -510,7 +545,7 @@ subroutine bootstrap_nonlinear_least_squares(fun, x, y, params, ymod, resid, &
     if (present(method)) then
         resample => method
     else
-        resample => random_resample
+        resample => scaled_random_resample
     end if
     n = size(x)
     nparams = size(params)

@@ -66,6 +66,7 @@ module fstats
     public :: bootstrap_resampling_routine
     public :: bootstrap_statistic_routine
     public :: random_resample
+    public :: scaled_random_resample
     public :: bootstrap_statistics
     public :: bootstrap
     public :: bootstrap_regression_statistics
