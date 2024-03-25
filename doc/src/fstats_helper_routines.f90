@@ -1,6 +1,9 @@
 module fstats_helper_routines
     use iso_fortran_env
     implicit none
+    private
+    public :: difference
+    public :: factorial
 contains
 
 ! ------------------------------------------------------------------------------

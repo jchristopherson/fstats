@@ -95,9 +95,23 @@
 			   <tr><td><a href='../interface/anova.html'>anova</a></td><td><a href='../module/fstats_anova.html'>fstats_anova</a></td><td>Interface</td><td><p>Performs an analysis of variance (ANOVA) on the supplied data 
 set.</p><a href="../interface/anova.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			   <tr><td><a href='../proc/beta.html'>beta</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the beta function.</p><a href="../proc/beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../proc/bootstrap.html'>bootstrap</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Function</td><td><p>Performs a bootstrap calculation on the supplied data set for the given
+statistic.  The default implementation utlizes a random resampling with 
+replacement.  Other resampling methods may be defined by specifying an 
+appropriate routine by means of the method input.</p></td></tr>
 			   <tr><td><a href='../proc/bootstrap_linear_least_squares.html'>bootstrap_linear_least_squares</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Subroutine</td><td><p>Computes a linear least-squares regression to fit a set of data.
 Bootstrapping is utilized to gain insight into the quality of 
-the fit.</p></td></tr>
+the fit.  Resampling for the bootstrap process is a random resampling 
+with replacement process with the range of values limited by the 
+standard deviation of the original data set.</p></td></tr>
+			   <tr><td><a href='../proc/bootstrap_nonlinear_least_squares.html'>bootstrap_nonlinear_least_squares</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Subroutine</td><td><p>Performs a nonlinear regression to fit a model using a version
+of the Levenberg-Marquardt algorithm.  Bootstrapping is utilized to gain 
+insight into the quality of the fit.  Resampling for the bootstrap 
+process is a random resampling with replacement process with the 
+range of values limited by the standard deviation of the original 
+data set.</p></td></tr>
+			   <tr><td><a href='../interface/bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Interface</td><td></td></tr>
+			   <tr><td><a href='../interface/bootstrap_statistic_routine.html'>bootstrap_statistic_routine</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Interface</td><td></td></tr>
 			   <tr><td><a href='../interface/box_muller_sample.html'>box_muller_sample</a></td><td><a href='../module/fstats_sampling.html'>fstats_sampling</a></td><td>Interface</td><td><p>Generates random, normally distributed values via the Box-Muller 
 transform.</p></td></tr>
 			   <tr><td><a href='../proc/calculate_regression_statistics.html'>calculate_regression_statistics</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Function</td><td><p>Computes statistics for the quality of fit for a regression 
@@ -127,6 +141,9 @@ full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-righ
 			   <tr><td><a href='../interface/iteration_update.html'>iteration_update</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Interface</td><td></td></tr>
 			   <tr><td><a href='../proc/jacobian.html'>jacobian</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Computes the Jacobian matrix for a nonlinear regression problem.</p></td></tr>
 			   <tr><td><a href='../proc/linear_least_squares.html'>linear_least_squares</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Computes a linear least-squares regression to fit a set of data.</p><a href="../proc/linear_least_squares.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../proc/lowess.html'>lowess</a></td><td><a href='../module/fstats_smoothing.html'>fstats_smoothing</a></td><td>Subroutine</td><td><p>Computes the smoothing of a data set using a robust locally weighted
+scatterplot smoothing (LOWESS) algorithm.  Fitted values are computed at
+each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			   <tr><td><a href='../proc/mean.html'>mean</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the mean of the values in an array.</p></td></tr>
 			   <tr><td><a href='../proc/median.html'>median</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the median of the values in an array.</p></td></tr>
 			   <tr><td><a href='../proc/nonlinear_least_squares.html'>nonlinear_least_squares</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Performs a nonlinear regression to fit a model using a version
@@ -134,6 +151,7 @@ of the Levenberg-Marquardt algorithm.</p></td></tr>
 			   <tr><td><a href='../proc/quantile.html'>quantile</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the specified quantile of a data set using the SAS 
 Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			   <tr><td><a href='../proc/r_squared.html'>r_squared</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the R-squared value for a data set.</p><a href="../proc/r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../proc/random_resample.html'>random_resample</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Subroutine</td><td><p>Random resampling, with replacement, based upon a normal distribution.</p></td></tr>
 			   <tr><td><a href='../interface/regression_function.html'>regression_function</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Interface</td><td></td></tr>
 			   <tr><td><a href='../proc/regularized_beta.html'>regularized_beta</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the regularized beta function.</p><a href="../proc/regularized_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			   <tr><td><a href='../proc/rejection_sample.html'>rejection_sample</a></td><td><a href='../module/fstats_sampling.html'>fstats_sampling</a></td><td>Function</td><td><p>Uses rejection sampling to randomly sample a target distribution.</p></td></tr>
@@ -144,6 +162,8 @@ when they should be the same size.</p></td></tr>
 			   <tr><td><a href='../proc/report_matrix_size_error.html'>report_matrix_size_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports a matrix size error.</p></td></tr>
 			   <tr><td><a href='../proc/report_memory_error.html'>report_memory_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports a memory allocation related error.</p></td></tr>
 			   <tr><td><a href='../proc/report_underdefined_error.html'>report_underdefined_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an underdefined problem error.</p></td></tr>
+			   <tr><td><a href='../proc/scaled_random_resample.html'>scaled_random_resample</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Subroutine</td><td><p>A random resampling, scaled by the standard deviation of the original
+data, but based upon a normal distribution.</p></td></tr>
 			   <tr><td><a href='../proc/standard_deviation.html'>standard_deviation</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the sample standard deviation of the values in an array.</p><a href="../proc/standard_deviation.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			   <tr><td><a href='../proc/t_test_equal_variance.html'>t_test_equal_variance</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Subroutine</td><td><p>Computes the 2-tailed Student's T-Test for two data sets of 
 assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
@@ -168,7 +188,7 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-03-14 15:35              </p>
+ on 2024-03-25 15:40              </p>
           </div>
         </div>
         <br>

@@ -2,6 +2,8 @@ module fstats_allan
     use iso_fortran_env
     use fstats_errors
     implicit none
+    private
+    public :: allan_variance
 contains
 ! ------------------------------------------------------------------------------
 ! REF: Yadav, Shrikanth & Shastri, Saurav & Chakravarthi, Ghanashyam & Kumar, 

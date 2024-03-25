@@ -1,5 +1,6 @@
 module fstats_anova
     use iso_fortran_env
+    use ieee_arithmetic
     use fstats_special_functions
     use fstats_descriptive_statistics
     use ferror

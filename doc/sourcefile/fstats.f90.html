@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 3.1% of total for source files.">70 statements</a>
+               title=" 2.8% of total for source files.">78 statements</a>
           </li>
 
             <li id="source-file">
@@ -228,7 +228,7 @@
 <a id="ln-13" name="ln-13" href="#ln-13"></a><span class="w">    </span><span class="k">use </span><span class="n">fstats_allan</span><span class="w"></span>
 <a id="ln-14" name="ln-14" href="#ln-14"></a><span class="w">    </span><span class="k">use </span><span class="n">fstats_bootstrap</span><span class="w"></span>
 <a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">    </span><span class="k">use </span><span class="n">fstats_sampling</span><span class="w"></span>
-<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">    </span><span class="k">use </span><span class="n">ferror</span><span class="w"></span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">    </span><span class="k">use </span><span class="n">fstats_smoothing</span><span class="w"></span>
 <a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">    </span><span class="k">implicit none</span>
 <a id="ln-18" name="ln-18" href="#ln-18"></a><span class="k">    private</span>
 <a id="ln-19" name="ln-19" href="#ln-19"></a><span class="k">    public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">distribution</span><span class="w"></span>
@@ -278,15 +278,23 @@
 <a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">trimmed_mean</span><span class="w"></span>
 <a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">difference</span><span class="w"></span>
 <a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factorial</span><span class="w"></span>
-<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_regression_statistics</span><span class="w"></span>
-<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_linear_least_squares</span><span class="w"></span>
-<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">box_muller_sample</span><span class="w"></span>
-<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rejection_sample</span><span class="w"></span>
-<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">FS_LEVENBERG_MARQUARDT_UPDATE</span><span class="w"></span>
-<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">FS_QUADRATIC_UPDATE</span><span class="w"></span>
-<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">FS_NIELSEN_UPDATE</span><span class="w"></span>
-<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">   </span>
-<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="k">end module</span><span class="w"></span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_resampling_routine</span><span class="w"></span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_statistic_routine</span><span class="w"></span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">random_resample</span><span class="w"></span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">scaled_random_resample</span><span class="w"></span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_statistics</span><span class="w"></span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap</span><span class="w"></span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_regression_statistics</span><span class="w"></span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_linear_least_squares</span><span class="w"></span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bootstrap_nonlinear_least_squares</span><span class="w"></span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">box_muller_sample</span><span class="w"></span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rejection_sample</span><span class="w"></span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lowess</span><span class="w"></span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">FS_LEVENBERG_MARQUARDT_UPDATE</span><span class="w"></span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">FS_QUADRATIC_UPDATE</span><span class="w"></span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">FS_NIELSEN_UPDATE</span><span class="w"></span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">   </span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="k">end module</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -305,7 +313,7 @@
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-03-14 15:35              </p>
+ on 2024-03-25 15:40              </p>
           </div>
         </div>
         <br>
