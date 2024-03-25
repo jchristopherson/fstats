@@ -5,6 +5,7 @@ module fstats
     use iso_fortran_env
     use fstats_special_functions
     use fstats_descriptive_statistics
+    use fstats_hypothesis
     use fstats_distributions
     use fstats_anova
     use fstats_helper_routines

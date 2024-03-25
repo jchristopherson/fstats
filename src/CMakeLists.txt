@@ -6,6 +6,7 @@ set(FSTATS_SOURCES
     ${dir}/fstats.f90
     ${dir}/fstats_special_functions.f90
     ${dir}/fstats_descriptive_statistics.f90
+    ${dir}/fstats_hypothesis.f90
     ${dir}/fstats_anova.f90
     ${dir}/fstats_distributions.f90
     ${dir}/fstats_helper_routines.f90
