@@ -40,17 +40,20 @@ target_link_libraries(bootstrap_regression_example fstats)
 
 # Box-Muller Example
 add_executable(box_muller_example box_muller_example.f90)
-target_link_libraries(box_muller_example fstats)
-target_link_libraries(box_muller_example ${fplot_LIBRARY})
+target_link_libraries(box_muller_example fstats ${fplot_LIBRARY})
 target_include_directories(box_muller_example PUBLIC ${fplot_INCLUDE_DIR})
 
 # Rejection Sampling Example
 add_executable(rejection_sample_example rejection_sample_example.f90)
-target_link_libraries(rejection_sample_example fstats)
-target_link_libraries(rejection_sample_example ${fplot_LIBRARY})
+target_link_libraries(rejection_sample_example fstats ${fplot_LIBRARY})
 target_include_directories(rejection_sample_example PUBLIC ${fplot_INCLUDE_DIR})
 
 # LOWESS Example
 add_executable(lowess_example lowess_example.f90)
 target_link_libraries(lowess_example fstats ${fplot_LIBRARY})
 target_include_directories(lowess_example PUBLIC ${fplot_INCLUDE_DIR})
+
+# Bootstrap Example
+add_executable(bootstrap_example bootstrap_example.f90)
+target_link_libraries(bootstrap_example fstats ${fplot_LIBRARY})
+target_include_directories(bootstrap_example PUBLIC ${fplot_INCLUDE_DIR})
