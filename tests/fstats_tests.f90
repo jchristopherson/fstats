@@ -99,8 +99,8 @@ program tests
     local = test_nl_least_squares()
     if (.not.local) overall = .false.
 
-    ! local = test_bootstrap_nl_least_squares()
-    ! if (.not.local) overall = .false.
+    local = test_bootstrap_nl_least_squares()
+    if (.not.local) overall = .false.
 
     ! Allan Variance Tests
     local = test_allan_variance()
