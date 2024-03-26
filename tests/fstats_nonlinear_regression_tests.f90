@@ -112,7 +112,7 @@ contains
         logical :: rst
 
         ! Parameters
-        real(real64), parameter :: tol = 1.0d-5
+        real(real64), parameter :: tol = 1.0d-6
 
         ! Local Variables
         procedure(regression_function), pointer :: fun
@@ -147,6 +147,10 @@ contains
         else
             rst = .false.
             print '(A)', "TEST FAILED: test_nl_least_squares 1-1"
+            print '(A)', "Expected:"
+            print *, ans
+            print '(A)', "Found:"
+            print *, params
         end if
 
         ! Test with a different options set
@@ -160,6 +164,10 @@ contains
         if (.not.is_equal(params, ans, tol)) then
             rst = .false.
             print '(A)', "TEST FAILED: test_nl_least_squares 1-2"
+            print '(A)', "Expected:"
+            print *, ans
+            print '(A)', "Found:"
+            print *, params
         end if
 
         ! Now test the quadratic update option
@@ -174,6 +182,10 @@ contains
         if (.not.is_equal(params, ans, tol)) then
             rst = .false.
             print '(A)', "TEST FAILED: test_nl_least_squares 1-3"
+            print '(A)', "Expected:"
+            print *, ans
+            print '(A)', "Found:"
+            print *, params
         end if
     end function
 
