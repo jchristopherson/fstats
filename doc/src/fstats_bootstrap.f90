@@ -203,7 +203,6 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
     rst%population(1) = rst%statistic_value
 
     ! Resampling Process
-    call random_init(.false., .true.)
 #ifdef USEOPENMP
     ! Use OpenMP to run operations in parallel
 !$OMP PARALLEL DO PRIVATE(xn) SHARED(rst)
@@ -370,7 +369,6 @@ subroutine bootstrap_linear_least_squares(order, intercept, x, y, &
     allcoeffs(:,1) = coeffs
 
     ! Cycle over each data set and perform the fit
-    call random_init(.false., .true.)
 #ifdef USEOPENMP
 !$OMP PARALLEL DO PRIVATE(fLocal, yLocal, rLocal) SHARED(allcoeffs)
     do i = 2, ns
@@ -583,9 +581,8 @@ subroutine bootstrap_nonlinear_least_squares(fun, x, y, params, ymod, resid, &
     end do
 
     ! Cycle over each data set and perform the fit
-    call random_init(.false., .true.)
 #ifdef USEOPENMP
-!$OMP PARALLEL DO
+!$OMP PARALLEL DO PRIVATE(fLocal, yLocal, rLocal)
     do i = 2, ns
         ! Allocate local arrays on a per-thread basis
         if (.not.allocated(fLocal)) allocate(fLocal(n))

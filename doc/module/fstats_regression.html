@@ -207,15 +207,15 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item">linalg</li>
-                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
-                  <li class="list-inline-item">ferror</li>
-                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
-                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
                   <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
                   <li class="list-inline-item">blas</li>
+                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
+                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
+                  <li class="list-inline-item">ferror</li>
               </ul>
             </li>
         </ul>
@@ -1049,7 +1049,7 @@ determined by the regression process.</p><a href="../type/regression_statistics.
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-probability~3"></span>
+              <span class="anchor" id="variable-probability~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1066,7 +1066,7 @@ important.  A statistically important coefficient will have a
 low probability (p-value), typically 0.05 or lower; however, a 
 p-value of up to ~0.2 may be acceptable dependent upon the 
 problem.  Typically any p-value larger than ~0.2 indicates the 
-parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability~3" class="pull-right"><emph>Read more&hellip;</emph></a>
+parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability~2" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -1137,7 +1137,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~7"></span>
+              <span class="anchor" id="variable-p~3"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -1152,7 +1152,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~25"></span>
+              <span class="anchor" id="variable-x~32"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1184,7 +1184,7 @@ values.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~14"></span>
+              <span class="anchor" id="variable-err~4"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1265,7 +1265,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~5"></span>
+              <span class="anchor" id="variable-c~7"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1280,7 +1280,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~8"></span>
+              <span class="anchor" id="variable-alpha~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1297,7 +1297,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~18"></span>
+              <span class="anchor" id="variable-err~8"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1349,7 +1349,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~26"></span>
+              <span class="anchor" id="variable-x~33"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1409,7 +1409,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~24"></span>
+              <span class="anchor" id="variable-x~31"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1441,7 +1441,7 @@ values.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~13"></span>
+              <span class="anchor" id="variable-err~3"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1532,7 +1532,7 @@ as part of the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~27"></span>
+              <span class="anchor" id="variable-x~34"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1548,7 +1548,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~2"></span>
+              <span class="anchor" id="variable-c~4"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1565,7 +1565,7 @@ however, if intercept is false, K must equal order.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~15"></span>
+              <span class="anchor" id="variable-err~5"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1611,7 +1611,7 @@ by coefficient_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-r
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~28"></span>
+              <span class="anchor" id="variable-x~35"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1627,7 +1627,7 @@ by coefficient_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-r
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~3"></span>
+              <span class="anchor" id="variable-c~5"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1642,7 +1642,7 @@ by coefficient_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-r
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~16"></span>
+              <span class="anchor" id="variable-err~6"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1815,7 +1815,7 @@ root of machine precision.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~19"></span>
+              <span class="anchor" id="variable-err~9"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1894,7 +1894,7 @@ the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~29"></span>
+              <span class="anchor" id="variable-x~36"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1941,7 +1941,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ymod~4"></span>
+              <span class="anchor" id="variable-ymod~3"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1989,7 +1989,7 @@ intercept is set to false, M = ORDER.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~7"></span>
+              <span class="anchor" id="variable-alpha~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -2006,7 +2006,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~17"></span>
+              <span class="anchor" id="variable-err~7"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -2069,7 +2069,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~30"></span>
+              <span class="anchor" id="variable-x~37"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -2116,7 +2116,7 @@ parameters.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ymod~5"></span>
+              <span class="anchor" id="variable-ymod~4"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -2217,7 +2217,7 @@ to return statistics about the fit for each parameter.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~9"></span>
+              <span class="anchor" id="variable-alpha~7"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -2296,7 +2296,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~20"></span>
+              <span class="anchor" id="variable-err~10"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -2348,7 +2348,7 @@ caller.  Possible warning and error codes are as follows.
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-03-25 20:52              </p>
+ on 2024-03-26 07:52              </p>
           </div>
         </div>
         <br>
