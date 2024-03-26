@@ -26,6 +26,9 @@ auto-executables = false
 auto-examples = false
 auto-tests = false
 
+[preprocess]
+cpp.macros = ["USEOPENMP=1"]
+
 [[test]]
 name = "fstats_tests"
 source-dir = "tests"
