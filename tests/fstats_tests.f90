@@ -110,6 +110,14 @@ program tests
     local = trimmed_mean_test_1()
     if (.not.local) overall = .false.
 
+    ! Covariance Tests
+    local = test_covariance_1()
+    if (.not.local) overall = .false.
+
+    ! Correlation Tests
+    local = test_correlation_1()
+    if (.not.local) overall = .false.
+
     ! End
     if (.not.overall) then
         stop 1

@@ -18,6 +18,7 @@ module fstats_regression
     public :: regression_statistics
     public :: r_squared
     public :: adjusted_r_squared
+    public :: correlation
     public :: coefficient_matrix
     public :: covariance_matrix
     public :: linear_least_squares
@@ -269,6 +270,26 @@ function adjusted_r_squared(p, x, xm, err) result(rst)
     r2 = r_squared(x, xm, errmgr)
     if (errmgr%has_error_occurred()) return
     rst = one - (one - r2) * (n - one) / (n - p - one)
+end function
+
+! ------------------------------------------------------------------------------
+pure function correlation(x, y) result(rst)
+    !! Computes the sample correlation coefficient (an estimate to the 
+    !! population Pearson correlation) as follows.
+    !!
+    !! $$ r_{xy} = \frac{cov(x, y)}{s_{x} s_{y}} $$.
+    !!
+    !! Where, $$ s_{x} $$ & $$ s_{y} $$ are the sample standard deviations of
+    !! x and y respectively.
+    real(real64), intent(in), dimension(:) :: x
+        !! The first N-element data set.
+    real(real64), intent(in), dimension(size(x)) :: y
+        !! The second N-element data set.
+    real(real64) :: rst
+        !! The correlation coefficient.
+
+    ! Process
+    rst = covariance(x, y) / (standard_deviation(x) * standard_deviation(y))
 end function
 
 ! ------------------------------------------------------------------------------

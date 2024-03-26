@@ -11,6 +11,7 @@ module fstats_descriptive_statistics
     public :: median
     public :: quantile
     public :: trimmed_mean
+    public :: covariance
     
 contains
 ! ------------------------------------------------------------------------------
@@ -43,8 +44,8 @@ end function
 pure function variance(x) result(rst)
     !! Computes the sample variance of the values in an array.
     !!
-    !! The variance computed is the sample variance such that the variance.
-    !! $$ s^2 = \frac{\Sigma \left( x_{i} - \bar{x} \right)^2}{n - 1} $$
+    !! The variance computed is the sample variance such that 
+    !! $$ s^2 = \frac{\Sigma \left( x_{i} - \bar{x} \right)^2}{n - 1} $$.
     real(real64), intent(in) :: x(:)
         !! The array of values to analyze.
     real(real64) :: rst
@@ -194,6 +195,46 @@ function trimmed_mean(x, p) result(rst)
     i1 = max(floor(n * pv, int32), 1)
     i2 = min(n, n - i1 + 1)
     rst = mean(x(i1:i2))
+end function
+
+! ------------------------------------------------------------------------------
+pure function covariance(x, y) result(rst)
+    !! Computes the sample covariance of two data sets.
+    !!
+    !! The covariance computed is the sample covariance such that 
+    !! $$ q_{jk} = \frac{\Sigma \left( x_{i} - \bar{x} \right) 
+    !! \left( y_{i} - \bar{y} \right)}{n - 1} $$.
+    real(real64), intent(in), dimension(:) :: x
+        !! The first N-element data set.
+    real(real64), intent(in), dimension(size(x)) :: y
+        !! The second N-element data set.
+    real(real64) :: rst
+        !! The covariance.
+
+    ! Parameters
+    real(real64), parameter :: zero = 0.0d0
+    real(real64), parameter :: one = 1.0d0
+
+    ! Local Variables
+    integer(int32) :: i, n
+    real(real64) :: meanX, meanY
+
+    ! Process
+    n = size(x)
+    if (n <= 1) then
+        rst = zero
+    else
+        ! Compute the means
+        meanX = x(1)
+        meanY = y(1)
+        do i = 2, n
+            meanX = meanX + (x(i) - meanX) / i
+            meanY = meanY + (y(i) - meanY) / i
+        end do
+
+        ! Compute the covariance
+        rst = sum((x - meanX) * (y - meanY)) / (n - one)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------

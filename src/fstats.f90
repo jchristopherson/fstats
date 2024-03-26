@@ -29,8 +29,10 @@ module fstats
     public :: variance
     public :: standard_deviation
     public :: median
+    public :: covariance
     public :: r_squared
     public :: adjusted_r_squared
+    public :: correlation
     public :: quantile
     public :: t_test_equal_variance
     public :: t_test_unequal_variance

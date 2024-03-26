@@ -849,4 +849,59 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_covariance_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 500
+        real(real64) :: x(n), y(n), cov, ans, avgX, avgY
+
+        ! Initialization
+        rst = .true.
+        call random_number(x)
+        call random_number(y)
+
+        avgX = mean(x)
+        avgY = mean(y)
+
+        ans = sum((x - avgX) * (y - avgY)) / (n - 1.0d0)
+
+        ! Test 1
+        cov = covariance(x, y)
+        if (.not.is_equal(cov, ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Covariance test 1"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_correlation_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 500
+        real(real64) :: x(n), y(n), c, ans, avgX, avgY
+
+        ! Initialization
+        rst = .true.
+        call random_number(x)
+        call random_number(y)
+
+        avgX = mean(x)
+        avgY = mean(y)
+
+        ans = sum((x - avgX) * (y - avgY)) / &
+            sqrt(sum((x - avgX)**2) * sum((y - avgY)**2))
+        
+        ! Test 1
+        c = correlation(x, y)
+        if (.not.is_equal(c, ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Correlation test 1"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module
