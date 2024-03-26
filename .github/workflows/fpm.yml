@@ -42,7 +42,7 @@ jobs:
     - name: Install fpm
       uses: fortran-lang/setup-fpm@v3
       with:
-        fpm-version: 'v0.8.2'
+        fpm-version: 'v0.10.0'
 
     - name: Build the library
       run: |
@@ -116,7 +116,7 @@ jobs:
     - name: Install fpm
       uses: fortran-lang/setup-fpm@v3
       with:
-        fpm-version: 'v0.8.2'
+        fpm-version: 'v0.10.0'
 
     - name: fpm build
       run: |

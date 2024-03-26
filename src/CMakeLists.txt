@@ -4,18 +4,18 @@ set(dir ${CMAKE_CURRENT_SOURCE_DIR})
 # Define the source files
 set(FSTATS_SOURCES
     ${dir}/fstats.f90
-    ${dir}/special_functions_beta.f90
-    ${dir}/special_functions_gamma.f90
-    ${dir}/distributions_normal.f90
-    ${dir}/distributions_t.f90
-    ${dir}/distributions_f.f90
-    ${dir}/statistics_implementation.f90
-    ${dir}/regression_implementation.f90
-    ${dir}/experimental_design_implementation.f90
-    ${dir}/levenberg_marquardt.f90
-    ${dir}/distributions_chisquared.f90
-    ${dir}/allan.f90
+    ${dir}/fstats_special_functions.f90
+    ${dir}/fstats_descriptive_statistics.f90
+    ${dir}/fstats_hypothesis.f90
+    ${dir}/fstats_anova.f90
+    ${dir}/fstats_distributions.f90
+    ${dir}/fstats_helper_routines.f90
+    ${dir}/fstats_regression.f90
+    ${dir}/fstats_experimental_design.f90
+    ${dir}/fstats_allan.f90
     ${dir}/fstats_errors.f90
-    ${dir}/external.f90
+    ${dir}/fstats_bootstrap.f90
+    ${dir}/fstats_sampling.f90
+    ${dir}/fstats_smoothing.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)

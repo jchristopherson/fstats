@@ -1,0 +1,897 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="FSTATS is a modern Fortran statistical library containing routines for computing basic statistical properties, hypothesis testing, regression, special functions, and experimental design.">
+    <meta name="author" content="Jason Christopherson" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>fstats_distributions &ndash; FSTATS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">FSTATS </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>fstats_distributions
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="10.9% of total for modules and submodules.">303 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/fstats_distributions.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">fstats_distributions</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_function">distribution_function</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_property">distribution_property</a>
+        </div>
+      </div>
+    </div>
+
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#types-0"
+         aria-expanded="false" aria-controls="types-0">
+         <h4 class="card-header bg-primary text-white">Derived Types</h4>
+      </a>
+      <div id="types-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-binomial_distribution">binomial_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-chi_squared_distribution">chi_squared_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-distribution">distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-f_distribution">f_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-normal_distribution">normal_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-t_distribution">t_distribution</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
+                  <li class="list-inline-item"><a href='fstats_helper_routines.html'>fstats_helper_routines</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      
+      <br>
+
+
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-distribution_function"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public pure elemental function distribution_function(this, x) result(rst)  
+
+    </h3>
+  <p>Defines the interface for a probability distribution function.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-this"></span>
+              class(<a href='..\type\distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~15"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value at which to evaluate the function.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The value of the function.</p>
+
+        </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-distribution_property"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public pure function distribution_property(this) result(rst)  
+
+    </h3>
+  <p>Computes the value of a distribution property.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-this~2"></span>
+              class(<a href='..\type\distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The property value.</p>
+
+        </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+        <section>
+          <h2>Derived Types</h2>
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-binomial_distribution"></span>
+      <h3>
+        type, public, extends(<a href='..\type\distribution.html'>distribution</a>)&nbsp;::&nbsp;
+        <a href='..\type\binomial_distribution.html'>binomial_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a binomial distribution.  The binomial distribution describes
+the probability p of getting k successes in n independent trials.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~12"></span>
+              integer(kind=int32),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The number of independent trials.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The success probability for each trial.  This parameter must
+exist on the set [0, 1].</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\binomial_distribution.html#boundprocedure-cdf~6'>cdf</a></strong> => bd_cdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\binomial_distribution.html#boundprocedure-mean~6'>mean</a></strong> => bd_mean</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\binomial_distribution.html#boundprocedure-median~6'>median</a></strong> => bd_median</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\binomial_distribution.html#boundprocedure-mode~6'>mode</a></strong> => bd_mode</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\binomial_distribution.html#boundprocedure-pdf~6'>pdf</a></strong> => bd_pdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\binomial_distribution.html#boundprocedure-variance~6'>variance</a></strong> => bd_variance</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-chi_squared_distribution"></span>
+      <h3>
+        type, public, extends(<a href='..\type\distribution.html'>distribution</a>)&nbsp;::&nbsp;
+        <a href='..\type\chi_squared_distribution.html'>chi_squared_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a Chi-squared distribution.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-dof~2"></span>
+              integer(kind=int32),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The number of degrees of freedom.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-cdf~5'>cdf</a></strong> => cs_cdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-mean~5'>mean</a></strong> => cs_mean</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-median~5'>median</a></strong> => cs_median</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-mode~5'>mode</a></strong> => cs_mode</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-pdf~5'>pdf</a></strong> => cs_pdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-variance~5'>variance</a></strong> => cs_variance</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-distribution"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='..\type\distribution.html'>distribution</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a probability distribution.</p>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure(<a href='..\interface\distribution_function.html'>distribution_function</a>), public, deferred, pass ::
+  <strong><a href='..\type\distribution.html#boundprocedure-cdf'>cdf</a></strong></td>
+                <td>..\..\<p>Computes the cumulative distribution function.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
+  <strong><a href='..\type\distribution.html#boundprocedure-mean'>mean</a></strong></td>
+                <td>..\..\<p>Computes the mean of the distribution.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
+  <strong><a href='..\type\distribution.html#boundprocedure-median'>median</a></strong></td>
+                <td>..\..\<p>Computes the median of the distribution.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
+  <strong><a href='..\type\distribution.html#boundprocedure-mode'>mode</a></strong></td>
+                <td>..\..\<p>Computes the mode of the distribution.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(<a href='..\interface\distribution_function.html'>distribution_function</a>), public, deferred, pass ::
+  <strong><a href='..\type\distribution.html#boundprocedure-pdf'>pdf</a></strong></td>
+                <td>..\..\<p>Computes the probability density function.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
+  <strong><a href='..\type\distribution.html#boundprocedure-variance'>variance</a></strong></td>
+                <td>..\..\<p>Computes the variance of the distribution.<\p></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-f_distribution"></span>
+      <h3>
+        type, public, extends(<a href='..\type\distribution.html'>distribution</a>)&nbsp;::&nbsp;
+        <a href='..\type\f_distribution.html'>f_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines an F-distribution.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-d1"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>d1</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The measure of degrees of freedom for the first data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-d2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>d2</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The measure of degrees of freedom for the second data set.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\f_distribution.html#boundprocedure-cdf~4'>cdf</a></strong> => fd_cdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\f_distribution.html#boundprocedure-mean~4'>mean</a></strong> => fd_mean</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\f_distribution.html#boundprocedure-median~4'>median</a></strong> => fd_median</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\f_distribution.html#boundprocedure-mode~4'>mode</a></strong> => fd_mode</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\f_distribution.html#boundprocedure-pdf~4'>pdf</a></strong> => fd_pdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\f_distribution.html#boundprocedure-variance~4'>variance</a></strong> => fd_variance</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-normal_distribution"></span>
+      <h3>
+        type, public, extends(<a href='..\type\distribution.html'>distribution</a>)&nbsp;::&nbsp;
+        <a href='..\type\normal_distribution.html'>normal_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a normal distribution.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-mean_value"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>mean_value</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The mean value of the distribution.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-standard_deviation"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>standard_deviation</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The standard deviation of the distribution.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-cdf~3'>cdf</a></strong> => nd_cdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-mean~3'>mean</a></strong> => nd_mean</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-median~3'>median</a></strong> => nd_median</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-mode~3'>mode</a></strong> => nd_mode</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-pdf~3'>pdf</a></strong> => nd_pdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-standardize'>standardize</a></strong> => nd_standardize</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-variance~3'>variance</a></strong> => nd_variance</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-t_distribution"></span>
+      <h3>
+        type, public, extends(<a href='..\type\distribution.html'>distribution</a>)&nbsp;::&nbsp;
+        <a href='..\type\t_distribution.html'>t_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines Student's T-Distribution.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-dof"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The number of degrees of freedom.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\t_distribution.html#boundprocedure-cdf~2'>cdf</a></strong> => td_cdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\t_distribution.html#boundprocedure-mean~2'>mean</a></strong> => td_mean</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\t_distribution.html#boundprocedure-median~2'>median</a></strong> => td_median</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\t_distribution.html#boundprocedure-mode~2'>mode</a></strong> => td_mode</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\t_distribution.html#boundprocedure-pdf~2'>pdf</a></strong> => td_pdf</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\t_distribution.html#boundprocedure-variance~2'>variance</a></strong> => td_variance</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2024 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2024-03-26 07:52              </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>

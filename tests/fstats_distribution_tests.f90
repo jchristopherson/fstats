@@ -147,4 +147,44 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function binomial_distribution_test_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 100
+        real(real64), parameter :: p = 0.25d0
+        integer(int32), parameter :: npts = 9
+        real(real64) :: x(npts), pmf(npts), cdf(npts), pmfans(npts), cdfans(npts)
+        type(binomial_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+        dist%n = n
+        dist%p = p
+        x = [1.0d1, 2.0d1, 3.0d1, 4.0d1, 5.0d1, 6.0d1, 7.0d1, 8.0d1, 9.0d1]
+        pmfans = [ &
+            9.40196486279606d-05, 4.93006403376772d-02, 4.57538076104868d-02, &
+            3.62626791645609d-04, 4.50731087508638d-08, 1.04000348155055d-13, &
+            3.76337116402577d-21, 1.16299347183680d-30, 6.36089528619433d-43]
+        cdfans = [ &
+            0.000137100563168d0, 0.148831050442992d0, 0.896212761043913d0, &
+            0.999676034583683d0, 0.999999978688084d0, 0.999999999999971d0, &
+            1.0d0, 1.0d0, 1.0d0]
+
+        ! Tests
+        pmf = dist%pdf(x)
+        if (.not.is_equal(pmf, pmfans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Binomial distribution PMF test."
+        end if
+
+        cdf = dist%cdf(x)
+        if (.not.is_equal(cdf, cdfans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Binomial distribution CDF test."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

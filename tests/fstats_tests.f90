@@ -27,6 +27,9 @@ program tests
     local = chi_squared_distribution_test_1()
     if (.not.local) overall = .false.
 
+    local = binomial_distribution_test_1()
+    if (.not.local) overall = .false.
+
     ! Statistics Tests
     local = mean_test_1()
     if (.not.local) overall = .false.
@@ -76,6 +79,9 @@ program tests
     local = regression_test_1()
     if (.not.local) overall = .false.
 
+    local = bootstrap_regression_test_1()
+    if (.not.local) overall = .false.
+
     ! Experimental Design
     local = get_full_matrix_size_test_1()
     if (.not.local) overall = .false.
@@ -93,8 +99,23 @@ program tests
     local = test_nl_least_squares()
     if (.not.local) overall = .false.
 
+    local = test_bootstrap_nl_least_squares()
+    if (.not.local) overall = .false.
+
     ! Allan Variance Tests
     local = test_allan_variance()
+    if (.not.local) overall = .false.
+
+    ! Trimmed Mean Tests
+    local = trimmed_mean_test_1()
+    if (.not.local) overall = .false.
+
+    ! Covariance Tests
+    local = test_covariance_1()
+    if (.not.local) overall = .false.
+
+    ! Correlation Tests
+    local = test_correlation_1()
     if (.not.local) overall = .false.
 
     ! End

@@ -74,20 +74,20 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p> 8.7% of total for derived types.</p>Including implementation: 10 statements,  8.7% of total for derived types.">10 statements</a>
+                 title="<p> 7.1% of total for derived types.</p>Including implementation: 55 statements, 15.1% of total for derived types.">10 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats.f90"> Source File</a>
+              <a href="../src/fstats_distributions.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='..\sourcefile\fstats.f90.html'>fstats.f90</a></li>
-                <li class="breadcrumb-item"><a href='..\module\fstats.html'>fstats</a></li>
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_distributions.html'>fstats_distributions</a></li>
             <li class="breadcrumb-item active" aria-current="page">t_distribution</li>
           </ol>
         </nav>
@@ -216,17 +216,15 @@
     </div>
     <ul class="list-group">
         <li class="list-group-item">
-              <h3>interface </h3>
                   <h3>
-    private pure elemental module function td_cdf(this, x) result(rst)  
+    private pure elemental function td_cdf(this, x) result(rst)  
 </h3>
 
   <p>Computes the cumulative distribution function.</p>
 <p>The CDF for Student's T-Distribution is given as
 <script type="math/tex; mode=display"> F(t) = \int_{-\infty}^{t} f(u) \,du = 1 - \frac{1}{2} I_{x(t)}
 \left( \frac{\nu}{2}, \frac{1}{2} \right) </script>
-where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </script>
-</p>
+where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </script>.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -295,9 +293,8 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
     </div>
     <ul class="list-group">
         <li class="list-group-item">
-              <h3>interface </h3>
                   <h3>
-    private pure module function td_mean(this) result(rst)  
+    private pure function td_mean(this) result(rst)  
 </h3>
 
   <p>Computes the mean of the distribution.</p>
@@ -354,9 +351,8 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
     </div>
     <ul class="list-group">
         <li class="list-group-item">
-              <h3>interface </h3>
                   <h3>
-    private pure module function td_median(this) result(rst)  
+    private pure function td_median(this) result(rst)  
 </h3>
 
   <p>Computes the median of the distribution.</p>
@@ -394,7 +390,7 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The median.</p>
+    
 
         </li>
     </ul>
@@ -413,9 +409,8 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
     </div>
     <ul class="list-group">
         <li class="list-group-item">
-              <h3>interface </h3>
                   <h3>
-    private pure module function td_mode(this) result(rst)  
+    private pure function td_mode(this) result(rst)  
 </h3>
 
   <p>Computes the mode of the distribution.</p>
@@ -472,17 +467,15 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
     </div>
     <ul class="list-group">
         <li class="list-group-item">
-              <h3>interface </h3>
                   <h3>
-    private pure elemental module function td_pdf(this, x) result(rst)  
+    private pure elemental function td_pdf(this, x) result(rst)  
 </h3>
 
   <p>Computes the probability density function.</p>
 <p>The PDF for Student's T-Distribution is given as 
 <script type="math/tex; mode=display"> f(t) = \frac{ \Gamma \left( \frac{\nu + 1}{2} \right) }
 { \sqrt{\nu \pi} \Gamma \left( \frac{\nu}{2} \right) } 
-\left( 1 + \frac{t^2}{\nu} \right)^{-(\nu + 1) / 2} </script>
-</p>
+\left( 1 + \frac{t^2}{\nu} \right)^{-(\nu + 1) / 2} </script>.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -551,9 +544,8 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
     </div>
     <ul class="list-group">
         <li class="list-group-item">
-              <h3>interface </h3>
                   <h3>
-    private pure module function td_variance(this) result(rst)  
+    private pure function td_variance(this) result(rst)  
 </h3>
 
   <p>Computes the variance of the distribution.</p>
@@ -616,7 +608,7 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-02-28 15:10              </p>
+ on 2024-03-26 07:52              </p>
           </div>
         </div>
         <br>
