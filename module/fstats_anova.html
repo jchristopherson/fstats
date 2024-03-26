@@ -1,0 +1,922 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="FSTATS is a modern Fortran statistical library containing routines for computing basic statistical properties, hypothesis testing, regression, special functions, and experimental design.">
+    <meta name="author" content="Jason Christopherson" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>fstats_anova &ndash; FSTATS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">FSTATS </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>fstats_anova
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 7.2% of total for modules and submodules.">201 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/fstats_anova.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_anova.f90.html'>fstats_anova.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">fstats_anova</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_anova.html#interface-anova">anova</a>
+        </div>
+      </div>
+    </div>
+
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#types-0"
+         aria-expanded="false" aria-controls="types-0">
+         <h4 class="card-header bg-primary text-white">Derived Types</h4>
+      </a>
+      <div id="types-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_anova.html#type-anova_factor">anova_factor</a>
+            <a class="list-group-item" href="../module/fstats_anova.html#type-single_factor_anova_table">single_factor_anova_table</a>
+            <a class="list-group-item" href="../module/fstats_anova.html#type-two_factor_anova_table">two_factor_anova_table</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item">ferror</li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      
+      <br>
+
+
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-anova"></span>
+      <h3>public        interface <a href='..\interface\anova.html'>anova</a> 
+      </h3>
+    </div>
+      <div class="card-body">
+        <p>Performs an analysis of variance (ANOVA) on the supplied data 
+set.</p>
+<p>The following example illustrates a single-factor ANOVA on a 
+data set.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">program </span><span class="n">example</span>
+<span class="w">    </span><span class="k">use </span><span class="n">iso_fortran_env</span>
+<span class="w">    </span><span class="k">use </span><span class="n">fstats</span>
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="w">    </span><span class="c">! Local Variables</span>
+<span class="w">    </span><span class="kt">character</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">achar</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">single_factor_anova_table</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tbl</span>
+
+<span class="w">    </span><span class="c">! Define the data</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">reshape</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="p">[</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="mf">3.086d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.082d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.069d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.072d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.045d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.070d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.079d3</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="mf">3.050d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.062d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.062d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.075d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.061d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.063d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.038d3</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="mf">3.070d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.062d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.070d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.049d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.042d3</span><span class="p">,</span><span class="w"> </span><span class="mf">3.063d3</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="p">],</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! Perform the ANOVA</span>
+<span class="w">    </span><span class="n">tbl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">anova</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! Print out the table</span>
+<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Description&quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;DOF&quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;Sum of Sq.&quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;Variance&quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;F-Stat&quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="s2">&quot;P-Value&quot;</span>
+<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(AF2.0AF5.1AF5.1AF5.3AF5.3)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Main Factor: &quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">main_factor</span><span class="p">%</span><span class="n">dof</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">main_factor</span><span class="p">%</span><span class="n">sum_of_squares</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">main_factor</span><span class="p">%</span><span class="n">variance</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">main_factor</span><span class="p">%</span><span class="n">f_statistic</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">main_factor</span><span class="p">%</span><span class="n">probability</span>
+
+<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(AF3.0AF6.1AF5.1)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Within: &quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">within_factor</span><span class="p">%</span><span class="n">dof</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">within_factor</span><span class="p">%</span><span class="n">sum_of_squares</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">within_factor</span><span class="p">%</span><span class="n">variance</span>
+
+<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(AF3.0AF6.1AF5.1)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Total: &quot;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">total_dof</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">total_sum_of_squares</span><span class="p">,</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">tab</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">        </span><span class="n">tbl</span><span class="p">%</span><span class="n">total_variance</span>
+
+<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(AF6.1)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Overall Mean: &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tbl</span><span class="p">%</span><span class="n">overall_mean</span>
+<span class="k">end program</span>
+</code></pre></div>
+
+<p>The above program produces the following output.</p>
+<div class="codehilite"><pre><span></span><code>Description     DOF     Sum of Sq.      Variance        F-Stat  P-Value
+Main Factor:    1.      352.8           352.8           2.147   0.160
+Within:         18.     2958.2          164.3
+Total:          19.     3311.0          174.3
+Overall Mean: 3063.5
+</code></pre></div>
+
+<p>See Also</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Analysis_of_variance">Wikipedia</a></li>
+<li><a href="https://www.spcforexcel.com/knowledge/root-cause-analysis/single-factor-anova">SPC Excel Single Factor ANOVA</a></li>
+<li><a href="https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1">SPC Excel Gage R&amp;R</a></li>
+<li><a href="https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1">SPC Excel Understanding Regression Statistics</a></li>
+<li><a href="https://www.itl.nist.gov/div898/handbook/prc/section4/prc427.htm">NIST - Two Way ANOVA</a></li>
+</ul>
+      </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private  function anova_1_factor(x) result(rst)  
+
+    </h3>
+  <p>Performs an analysis of variance (ANOVA) on the supplied data set.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~51"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:,:)</td>
+            <td>
+                <p>An M-by-N matrix containing the M replications of the N test 
+points of interest.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\single_factor_anova_table.html'>single_factor_anova_table</a>)</small>
+    </h4>
+    <p>A single_factor_anova_table instance containing the ANOVA results.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private  function anova_2_factor(x) result(rst)  
+
+    </h3>
+  <p>Performs an analysis of variance (ANOVA) on the supplied data set.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~52"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:,:,:)</td>
+            <td>
+                <p>An M-by-N-by-K array containing the M replications of the
+N first factor results, and the K second factor results.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\two_factor_anova_table.html'>two_factor_anova_table</a>)</small>
+    </h4>
+    <p>A two_factor_anova_table instance containing the ANOVA results.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private  function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)  
+
+    </h3>
+  <p>Performs an analysis of variance (ANOVA) on the supplied data set.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nmodelparams"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nmodelparams</strong></td>
+            <td>
+                <p>The number of model parameters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ymeas"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ymeas</strong>(:)</td>
+            <td>
+                <p>An N-element array containing the measured dependent variable data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ymod~5"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ymod</strong>(:)</td>
+            <td>
+                <p>An N-element array containing the modeled dependent variable data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-err~24"></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if ymeas and ymod are not the 
+  same length.
+- FS_MEMORY_ERROR: Occurs if a memory error is encountered.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\single_factor_anova_table.html'>single_factor_anova_table</a>)</small>
+    </h4>
+    <p>A single_factor_anova_table instance containing the ANOVA results.</p>
+
+          </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+        <section>
+          <h2>Derived Types</h2>
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-anova_factor"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='..\type\anova_factor.html'>anova_factor</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines an ANOVA factor result.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-dof~9"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dof</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The number of degrees of freedome.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f_statistic"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f_statistic</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The F-statistic.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-probability~3"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>probability</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The variance probability term.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-sum_of_squares"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>sum_of_squares</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The sum of the squares.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-variance~7"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>variance</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The estimate of variance.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-single_factor_anova_table"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='..\type\single_factor_anova_table.html'>single_factor_anova_table</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a single-factor ANOVA results table. </p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-main_factor"></span>
+              type(<a href='..\type\anova_factor.html'>anova_factor</a>),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>main_factor</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The main, or main factor, results.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-overall_mean"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>overall_mean</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The overall mean value.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-total_dof"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>total_dof</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The total number of degrees of freedom.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-total_sum_of_squares"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>total_sum_of_squares</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The total sum of squares. </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-total_variance"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>total_variance</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The total variance estimate.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-within_factor"></span>
+              type(<a href='..\type\anova_factor.html'>anova_factor</a>),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>within_factor</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The within-treatement (error) results.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-two_factor_anova_table"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='..\type\two_factor_anova_table.html'>two_factor_anova_table</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a two-factor ANOVA results table.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-interaction"></span>
+              type(<a href='..\type\anova_factor.html'>anova_factor</a>),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>interaction</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The interaction effects.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-main_factor_1"></span>
+              type(<a href='..\type\anova_factor.html'>anova_factor</a>),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>main_factor_1</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The first main-factor results.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-main_factor_2"></span>
+              type(<a href='..\type\anova_factor.html'>anova_factor</a>),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>main_factor_2</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The second main-factor results.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-overall_mean~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>overall_mean</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The overall mean value.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-total_dof~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>total_dof</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The total number of degrees of freedom.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-total_sum_of_squares~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>total_sum_of_squares</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The total sum of squares.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-total_variance~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>total_variance</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The total variance estimate.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-within_factor~2"></span>
+              type(<a href='..\type\anova_factor.html'>anova_factor</a>),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>within_factor</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The within (error) factor results. </p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2024 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2024-03-26 07:52              </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>
