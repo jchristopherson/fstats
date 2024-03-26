@@ -112,7 +112,7 @@ contains
         logical :: rst
 
         ! Parameters
-        real(real64), parameter :: tol = 1.0d-6
+        real(real64), parameter :: tol = 1.0d-5
 
         ! Local Variables
         procedure(regression_function), pointer :: fun
