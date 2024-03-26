@@ -7,6 +7,7 @@ module fstats_regression
     use fstats_descriptive_statistics
     use fstats_distributions
     use fstats_special_functions
+    use fstats_hypothesis
     implicit none
     private
     public :: iteration_controls
@@ -15,6 +16,9 @@ module fstats_regression
     public :: regression_function
     public :: iteration_update
     public :: regression_statistics
+    public :: r_squared
+    public :: adjusted_r_squared
+    public :: correlation
     public :: coefficient_matrix
     public :: covariance_matrix
     public :: linear_least_squares
@@ -148,6 +152,146 @@ module fstats_regression
     end interface
 
 contains
+
+! ------------------------------------------------------------------------------
+function r_squared(x, xm, err) result(rst)
+    !! Computes the R-squared value for a data set.
+    !!
+    !! The R-squared value is computed by determining the sum of the squares
+    !! of the residuals: 
+    !! $$ SS_{res} = \Sigma \left( y_i - f_i \right)^2 $$
+    !! The total sum of the squares: 
+    !! $$ SS_{tot} = \Sigma \left( y_i - \bar{y} \right)^2 $$. 
+    !! The R-squared value is then: 
+    !! $$ R^2 = 1 - \frac{SS_{res}}{SS_{tot}} $$.
+    !!
+    !! See Also:
+    !!
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination)
+    real(real64), intent(in) :: x(:)
+        !! An N-element array containing the dependent variables from 
+        !! the data set.
+    real(real64), intent(in) :: xm(:)
+        !! An N-element array containing the corresponding modeled 
+        !! values.
+    class(errors), intent(inout), optional, target :: err
+        !! A mechanism for communicating errors and warnings
+        !! to the caller.  Possible warning and error codes are as 
+        !! follows.
+        !! - FS_NO_ERROR: No errors encountered.
+        !! - FS_ARRAY_SIZE_ERROR: Occurs if x and xm are not the 
+        !!   same size.
+    real(real64) :: rst
+        !! The result.
+
+    ! Parameters
+    real(real64), parameter :: zero = 0.0d0
+    real(real64), parameter :: one = 1.0d0
+
+    ! Local Variables
+    integer(int32) :: i, n
+    real(real64) :: esum, vt
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Input Check
+    n = size(x)
+    if (size(xm) /= n) then
+        call report_array_size_error(errmgr, "r_squared_real64", "XM", n, &
+            size(xm))
+        return
+    end if
+
+    ! Process
+    esum = zero
+    do i = 1, n
+        esum = esum + (x(i) - xm(i))**2
+    end do
+    vt = variance(x) * (n - one)
+    rst = one - esum / vt
+end function
+
+! ------------------------------------------------------------------------------
+function adjusted_r_squared(p, x, xm, err) result(rst)
+    !! Computes the adjusted R-squared value for a data set.
+    !!
+    !! The adjusted R-squared provides a mechanism for tempering the effects
+    !! of extra explanatory variables on the traditional R-squared 
+    !! calculation.  It is computed by noting the sample size \( n \) and 
+    !! the number of variables \( p \).
+    !! $$ \bar{R}^2 = 1 - \left( 1 - R^2 \right) \frac{n - 1}{n - p} $$.
+    !!
+    !! See Also:
+    !!
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2)
+    integer(int32), intent(in) :: p
+        !! The number of variables.
+    real(real64), intent(in) :: x(:)
+        !! An N-element array containing the dependent variables from 
+        !! the data set.
+    real(real64), intent(in) :: xm(:)
+        !! An N-element array containing the corresponding modeled 
+        !! values.
+    class(errors), intent(inout), optional, target :: err
+        !! A mechanism for communicating errors and warnings
+        !! to the caller.  Possible warning and error codes are as 
+        !! follows.
+        !! - FS_NO_ERROR: No errors encountered.
+        !! - FS_ARRAY_SIZE_ERROR: Occurs if x and xm are not the 
+        !!   same size.
+    real(real64) :: rst
+        !! The result.
+
+    ! Local Variables
+    integer(int32) :: n
+    real(real64) :: r2
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+
+    ! Parameters
+    real(real64), parameter :: one = 1.0d0
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(x)
+
+    ! Process
+    r2 = r_squared(x, xm, errmgr)
+    if (errmgr%has_error_occurred()) return
+    rst = one - (one - r2) * (n - one) / (n - p - one)
+end function
+
+! ------------------------------------------------------------------------------
+pure function correlation(x, y) result(rst)
+    !! Computes the sample correlation coefficient (an estimate to the 
+    !! population Pearson correlation) as follows.
+    !!
+    !! $$ r_{xy} = \frac{cov(x, y)}{s_{x} s_{y}} $$.
+    !!
+    !! Where, \( s_{x} \) & \( s_{y} \) are the sample standard deviations of
+    !! x and y respectively.
+    real(real64), intent(in), dimension(:) :: x
+        !! The first N-element data set.
+    real(real64), intent(in), dimension(size(x)) :: y
+        !! The second N-element data set.
+    real(real64) :: rst
+        !! The correlation coefficient.
+
+    ! Process
+    rst = covariance(x, y) / (standard_deviation(x) * standard_deviation(y))
+end function
+
 ! ------------------------------------------------------------------------------
 subroutine coefficient_matrix(order, intercept, x, c, err)
     !! Computes the coefficient matrix \( X \) to the linear 

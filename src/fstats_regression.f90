@@ -279,7 +279,7 @@ pure function correlation(x, y) result(rst)
     !!
     !! $$ r_{xy} = \frac{cov(x, y)}{s_{x} s_{y}} $$.
     !!
-    !! Where, $$ s_{x} $$ & $$ s_{y} $$ are the sample standard deviations of
+    !! Where, \( s_{x} \) & \( s_{y} \) are the sample standard deviations of
     !! x and y respectively.
     real(real64), intent(in), dimension(:) :: x
         !! The first N-element data set.
