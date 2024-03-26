@@ -387,11 +387,6 @@ subroutine bootstrap_linear_least_squares(order, intercept, x, y, &
         ! Compute the fit of the perturbed data set
         call linear_least_squares(order, intercept, x, yLocal, &
             allcoeffs(:,i), fLocal, rLocal, alpha = alph)
-
-        ! Clean up allocated arrays
-        if (allocated(fLocal)) deallocate(fLocal)
-        if (allocated(yLocal)) deallocate(yLocal)
-        if (allocated(rLocal)) deallocate(rLocal)
     end do
 !$OMP END PARALLEL DO
 #else
@@ -587,7 +582,7 @@ subroutine bootstrap_nonlinear_least_squares(fun, x, y, params, ymod, resid, &
 
     ! Cycle over each data set and perform the fit
 #ifdef USEOPENMP
-!$OMP PARALLEL DO
+!$OMP PARALLEL DO PRIVATE(fLocal, yLocal, rLocal)
     do i = 2, ns
         ! Allocate local arrays on a per-thread basis
         if (.not.allocated(fLocal)) allocate(fLocal(n))
@@ -601,11 +596,6 @@ subroutine bootstrap_nonlinear_least_squares(fun, x, y, params, ymod, resid, &
         call nonlinear_least_squares(fun, x, yLocal, allcoeffs(:,i), fLocal, &
             rLocal, weights = weights, maxp = maxp, minp = minp, alpha = alph, &
             controls = controls, settings = settings, info = info)
-
-        ! Clean up allocated arrays
-        if (allocated(fLocal)) deallocate(fLocal)
-        if (allocated(yLocal)) deallocate(yLocal)
-        if (allocated(rLocal)) deallocate(rLocal)
     end do
 !$OMP END PARALLEL DO
 #else
