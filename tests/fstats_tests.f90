@@ -73,7 +73,7 @@ program tests
     local = incomplete_gamma_test_1()
     if (.not.local) overall = .false.
 
-    local = coefficient_matrix_test_1()
+    local = design_matrix_test_1()
     if (.not.local) overall = .false.
 
     local = regression_test_1()

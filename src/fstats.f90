@@ -49,7 +49,7 @@ module fstats
     public :: digamma
     public :: incomplete_gamma_upper
     public :: incomplete_gamma_lower
-    public :: coefficient_matrix
+    public :: design_matrix
     public :: covariance_matrix
     public :: linear_least_squares
     public :: regression_statistics
