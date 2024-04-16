@@ -319,6 +319,9 @@ subroutine bartletts_test(x, stat, p)
     !! \left(n_{i} - 1 \right) \ln(S_{i}^{2})}{1 + 
     !! \frac{1}{3 \left( k - 1 \right)} \left( \sum_{i = 1}^{k} 
     !! \left( \frac{1}{n_{i} - 1} \right) - \frac{1}{N - k} \right)} $$
+    !!
+    !! Where \( N = \sum_{i = 1}^{k} n_{i} \) and \( S_{p}^{2} \) is the pooled
+    !! variance.
     type(array_container), intent(in), dimension(:) :: x
         !! The arrays of data to analyze.
     real(real64), intent(out) :: stat

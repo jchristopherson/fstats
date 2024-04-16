@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="30.9% of total for modules and submodules.">861 statements</a>
+                 title="30.1% of total for modules and submodules.">861 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -177,8 +177,8 @@
       </a>
       <div id="subs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/fstats_regression.html#proc-coefficient_matrix">coefficient_matrix</a>
             <a class="list-group-item" href="../module/fstats_regression.html#proc-covariance_matrix">covariance_matrix</a>
+            <a class="list-group-item" href="../module/fstats_regression.html#proc-design_matrix">design_matrix</a>
             <a class="list-group-item" href="../module/fstats_regression.html#proc-jacobian">jacobian</a>
             <a class="list-group-item" href="../module/fstats_regression.html#proc-linear_least_squares">linear_least_squares</a>
             <a class="list-group-item" href="../module/fstats_regression.html#proc-nonlinear_least_squares">nonlinear_least_squares</a>
@@ -207,15 +207,15 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item">linalg</li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
                   <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
-                  <li class="list-inline-item">blas</li>
                   <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item">blas</li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
                   <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
+                  <li class="list-inline-item">linalg</li>
                   <li class="list-inline-item">ferror</li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
               </ul>
             </li>
         </ul>
@@ -325,7 +325,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-iter"></span>
+              <span class="anchor" id="variable-iter~2"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -355,7 +355,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~4"></span>
+              <span class="anchor" id="variable-resid~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -463,7 +463,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~3"></span>
+              <span class="anchor" id="variable-resid~4"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -1049,7 +1049,7 @@ determined by the regression process.</p><a href="../type/regression_statistics.
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-probability~2"></span>
+              <span class="anchor" id="variable-probability~3"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1066,7 +1066,7 @@ important.  A statistically important coefficient will have a
 low probability (p-value), typically 0.05 or lower; however, a 
 p-value of up to ~0.2 may be acceptable dependent upon the 
 problem.  Typically any p-value larger than ~0.2 indicates the 
-parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability~3" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -1152,7 +1152,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~32"></span>
+              <span class="anchor" id="variable-x~30"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1184,7 +1184,7 @@ values.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~4"></span>
+              <span class="anchor" id="variable-err~9"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1235,7 +1235,7 @@ model.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~6"></span>
+              <span class="anchor" id="variable-resid~7"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1265,7 +1265,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~7"></span>
+              <span class="anchor" id="variable-c~8"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1280,7 +1280,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~6"></span>
+              <span class="anchor" id="variable-alpha~7"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1297,7 +1297,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~8"></span>
+              <span class="anchor" id="variable-err~13"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1349,7 +1349,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~33"></span>
+              <span class="anchor" id="variable-x~31"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1364,7 +1364,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~4"></span>
+              <span class="anchor" id="variable-y~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1409,7 +1409,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~31"></span>
+              <span class="anchor" id="variable-x~29"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1441,7 +1441,7 @@ values.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~3"></span>
+              <span class="anchor" id="variable-err~8"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1477,15 +1477,94 @@ follows.
         <section>
           <h2>Subroutines</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-coefficient_matrix"></span> <h3>public  subroutine <a href='..\proc\coefficient_matrix.html'>coefficient_matrix</a>(order, intercept, x, c, err)  
+    <div class="card-header codesum"><span class="anchor" id="proc-covariance_matrix"></span> <h3>public  subroutine <a href='..\proc\covariance_matrix.html'>covariance_matrix</a>(x, c, err)  
 </h3></div>
     <div class="card-body">
           
-  <p>Computes the coefficient matrix <script type="math/tex"> X </script> to the linear 
+  <p>Computes the covariance matrix <script type="math/tex"> C </script> where 
+<script type="math/tex"> C = \left( X^{T} X \right)^{-1} </script> and <script type="math/tex"> X </script> is computed
+by design_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~33"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:,:)</td>
+            <td>
+<p>An M-by-N matrix containing the formatted independent data
+ matrix <script type="math/tex"> X </script> as computed by design_matrix.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-c~6"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>c</strong>(:,:)</td>
+            <td>
+<p>The N-by-N covariance matrix.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-err~11"></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not 
+     sized correctly.
+- FS_MEMORY_ERROR: Occurs if there is a memory allocation 
+     error.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-design_matrix"></span> <h3>public  subroutine <a href='..\proc\design_matrix.html'>design_matrix</a>(order, intercept, x, c, err)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes the design matrix <script type="math/tex"> X </script> for the linear 
 least-squares regression problem of <script type="math/tex"> X \beta = y </script>, where 
-<script type="math/tex"> X </script> is the coefficient matrix computed here, <script type="math/tex"> \beta </script> is 
+<script type="math/tex"> X </script> is the matrix computed here, <script type="math/tex"> \beta </script> is 
 the vector of coefficients to be determined, and <script type="math/tex"> y </script> is the 
-vector of measured dependent variables.</p><a href="../proc/coefficient_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+vector of measured dependent variables.</p><a href="../proc/design_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -1532,7 +1611,7 @@ as part of the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~34"></span>
+              <span class="anchor" id="variable-x~32"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1548,7 +1627,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~4"></span>
+              <span class="anchor" id="variable-c~5"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1565,7 +1644,7 @@ however, if intercept is false, K must equal order.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~5"></span>
+              <span class="anchor" id="variable-err~10"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1580,85 +1659,6 @@ caller.  Possible warning and error codes are as follows.
 - FS_NO_ERROR: No errors encountered.
 - FS_ARRAY_SIZE_ERROR: Occurs if c is not properly sized.
 - FS_INVALID_INPUT_ERROR: Occurs if order is less than 1.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-covariance_matrix"></span> <h3>public  subroutine <a href='..\proc\covariance_matrix.html'>covariance_matrix</a>(x, c, err)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the covariance matrix <script type="math/tex"> C </script> where 
-<script type="math/tex"> C = \left( X^{T} X \right)^{-1} </script> and <script type="math/tex"> X </script> is computed
-by coefficient_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~35"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong>(:,:)</td>
-            <td>
-<p>An M-by-N matrix containing the formatted independent data
- matrix <script type="math/tex"> X </script> as computed by coefficient_matrix.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-c~5"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>c</strong>(:,:)</td>
-            <td>
-<p>The N-by-N covariance matrix.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-err~6"></span>
-              class(errors),
-            </td>
-<td>intent(inout),</td>
-              <td>optional,</td>            <td>
-              target
-            </td>
-            <td>::</td>
-            <td><strong>err</strong></td>
-            <td>
-<p>A mechanism for communicating errors and warnings to the 
-caller.  Possible warning and error codes are as follows.
-- FS_NO_ERROR: No errors encountered.
-- FS_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not 
-     sized correctly.
-- FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-     error.</p>
             </td>
         </tr>
     </tbody>
@@ -1815,7 +1815,7 @@ root of machine precision.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~9"></span>
+              <span class="anchor" id="variable-err~14"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1894,7 +1894,7 @@ the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~36"></span>
+              <span class="anchor" id="variable-x~34"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1910,7 +1910,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~5"></span>
+              <span class="anchor" id="variable-y~7"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1941,7 +1941,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ymod~3"></span>
+              <span class="anchor" id="variable-ymod~4"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1956,7 +1956,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~5"></span>
+              <span class="anchor" id="variable-resid~6"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1989,7 +1989,7 @@ intercept is set to false, M = ORDER.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~5"></span>
+              <span class="anchor" id="variable-alpha~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -2006,7 +2006,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~7"></span>
+              <span class="anchor" id="variable-err~12"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -2069,7 +2069,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~37"></span>
+              <span class="anchor" id="variable-x~35"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -2084,7 +2084,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~6"></span>
+              <span class="anchor" id="variable-y~8"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -2116,7 +2116,7 @@ parameters.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ymod~4"></span>
+              <span class="anchor" id="variable-ymod~5"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -2132,7 +2132,7 @@ be written.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~7"></span>
+              <span class="anchor" id="variable-resid~8"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -2217,7 +2217,7 @@ to return statistics about the fit for each parameter.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~7"></span>
+              <span class="anchor" id="variable-alpha~8"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -2296,7 +2296,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~10"></span>
+              <span class="anchor" id="variable-err~15"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -2348,7 +2348,7 @@ caller.  Possible warning and error codes are as follows.
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-03-26 07:52              </p>
+ on 2024-04-16 13:46              </p>
           </div>
         </div>
         <br>

@@ -3,6 +3,7 @@ module fstats_descriptive_statistics
     use linalg, only : sort
     use ferror
     use fstats_errors
+    use fstats_types
     implicit none
     private
     public :: mean
@@ -12,7 +13,13 @@ module fstats_descriptive_statistics
     public :: quantile
     public :: trimmed_mean
     public :: covariance
+    public :: pooled_variance
     
+    interface pooled_variance
+        !! Computes the pooled estimate of variance.
+        module procedure :: pooled_variance_1
+        module procedure :: pooled_variance_2
+    end interface
 contains
 ! ------------------------------------------------------------------------------
 pure function mean(x) result(rst)
@@ -235,6 +242,54 @@ pure function covariance(x, y) result(rst)
         ! Compute the covariance
         rst = sum((x - meanX) * (y - meanY)) / (n - one)
     end if
+end function
+
+! ------------------------------------------------------------------------------
+pure function pooled_variance_1(si, ni) result(rst)
+    !! Computes the pooled estimate of variance.
+    real(real64), intent(in), dimension(:) :: si
+        !! An N-element array containing the estimates for each of the N
+        !! variances.
+    integer(int32), intent(in), dimension(size(si)) :: ni
+        !! An N-element array containing the number of data points in each
+        !! of the data sets used to compute the variances in si.
+    real(real64) :: rst
+        !! The pooled variance.
+
+    ! Local Variables
+    integer(int32) :: i, k, n
+
+    ! Process
+    k = size(si)
+    rst = 0.0d0
+    n = 0
+    do i = 1, k
+        n = n + ni(i)
+        rst = rst + (ni(i) - 1.0d0) * si(i)
+    end do
+    rst = rst / real(n - k, real64)
+end function
+
+pure function pooled_variance_2(x) result(rst)
+    !! Computes the pooled estimate of variance.
+    type(array_container), intent(in), dimension(:) :: x
+        !! An array of arrays of data.
+    real(real64) :: rst
+        !! The pooled variance.
+
+    ! Local Variables
+    integer(int32) :: i, k, n, ni
+
+    ! Process
+    k = size(x)
+    n = 0
+    rst = 0.0d0
+    do i = 1, k
+        ni = size(x(i)%x)
+        n = n + ni
+        rst = rst + variance(x(i)%x) * (ni - 1.0)
+    end do
+    rst = rst / real(n - k, real64)
 end function
 
 ! ------------------------------------------------------------------------------

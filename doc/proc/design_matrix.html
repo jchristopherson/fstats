@@ -10,7 +10,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>report_arrays_not_same_size_error &ndash; FSTATS</title>
+    <title>design_matrix &ndash; FSTATS</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -62,7 +62,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>report_arrays_not_same_size_error
+    <h1>design_matrix
       <small>Subroutine</small>
       
     </h1>
@@ -74,21 +74,21 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.7% of total for procedures.">12 statements</a>
+                 title=" 2.4% of total for procedures.">39 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_errors.f90"> Source File</a>
+              <a href="../src/fstats_regression.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_errors.f90.html'>fstats_errors.f90</a></li>
-                <li class="breadcrumb-item"><a href='..\module\fstats_errors.html'>fstats_errors</a></li>
-            <li class="breadcrumb-item active" aria-current="page">report_arrays_not_same_size_error</li>
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_regression.f90.html'>fstats_regression.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_regression.html'>fstats_regression</a></li>
+            <li class="breadcrumb-item active" aria-current="page">design_matrix</li>
           </ol>
         </nav>
       </div>
@@ -107,18 +107,7 @@
       <div id="sidebar">
       <h3>Contents</h3>
   
-      <div class="card mb-4">
-      <a data-bs-toggle="collapse" href="#vars-0"
-         aria-expanded="false" aria-controls="vars-0">
-         <h4 class="card-header bg-primary text-white">Variables</h4>
-      </a>
-      <div id="vars-0" class="collapse">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../proc/report_arrays_not_same_size_error.html#variable-msg~4">msg</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -144,12 +133,21 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public  subroutine report_arrays_not_same_size_error(err, fname, name1, name2, size1, size2)  
+    <h2>public  subroutine design_matrix(order, intercept, x, c, err)  
 </h2>
     
 
-    <p>Reports an error relating to two arrays not being the same size
-when they should be the same size.</p>
+    <p>Computes the design matrix <script type="math/tex"> X </script> for the linear 
+least-squares regression problem of <script type="math/tex"> X \beta = y </script>, where 
+<script type="math/tex"> X </script> is the matrix computed here, <script type="math/tex"> \beta </script> is 
+the vector of coefficients to be determined, and <script type="math/tex"> y </script> is the 
+vector of measured dependent variables.</p>
+<p>See Also</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Linear_regression">Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Vandermonde_matrix">Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Design_matrix">Wikipedia</a></li>
+</ul>
 
 
     <h3>Arguments</h3>
@@ -165,92 +163,86 @@ when they should be the same size.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~21"></span>
-              class(errors),
+              <span class="anchor" id="variable-order~2"></span>
+              integer(kind=int32),
             </td>
-<td>intent(inout)</td>
+<td>intent(in)</td>
               <td></td>            <td>
               
+            </td>
+            <td>::</td>
+            <td><strong>order</strong></td>
+            <td>
+                <p>The order of the equation to fit.  This value must be
+at least one (linear equation), but can be higher as desired.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-intercept~3"></span>
+              logical,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>intercept</strong></td>
+            <td>
+                <p>Set to true if the intercept is being computed
+as part of the regression; else, false.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~32"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+                <p>An N-element array containing the independent variable
+measurement points.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-c~5"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>c</strong>(:,:)</td>
+            <td>
+                <p>An N-by-K matrix where the results will be written.  K
+must equal order + 1 in the event intercept is true; 
+however, if intercept is false, K must equal order.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-err~10"></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
             </td>
             <td>::</td>
             <td><strong>err</strong></td>
             <td>
-                <p>The error handling object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fname~4"></span>
-              character(len=*),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>fname</strong></td>
-            <td>
-                <p>The name of the routine in which the error occurred.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-name1"></span>
-              character(len=*),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>name1</strong></td>
-            <td>
-                <p>The name of the first array.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-name2"></span>
-              character(len=*),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>name2</strong></td>
-            <td>
-                <p>The name of the second array.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-size1"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>size1</strong></td>
-            <td>
-                <p>The size of the first array.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-size2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>size2</strong></td>
-            <td>
-                <p>The size of the second array.</p>
+                <p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if c is not properly sized.
+- FS_INVALID_INPUT_ERROR: Occurs if order is less than 1.</p>
             </td>
         </tr>
     </tbody>
@@ -259,40 +251,6 @@ when they should be the same size.</p>
     <br>
 
 
-    <section>    
-      <h2>Variables</h2>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-<th></th><th scope="col">Initial</th>        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-msg~4"></span>
-              character(len=MESSAGE_SIZE),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>msg</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    </section>
-    <br>
     
     
 
