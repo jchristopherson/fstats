@@ -5,12 +5,14 @@ module fstats_hypothesis
     use fstats_special_functions
     use fstats_distributions
     use fstats_descriptive_statistics
+    use fstats_types
     private
     public :: confidence_interval
     public :: t_test_equal_variance
     public :: t_test_unequal_variance
     public :: t_test_paired
     public :: f_test
+    public :: bartletts_test
 
     interface confidence_interval
         !! Computes the confidence interval for the specified distribution.
@@ -279,13 +281,13 @@ subroutine f_test(x1, x2, stat, p, dof1, dof2)
         !! A measure of the degrees of freedom.
 
     ! Parameters
-    real(real64), parameter :: half = 0.5d0
     real(real64), parameter :: one = 1.0d0
     real(real64), parameter :: two = 2.0d0
 
     ! Local Variables
     integer(int32) :: n1, n2
-    real(real64) :: v1, v2, m1, m2, a, b, x
+    real(real64) :: v1, v2, m1, m2
+    type(f_distribution) :: dist
 
     ! Compute the F-statistic
     n1 = size(x1)
@@ -304,12 +306,61 @@ subroutine f_test(x1, x2, stat, p, dof1, dof2)
         dof2 = n1 - one
     end if
 
-    ! Compute the probability
-    a = half * dof2
-    b = half * dof1
-    x = dof2 / (dof2 + dof1 * stat)
-    p = two * regularized_beta(a, b, x)
-    if (p > one) p = two - p
+    dist%d1 = dof1
+    dist%d2 = dof2
+    p = two * (one - dist%cdf(stat))
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine bartletts_test(x, stat, p)
+    !! Computes Bartlett's test statistic as follows.
+    !!
+    !! $$ \chi^{2} = \frac{(N - k) \ln(S_{p}^{2}) \sum_{i = 1}^{k} 
+    !! \left(n_{i} - 1 \right) \ln(S_{i}^{2})}{1 + 
+    !! \frac{1}{3 \left( k - 1 \right)} \left( \sum_{i = 1}^{k} 
+    !! \left( \frac{1}{n_{i} - 1} \right) - \frac{1}{N - k} \right)} $$
+    type(array_container), intent(in), dimension(:) :: x
+        !! The arrays of data to analyze.
+    real(real64), intent(out) :: stat
+        !! The Bartlett's test statistic.
+    real(real64), intent(out) :: p
+        !! The probability value that the variances of each data set are
+        !! equivalent.  A low p-value, less than some significance level,
+        !! indicates a non-equivalance of variances.
+
+    ! Local Variables
+    integer(int32) :: i, n, k, ni
+    real(real64) :: si, sp, numer, denom
+    type(chi_squared_distribution) :: dist
+
+    ! Initialization
+    k = size(x)
+    n = 0
+    do i = 1, k
+        n = n + size(x(i)%x)
+    end do
+
+    ! Compute the statistic
+    n = 0
+    sp = 0.0d0
+    numer = 0.0d0
+    denom = 0.0d0
+    do i = 1, k
+        ni = size(x(i)%x)
+        n = n + ni
+        si = variance(x(i)%x)
+        sp = sp + (ni - 1.0d0) * si
+        numer = numer + (ni - 1.0d0) * log(variance(x(i)%x))
+        denom = denom + 1.0d0 / (ni - 1.0d0)
+    end do
+    sp = sp / real(n - k, real64)
+    stat = ((n - k) * log(sp) - numer) / &
+        (1.0d0 + (1.0d0 / (3.0d0 * k - 3.0d0)) * &
+        (denom - 1.0d0 / real(n - k, real64)))
+
+    ! Compute the p-value
+    dist%dof = k - 1
+    p = 1.0d0 - dist%cdf(stat)
 end subroutine
 
 ! ------------------------------------------------------------------------------

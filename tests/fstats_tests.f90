@@ -118,6 +118,13 @@ program tests
     local = test_correlation_1()
     if (.not.local) overall = .false.
 
+    ! Additional Tests
+    local = test_pooled_variance_1()
+    if (.not.local) overall = .false.
+
+    local = test_bartlett_1()
+    if (.not.local) overall = .false.
+
     ! End
     if (.not.overall) then
         stop 1
