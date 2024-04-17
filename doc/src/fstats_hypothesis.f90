@@ -13,6 +13,7 @@ module fstats_hypothesis
     public :: t_test_paired
     public :: f_test
     public :: bartletts_test
+    public :: levenes_test
 
     interface confidence_interval
         !! Computes the confidence interval for the specified distribution.
@@ -313,7 +314,9 @@ end subroutine
 
 ! ------------------------------------------------------------------------------
 subroutine bartletts_test(x, stat, p)
-    !! Computes Bartlett's test statistic as follows.
+    !! Computes Bartlett's test statistic and associated probability.
+    !!
+    !! The statistic is calculated as follows.
     !!
     !! $$ \chi^{2} = \frac{(N - k) \ln(S_{p}^{2}) \sum_{i = 1}^{k} 
     !! \left(n_{i} - 1 \right) \ln(S_{i}^{2})}{1 + 
@@ -322,6 +325,17 @@ subroutine bartletts_test(x, stat, p)
     !!
     !! Where \( N = \sum_{i = 1}^{k} n_{i} \) and \( S_{p}^{2} \) is the pooled
     !! variance.
+    !!
+    !! The probability is calculated as the right-tail probability of the
+    !! chi-squared distribution.
+    !!
+    !! Bartlett's test is most relevant for distributions showing strong 
+    !! normality.  For distributions lacking strong normality, consider 
+    !! Levene's test instead.
+    !!
+    !! See Also
+    !!
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Bartlett%27s_test)
     type(array_container), intent(in), dimension(:) :: x
         !! The arrays of data to analyze.
     real(real64), intent(out) :: stat
@@ -363,6 +377,88 @@ subroutine bartletts_test(x, stat, p)
 
     ! Compute the p-value
     dist%dof = k - 1
+    p = 1.0d0 - dist%cdf(stat)
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine levenes_test(x, stat, p, err)
+    !! Computes Levene's test statistic and associated probability.
+    !!
+    !! The statistic is calculated as follows.
+    !! $$ W = \frac{N - k}{k - 1} \frac{ \sum_{i = 1}^{k} N_{i} \left( Z_{i.} - 
+    !! Z{..} \right)^{2}}{ \sum_{i = 1}^{k} \sum_{j = 1}^{n_{i}} \left( Z_{ij} -
+    !! Z_{i.} \right)^{2} } $$
+    !!
+    !! As the test statistic is approximately F-distributed, the F-distribution
+    !! is used to calculate the probability term.
+    !!
+    !! See Also
+    !!
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Levene%27s_test)
+    type(array_container), intent(in), dimension(:) :: x
+        !! The arrays of data to analyze.
+    real(real64), intent(out) :: stat
+        !! The Bartlett's test statistic.
+    real(real64), intent(out) :: p
+        !! The probability value that the variances of each data set are
+        !! equivalent.  A low p-value, less than some significance level,
+        !! indicates a non-equivalance of variances.
+    class(errors), intent(inout), optional, target :: err
+
+    ! Local Variables
+    integer(int32) :: i, j, k, n, ni, flag
+    real(real64) :: numer, denom, inner, yi, z, zij
+    real(real64), allocatable, dimension(:) :: y, zt, zi
+    type(f_distribution) :: dist
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    k = size(x)
+
+    ! Local Memory Allocations
+    allocate(y(k), zi(k), stat = flag)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "levenes_test", flag)
+        return
+    end if
+
+    ! Compute the total mean
+    z = 0.0d0
+    n = 0
+    do i = 1, k
+        ni = size(x(i)%x)
+        n = n + ni
+        y(i) = mean(x(i)%x)
+        zt = abs(x(i)%x - y(i))
+        zi(i) = mean(zt)
+        z = z + zi(i) * ni
+    end do
+    z = z / n
+
+    ! Process
+    numer = 0.0d0
+    denom = 0.0d0
+    do i = 1, k
+        ni = size(x(i)%x)
+        yi = y(i)
+        numer = numer + ni * (zi(i) - z)**2
+        
+        inner = 0.0d0
+        do j = 1, ni
+            zij = abs(x(i)%x(j) - yi)
+            inner = inner + (zij - zi(i))**2
+        end do
+        denom = denom + inner
+    end do
+    stat = real((N - k) / (k - 1), real64) * (numer / denom)
+    dist%d1 = k - 1.0d0
+    dist%d2 = real(n - k, real64)
     p = 1.0d0 - dist%cdf(stat)
 end subroutine
 

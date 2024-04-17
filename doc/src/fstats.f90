@@ -80,6 +80,7 @@ module fstats
     public :: lowess
     public :: pooled_variance
     public :: bartletts_test
+    public :: levenes_test
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
