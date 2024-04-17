@@ -309,7 +309,8 @@ subroutine f_test(x1, x2, stat, p, dof1, dof2)
 
     dist%d1 = dof1
     dist%d2 = dof2
-    p = two * (one - dist%cdf(stat))
+    p = two * (one - dist%cdf(stat))! 2x because this is a two-tailed estimate
+    if (p > one) p = two - p
 end subroutine
 
 ! ------------------------------------------------------------------------------
