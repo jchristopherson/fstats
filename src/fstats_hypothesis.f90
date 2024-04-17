@@ -390,7 +390,7 @@ subroutine levenes_test(x, stat, p, err)
     !! Z_{i.} \right)^{2} } $$
     !!
     !! Where:
-    !! $$ Z_{ij} = |X_{ij} - \overline{X_{i.}} $$
+    !! $$ Z_{ij} = |X_{ij} - \overline{X_{i.}}| $$
     !! $$ Z_{i.} = \frac{1}{n_{i}} \sum_{j = 1}^{n_{i}} Z_{ij} $$ 
     !! $$ Z_{..} = \frac{1}{N} \sum_{i = 1}^{k} \sum_{j = 1}^{n_{i}} Z_{ij} $$
     !!
