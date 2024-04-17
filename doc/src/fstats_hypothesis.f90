@@ -389,6 +389,11 @@ subroutine levenes_test(x, stat, p, err)
     !! Z{..} \right)^{2}}{ \sum_{i = 1}^{k} \sum_{j = 1}^{n_{i}} \left( Z_{ij} -
     !! Z_{i.} \right)^{2} } $$
     !!
+    !! Where:
+    !! $$ Z_{ij} = |X_{ij} - \overline{X_{i.}}| $$
+    !! $$ Z_{i.} = \frac{1}{n_{i}} \sum_{j = 1}^{n_{i}} Z_{ij} $$ 
+    !! $$ Z_{..} = \frac{1}{N} \sum_{i = 1}^{k} \sum_{j = 1}^{n_{i}} Z_{ij} $$
+    !!
     !! As the test statistic is approximately F-distributed, the F-distribution
     !! is used to calculate the probability term.
     !!
