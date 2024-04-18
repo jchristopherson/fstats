@@ -31,6 +31,8 @@ module fstats_distributions
             !! Computes the mode of the distribution.
         procedure(distribution_property), deferred, pass :: variance
             !! Computes the variance of the distribution.
+        procedure, public :: area => dist_area
+            !! Computes the area under the PDF curve up to the value specified.
     end type
 
     interface
@@ -135,8 +137,40 @@ module fstats_distributions
         procedure, public :: variance => bd_variance
     end type
 
-! ------------------------------------------------------------------------------
 contains
+! ------------------------------------------------------------------------------
+pure elemental function dist_area(this, x) result(rst)
+    !! Computes the area under the PDF curve up to the value of X specified.
+    class(distribution), intent(in) :: this
+        !! The distribution object.
+    real(real64), intent(in) :: x
+        !! The upper parameter limit.
+    real(real64) :: rst
+        !! The requested area.
+
+    ! Local Variables
+    integer(int32), parameter :: maxiter = 100
+    real(real64), parameter :: tol = 1.0d-6
+    integer(int32) :: i
+    real(real64) :: f, df, h, twoh, dy
+
+    ! Process
+    !
+    ! We use a simplified Newton's method to solve for the independent variable
+    ! of the CDF function
+    h = 1.0d-6
+    twoh = 2.0d0 * h
+    rst = 0.5d0 ! just an initial guess
+    do i = 1, maxiter
+        ! Compute the CDF and its derivative at y
+        f = this%cdf(rst) - x
+        df = (this%cdf(rst + h) - this%cdf(rst - h)) / twoh
+        dy = f / df
+        rst = rst - dy
+        if (abs(dy) < tol) exit
+    end do
+end function
+
 ! ******************************************************************************
 ! STUDENT'S T-DISTRIBUTION
 ! ------------------------------------------------------------------------------

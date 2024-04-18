@@ -42,29 +42,11 @@ pure function confidence_interval_scalar(dist, alpha, s, n) result(rst)
         !! The result.
 
     ! Local Variables
-    integer(int32), parameter :: maxiter = 100
-    real(real64), parameter :: tol = 1.0d-6
-    integer(int32) :: i
-    real(real64) :: x, f, df, h, twoh, dy
+    real(real64) :: x
 
     ! Process
-    !
-    ! We use a simplified Newton's method to solve for the independent variable
-    ! of the CDF function where it equals 1 - alpha / 2.
-    h = 1.0d-6
-    twoh = 2.0d0 * h
     x = 1.0d0 - alpha / 2.0d0
-    rst = 0.5d0
-    do i = 1, maxiter 
-        ! Compute the CDF and its derivative at y
-        f = dist%cdf(rst) - x
-        df = (dist%cdf(rst + h) - dist%cdf(rst - h)) / twoh
-        dy = f / df
-        rst = rst - dy
-        if (abs(dy) < tol) exit
-    end do
-
-    ! Determine the actual interval
+    rst = dist%area(x)
     rst = rst * s / sqrt(real(n, real64))
 end function
 
@@ -467,6 +449,24 @@ subroutine levenes_test(x, stat, p, err)
     dist%d2 = real(n - k, real64)
     p = 1.0d0 - dist%cdf(stat)
 end subroutine
+
+! ------------------------------------------------------------------------------
+pure function sample_size(dist, delta, pwr, alpha) result(rst)
+    !! Estimates the sample size required to achieve an experiment with the
+    !! desired power and significance levels to ascertain the desired 
+    !! difference in parameter.
+    class(distribution), intent(in) :: dist
+        !! The distribution to utilize as a measure.
+    real(real64), intent(in) :: delta
+        !! The parameter difference that is desired.
+    real(real64), intent(in), optional :: pwr
+        !! The desired power level.  The default for this value is 0.8.
+    real(real64), intent(in), optional :: alpha
+        !! The desired significance level.  The default for this value is 0.05.
+    integer(int32) :: rst
+        !! The minimum sample size requried to achieve the desired experimental
+        !! outcome.
+end function
 
 ! ------------------------------------------------------------------------------
 end module
