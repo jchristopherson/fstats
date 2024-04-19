@@ -187,4 +187,37 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_standardized_variable() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        real(real64), parameter :: tol = 1.0d-2
+        real(real64), parameter :: alpha1 = 0.975d0
+        real(real64), parameter :: alpha2 = 0.2d0
+        real(real64), parameter :: ans1 = 1.96d0
+        real(real64), parameter :: ans2 = 0.84d0
+        real(real64) :: z1, z2
+        type(normal_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+        call dist%standardize()
+
+        ! Test 1
+        z1 = dist%standardized_variable(alpha1)
+        if (.not.is_equal(z1, ans1, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Standardized variable test -1."
+        end if
+
+        ! Test 2
+        z2 = dist%standardized_variable(0.8d0)
+        if (.not.is_equal(z2, ans2, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Standardized variable test -2."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

@@ -1041,4 +1041,31 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_sample_size() result(rst)
+        ! Arguments
+        logical :: rst
+        
+        ! Variables
+        real(real64), parameter :: tol = 1.0d-3
+        real(real64), parameter :: ans = 15.698d0
+        real(real64), parameter :: var = 1.0d0
+        real(real64), parameter :: delta = 1.0d0
+        real(real64), parameter :: alpha = 0.05d0
+        real(real64), parameter :: bet = 0.8d0
+        real(real64) :: dn
+        type(normal_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+        call dist%standardize()
+
+        ! Test 1
+        dn = sample_size(dist, var, delta, bet, alpha)
+        if (.not.is_equal(ans, dn, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Sample size test 1."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

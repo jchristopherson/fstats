@@ -14,6 +14,7 @@ module fstats_hypothesis
     public :: f_test
     public :: bartletts_test
     public :: levenes_test
+    public :: sample_size
 
     interface confidence_interval
         !! Computes the confidence interval for the specified distribution.
@@ -46,7 +47,7 @@ pure function confidence_interval_scalar(dist, alpha, s, n) result(rst)
 
     ! Process
     x = 1.0d0 - alpha / 2.0d0
-    rst = dist%area(x)
+    rst = dist%standardized_variable(x)
     rst = rst * s / sqrt(real(n, real64))
 end function
 
@@ -451,21 +452,48 @@ subroutine levenes_test(x, stat, p, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-pure function sample_size(dist, delta, pwr, alpha) result(rst)
+pure function sample_size(dist, var, delta, bet, alpha) result(rst)
     !! Estimates the sample size required to achieve an experiment with the
     !! desired power and significance levels to ascertain the desired 
     !! difference in parameter.
+    !!
+    !! See Also
+    !!
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Power_of_a_test)
     class(distribution), intent(in) :: dist
         !! The distribution to utilize as a measure.
+    real(real64), intent(in) :: var
+        !! An estimate of the population variance.
     real(real64), intent(in) :: delta
         !! The parameter difference that is desired.
-    real(real64), intent(in), optional :: pwr
-        !! The desired power level.  The default for this value is 0.8.
+    real(real64), intent(in), optional :: bet
+        !! The desired power level.  The default for this value is 0.2, for a 
+        !! power of 80%.
     real(real64), intent(in), optional :: alpha
-        !! The desired significance level.  The default for this value is 0.05.
-    integer(int32) :: rst
+        !! The desired significance level.  The default for this value is 0.05
+        !! for a confidence level of 95%.
+    real(real64) :: rst
         !! The minimum sample size requried to achieve the desired experimental
         !! outcome.
+
+    ! Local Variables
+    real(real64) :: a, b, za, zb
+
+    ! Initialization
+    if (present(bet)) then
+        b = bet
+    else
+        b = 0.8d0
+    end if
+    if (present(alpha)) then
+        a = alpha
+    else
+        a = 0.05d0
+    end if
+
+    za = dist%standardized_variable(1.0d0 - a / 2.0d0)
+    zb = dist%standardized_variable(b)
+    rst = 2.0d0 * (za + zb)**2 * var / (delta**2)
 end function
 
 ! ------------------------------------------------------------------------------

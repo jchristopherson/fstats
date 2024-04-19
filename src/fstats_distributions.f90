@@ -31,8 +31,8 @@ module fstats_distributions
             !! Computes the mode of the distribution.
         procedure(distribution_property), deferred, pass :: variance
             !! Computes the variance of the distribution.
-        procedure, public :: area => dist_area
-            !! Computes the area under the PDF curve up to the value specified.
+        procedure, public :: standardized_variable => dist_std_var
+            !! Computes the standardized variable for the distribution.
     end type
 
     interface
@@ -139,14 +139,14 @@ module fstats_distributions
 
 contains
 ! ------------------------------------------------------------------------------
-pure elemental function dist_area(this, x) result(rst)
-    !! Computes the area under the PDF curve up to the value of X specified.
+pure elemental function dist_std_var(this, x) result(rst)
+    !! Computes the standardized variable for the distribution.
     class(distribution), intent(in) :: this
         !! The distribution object.
     real(real64), intent(in) :: x
-        !! The upper parameter limit.
+        !! The value of interest.
     real(real64) :: rst
-        !! The requested area.
+        !! The result.
 
     ! Local Variables
     integer(int32), parameter :: maxiter = 100

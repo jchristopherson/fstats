@@ -128,6 +128,12 @@ program tests
     local = test_levene_1()
     if (.not.local) overall = .false.
 
+    local = test_standardized_variable()
+    if (.not.local) overall = .false.
+
+    local = test_sample_size()
+    if (.not.local) overall = .false.
+
     ! End
     if (.not.overall) then
         stop 1
