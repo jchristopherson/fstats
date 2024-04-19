@@ -2,6 +2,7 @@ module fstats_statistics_tests
     use iso_fortran_env
     use fstats
     use fstats_test_helper
+    use fstats_types
     implicit none
 contains
 ! ------------------------------------------------------------------------------
@@ -900,6 +901,169 @@ contains
         if (.not.is_equal(c, ans)) then
             rst = .false.
             print '(A)', "TEST FAILED: Correlation test 1"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_pooled_variance_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: k = 20
+        integer(int32), parameter :: n = 1000
+        integer(int32) :: i, m, ni(k)
+        type(array_container) :: x(k)
+        real(real64) :: ans, sp, sp2, si(k)
+        
+        ! Initialization
+        rst = .true.
+        m = n * k
+        ans = 0.0d0
+        do i = 1, k
+            allocate(x(i)%x(n))
+            call random_number(x(i)%x)
+            si(i) = variance(x(i)%x)
+            ni(i) = n
+            ans = ans + si(i) * (n - 1.0d0)
+        end do
+        ans = ans / real(m - k, real64)
+
+        ! Test 1
+        sp = pooled_variance(x)
+        if (.not.is_equal(ans, sp)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Pooled variance test 1"
+        end if
+
+        ! Test 2
+        sp2 = pooled_variance(si, ni)
+        if (.not.is_equal(ans, sp2)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Pooled variance test 2"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_bartlett_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Local Variables
+        integer(int32), parameter :: npts = 25
+        real(real64), parameter :: stat_ans = 1.52960933869d0
+        real(real64), parameter :: p_ans = 0.21617108550d0
+        type(array_container) :: x(2)
+        real(real64) :: stat, p
+
+        ! Initialization
+        rst = .true.
+        allocate(x(1)%x(npts), x(2)%x(npts))
+        x(1)%x = [ &
+            0.357692624494507d0, 0.614383931107340d0, 0.802887803239860d0, &
+            0.138578373117993d0, 0.754710064162687d0, 0.522900047841238d0, &
+            0.076443208652965d0, 0.860167572639019d0, 0.183130360392741d0, &
+            0.471659086806133d0, 0.071125320345872d0, 0.559104389166637d0, &
+            0.500927806104085d0, 0.458795768141623d0,0.846677090629315d0, &
+            0.569806543430701d0, 0.342909916953321d0, 0.660491929487175d0, &
+            0.153963845813654d0, 0.274295416513455d0, 0.568200275187962d0, &
+            0.234641814188948d0, 0.223741046257743d0, 0.960908965603275d0, &
+            0.409105079237050d0]
+        x(2)%x = [ &
+            0.146676174916891d0, 0.074990182260762d0, 0.626736796964143d0, &
+            0.715565996611289d0, 0.243765200640375d0, 0.158861292064668d0, &
+            0.135906579751008d0, 0.105995980721743d0, 0.040415255757239d0, &
+            0.483256288452508d0, 0.658804776850479d0, 0.777622410194220d0, &
+            0.965626651747080d0, 0.779568110382855d0, 0.215591619210302d0, &
+            0.921351076345661d0, 0.199225207581094d0, 0.147835195118642d0, &
+            0.908049631668390d0, 0.970759884908368d0, 0.825828458448519d0, &
+            0.183678303516097d0, 0.433932667318501d0, 0.915015089978645d0, &
+            0.495746710480416d0]
+
+        ! Test 1 - reference results calculated by Excel
+        call bartletts_test(x, stat, p)
+        if (.not.is_equal(stat, stat_ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Bartlett's test 1"
+        end if
+        if (.not.is_equal(p, p_ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Bartlett's test 1"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_levene_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Local Variables
+        integer(int32), parameter :: npts = 25
+        real(real64), parameter :: stat_ans = 4.85959468188d0
+        real(real64), parameter :: p_ans = 0.03231972203d0
+        type(array_container) :: x(2)
+        real(real64) :: stat, p
+
+        ! Initialization
+        rst = .true.
+        allocate(x(1)%x(npts), x(2)%x(npts))
+        x(1)%x = [ &
+            0.357692624494507d0, 0.614383931107340d0, 0.802887803239860d0, &
+            0.138578373117993d0, 0.754710064162687d0, 0.522900047841238d0, &
+            0.076443208652965d0, 0.860167572639019d0, 0.183130360392741d0, &
+            0.471659086806133d0, 0.071125320345872d0, 0.559104389166637d0, &
+            0.500927806104085d0, 0.458795768141623d0,0.846677090629315d0, &
+            0.569806543430701d0, 0.342909916953321d0, 0.660491929487175d0, &
+            0.153963845813654d0, 0.274295416513455d0, 0.568200275187962d0, &
+            0.234641814188948d0, 0.223741046257743d0, 0.960908965603275d0, &
+            0.409105079237050d0]
+        x(2)%x = [ &
+            0.146676174916891d0, 0.074990182260762d0, 0.626736796964143d0, &
+            0.715565996611289d0, 0.243765200640375d0, 0.158861292064668d0, &
+            0.135906579751008d0, 0.105995980721743d0, 0.040415255757239d0, &
+            0.483256288452508d0, 0.658804776850479d0, 0.777622410194220d0, &
+            0.965626651747080d0, 0.779568110382855d0, 0.215591619210302d0, &
+            0.921351076345661d0, 0.199225207581094d0, 0.147835195118642d0, &
+            0.908049631668390d0, 0.970759884908368d0, 0.825828458448519d0, &
+            0.183678303516097d0, 0.433932667318501d0, 0.915015089978645d0, &
+            0.495746710480416d0]
+
+        ! Test 1 - reference results calculated by Excel
+        call levenes_test(x, stat, p)
+        if (.not.is_equal(stat, stat_ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Levene's test 1"
+        end if
+        if (.not.is_equal(p, p_ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Levene's test 1"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_sample_size() result(rst)
+        ! Arguments
+        logical :: rst
+        
+        ! Variables
+        real(real64), parameter :: tol = 1.0d-3
+        real(real64), parameter :: ans = 15.698d0
+        real(real64), parameter :: var = 1.0d0
+        real(real64), parameter :: delta = 1.0d0
+        real(real64), parameter :: alpha = 0.05d0
+        real(real64), parameter :: bet = 0.8d0
+        real(real64) :: dn
+        type(normal_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+        call dist%standardize()
+
+        ! Test 1
+        dn = sample_size(dist, var, delta, bet, alpha)
+        if (.not.is_equal(ans, dn, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Sample size test 1."
         end if
     end function
 

@@ -5,7 +5,7 @@ module fstats_regression_tests
     implicit none
 contains
 ! ------------------------------------------------------------------------------
-    function coefficient_matrix_test_1() result(rst)
+    function design_matrix_test_1() result(rst)
         ! Arguments
         logical :: rst
 
@@ -37,24 +37,24 @@ contains
         ans3(:,5) = x**4
 
         ! Test 1 - linear w/ intercept
-        call coefficient_matrix(order1, .true., x, c1)
+        call design_matrix(order1, .true., x, c1)
         if (.not.is_equal(c1, ans1)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 1"
+            print '(A)', "TEST FAILED: Design Matrix Test 1 - 1"
         end if
 
         ! Test 2 - linear w/o intercept
-        call coefficient_matrix(order1, .false., x, c2)
+        call design_matrix(order1, .false., x, c2)
         if (.not.is_equal(c2, ans2)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 2"
+            print '(A)', "TEST FAILED: Design Matrix Test 1 - 2"
         end if
 
         ! Test 3 - 4th order w/ intercept
-        call coefficient_matrix(order2, .true., x, c3)
+        call design_matrix(order2, .true., x, c3)
         if (.not.is_equal(c3, ans3)) then
             rst = .false.
-            print '(A)', "TEST FAILED: Coefficient Matrix Test 1 - 3"
+            print '(A)', "TEST FAILED: Design Matrix Test 1 - 3"
         end if
     end function
 

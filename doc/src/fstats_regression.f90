@@ -19,7 +19,7 @@ module fstats_regression
     public :: r_squared
     public :: adjusted_r_squared
     public :: correlation
-    public :: coefficient_matrix
+    public :: design_matrix
     public :: covariance_matrix
     public :: linear_least_squares
     public :: calculate_regression_statistics
@@ -293,16 +293,18 @@ pure function correlation(x, y) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine coefficient_matrix(order, intercept, x, c, err)
-    !! Computes the coefficient matrix \( X \) to the linear 
+subroutine design_matrix(order, intercept, x, c, err)
+    !! Computes the design matrix \( X \) for the linear 
     !! least-squares regression problem of \( X \beta = y \), where 
-    !! \( X \) is the coefficient matrix computed here, \( \beta \) is 
+    !! \( X \) is the matrix computed here, \( \beta \) is 
     !! the vector of coefficients to be determined, and \( y \) is the 
     !! vector of measured dependent variables.
     !!
     !! See Also
     !!
     !! - [Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Vandermonde_matrix)
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Design_matrix)
     integer(int32), intent(in) :: order
         !! The order of the equation to fit.  This value must be
         !! at least one (linear equation), but can be higher as desired.
@@ -343,12 +345,12 @@ subroutine coefficient_matrix(order, intercept, x, c, err)
 
     ! Input Check
     if (order < 1) then
-        call errmgr%report_error("coefficient_matrix", &
+        call errmgr%report_error("design_matrix", &
             "The model order must be at least one.", FS_INVALID_INPUT_ERROR)
         return
     end if
     if (size(c, 1) /= npts .or. size(c, 2) /= ncols) then
-        call report_matrix_size_error(errmgr, "coefficient_matrix", &
+        call report_matrix_size_error(errmgr, "design_matrix", &
             "c", npts, ncols, size(c, 1), size(c, 2))
         return
     end if
@@ -372,7 +374,7 @@ end subroutine
 subroutine covariance_matrix(x, c, err)
     !! Computes the covariance matrix \( C \) where 
     !! \( C = \left( X^{T} X \right)^{-1} \) and \( X \) is computed
-    !! by coefficient_matrix.
+    !! by design_matrix.
     !!
     !! See Also
     !!
@@ -380,7 +382,7 @@ subroutine covariance_matrix(x, c, err)
     !! - [Wikipedia - Regression](https://en.wikipedia.org/wiki/Linear_regression)
     real(real64), intent(in) :: x(:,:)
         !! An M-by-N matrix containing the formatted independent data
-        !!  matrix \( X \) as computed by coefficient_matrix.
+        !!  matrix \( X \) as computed by design_matrix.
     real(real64), intent(out) :: c(:,:)
         !! The N-by-N covariance matrix.
     class(errors), intent(inout), optional, target :: err
@@ -551,7 +553,7 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
     end if
 
     ! Compute the coefficient matrix
-    call coefficient_matrix(order, intercept, x, a, errmgr)
+    call design_matrix(order, intercept, x, a, errmgr)
     if (errmgr%has_error_occurred()) return
 
     ! Compute the covariance matrix

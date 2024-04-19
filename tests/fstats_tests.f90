@@ -73,7 +73,7 @@ program tests
     local = incomplete_gamma_test_1()
     if (.not.local) overall = .false.
 
-    local = coefficient_matrix_test_1()
+    local = design_matrix_test_1()
     if (.not.local) overall = .false.
 
     local = regression_test_1()
@@ -116,6 +116,22 @@ program tests
 
     ! Correlation Tests
     local = test_correlation_1()
+    if (.not.local) overall = .false.
+
+    ! Additional Tests
+    local = test_pooled_variance_1()
+    if (.not.local) overall = .false.
+
+    local = test_bartlett_1()
+    if (.not.local) overall = .false.
+
+    local = test_levene_1()
+    if (.not.local) overall = .false.
+
+    local = test_standardized_variable()
+    if (.not.local) overall = .false.
+
+    local = test_sample_size()
     if (.not.local) overall = .false.
 
     ! End
