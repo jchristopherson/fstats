@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 8.8% of total for modules and submodules.">256 statements</a>
+                 title=" 9.1% of total for modules and submodules.">268 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -127,7 +127,18 @@
 
   
   
-  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#funcs-0"
+         aria-expanded="false" aria-controls="funcs-0">
+         <h4 class="card-header bg-primary text-white">Functions</h4>
+      </a>
+      <div id="funcs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_hypothesis.html#proc-sample_size">sample_size</a>
+        </div>
+      </div>
+    </div>
+
       <div class="card mb-4">
       <a data-bs-toggle="collapse" href="#subs-0"
          aria-expanded="false" aria-controls="subs-0">
@@ -166,13 +177,13 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
-                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
-                  <li class="list-inline-item"><a href='fstats_types.html'>fstats_types</a></li>
                   <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
-                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_types.html'>fstats_types</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
               </ul>
             </li>
         </ul>
@@ -221,7 +232,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-dist~3"></span>
+              <span class="anchor" id="variable-dist~5"></span>
               class(<a href='..\type\distribution.html'>distribution</a>),
             </td>
 <td>intent(in)</td>
@@ -237,7 +248,7 @@ to establish the confidence level.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~7"></span>
+              <span class="anchor" id="variable-alpha~12"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -253,7 +264,7 @@ for a confidence level of 95%.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-s"></span>
+              <span class="anchor" id="variable-s~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -268,7 +279,7 @@ for a confidence level of 95%.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~14"></span>
+              <span class="anchor" id="variable-n~36"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -311,7 +322,7 @@ for a confidence level of 95%.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-dist~4"></span>
+              <span class="anchor" id="variable-dist~6"></span>
               class(<a href='..\type\distribution.html'>distribution</a>),
             </td>
 <td>intent(in)</td>
@@ -327,7 +338,7 @@ to establish the confidence level.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~8"></span>
+              <span class="anchor" id="variable-alpha~13"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -343,7 +354,7 @@ for a confidence level of 95%.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~14"></span>
+              <span class="anchor" id="variable-x~51"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -374,6 +385,120 @@ for a confidence level of 95%.</p>
 
 
 
+        <section>
+          <h2>Functions</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-sample_size"></span> <h3>public pure function <a href='..\proc\sample_size.html'>sample_size</a>(dist, var, delta, bet, alpha) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Estimates the sample size required to achieve an experiment with the
+desired power and significance levels to ascertain the desired 
+difference in parameter.</p><a href="../proc/sample_size.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-dist~10"></span>
+              class(<a href='..\type\distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dist</strong></td>
+            <td>
+<p>The distribution to utilize as a measure.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-var~3"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>var</strong></td>
+            <td>
+<p>An estimate of the population variance.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-delta~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>delta</strong></td>
+            <td>
+<p>The parameter difference that is desired.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bet"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>bet</strong></td>
+            <td>
+<p>The desired power level.  The default for this value is 0.2, for a 
+power of 80%.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~14"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+<p>The desired significance level.  The default for this value is 0.05
+for a confidence level of 95%.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The minimum sample size requried to achieve the desired experimental
+outcome.</p>
+
+    </div>
+  </div>
+
+        </section>
+        <br>
 
         <section>
           <h2>Subroutines</h2>
@@ -397,7 +522,7 @@ for a confidence level of 95%.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~18"></span>
+              <span class="anchor" id="variable-x~55"></span>
               type(<a href='..\type\array_container.html'>array_container</a>),
             </td>
 <td>intent(in),</td>
@@ -412,7 +537,7 @@ for a confidence level of 95%.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat~5"></span>
+              <span class="anchor" id="variable-stat~6"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -427,7 +552,7 @@ for a confidence level of 95%.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~12"></span>
+              <span class="anchor" id="variable-p~15"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -485,7 +610,7 @@ the variances of two data sets are not significantly different.</p><a href="../p
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x2~4"></span>
+              <span class="anchor" id="variable-x2~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -500,7 +625,7 @@ the variances of two data sets are not significantly different.</p><a href="../p
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat~4"></span>
+              <span class="anchor" id="variable-stat~5"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -515,7 +640,7 @@ the variances of two data sets are not significantly different.</p><a href="../p
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~11"></span>
+              <span class="anchor" id="variable-p~14"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -532,7 +657,7 @@ have the same variance.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof1"></span>
+              <span class="anchor" id="variable-dof1~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -547,7 +672,7 @@ have the same variance.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof2"></span>
+              <span class="anchor" id="variable-dof2~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -587,7 +712,7 @@ have the same variance.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~19"></span>
+              <span class="anchor" id="variable-x~56"></span>
               type(<a href='..\type\array_container.html'>array_container</a>),
             </td>
 <td>intent(in),</td>
@@ -602,7 +727,7 @@ have the same variance.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat~6"></span>
+              <span class="anchor" id="variable-stat~7"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -617,7 +742,7 @@ have the same variance.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~13"></span>
+              <span class="anchor" id="variable-p~16"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -634,7 +759,7 @@ indicates a non-equivalance of variances.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~12"></span>
+              <span class="anchor" id="variable-err~25"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -690,7 +815,7 @@ assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" cl
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x2"></span>
+              <span class="anchor" id="variable-x2~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -705,7 +830,7 @@ assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" cl
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat"></span>
+              <span class="anchor" id="variable-stat~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -720,7 +845,7 @@ assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" cl
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~8"></span>
+              <span class="anchor" id="variable-p~11"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -737,7 +862,7 @@ have the same mean.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof~4"></span>
+              <span class="anchor" id="variable-dof~7"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -792,7 +917,7 @@ have the same mean.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x2~3"></span>
+              <span class="anchor" id="variable-x2~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -807,7 +932,7 @@ have the same mean.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat~3"></span>
+              <span class="anchor" id="variable-stat~4"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -822,7 +947,7 @@ have the same mean.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~10"></span>
+              <span class="anchor" id="variable-p~13"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -839,7 +964,7 @@ have the same mean.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof~6"></span>
+              <span class="anchor" id="variable-dof~9"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -854,7 +979,7 @@ have the same mean.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~11"></span>
+              <span class="anchor" id="variable-err~24"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -914,7 +1039,7 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x2~2"></span>
+              <span class="anchor" id="variable-x2~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -929,7 +1054,7 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat~2"></span>
+              <span class="anchor" id="variable-stat~3"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -944,7 +1069,7 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~9"></span>
+              <span class="anchor" id="variable-p~12"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -961,7 +1086,7 @@ have the same mean.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof~5"></span>
+              <span class="anchor" id="variable-dof~8"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1001,7 +1126,7 @@ have the same mean.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-04-17 05:57              </p>
+ on 2024-04-19 07:47              </p>
           </div>
         </div>
         <br>

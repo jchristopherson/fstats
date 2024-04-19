@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="12.1% of total for modules and submodules.">351 statements</a>
+                 title="11.9% of total for modules and submodules.">351 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -188,14 +188,14 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item">linalg</li>
+                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
-                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
-                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
+                  <li class="list-inline-item">linalg</li>
                   <li class="list-inline-item"><a href='https://www.openmp.org/spec-html/5.1/openmpch3.html#x156-1890003'>omp_lib</a></li>
+                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
                   <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
               </ul>
             </li>
         </ul>
@@ -238,7 +238,7 @@ resampling of data for bootstrapping purposes.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~34"></span>
+              <span class="anchor" id="variable-x~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -303,7 +303,7 @@ bootstrap statistic.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~35"></span>
+              <span class="anchor" id="variable-x~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -378,7 +378,7 @@ computed in a bootstrap, or equivalent, calculation.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-probability~2"></span>
+              <span class="anchor" id="variable-probability"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -395,12 +395,12 @@ important.  A statistically important coefficient will have a
 low probability (p-value), typically 0.05 or lower; however, a 
 p-value of up to ~0.2 may be acceptable dependent upon the 
 problem.  Typically any p-value larger than ~0.2 indicates the 
-parameter is not statistically important for the model.</p><a href="../type/bootstrap_regression_statistics.html#variable-probability~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+parameter is not statistically important for the model.</p><a href="../type/bootstrap_regression_statistics.html#variable-probability" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_error~2"></span>
+              <span class="anchor" id="variable-standard_error"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -417,7 +417,7 @@ parameter is not statistically important for the model.</p><a href="../type/boot
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-t_statistic~2"></span>
+              <span class="anchor" id="variable-t_statistic"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -429,7 +429,7 @@ parameter is not statistically important for the model.</p><a href="../type/boot
                 <td></td>
                 <td></td>
             <td>
-<p>The T-statistic for the model coefficient.</p><a href="../type/bootstrap_regression_statistics.html#variable-t_statistic~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>The T-statistic for the model coefficient.</p><a href="../type/bootstrap_regression_statistics.html#variable-t_statistic" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -535,7 +535,7 @@ process.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_error~3"></span>
+              <span class="anchor" id="variable-standard_error~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -621,7 +621,7 @@ appropriate routine by means of the method input.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat~7"></span>
+              <span class="anchor" id="variable-stat"></span>
               procedure(<a href='..\interface\bootstrap_statistic_routine.html'>bootstrap_statistic_routine</a>),
             </td>
 <td>intent(in),</td>
@@ -636,7 +636,7 @@ appropriate routine by means of the method input.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~38"></span>
+              <span class="anchor" id="variable-x~7"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -651,7 +651,7 @@ appropriate routine by means of the method input.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~2"></span>
+              <span class="anchor" id="variable-method"></span>
               procedure(<a href='..\interface\bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a>),
             </td>
 <td>intent(in),</td>
@@ -683,7 +683,7 @@ resampling runs to perform.  The default is 10 000.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~9"></span>
+              <span class="anchor" id="variable-alpha"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -739,7 +739,7 @@ standard deviation of the original data set.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-order~3"></span>
+              <span class="anchor" id="variable-order"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -756,7 +756,7 @@ as long as there is sufficient data.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-intercept~3"></span>
+              <span class="anchor" id="variable-intercept"></span>
               logical,
             </td>
 <td>intent(in)</td>
@@ -772,7 +772,7 @@ the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~39"></span>
+              <span class="anchor" id="variable-x~8"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -788,7 +788,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~9"></span>
+              <span class="anchor" id="variable-y"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -804,7 +804,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-coeffs~2"></span>
+              <span class="anchor" id="variable-coeffs"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -820,7 +820,7 @@ be written.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ymod~3"></span>
+              <span class="anchor" id="variable-ymod"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -835,7 +835,7 @@ be written.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~8"></span>
+              <span class="anchor" id="variable-resid"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -866,7 +866,7 @@ written (modeled - actual).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats~3"></span>
+              <span class="anchor" id="variable-stats"></span>
               type(<a href='..\type\bootstrap_regression_statistics.html'>bootstrap_regression_statistics</a>),
             </td>
 <td>intent(out),</td>
@@ -902,7 +902,7 @@ parameter and the original estimate of the given parameter.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~10"></span>
+              <span class="anchor" id="variable-alpha~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -919,7 +919,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~3"></span>
+              <span class="anchor" id="variable-method~2"></span>
               procedure(<a href='..\interface\bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a>),
             </td>
 <td>intent(in),</td>
@@ -952,7 +952,7 @@ such that the resulting matrix is NCOEFFS -by- NSAMPLES.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~16"></span>
+              <span class="anchor" id="variable-err"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1004,7 +1004,7 @@ data set.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-fun~8"></span>
+              <span class="anchor" id="variable-fun"></span>
               procedure(<a href='..\interface\regression_function.html'>regression_function</a>),
             </td>
 <td>intent(in),</td>
@@ -1019,7 +1019,7 @@ data set.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~40"></span>
+              <span class="anchor" id="variable-x~9"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1034,7 +1034,7 @@ data set.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~10"></span>
+              <span class="anchor" id="variable-y~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1049,7 +1049,7 @@ data set.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-params~7"></span>
+              <span class="anchor" id="variable-params"></span>
               real(kind=real64),
             </td>
 <td>intent(inout)</td>
@@ -1066,7 +1066,7 @@ parameters.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ymod~4"></span>
+              <span class="anchor" id="variable-ymod~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1082,7 +1082,7 @@ be written.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~9"></span>
+              <span class="anchor" id="variable-resid~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1113,7 +1113,7 @@ written.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-weights~6"></span>
+              <span class="anchor" id="variable-weights"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1129,7 +1129,7 @@ individual points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-maxp~2"></span>
+              <span class="anchor" id="variable-maxp"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1147,7 +1147,7 @@ internal default is to utilize huge() as a value.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-minp~2"></span>
+              <span class="anchor" id="variable-minp"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1166,7 +1166,7 @@ as a value.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats~4"></span>
+              <span class="anchor" id="variable-stats~2"></span>
               type(<a href='..\type\bootstrap_regression_statistics.html'>bootstrap_regression_statistics</a>),
             </td>
 <td>intent(out),</td>
@@ -1182,7 +1182,7 @@ to return statistics about the fit for each parameter.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~11"></span>
+              <span class="anchor" id="variable-alpha~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1199,7 +1199,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-controls~5"></span>
+              <span class="anchor" id="variable-controls"></span>
               type(<a href='..\type\iteration_controls.html'>iteration_controls</a>),
             </td>
 <td>intent(in),</td>
@@ -1214,7 +1214,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-settings~2"></span>
+              <span class="anchor" id="variable-settings"></span>
               type(<a href='..\type\lm_solver_options.html'>lm_solver_options</a>),
             </td>
 <td>intent(in),</td>
@@ -1229,7 +1229,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~4"></span>
+              <span class="anchor" id="variable-info"></span>
               type(<a href='..\type\convergence_info.html'>convergence_info</a>),
             </td>
 <td>intent(out),</td>
@@ -1265,7 +1265,7 @@ parameter.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~4"></span>
+              <span class="anchor" id="variable-method~3"></span>
               procedure(<a href='..\interface\bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a>),
             </td>
 <td>intent(in),</td>
@@ -1298,7 +1298,7 @@ such that the resulting matrix is NCOEFFS -by- NSAMPLES.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~17"></span>
+              <span class="anchor" id="variable-err~2"></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -1350,7 +1350,7 @@ caller.  Possible warning and error codes are as follows.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~36"></span>
+              <span class="anchor" id="variable-x~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1406,7 +1406,7 @@ data, but based upon a normal distribution.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~37"></span>
+              <span class="anchor" id="variable-x~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1461,7 +1461,7 @@ data, but based upon a normal distribution.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-04-17 05:57              </p>
+ on 2024-04-19 07:47              </p>
           </div>
         </div>
         <br>

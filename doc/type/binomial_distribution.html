@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p> 7.6% of total for derived types.</p>Including implementation: 47 statements, 12.8% of total for derived types.">11 statements</a>
+                 title="<p> 7.6% of total for derived types.</p>Including implementation: 66 statements, 13.7% of total for derived types.">11 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -114,8 +114,8 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/binomial_distribution.html#variable-n~37">n</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#variable-p~16">p</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#variable-n~10">n</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#variable-p">p</a>
         </div>
       </div>
     </div>
@@ -147,7 +147,8 @@
             <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-median~6">median</a>
             <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mode~6">mode</a>
             <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-pdf~6">pdf</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~7">variance</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~6">variance</a>
         </div>
       </div>
     </div>
@@ -181,7 +182,7 @@ the probability p of getting k successes in n independent trials.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~37"></span>
+              <span class="anchor" id="variable-n~10"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -198,7 +199,7 @@ the probability p of getting k successes in n independent trials.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~16"></span>
+              <span class="anchor" id="variable-p"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -557,7 +558,84 @@ such, this parameter must exist on the set [0, n].</p>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-variance~7"></span>
+      <span class="anchor" id="boundprocedure-standardized_variable"></span>
+      <h3>
+          procedure, public ::
+  <strong>standardized_variable</strong> => dist_std_var
+        
+      </h3>
+    </div>
+      <div class="card-body">
+        
+        <p>Computes the standardized variable for the distribution.</p>
+      </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function dist_std_var(this, x) result(rst)  
+</h3>
+
+  <p>Computes the standardized variable for the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value of interest.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-variance~6"></span>
       <h3>
           procedure, public ::
   <strong>variance</strong> => bd_variance
@@ -630,7 +708,7 @@ such, this parameter must exist on the set [0, n].</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-04-17 05:57              </p>
+ on 2024-04-19 07:47              </p>
           </div>
         </div>
         <br>

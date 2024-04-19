@@ -14,6 +14,7 @@ module fstats_hypothesis
     public :: f_test
     public :: bartletts_test
     public :: levenes_test
+    public :: sample_size
 
     interface confidence_interval
         !! Computes the confidence interval for the specified distribution.
@@ -42,29 +43,11 @@ pure function confidence_interval_scalar(dist, alpha, s, n) result(rst)
         !! The result.
 
     ! Local Variables
-    integer(int32), parameter :: maxiter = 100
-    real(real64), parameter :: tol = 1.0d-6
-    integer(int32) :: i
-    real(real64) :: x, f, df, h, twoh, dy
+    real(real64) :: x
 
     ! Process
-    !
-    ! We use a simplified Newton's method to solve for the independent variable
-    ! of the CDF function where it equals 1 - alpha / 2.
-    h = 1.0d-6
-    twoh = 2.0d0 * h
     x = 1.0d0 - alpha / 2.0d0
-    rst = 0.5d0
-    do i = 1, maxiter 
-        ! Compute the CDF and its derivative at y
-        f = dist%cdf(rst) - x
-        df = (dist%cdf(rst + h) - dist%cdf(rst - h)) / twoh
-        dy = f / df
-        rst = rst - dy
-        if (abs(dy) < tol) exit
-    end do
-
-    ! Determine the actual interval
+    rst = dist%standardized_variable(x)
     rst = rst * s / sqrt(real(n, real64))
 end function
 
@@ -309,7 +292,8 @@ subroutine f_test(x1, x2, stat, p, dof1, dof2)
 
     dist%d1 = dof1
     dist%d2 = dof2
-    p = two * (one - dist%cdf(stat))
+    p = two * (one - dist%cdf(stat))! 2x because this is a two-tailed estimate
+    if (p > one) p = two - p
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -466,6 +450,51 @@ subroutine levenes_test(x, stat, p, err)
     dist%d2 = real(n - k, real64)
     p = 1.0d0 - dist%cdf(stat)
 end subroutine
+
+! ------------------------------------------------------------------------------
+pure function sample_size(dist, var, delta, bet, alpha) result(rst)
+    !! Estimates the sample size required to achieve an experiment with the
+    !! desired power and significance levels to ascertain the desired 
+    !! difference in parameter.
+    !!
+    !! See Also
+    !!
+    !! - [Wikipedia](https://en.wikipedia.org/wiki/Power_of_a_test)
+    class(distribution), intent(in) :: dist
+        !! The distribution to utilize as a measure.
+    real(real64), intent(in) :: var
+        !! An estimate of the population variance.
+    real(real64), intent(in) :: delta
+        !! The parameter difference that is desired.
+    real(real64), intent(in), optional :: bet
+        !! The desired power level.  The default for this value is 0.2, for a 
+        !! power of 80%.
+    real(real64), intent(in), optional :: alpha
+        !! The desired significance level.  The default for this value is 0.05
+        !! for a confidence level of 95%.
+    real(real64) :: rst
+        !! The minimum sample size requried to achieve the desired experimental
+        !! outcome.
+
+    ! Local Variables
+    real(real64) :: a, b, za, zb
+
+    ! Initialization
+    if (present(bet)) then
+        b = bet
+    else
+        b = 0.8d0
+    end if
+    if (present(alpha)) then
+        a = alpha
+    else
+        a = 0.05d0
+    end if
+
+    za = dist%standardized_variable(1.0d0 - a / 2.0d0)
+    zb = dist%standardized_variable(b)
+    rst = 2.0d0 * (za + zb)**2 * var / (delta**2)
+end function
 
 ! ------------------------------------------------------------------------------
 end module
