@@ -5,6 +5,7 @@ module fstats_anova
     use fstats_descriptive_statistics
     use ferror
     use fstats_errors
+    use fstats_distributions
     implicit none
     private
     public :: anova_factor
@@ -427,18 +428,13 @@ subroutine anova_probability(v1, v2, dof1, dof2, f, p)
     real(real64), intent(out) :: f, p
 
     ! Local Variables
-    real(real64) :: d1, d2, a, b, x
+    type(f_distribution) :: dist
     
     ! Process
     f = v1 / v2
-    d1 = dof1
-    d2 = dof2
-
-    a = 0.5d0 * d2
-    b = 0.5d0 * d1
-    x = d2 / (d2 + d1 * f)
-
-    p = regularized_beta(a, b, x)
+    dist%d1 = dof1
+    dist%d2 = dof2
+    p = 1.0d0 - dist%cdf(f)
     if (p > 1.0d0) then
         p = 2.0d0 - p
     end if

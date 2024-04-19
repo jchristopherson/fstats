@@ -10,7 +10,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>beta &ndash; FSTATS</title>
+    <title>bartletts_test &ndash; FSTATS</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -62,8 +62,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>beta
-      <small>Function</small>
+    <h1>bartletts_test
+      <small>Subroutine</small>
       
     </h1>
       <div class="container p-2 mb-4 bg-light border rounded-3">
@@ -74,21 +74,21 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.4% of total for procedures.">6 statements</a>
+                 title=" 1.7% of total for procedures.">29 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_special_functions.f90"> Source File</a>
+              <a href="../src/fstats_hypothesis.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_special_functions.f90.html'>fstats_special_functions.f90</a></li>
-                <li class="breadcrumb-item"><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></li>
-            <li class="breadcrumb-item active" aria-current="page">beta</li>
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_hypothesis.f90.html'>fstats_hypothesis.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></li>
+            <li class="breadcrumb-item active" aria-current="page">bartletts_test</li>
           </ol>
         </nav>
       </div>
@@ -133,17 +133,28 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public pure elemental function beta(a, b) result(rst)  
+    <h2>public  subroutine bartletts_test(x, stat, p)  
 </h2>
     
 
-    <p>Computes the beta function.</p>
-<p>The beta function is related to the gamma function
-by the following relationship.
-<script type="math/tex; mode=display"> \beta(a,b) = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} </script>.</p>
+    <p>Computes Bartlett's test statistic and associated probability.</p>
+<p>The statistic is calculated as follows.</p>
+<p>
+<script type="math/tex; mode=display"> \chi^{2} = \frac{(N - k) \ln(S_{p}^{2}) \sum_{i = 1}^{k} 
+\left(n_{i} - 1 \right) \ln(S_{i}^{2})}{1 + 
+\frac{1}{3 \left( k - 1 \right)} \left( \sum_{i = 1}^{k} 
+\left( \frac{1}{n_{i} - 1} \right) - \frac{1}{N - k} \right)} </script>
+</p>
+<p>Where <script type="math/tex"> N = \sum_{i = 1}^{k} n_{i} </script> and <script type="math/tex"> S_{p}^{2} </script> is the pooled
+variance.</p>
+<p>The probability is calculated as the right-tail probability of the
+chi-squared distribution.</p>
+<p>Bartlett's test is most relevant for distributions showing strong 
+normality.  For distributions lacking strong normality, consider 
+Levene's test instead.</p>
 <p>See Also</p>
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Beta_function">Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Bartlett%27s_test">Wikipedia</a></li>
 </ul>
 
 
@@ -160,44 +171,54 @@ by the following relationship.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~7"></span>
-              real(kind=real64),
+              <span class="anchor" id="variable-x~55"></span>
+              type(<a href='..\type\array_container.html'>array_container</a>),
             </td>
-<td>intent(in)</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              
+              dimension(:)
             </td>
             <td>::</td>
-            <td><strong>a</strong></td>
+            <td><strong>x</strong></td>
             <td>
-                <p>The first argument of the function.</p>
+                <p>The arrays of data to analyze.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~3"></span>
+              <span class="anchor" id="variable-stat~6"></span>
               real(kind=real64),
             </td>
-<td>intent(in)</td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>b</strong></td>
+            <td><strong>stat</strong></td>
             <td>
-                <p>The second argument of the function.</p>
+                <p>The Bartlett's test statistic.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~15"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+                <p>The probability value that the variances of each data set are
+equivalent.  A low p-value, less than some significance level,
+indicates a non-equivalance of variances.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
-      <h3>Return Value
-        <small>
-          <span class="anchor" id="variable-rst~56"></span>
-          real(kind=real64)
-        </small>
-      </h3>
-      <p>The value of the beta function at <script type="math/tex"> a </script> and <script type="math/tex"> b </script>.</p>
     <br>
 
 

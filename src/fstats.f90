@@ -49,7 +49,7 @@ module fstats
     public :: digamma
     public :: incomplete_gamma_upper
     public :: incomplete_gamma_lower
-    public :: coefficient_matrix
+    public :: design_matrix
     public :: covariance_matrix
     public :: linear_least_squares
     public :: regression_statistics
@@ -78,6 +78,10 @@ module fstats
     public :: box_muller_sample
     public :: rejection_sample
     public :: lowess
+    public :: pooled_variance
+    public :: bartletts_test
+    public :: levenes_test
+    public :: sample_size
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE

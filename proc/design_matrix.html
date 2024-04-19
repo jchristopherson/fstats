@@ -10,7 +10,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>beta &ndash; FSTATS</title>
+    <title>design_matrix &ndash; FSTATS</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -62,8 +62,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>beta
-      <small>Function</small>
+    <h1>design_matrix
+      <small>Subroutine</small>
       
     </h1>
       <div class="container p-2 mb-4 bg-light border rounded-3">
@@ -74,21 +74,21 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.4% of total for procedures.">6 statements</a>
+                 title=" 2.3% of total for procedures.">39 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_special_functions.f90"> Source File</a>
+              <a href="../src/fstats_regression.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_special_functions.f90.html'>fstats_special_functions.f90</a></li>
-                <li class="breadcrumb-item"><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></li>
-            <li class="breadcrumb-item active" aria-current="page">beta</li>
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_regression.f90.html'>fstats_regression.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_regression.html'>fstats_regression</a></li>
+            <li class="breadcrumb-item active" aria-current="page">design_matrix</li>
           </ol>
         </nav>
       </div>
@@ -133,17 +133,20 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public pure elemental function beta(a, b) result(rst)  
+    <h2>public  subroutine design_matrix(order, intercept, x, c, err)  
 </h2>
     
 
-    <p>Computes the beta function.</p>
-<p>The beta function is related to the gamma function
-by the following relationship.
-<script type="math/tex; mode=display"> \beta(a,b) = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} </script>.</p>
+    <p>Computes the design matrix <script type="math/tex"> X </script> for the linear 
+least-squares regression problem of <script type="math/tex"> X \beta = y </script>, where 
+<script type="math/tex"> X </script> is the matrix computed here, <script type="math/tex"> \beta </script> is 
+the vector of coefficients to be determined, and <script type="math/tex"> y </script> is the 
+vector of measured dependent variables.</p>
 <p>See Also</p>
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Beta_function">Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Linear_regression">Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Vandermonde_matrix">Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Design_matrix">Wikipedia</a></li>
 </ul>
 
 
@@ -160,22 +163,39 @@ by the following relationship.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~7"></span>
-              real(kind=real64),
+              <span class="anchor" id="variable-order~2"></span>
+              integer(kind=int32),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>a</strong></td>
+            <td><strong>order</strong></td>
             <td>
-                <p>The first argument of the function.</p>
+                <p>The order of the equation to fit.  This value must be
+at least one (linear equation), but can be higher as desired.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~3"></span>
+              <span class="anchor" id="variable-intercept~3"></span>
+              logical,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>intercept</strong></td>
+            <td>
+                <p>Set to true if the intercept is being computed
+as part of the regression; else, false.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~27"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -183,21 +203,51 @@ by the following relationship.
               
             </td>
             <td>::</td>
-            <td><strong>b</strong></td>
+            <td><strong>x</strong>(:)</td>
             <td>
-                <p>The second argument of the function.</p>
+                <p>An N-element array containing the independent variable
+measurement points.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-c"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>c</strong>(:,:)</td>
+            <td>
+                <p>An N-by-K matrix where the results will be written.  K
+must equal order + 1 in the event intercept is true; 
+however, if intercept is false, K must equal order.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-err~8"></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if c is not properly sized.
+- FS_INVALID_INPUT_ERROR: Occurs if order is less than 1.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
-      <h3>Return Value
-        <small>
-          <span class="anchor" id="variable-rst~56"></span>
-          real(kind=real64)
-        </small>
-      </h3>
-      <p>The value of the beta function at <script type="math/tex"> a </script> and <script type="math/tex"> b </script>.</p>
     <br>
 
 

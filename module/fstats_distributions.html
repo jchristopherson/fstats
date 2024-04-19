@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="10.9% of total for modules and submodules.">303 statements</a>
+                 title="11.0% of total for modules and submodules.">323 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -167,9 +167,9 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='fstats_helper_routines.html'>fstats_helper_routines</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item"><a href='fstats_helper_routines.html'>fstats_helper_routines</a></li>
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
               </ul>
             </li>
@@ -227,7 +227,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~15"></span>
+              <span class="anchor" id="variable-x~11"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -338,7 +338,7 @@ the probability p of getting k successes in n independent trials.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~12"></span>
+              <span class="anchor" id="variable-n~10"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -355,7 +355,7 @@ the probability p of getting k successes in n independent trials.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~2"></span>
+              <span class="anchor" id="variable-p"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -404,6 +404,11 @@ exist on the set [0, 1].</p>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-pdf~6'>pdf</a></strong> => bd_pdf</td>
                 <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
+                <td>..\..\<p>Computes the standardized variable for the distribution.<\p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
@@ -491,6 +496,11 @@ exist on the set [0, 1].</p>
               </tr>
               <tr>
                 <td>  procedure, public ::
+  <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
+                <td>..\..\<p>Computes the standardized variable for the distribution.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-variance~5'>variance</a></strong> => cs_variance</td>
                 <td></td>
               </tr>
@@ -541,6 +551,11 @@ exist on the set [0, 1].</p>
                 <td>  procedure(<a href='..\interface\distribution_function.html'>distribution_function</a>), public, deferred, pass ::
   <strong><a href='..\type\distribution.html#boundprocedure-pdf'>pdf</a></strong></td>
                 <td>..\..\<p>Computes the probability density function.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
+                <td>..\..\<p>Computes the standardized variable for the distribution.<\p></td>
               </tr>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
@@ -642,6 +657,11 @@ exist on the set [0, 1].</p>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-pdf~4'>pdf</a></strong> => fd_pdf</td>
                 <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
+                <td>..\..\<p>Computes the standardized variable for the distribution.<\p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
@@ -751,6 +771,11 @@ exist on the set [0, 1].</p>
               </tr>
               <tr>
                 <td>  procedure, public ::
+  <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
+                <td>..\..\<p>Computes the standardized variable for the distribution.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-variance~3'>variance</a></strong> => nd_variance</td>
                 <td></td>
               </tr>
@@ -835,6 +860,11 @@ exist on the set [0, 1].</p>
               </tr>
               <tr>
                 <td>  procedure, public ::
+  <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
+                <td>..\..\<p>Computes the standardized variable for the distribution.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
   <strong><a href='..\type\t_distribution.html#boundprocedure-variance~2'>variance</a></strong> => td_variance</td>
                 <td></td>
               </tr>
@@ -865,7 +895,7 @@ exist on the set [0, 1].</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-03-26 07:52              </p>
+ on 2024-04-19 07:47              </p>
           </div>
         </div>
         <br>
