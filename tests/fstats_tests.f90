@@ -15,20 +15,20 @@ program tests
     overall = .true.
 
     ! Distribution Tests
-    ! local = t_distribution_test_1()
-    ! if (.not.local) overall = .false.
+    local = t_distribution_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = normal_distribution_test_1()
-    ! if (.not.local) overall = .false.
+    local = normal_distribution_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = f_distribution_test_1()
-    ! if (.not.local) overall = .false.
+    local = f_distribution_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = chi_squared_distribution_test_1()
-    ! if (.not.local) overall = .false.
+    local = chi_squared_distribution_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = binomial_distribution_test_1()
-    ! if (.not.local) overall = .false.
+    local = binomial_distribution_test_1()
+    if (.not.local) overall = .false.
 
     ! ! Statistics Tests
     ! local = mean_test_1()
