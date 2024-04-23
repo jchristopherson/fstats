@@ -83,24 +83,24 @@ program tests
     if (.not.local) overall = .false.
 
     ! Experimental Design
-    ! local = get_full_matrix_size_test_1()
-    ! if (.not.local) overall = .false.
+    local = get_full_matrix_size_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = full_factorial_test_1()
-    ! if (.not.local) overall = .false.
+    local = full_factorial_test_1()
+    if (.not.local) overall = .false.
 
-    ! ! Nonlinear Regression
-    ! local = test_prototype_function_call()
-    ! if (.not.local) overall = .false.
+    ! Nonlinear Regression
+    local = test_prototype_function_call()
+    if (.not.local) overall = .false.
 
-    ! local = test_jacobian()
-    ! if (.not.local) overall = .false.
+    local = test_jacobian()
+    if (.not.local) overall = .false.
 
-    ! local = test_nl_least_squares()
-    ! if (.not.local) overall = .false.
+    local = test_nl_least_squares()
+    if (.not.local) overall = .false.
 
-    ! local = test_bootstrap_nl_least_squares()
-    ! if (.not.local) overall = .false.
+    local = test_bootstrap_nl_least_squares()
+    if (.not.local) overall = .false.
 
     ! ! Allan Variance Tests
     ! local = test_allan_variance()
