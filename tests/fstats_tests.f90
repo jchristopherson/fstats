@@ -30,59 +30,59 @@ program tests
     local = binomial_distribution_test_1()
     if (.not.local) overall = .false.
 
-    ! ! Statistics Tests
-    ! local = mean_test_1()
-    ! if (.not.local) overall = .false.
+    ! Statistics Tests
+    local = mean_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = variance_test_1()
-    ! if (.not.local) overall = .false.
+    local = variance_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = standard_deviation_test_1()
-    ! if (.not.local) overall = .false.
+    local = standard_deviation_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = median_test_1()
-    ! if (.not.local) overall = .false.
+    local = median_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = r_squared_test_1()
-    ! if (.not.local) overall = .false.
+    local = r_squared_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = t_test_test_1()
-    ! if (.not.local) overall = .false.
+    local = t_test_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = f_test_test_1()
-    ! if (.not.local) overall = .false.
+    local = f_test_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = anova_test_1()
-    ! if (.not.local) overall = .false.
+    local = anova_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = anova_test_2()
-    ! if (.not.local) overall = .false.
+    local = anova_test_2()
+    if (.not.local) overall = .false.
 
-    ! local = anova_test_3()
-    ! if (.not.local) overall = .false.
+    local = anova_test_3()
+    if (.not.local) overall = .false.
 
-    ! local = confidence_interval_test_1()
-    ! if (.not.local) overall = .false.
+    local = confidence_interval_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = beta_test_1()
-    ! if (.not.local) overall = .false.
+    local = beta_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = beta_test_2()
-    ! if (.not.local) overall = .false.
+    local = beta_test_2()
+    if (.not.local) overall = .false.
 
-    ! local = incomplete_gamma_test_1()
-    ! if (.not.local) overall = .false.
+    local = incomplete_gamma_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = design_matrix_test_1()
-    ! if (.not.local) overall = .false.
+    local = design_matrix_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = regression_test_1()
-    ! if (.not.local) overall = .false.
+    local = regression_test_1()
+    if (.not.local) overall = .false.
 
-    ! local = bootstrap_regression_test_1()
-    ! if (.not.local) overall = .false.
+    local = bootstrap_regression_test_1()
+    if (.not.local) overall = .false.
 
-    ! ! Experimental Design
+    ! Experimental Design
     ! local = get_full_matrix_size_test_1()
     ! if (.not.local) overall = .false.
 
