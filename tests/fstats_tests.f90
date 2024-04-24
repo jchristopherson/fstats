@@ -106,9 +106,9 @@ program tests
     local = test_allan_variance()
     if (.not.local) overall = .false.
 
-    ! ! Trimmed Mean Tests
-    ! local = trimmed_mean_test_1()
-    ! if (.not.local) overall = .false.
+    ! Trimmed Mean Tests
+    local = trimmed_mean_test_1()
+    if (.not.local) overall = .false.
 
     ! ! Covariance Tests
     ! local = test_covariance_1()
