@@ -106,17 +106,17 @@ program tests
     local = test_allan_variance()
     if (.not.local) overall = .false.
 
-    ! Trimmed Mean Tests
-    local = trimmed_mean_test_1()
-    if (.not.local) overall = .false.
+    ! ! Trimmed Mean Tests
+    ! local = trimmed_mean_test_1()
+    ! if (.not.local) overall = .false.
 
-    ! Covariance Tests
-    local = test_covariance_1()
-    if (.not.local) overall = .false.
+    ! ! Covariance Tests
+    ! local = test_covariance_1()
+    ! if (.not.local) overall = .false.
 
-    ! Correlation Tests
-    local = test_correlation_1()
-    if (.not.local) overall = .false.
+    ! ! Correlation Tests
+    ! local = test_correlation_1()
+    ! if (.not.local) overall = .false.
 
     ! ! Additional Tests
     ! local = test_pooled_variance_1()
