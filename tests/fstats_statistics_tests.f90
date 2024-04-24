@@ -844,7 +844,7 @@ contains
         ! Test 1
         tm = trimmed_mean(x, p = p)
         if (.not.is_equal(tm, ans)) then
-            ! rst = .false.
+            rst = .false.
             print '(A)', "TEST FAILED: Trimmed Mean Test 1"
         end if
     end function

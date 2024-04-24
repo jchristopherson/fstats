@@ -195,7 +195,7 @@ function trimmed_mean(x, p) result(rst)
     end if
 
     ! Sort the array into ascending order
-    ! call sort(x, .true.)
+    call sort(x, .true.)
 
     ! Find the limiting indices
     n = size(x)
