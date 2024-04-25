@@ -61,6 +61,9 @@ program tests
     local = anova_test_3()
     if (.not.local) overall = .false.
 
+    local = test_standardized_variable()
+    if (.not.local) overall = .false.
+
     local = confidence_interval_test_1()
     if (.not.local) overall = .false.
 
@@ -126,9 +129,6 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_levene_1()
-    if (.not.local) overall = .false.
-
-    local = test_standardized_variable()
     if (.not.local) overall = .false.
 
     local = test_sample_size()
