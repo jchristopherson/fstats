@@ -43,12 +43,13 @@ pure function confidence_interval_scalar(dist, alpha, s, n) result(rst)
         !! The result.
 
     ! Local Variables
-    real(real64) :: x
+    real(real64) :: x, dn
 
     ! Process
-    x = 1.0d0 - alpha / 2.0d0
+    dn = real(n, real64)
+    x = 1.0d0 - 0.5d0 * alpha
     rst = dist%standardized_variable(x)
-    rst = rst * s / sqrt(real(n, real64))
+    rst = rst * s / sqrt(dn)
 end function
 
 ! ------------------------------------------------------------------------------
