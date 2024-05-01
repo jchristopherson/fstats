@@ -15,13 +15,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         toolchain:
           - {compiler: gcc, version: 13}
-          - {compiler: intel, version: '2023.2'}
-          - {compiler: intel-classic, version: '2021.10'}
         include:
           - os: macos-lastest
+            toolchain: {compiler: intel-classic, version: '2021.10'}
+          - os: ubuntu-latest
+            toolchain: {compiler: intel, version: '2023.2'}
+          - os: windows-latest
             toolchain: {compiler: intel, version: '2023.2'}
 
     steps:
@@ -31,7 +33,7 @@ jobs:
           compiler: ${{ matrix.toolchain.compiler }}
           version: ${{ matrix.toolchain.version }}
 
-      - run: ${{ env.FC }} --version
+      - run: ${{ env.FC }}
         env:
           FC: ${{ steps.setup-fortran.outputs.fc }}
           CC: ${{ steps.setup-fortran.outputs.cc }}
