@@ -17,35 +17,26 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         toolchain:
-          - {compiler: gcc, version: 13}
-          - {compiler: intel, version: '2023.2'}
-          - {compiler: intel-classic, version: '2021.10'}
-          - {compiler: nvidia-hpc, version: '23.11'}
+          - {compiler: gcc, version: 11}
+          - {compiler: intel-classic, version: '2021.9'}
         include:
           - os: ubuntu-latest
-            toolchain: {compiler: gcc, version: 12}
-        exclude:
-          - os: macos-latest
             toolchain: {compiler: intel, version: '2023.2'}
-          - os: macos-latest
-            toolchain: {compiler: nvidia-hpc, version: '23.11'}
-          - os: windows-latest
-            toolchain: {compiler: nvidia-hpc, version: '23.11'}
+        exclude:
+          - os: ubuntu-latest
+            toolchain: {compiler: intel-classic, version: '2021.9'}
 
     steps:
-      - uses: fortran-lang/setup-fortran@v1
+      - uses: awvwgk/setup-fortran@v1
         id: setup-fortran
         with:
           compiler: ${{ matrix.toolchain.compiler }}
           version: ${{ matrix.toolchain.version }}
 
-      - run: |
-          ${{ env.FC }}
-          ${{ steps.setup-fortran.outputs.fc }}
-      # - run: ${{ env.FC }} --version
-      #   env:
-      #     FC: ${{ steps.setup-fortran.outputs.fc }}
-      #     CC: ${{ steps.setup-fortran.outputs.cc }}
+      - run: ${{ env.FC }} --version
+        env:
+          FC: ${{ steps.setup-fortran.outputs.fc }}
+          CC: ${{ steps.setup-fortran.outputs.cc }}
 
       - uses: actions/checkout@v3
       
@@ -57,4 +48,4 @@ jobs:
 
       - name: Test with CMake
         working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+        run: ctest -C ${{env.BUILD_TYPE}}
