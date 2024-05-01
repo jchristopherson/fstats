@@ -639,7 +639,7 @@ contains
         logical :: rst
 
         ! Variables
-        real(real64), parameter :: alpha = 2.0d0
+        real(real64), parameter :: alpha = 0.05d0
         real(real64), parameter :: tol = 1.0d-3
         real(real64), parameter :: t20 = 2.086d0
         real(real64), parameter :: t10 = 2.228d0
@@ -659,6 +659,7 @@ contains
         if (.not.is_equal(c, t10, tol)) then
             rst = .false.
             print '(A)', "TEST FAILED: Confidence Interval Test 1"
+            print *, "Expected: ", t10, " Found: ", c
         end if
 
         ! Test 2, nu = 20
@@ -667,6 +668,7 @@ contains
         if (.not.is_equal(c, t20, tol)) then
             rst = .false.
             print '(A)', "TEST FAILED: Confidence Interval Test 2"
+            print *, "Expected: ", t20, " Found: ", c
         end if
 
         ! Test 3, nu = 30
@@ -675,6 +677,7 @@ contains
         if (.not.is_equal(c, t30, tol)) then
             rst = .false.
             print '(A)', "TEST FAILED: Confidence Interval Test 3"
+            print *, "Expected: ", t30, " Found: ", c
         end if
     end function
 
