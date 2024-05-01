@@ -639,7 +639,7 @@ contains
         logical :: rst
 
         ! Variables
-        real(real64), parameter :: alpha = 2.0d0
+        real(real64), parameter :: alpha = 0.05d0
         real(real64), parameter :: tol = 1.0d-3
         real(real64), parameter :: t20 = 2.086d0
         real(real64), parameter :: t10 = 2.228d0
