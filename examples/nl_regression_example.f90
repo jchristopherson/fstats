@@ -30,7 +30,6 @@ program example
         ylmod(21), lresid(21), lparams(4)
     type(convergence_info) :: info
     type(regression_statistics) :: stats(4), lstats(4)
-    type(bootstrap_regression_statistics) :: bstats(4)
 
     ! Data to fit
     xp = [0.0d0, 0.1d0, 0.2d0, 0.3d0, 0.4d0, 0.5d0, 0.6d0, 0.7d0, 0.8d0, &
@@ -75,26 +74,6 @@ program example
         info%converge_on_solution_change, " (", info%solution_change_value, ")"
     print 103, tab // "Converge on Parameter Change: ", &
         info%converge_on_residual_parameter, " (", info%residual_value, ")"
-
-    ! Compare via a bootstrap solution
-    params = 1.0d0  ! reset the initial guess
-    call bootstrap_nonlinear_least_squares(fun, xp, yp, params, ymod, resid, &
-        stats = bstats)
-
-    ! Display the Results
-    print '(A)', nl // "Bootstrap:"
-    print 100, (tab // "params(", i, "): ", params(i), i = 1, size(params))
-    
-    print '(A)', "Statistics:"
-    print 104, ( &
-        "Coefficient ", i, ":" // nl // &
-        tab // "Standard Error: ", bstats(i)%standard_error, nl // &
-        tab // "Upper Confidence Limit: ", bstats(i)%upper_confidence_interval, nl // &
-        tab // "Lower Confidence Limit: ", bstats(i)%lower_confidence_interval, nl // &
-        tab // "T-Statistic: ", bstats(i)%t_statistic, nl // &
-        tab // "P-Value: ", bstats(i)%probability, &
-        i = 1, size(bstats) &
-    )
 
     ! As our model is simply a 3rd order polynomial, the linear_least_squares
     ! routine can also be used.  As a comparison, here's the 
