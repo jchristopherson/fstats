@@ -89,8 +89,8 @@ jobs:
       fail-fast: false
 
     env:
-      FPM_FC: ifort
-      FC: ifort
+      FPM_FC: ifx
+      FC: ifx
 
     steps:
     - name: Checkout code
@@ -120,7 +120,7 @@ jobs:
 
     - name: fpm build
       run: |
-        ifort --version
+        ifx --version
         fpm --version
         fpm build --profile debug --flag "-warn nointerfaces"
 

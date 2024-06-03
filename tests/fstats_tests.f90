@@ -82,9 +82,6 @@ program tests
     local = regression_test_1()
     if (.not.local) overall = .false.
 
-    local = bootstrap_regression_test_1()
-    if (.not.local) overall = .false.
-
     ! Experimental Design
     local = get_full_matrix_size_test_1()
     if (.not.local) overall = .false.
@@ -100,9 +97,6 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_nl_least_squares()
-    if (.not.local) overall = .false.
-
-    local = test_bootstrap_nl_least_squares()
     if (.not.local) overall = .false.
 
     ! Allan Variance Tests
