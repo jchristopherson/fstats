@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>anova_factor &ndash; FSTATS </title>
+    <title>doe_fit_model &ndash; FSTATS</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>anova_factor
-      <small>Derived Type</small>
+    <h1>doe_fit_model
+      <small>Subroutine</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,18 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 5.1% of total for derived types.</p>Including implementation: 7 statements,  1.5% of total for derived types.">7 statements</a>
+               title=" 0.5% of total for procedures.">7 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_anova.f90"> Source File</a>
+              <a href="../src/fstats_experimental_design.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_anova.f90.html'>fstats_anova.f90</a></li>
-              <li><a href='../module/fstats_anova.html'>fstats_anova</a></li>
-          <li class="active">anova_factor</li>
+              <li><a href='../sourcefile/fstats_experimental_design.f90.html'>fstats_experimental_design.f90</a></li>
+              <li><a href='../module/fstats_experimental_design.html'>fstats_experimental_design</a></li>
+          <li class="active">doe_fit_model</li>
         </ol>
       </div>
     </div>
@@ -125,23 +125,7 @@
       <div id="sidebar">
       <h3>Contents</h3>
   
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-0">Variables</a>
-        </h3>
-      </div>
-      <div id="vars-0" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../type/anova_factor.html#variable-dof">dof</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-f_statistic">f_statistic</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-probability">probability</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-sum_of_squares">sum_of_squares</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-variance">variance</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -166,30 +150,119 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>type, public :: anova_factor</h2>
-    <p>Defines an ANOVA factor result.</p>
+    <h2>public  subroutine doe_fit_model(nway, x, y, beta, err)  
+</h2>
+    
+
+    <p>Fits a Taylor series model to the provided data.</p>
+<p>
+<script type="math/tex; mode=display"> Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
+\sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
+\sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
+X_{j} X_{k} + ... </script>
+</p>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nway"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nway</strong></td>
+            <td>
+                <p>The number of interaction levels.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~29"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The M-by-N matrix containing the M values of each of the N factors
+used to produce the results.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>An M-element array containing the results from the M experiments.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-beta"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>beta</strong></td>
+            <td>
+                <p>An allocatable array that will contain the fitted model parameters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-err~11"></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if x and y are not properly sized
+     relative to one another.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
         <h3>Contents</h3>
   
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-1">Variables</a>
-        </h3>
-      </div>
-      <div id="vars-1" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../type/anova_factor.html#variable-dof">dof</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-f_statistic">f_statistic</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-probability">probability</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-sum_of_squares">sum_of_squares</a>
-            <a class="list-group-item" href="../type/anova_factor.html#variable-variance">variance</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -212,112 +285,15 @@
     </section>
     <br class="visible-xs visible-sm hidden-md">
 
-    <section>
-    <h2>Components</h2>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Visibility</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-<th></th><th>Initial</th>        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-dof"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>dof</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The number of degrees of freedome.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-f_statistic"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>f_statistic</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The F-statistic.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-probability"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>probability</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The variance probability term.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-sum_of_squares"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>sum_of_squares</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The sum of the squares.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-variance"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>variance</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The estimate of variance.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
 
-    </section>
-    <br>
+    
+    
+
+    
     
 
 
-
+    
     
     </div>
   </div>

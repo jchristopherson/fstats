@@ -5,6 +5,7 @@ module fstats_experimental_design
     private
     public :: get_full_factorial_matrix_size
     public :: full_factorial
+    public :: doe_fit_model
 contains
 ! ------------------------------------------------------------------------------
 subroutine get_full_factorial_matrix_size(vars, m, n, err)
@@ -164,6 +165,57 @@ subroutine full_factorial(vars, tbl, err)
         end do
     end do
 end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine doe_fit_model(nway, x, y, beta, err)
+    !! Fits a Taylor series model to the provided data.
+    !!
+    !! $$ Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
+    !! \sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
+    !! \sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
+    !! X_{j} X_{k} + ... $$
+    integer(int32), intent(in) :: nway
+        !! The number of interaction levels.
+    real(real64), intent(in), dimension(:,:) :: x
+        !! The M-by-N matrix containing the M values of each of the N factors
+        !! used to produce the results.
+    real(real64), intent(in), dimension(:) :: y
+        !! An M-element array containing the results from the M experiments.
+    real(real64), intent(out), allocatable, dimension(:) :: beta
+        !! An allocatable array that will contain the fitted model parameters.
+    class(errors), intent(inout), optional, target :: err
+        !! A mechanism for communicating errors and warnings to the 
+        !! caller.  Possible warning and error codes are as follows.
+        !! - FS_NO_ERROR: No errors encountered.
+        !! - FS_ARRAY_SIZE_ERROR: Occurs if x and y are not properly sized
+        !!      relative to one another.
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure function doe_evaluate_model(nway, beta, x, map) result(rst)
+    !! Evaluates the model of the following form.
+    !!
+    !! $$ Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
+    !! \sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
+    !! \sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
+    !! X_{j} X_{k} + ... $$
+    integer(int32), intent(in) :: nway
+        !! The number of interaction levels.
+    real(real64), intent(in), dimension(:) :: beta
+        !! The model coefficients.
+    real(real64), intent(in), dimension(:,:) :: x
+        !! The M-by-N matrix containing the M values of each of the N factors
+        !! at which to evaluate the model.
+    logical, intent(in), optional, dimension(:) :: map
+        !! An optional array of the same size as beta that can be used to
+        !! eliminate a parameter from the model (false), or keep a parameter
+        !! in the model (true).  If not supplied, all parameters will be assumed
+        !! to be part of the model as if the array were filled with all true
+        !! values.
+
+    ! Local Variables
+
+end function
 
 ! ------------------------------------------------------------------------------
 end module
