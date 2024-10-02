@@ -212,6 +212,8 @@ pure function doe_evaluate_model(nway, beta, x, map) result(rst)
         !! in the model (true).  If not supplied, all parameters will be assumed
         !! to be part of the model as if the array were filled with all true
         !! values.
+    real(real64), allocatable, dimension(:) :: rst
+        !! The resulting M-element array.
 
     ! Local Variables
 
