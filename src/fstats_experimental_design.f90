@@ -224,13 +224,12 @@ function doe_evaluate_model(nway, beta, x, map, err) result(rst)
         !! The resulting M-element array.
 
     ! Local Variables
-    integer(int32) :: m, n, flag, i1, i2
+    integer(int32) :: m, flag
     logical, pointer, dimension(:) :: mapptr
     logical, allocatable, target, dimension(:) :: nmap
 
     ! Initialization
     m = size(x, 1)
-    n = size(x, 2)
 
     ! Input Checking
     if (nway < 1 .or. nway > 3) then
@@ -239,7 +238,7 @@ function doe_evaluate_model(nway, beta, x, map, err) result(rst)
     ! TO DO: Check the size of beta
 
     ! Memory Allocations
-    allocate(rst(m), stat = flag, source = beta(1))
+    allocate(rst(m), stat = flag)
     if (flag /= 0) then
         ! TO DO: Error - memory issue
     end if
@@ -257,22 +256,48 @@ function doe_evaluate_model(nway, beta, x, map, err) result(rst)
     end if
 
     ! Process
+    call doe_eval_engine(nway, beta, x, mapptr, rst)
+end function
+
+! ----------
+subroutine doe_eval_engine(nway, beta, x, map, y)
+    ! Driver routine for "doe_evaluate_model" that performs the actual 
+    ! calculations but forgoes any error checking.  This should not be exposed 
+    ! as part of the public API.
+    integer(int32), intent(in) :: nway
+    real(real64), intent(in), dimension(:) :: beta
+    real(real64), intent(in), dimension(:,:) :: x
+    logical, intent(in), dimension(:) :: map
+    real(real64), intent(out), dimension(:) :: y
+
+    ! Local Variables
+    integer(int32) :: i1, i2, n
+
+    ! Initialization
+    n = size(x, 2)
+    if (map(1)) then
+        y = beta(1)
+    else
+        y = 0.0d0
+    end if
+
+    ! Process
     if (nway >= 1) then
         i1 = 2
         i2 = i1 + n - 1
-        call doe_eval_1(beta(i1:i2), x, mapptr(i1:i2), rst)
+        call doe_eval_1(beta(i1:i2), x, map(i1:i2), y)
     end if
     if (nway >= 2) then
         i1 = i2 + 1
         i2 = i1 + n * (n - 1) - 1
-        call doe_eval_2(beta(i1:i2), x, mapptr(i1:i2), rst)
+        call doe_eval_2(beta(i1:i2), x, map(i1:i2), y)
     end if
     if (nway >= 3) then
         i1 = i2 + 1
         i2 = i1 + n * (n**2 - 1) - 1
-        call doe_eval_3(beta(i1:i2), x, mapptr(i1:i2), rst)
+        call doe_eval_3(beta(i1:i2), x, map(i1:i2), y)
     end if
-end function
+end subroutine
 
 ! ----------
 subroutine doe_eval_1(beta, x, map, y)
