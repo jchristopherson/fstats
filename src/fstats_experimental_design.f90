@@ -6,6 +6,7 @@ module fstats_experimental_design
     public :: get_full_factorial_matrix_size
     public :: full_factorial
     public :: doe_fit_model
+    public :: doe_evaluate_model
 contains
 ! ------------------------------------------------------------------------------
 subroutine get_full_factorial_matrix_size(vars, m, n, err)
@@ -192,7 +193,7 @@ subroutine doe_fit_model(nway, x, y, beta, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-pure function doe_evaluate_model(nway, beta, x, map) result(rst)
+function doe_evaluate_model(nway, beta, x, map, err) result(rst)
     !! Evaluates the model of the following form.
     !!
     !! $$ Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
@@ -200,24 +201,184 @@ pure function doe_evaluate_model(nway, beta, x, map) result(rst)
     !! \sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
     !! X_{j} X_{k} + ... $$
     integer(int32), intent(in) :: nway
-        !! The number of interaction levels.
+        !! The number of interaction levels.  Currently, this algorithm supports
+        !! a maximum of three-way interaction.
     real(real64), intent(in), dimension(:) :: beta
         !! The model coefficients.
     real(real64), intent(in), dimension(:,:) :: x
         !! The M-by-N matrix containing the M values of each of the N factors
         !! at which to evaluate the model.
-    logical, intent(in), optional, dimension(:) :: map
+    logical, intent(in), optional, target, dimension(:) :: map
         !! An optional array of the same size as beta that can be used to
         !! eliminate a parameter from the model (false), or keep a parameter
         !! in the model (true).  If not supplied, all parameters will be assumed
         !! to be part of the model as if the array were filled with all true
         !! values.
+    class(errors), intent(inout), optional, target :: err
+        !! A mechanism for communicating errors and warnings to the 
+        !! caller.  Possible warning and error codes are as follows.
+        !! - FS_NO_ERROR: No errors encountered.
+        !! - FS_ARRAY_SIZE_ERROR: Occurs if beta and map are not properly sized
+        !!      relative to one another.
     real(real64), allocatable, dimension(:) :: rst
         !! The resulting M-element array.
 
     ! Local Variables
+    integer(int32) :: m, n, flag, i1, i2
+    logical, pointer, dimension(:) :: mapptr
+    logical, allocatable, target, dimension(:) :: nmap
 
+    ! Initialization
+    m = size(x, 1)
+    n = size(x, 2)
+
+    ! Input Checking
+    if (nway < 1 .or. nway > 3) then
+        ! TO DO: Error - must be at least 1, but not more than 3
+    end if
+    ! TO DO: Check the size of beta
+
+    ! Memory Allocations
+    allocate(rst(m), stat = flag, source = beta(1))
+    if (flag /= 0) then
+        ! TO DO: Error - memory issue
+    end if
+
+    ! Set up the map parameters
+    if (present(map)) then
+        ! TO DO: Check the size of map
+        mapptr => map
+    else
+        allocate(nmap(size(beta)), stat = flag, source = .true.)
+        if (flag /= 0) then
+            ! TO DO: Error - memory issue
+        end if
+        mapptr => nmap
+    end if
+
+    ! Process
+    if (nway >= 1) then
+        i1 = 2
+        i2 = i1 + n - 1
+        call doe_eval_1(beta(i1:i2), x, mapptr(i1:i2), rst)
+    end if
+    if (nway >= 2) then
+        i1 = i2 + 1
+        i2 = i1 + n * (n - 1) - 1
+        call doe_eval_2(beta(i1:i2), x, mapptr(i1:i2), rst)
+    end if
+    if (nway >= 3) then
+        i1 = i2 + 1
+        i2 = i1 + n * (n**2 - 1) - 1
+        call doe_eval_3(beta(i1:i2), x, mapptr(i1:i2), rst)
+    end if
 end function
+
+! ----------
+subroutine doe_eval_1(beta, x, map, y)
+    !! Evaluates the main effect term.
+    !!
+    !! $$ Y = Y + /sum_{i=1}^{n} \beta_{i} X_{i} $$
+    real(real64), intent(in), dimension(:) :: beta
+        !! The model coefficients for just this portion of the model.
+    real(real64), intent(in), dimension(:,:) :: x
+        !! The M-by-N matrix containing the M values of each of the N factors
+        !! at which to evaluate the model.
+    logical, intent(in), dimension(:) :: map
+        !! The usage map corresponding to the model coefficients for just this
+        !! portion of the model.
+    real(real64), intent(inout), dimension(:) :: y
+        !! On input, an M-element array containing the existing portion of the 
+        !! model.  On output, this array is updated to include the main effects.
+
+    ! Local Variables
+    integer(int32) :: i, n
+
+    ! Initialization
+    n = size(x, 2)
+
+    ! Process
+    do i = 1, n
+        if (.not.map(i)) cycle
+        y = y + beta(i) * x(:,i)
+    end do
+end subroutine
+
+! ----------
+subroutine doe_eval_2(beta, x, map, y)
+    !! Evaluates the two-way interaction term.
+    !!
+    !! $$ Y = Y + /sum_{i=1}^{n} /sum_{j=1 // i /neq j}^{n} \beta_{i} X_{i} 
+    !! X_{j} $$
+    real(real64), intent(in), dimension(:) :: beta
+        !! The model coefficients for just this portion of the model.
+    real(real64), intent(in), dimension(:,:) :: x
+        !! The M-by-N matrix containing the M values of each of the N factors
+        !! at which to evaluate the model.
+    logical, intent(in), dimension(:) :: map
+        !! The usage map corresponding to the model coefficients for just this
+        !! portion of the model.
+    real(real64), intent(inout), dimension(:) :: y
+        !! On input, an M-element array containing the existing portion of the 
+        !! model.  On output, this array is updated to include the two-way
+        !! interactions.
+
+    ! Local Variables
+    integer(int32) :: i, j, k, n
+
+    ! Initialization
+    n = size(x, 2)
+
+    ! Process
+    k = 1
+    do i = 1, n
+        do j = 1, n
+            if (i == j) cycle
+            if (.not.map(k)) cycle
+            y = y + beta(k) * x(:,i) * x(:,j)
+            k = k + 1
+        end do
+    end do
+end subroutine
+
+! ----------
+subroutine doe_eval_3(beta, x, map, y)
+    !! Evaluates the three-way interaction term.
+    !!
+    !! $$ Y = Y + /sum_{i=1}^{n} /sum_{j=1 // i /neq j}^{n} \beta_{i} X_{i} 
+    !! X_{j} $$
+    real(real64), intent(in), dimension(:) :: beta
+        !! The model coefficients for just this portion of the model.
+    real(real64), intent(in), dimension(:,:) :: x
+        !! The M-by-N matrix containing the M values of each of the N factors
+        !! at which to evaluate the model.
+    logical, intent(in), dimension(:) :: map
+        !! The usage map corresponding to the model coefficients for just this
+        !! portion of the model.
+    real(real64), intent(inout), dimension(:) :: y
+        !! On input, an M-element array containing the existing portion of the 
+        !! model.  On output, this array is updated to include the three-way
+        !! interactions.
+
+    ! Local Variables
+    integer(int32) :: i, j, k, ii, n
+
+    ! Initialization
+    n = size(x, 2)
+
+    ! Process
+    ii = 1
+    do i = 1, n
+        do j = 1, n
+            do k = 1, n
+                if (i == j .and. j == k) cycle
+                if (.not.map(ii)) cycle
+                y = y + beta(ii) * x(:,i) * x(:,j) * x(:,k)
+                ii = ii + 1
+            end do
+        end do
+    end do
+end subroutine
 
 ! ------------------------------------------------------------------------------
 end module

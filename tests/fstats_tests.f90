@@ -89,6 +89,15 @@ program tests
     local = full_factorial_test_1()
     if (.not.local) overall = .false.
 
+    local = test_eval_model_main_effects()
+    if (.not.local) overall = .false.
+
+    local = test_eval_model_two_way()
+    if (.not.local) overall = .false.
+
+    local = test_eval_model_three_way()
+    if (.not.local) overall = .false.
+
     ! Nonlinear Regression
     local = test_prototype_function_call()
     if (.not.local) overall = .false.
