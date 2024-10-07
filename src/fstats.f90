@@ -84,5 +84,6 @@ module fstats
     public :: FS_NIELSEN_UPDATE
     public :: doe_fit_model
     public :: doe_evaluate_model
+    public :: doe_model
    
 end module
