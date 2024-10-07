@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 2.7% of total for modules and submodules.">74 statements</a>
+               title="11.3% of total for modules and submodules.">338 statements</a>
           </li>
 
             <li id="source-file">
@@ -131,10 +131,46 @@
   
   
   
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#inters-0">Interfaces</a>
+        </h3>
+      </div>
+      <div id="inters-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_experimental_design.html#interface-doe_evaluate_model">doe_evaluate_model</a>
+        </div>
+      </div>
+    </div>
+
   
-  
-  
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#types-0">Derived Types</a>
+        </h3>
+      </div>
+      <div id="types-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_experimental_design.html#type-doe_model">doe_model</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#funcs-0">Functions</a>
+        </h3>
+      </div>
+      <div id="funcs-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_fit_model">doe_fit_model</a>
+        </div>
+      </div>
+    </div>
+
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
@@ -143,7 +179,6 @@
       </div>
       <div id="subs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_fit_model">doe_fit_model</a>
             <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-full_factorial">full_factorial</a>
             <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-get_full_factorial_matrix_size">get_full_factorial_matrix_size</a>
         </div>
@@ -172,6 +207,7 @@
           <li class="list-group-item">
             <ul class="list-inline">
                 <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li><a href='../module/fstats_regression.html'>fstats_regression</a></li>
                 <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
             </ul>
           </li>
@@ -191,10 +227,46 @@
   
   
   
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#inters-1">Interfaces</a>
+        </h3>
+      </div>
+      <div id="inters-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_experimental_design.html#interface-doe_evaluate_model">doe_evaluate_model</a>
+        </div>
+      </div>
+    </div>
+
   
-  
-  
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#types-1">Derived Types</a>
+        </h3>
+      </div>
+      <div id="types-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_experimental_design.html#type-doe_model">doe_model</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#funcs-1">Functions</a>
+        </h3>
+      </div>
+      <div id="funcs-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_fit_model">doe_fit_model</a>
+        </div>
+      </div>
+    </div>
+
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
@@ -203,7 +275,6 @@
       </div>
       <div id="subs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_fit_model">doe_fit_model</a>
             <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-full_factorial">full_factorial</a>
             <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-get_full_factorial_matrix_size">get_full_factorial_matrix_size</a>
         </div>
@@ -224,14 +295,340 @@
 
 
 
+        <section>
+          <h2>Interfaces</h2>
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="interface-doe_evaluate_model"></span>
+      <h3>public        interface <a href='../interface/doe_evaluate_model.html'>doe_evaluate_model</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private  function doe_evaluate_model_1(nway, beta, x, map, err) result(rst)  
 
+    </h3>
+  <p>Evaluates the model of the following form.</p>
+<p>
+<script type="math/tex; mode=display"> Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
+\sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
+\sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
+X_{j} X_{k} + ... </script>
+</p>
 
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nway</strong></td>
+            <td>
+                <p>The number of interaction levels.  Currently, this algorithm supports
+a maximum of three-way interaction.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>beta</strong></td>
+            <td>
+                <p>The model coefficients.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The M-by-N matrix containing the M values of each of the N factors
+at which to evaluate the model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              target, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>map</strong></td>
+            <td>
+                <p>An optional array of the same size as beta that can be used to
+eliminate a parameter from the model (false), or keep a parameter
+in the model (true).  If not supplied, all parameters will be assumed
+to be part of the model as if the array were filled with all true
+values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if beta and map are not properly sized
+     relative to one another.
+- FS_MEMORY_ERROR: Occurs if there is a memory allocation 
+     error.
+- FS_INVALID_INPUT_ERROR: Occurs if nway is less than 1 or greater
+     than 3.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:)</small>
+    </h4>
+    <p>The resulting M-element array.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private  function doe_evaluate_model_2(mdl, x, err) result(rst)  
+
+    </h3>
+  <p>Evaluates the model of the following form.</p>
+<p>
+<script type="math/tex; mode=display"> Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
+\sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
+\sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
+X_{j} X_{k} + ... </script>
+</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/doe_model.html'>doe_model</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>mdl</strong></td>
+            <td>
+                <p>The model to evaluate.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The M-by-N matrix containing the M values of each of the N factors
+at which to evaluate the model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_MEMORY_ERROR: Occurs if there is a memory allocation 
+     error.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:)</small>
+    </h4>
+    <p>The resulting M-element array.</p>
+
+          </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
 
 
         <section>
-          <h2>Subroutines</h2>
+          <h2>Derived Types</h2>
               <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-doe_fit_model"></span><h3>public  subroutine <a href='../proc/doe_fit_model.html'>doe_fit_model</a>(nway, x, y, beta, err)  
+    <div class="panel-heading codesum">
+      <span class="anchor" id="type-doe_model"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='../type/doe_model.html'>doe_model</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>A model used to represent a design of experiments result.  The model
+is of the following form.</p><a href="../type/doe_model.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Visibility</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+<th></th><th>Initial</th>        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-coefficients"></span>
+              real(kind=real64),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>coefficients</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The model coefficients.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-map~6"></span>
+              logical,
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>map</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>An array denoting if a model coefficient should be included
+as part of the model (true), or neglected (false).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nway~3"></span>
+              integer(kind=int32),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nway</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The number of interaction levels.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-stats"></span>
+              type(<a href='../type/regression_statistics.html'>regression_statistics</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>stats</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>Statistical information for each model parameter.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+        <section>
+          <h2>Functions</h2>
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-doe_fit_model"></span><h3>public  function <a href='../proc/doe_fit_model.html'>doe_fit_model</a>(nway, x, y, map, alpha, err) result(rst)  
 </h3></div>
     <div class="panel-body">
           
@@ -297,16 +694,37 @@ used to produce the results.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              real(kind=real64),
+              logical,
             </td>
-<td>intent(out),</td>
-              <td></td>            <td>
-              allocatable, dimension(:)
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              target, dimension(:)
             </td>
             <td>::</td>
-            <td><strong>beta</strong></td>
+            <td><strong>map</strong></td>
             <td>
-<p>An allocatable array that will contain the fitted model parameters.</p>
+<p>An optional array of the same size as beta that can be used to
+eliminate a parameter from the model (false), or keep a parameter
+in the model (true).  If not supplied, all parameters will be assumed
+to be part of the model as if the array were filled with all true
+values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+<p>The significance level at which to evaluate the confidence 
+intervals.  The default value is 0.05 such that a 95% 
+confidence interval is calculated.</p>
             </td>
         </tr>
         <tr>
@@ -325,16 +743,28 @@ used to produce the results.</p>
 caller.  Possible warning and error codes are as follows.
 - FS_NO_ERROR: No errors encountered.
 - FS_ARRAY_SIZE_ERROR: Occurs if x and y are not properly sized
-     relative to one another.</p>
+     relative to one another.
+- FS_MEMORY_ERROR: Occurs if there is a memory allocation 
+     error.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
+    <h4>
+    Return Value
+    <small>type(<a href='../type/doe_model.html'>doe_model</a>)</small>
+    </h4>
+    <p>The resulting model.</p>
 
     </div>
   </div>
 
+        </section>
+        <br>
+
+        <section>
+          <h2>Subroutines</h2>
               <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="proc-full_factorial"></span><h3>public  subroutine <a href='../proc/full_factorial.html'>full_factorial</a>(vars, tbl, err)  
 </h3></div>
@@ -528,7 +958,7 @@ caller.  Possible warning and error codes are as follows.
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-10-02 15:10              </p>
+ on 2024-10-07 11:33              </p>
           </div>
         </div>
         <br>
