@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.24)
 project(
     fstats
     LANGUAGES Fortran
-    VERSION 1.2.4
+    VERSION 1.2.5
 )
 
 # Confgiure everything
