@@ -486,7 +486,10 @@ function doe_evaluate_model_1(nway, beta, x, map, err) result(rst)
 
     ! Input Checking
     if (nway < 1 .or. nway > 3) then
-        ! TO DO: Error - must be at least 1, but not more than 3
+        call errmgr%report_error("doe_evaluate_model_1", &
+            "The number of interaction levels must be between one and three.", &
+            FS_INVALID_ARGUMENT_ERROR)
+        return
     end if
 
     nparam = 1
