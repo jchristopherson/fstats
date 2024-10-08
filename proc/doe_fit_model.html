@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>report_memory_error &ndash; FSTATS</title>
+    <title>doe_fit_model &ndash; FSTATS</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>report_memory_error
-      <small>Subroutine</small>
+    <h1>doe_fit_model
+      <small>Function</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,18 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 0.6% of total for procedures.">9 statements</a>
+               title=" 6.2% of total for procedures.">99 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_errors.f90"> Source File</a>
+              <a href="../src/fstats_experimental_design.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_errors.f90.html'>fstats_errors.f90</a></li>
-              <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
-          <li class="active">report_memory_error</li>
+              <li><a href='../sourcefile/fstats_experimental_design.f90.html'>fstats_experimental_design.f90</a></li>
+              <li><a href='../module/fstats_experimental_design.html'>fstats_experimental_design</a></li>
+          <li class="active">doe_fit_model</li>
         </ol>
       </div>
     </div>
@@ -125,19 +125,7 @@
       <div id="sidebar">
       <h3>Contents</h3>
   
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-0">Variables</a>
-        </h3>
-      </div>
-      <div id="vars-0" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../proc/report_memory_error.html#variable-msg~5">msg</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -162,11 +150,30 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public  subroutine report_memory_error(err, fname, code)  
+    <h2>public  function doe_fit_model(nway, x, y, map, alpha, err) result(rst)  
 </h2>
-    
+        <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+            <ul class="list-inline">
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
+                <li>blas</li>
+            </ul>
+          </li>
+      </ul>
+    </div>
 
-    <p>Reports a memory allocation related error.</p>
+
+    <p>Fits a Taylor series model to the provided data.</p>
+<p>
+<script type="math/tex; mode=display"> Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
+\sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
+\sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
+X_{j} X_{k} + ... </script>
+</p>
 
 
     <h3>Arguments</h3>
@@ -182,37 +189,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~3"></span>
-              class(errors),
-            </td>
-<td>intent(inout)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>err</strong></td>
-            <td>
-                <p>The error handling object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fname"></span>
-              character(len=*),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>fname</strong></td>
-            <td>
-                <p>The name of the routine in which the error occurred.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-code"></span>
+              <span class="anchor" id="variable-nway"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -220,32 +197,117 @@
               
             </td>
             <td>::</td>
-            <td><strong>code</strong></td>
+            <td><strong>nway</strong></td>
             <td>
-                <p>The error code returned by the allocation routine.</p>
+                <p>The number of interaction levels.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~29"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The M-by-N matrix containing the M values of each of the N factors
+used to produce the results.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>An M-element array containing the results from the M experiments.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-map"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              target, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>map</strong></td>
+            <td>
+                <p>An optional array of the same size as beta that can be used to
+eliminate a parameter from the model (false), or keep a parameter
+in the model (true).  If not supplied, all parameters will be assumed
+to be part of the model as if the array were filled with all true
+values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>The significance level at which to evaluate the confidence 
+intervals.  The default value is 0.05 such that a 95% 
+confidence interval is calculated.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-err~9"></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>A mechanism for communicating errors and warnings to the 
+caller.  Possible warning and error codes are as follows.
+- FS_NO_ERROR: No errors encountered.
+- FS_ARRAY_SIZE_ERROR: Occurs if x and y are not properly sized
+     relative to one another.
+- FS_MEMORY_ERROR: Occurs if there is a memory allocation 
+     error.
+- FS_INVALID_ARGUMENT_ERROR: Occurs if nway is out of range, or if
+     map is used to "turn off" all model parameters.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
+      <h3>Return Value
+        <small>
+          <span class="anchor" id="variable-rst~47"></span>
+          type(<a href='../type/doe_model.html'>doe_model</a>)
+        </small>
+      </h3>
+      <p>The resulting model.</p>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
         <h3>Contents</h3>
   
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-1">Variables</a>
-        </h3>
-      </div>
-      <div id="vars-1" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../proc/report_memory_error.html#variable-msg~5">msg</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -269,40 +331,6 @@
     <br class="visible-xs visible-sm hidden-md">
 
 
-    <section>    
-      <h2>Variables</h2>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Visibility</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-<th></th><th>Initial</th>        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-msg~5"></span>
-              character(len=MESSAGE_SIZE),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>msg</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    </section>
-    <br>
     
     
 

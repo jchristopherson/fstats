@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>report_memory_error &ndash; FSTATS</title>
+    <title>doe_model &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>report_memory_error
-      <small>Subroutine</small>
+    <h1>doe_model
+      <small>Derived Type</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,18 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 0.6% of total for procedures.">9 statements</a>
+               title="<p> 4.2% of total for derived types.</p>Including implementation: 6 statements,  1.2% of total for derived types.">6 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_errors.f90"> Source File</a>
+              <a href="../src/fstats_experimental_design.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_errors.f90.html'>fstats_errors.f90</a></li>
-              <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
-          <li class="active">report_memory_error</li>
+              <li><a href='../sourcefile/fstats_experimental_design.f90.html'>fstats_experimental_design.f90</a></li>
+              <li><a href='../module/fstats_experimental_design.html'>fstats_experimental_design</a></li>
+          <li class="active">doe_model</li>
         </ol>
       </div>
     </div>
@@ -133,7 +133,10 @@
       </div>
       <div id="vars-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../proc/report_memory_error.html#variable-msg~5">msg</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-coefficients">coefficients</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-map~6">map</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-nway~3">nway</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-stats">stats</a>
         </div>
       </div>
     </div>
@@ -162,72 +165,15 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public  subroutine report_memory_error(err, fname, code)  
-</h2>
-    
-
-    <p>Reports a memory allocation related error.</p>
-
-
-    <h3>Arguments</h3>
-        <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-err~3"></span>
-              class(errors),
-            </td>
-<td>intent(inout)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>err</strong></td>
-            <td>
-                <p>The error handling object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fname"></span>
-              character(len=*),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>fname</strong></td>
-            <td>
-                <p>The name of the routine in which the error occurred.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-code"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>code</strong></td>
-            <td>
-                <p>The error code returned by the allocation routine.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
+      <h2>type, public :: doe_model</h2>
+    <p>A model used to represent a design of experiments result.  The model
+is of the following form.</p>
+<p>
+<script type="math/tex; mode=display"> Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
+\sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
+\sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
+X_{j} X_{k} + ... </script>
+</p>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
@@ -241,7 +187,10 @@
       </div>
       <div id="vars-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../proc/report_memory_error.html#variable-msg~5">msg</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-coefficients">coefficients</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-map~6">map</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-nway~3">nway</a>
+            <a class="list-group-item" href="../type/doe_model.html#variable-stats">stats</a>
         </div>
       </div>
     </div>
@@ -268,9 +217,8 @@
     </section>
     <br class="visible-xs visible-sm hidden-md">
 
-
-    <section>    
-      <h2>Variables</h2>
+    <section>
+    <h2>Components</h2>
       <table class="table table-striped varlist">
     <thead>
       <tr>
@@ -283,19 +231,71 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-msg~5"></span>
-              character(len=MESSAGE_SIZE),
+              <span class="anchor" id="variable-coefficients"></span>
+              real(kind=real64),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>coefficients</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>The model coefficients.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-map~6"></span>
+              logical,
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>map</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>An array denoting if a model coefficient should be included
+as part of the model (true), or neglected (false).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nway~3"></span>
+              integer(kind=int32),
             </td>
               <td>public</td>
             <td>
               
             </td>
             <td>::</td>
-            <td><strong>msg</strong></td>
+            <td><strong>nway</strong></td>
                 <td></td>
                 <td></td>
             <td>
-                
+                <p>The number of interaction levels.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-stats"></span>
+              type(<a href='../type/regression_statistics.html'>regression_statistics</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>stats</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>Statistical information for each model parameter.</p>
             </td>
         </tr>
     </tbody>
@@ -304,13 +304,9 @@
     </section>
     <br>
     
-    
-
-    
-    
 
 
-    
+
     
     </div>
   </div>
