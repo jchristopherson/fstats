@@ -82,5 +82,8 @@ module fstats
     public :: FS_LEVENBERG_MARQUARDT_UPDATE
     public :: FS_QUADRATIC_UPDATE
     public :: FS_NIELSEN_UPDATE
+    public :: doe_fit_model
+    public :: doe_evaluate_model
+    public :: doe_model
    
 end module

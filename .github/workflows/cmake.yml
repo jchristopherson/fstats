@@ -22,9 +22,6 @@ jobs:
         include:
           - os: ubuntu-latest
             toolchain: {compiler: intel, version: '2023.2'}
-        exclude:
-          - os: ubuntu-latest
-            toolchain: {compiler: intel-classic, version: '2021.9'}
 
     steps:
       - uses: awvwgk/setup-fortran@v1

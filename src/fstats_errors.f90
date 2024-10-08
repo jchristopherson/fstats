@@ -15,6 +15,7 @@ module fstats_errors
     integer(int32), parameter :: FS_UNDERDEFINED_PROBLEM_ERROR = 10004
     integer(int32), parameter :: FS_TOLERANCE_TOO_SMALL_ERROR = 10005
     integer(int32), parameter :: FS_TOO_FEW_ITERATION_ERROR = 10006
+    integer(int32), parameter :: FS_INVALID_ARGUMENT_ERROR = 10007
 
 ! ------------------------------------------------------------------------------
     integer(int32), private, parameter :: MESSAGE_SIZE = 1024
