@@ -228,6 +228,8 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
         !!      relative to one another.
         !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
         !!      error.
+        !! - FS_INVALID_ARGUMENT_ERROR: Occurs if nway is out of range, or if
+        !!      map is used to "turn off" all model parameters.
     type(doe_model) :: rst
         !! The resulting model.
 
@@ -259,7 +261,10 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
 
     ! Input Checking
     if (nway < 1 .or. nway > 3) then
-        ! TO DO: Error - must be at least 1, but not more than 3
+        call errmgr%report_error("doe_fit_model", &
+            "The number of interaction levels must be between one and three.", &
+            FS_INVALID_ARGUMENT_ERROR)
+        return
     end if
 
     ! Determine the parameter count
@@ -271,13 +276,16 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
     ! Set up the map parameters
     if (present(map)) then
         if (size(map) /= nparam) then
-            ! TO DO: Error - map is not sized correctly
+            call report_array_size_error(errmgr, "doe_fit_model", "map", &
+                nparam, size(map))
+            return
         end if
         mapptr => map
     else
         allocate(nmap(nparam), stat = flag, source = .true.)
         if (flag /= 0) then
-            ! TO DO: Error - memory issue
+            call report_memory_error(errmgr, "doe_fit_model", flag)
+            return
         end if
         mapptr => nmap
     end if
@@ -288,13 +296,17 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
         if (.not.mapptr(i)) n = n - 1
     end do
     if (n < 1) then
-        ! TO DO: Error.  there must be at least one parameter
+        call errmgr%report_error("doe_fit_model", &
+            "There must be at least one active model parameter.", &
+            FS_INVALID_ARGUMENT_ERROR)
+        return
     end if
 
     ! Local memory allocations
     allocate(xc(m, n), c(n, n), cxt(n, m), coeffs(n), stat = flag)
     if (flag /= 0) then
-        ! TO DO: Memory error
+        call report_memory_error(errmgr, "doe_fit_model", flag)
+        return
     end if
 
     ! Create the design matrix
@@ -322,7 +334,8 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
     if (flag == 0) allocate(rst%stats(nparam), stat = flag)
     if (flag == 0) allocate(rst%map(nparam), stat = flag, source = mapptr)
     if (flag /= 0) then
-        ! TO DO: Memory error
+        call report_memory_error(errmgr, "doe_fit_model", flag)
+        return
     end if
     j = 0
     do i = 1, nparam
@@ -459,14 +472,24 @@ function doe_evaluate_model_1(nway, beta, x, map, err) result(rst)
     integer(int32) :: m, n, nparam, flag
     logical, pointer, dimension(:) :: mapptr
     logical, allocatable, target, dimension(:) :: nmap
-
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
     ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
     m = size(x, 1)
     n = size(x, 2)
 
     ! Input Checking
     if (nway < 1 .or. nway > 3) then
-        ! TO DO: Error - must be at least 1, but not more than 3
+        call errmgr%report_error("doe_evaluate_model_1", &
+            "The number of interaction levels must be between one and three.", &
+            FS_INVALID_ARGUMENT_ERROR)
+        return
     end if
 
     nparam = 1
@@ -474,25 +497,31 @@ function doe_evaluate_model_1(nway, beta, x, map, err) result(rst)
     if (nway >= 2) nparam = nparam + n * (n - 1)
     if (nway >= 3) nparam = nparam + n * (n**2 - 1)
     if (size(beta) /= nparam) then
-        ! TO DO: Error - beta is not sized correctly
+        call report_array_size_error(errmgr, "doe_evaluate_model_1", "beta", &
+            nparam, size(beta))
+        return
     end if
 
     ! Memory Allocations
     allocate(rst(m), stat = flag)
     if (flag /= 0) then
-        ! TO DO: Error - memory issue
+        call report_memory_error(errmgr, "doe_evaluate_model_1", flag)
+        return
     end if
 
     ! Set up the map parameters
     if (present(map)) then
         if (size(map) /= nparam) then
-            ! TO DO: Error - map is not sized correctly
+            call report_array_size_error(errmgr, "doe_evaluate_model_1", &
+                "map", nparam, size(map))
+            return
         end if
         mapptr => map
     else
         allocate(nmap(nparam), stat = flag, source = .true.)
         if (flag /= 0) then
-            ! TO DO: Error - memory issue
+            call report_memory_error(errmgr, "doe_evaluate_model_1", flag)
+            return
         end if
         mapptr => nmap
     end if
