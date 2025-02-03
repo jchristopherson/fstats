@@ -30,9 +30,6 @@ function box_muller_sample_scalar(mu, sigma) result(rst)
     real(real64) :: rst(2)
         !! The pair of random values.
 
-    ! Parameters
-    complex(real64), parameter :: j = (0.0d0, 1.0d0)
-
     ! Local Variables
     real(real64) :: u1, u2
     complex(real64) :: z
@@ -40,8 +37,8 @@ function box_muller_sample_scalar(mu, sigma) result(rst)
     ! Process
     call random_number(u1)
     call random_number(u2)
-    z = sqrt(-log(u1)) * exp(j * twopi * u2)
-    rst = [real(z, real64), aimag(z)]
+    z = sqrt(-2.0d0 * log(u1)) * sigma
+    rst = [z * cos(twopi * u2) + mu, z * sin(twopi * u2) + mu]
 end function
 
 ! ------------------------------------------------------------------------------
