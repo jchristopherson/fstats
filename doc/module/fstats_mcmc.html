@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>f_test &ndash; FSTATS</title>
+    <title>fstats_mcmc &ndash; FSTATS</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>f_test
-      <small>Subroutine</small>
+    <h1>fstats_mcmc
+      <small>Module</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,18 +96,17 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 2.0% of total for procedures.">32 statements</a>
+               title=" 6.7% of total for modules and submodules.">232 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_hypothesis.f90"> Source File</a>
+              <a href="../src/fstats_mcmc.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_hypothesis.f90.html'>fstats_hypothesis.f90</a></li>
-              <li><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></li>
-          <li class="active">f_test</li>
+              <li><a href='../sourcefile/fstats_mcmc.f90.html'>fstats_mcmc.f90</a></li>
+          <li class="active">fstats_mcmc</li>
         </ol>
       </div>
     </div>
@@ -119,10 +118,10 @@
   </script>
 
   </div>
-  
+
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-      <div id="sidebar">
+        <div id="sidebar">
       <h3>Contents</h3>
   
   
@@ -134,7 +133,19 @@
   
   
   
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#types-0">Derived Types</a>
+        </h3>
+      </div>
+      <div id="types-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-metropolis_hastings">metropolis_hastings</a>
+        </div>
+      </div>
+    </div>
+
   
   
   
@@ -148,164 +159,176 @@
   </div>
 
     </div>
-    
+
     <div class="col-md-9" id='text'>
-    <h2>public  subroutine f_test(x1, x2, stat, p, dof1, dof2)  
-</h2>
-    
+      
+<br>          <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+            <ul class="list-inline">
+                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+                <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li><a href='../module/fstats_sampling.html'>fstats_sampling</a></li>
+                <li>ferror</li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+            </ul>
+          </li>
+      </ul>
+    </div>
 
-    <p>Computes the F-test and returns the probability (two-tailed) that
-the variances of two data sets are not significantly different.</p>
-<p>See Also</p>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/F-test">Wikipedia</a></li>
-</ul>
+      
+      <br>
+
+      <section class="visible-xs visible-sm hidden-md">
+          <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#types-1">Derived Types</a>
+        </h3>
+      </div>
+      <div id="types-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-metropolis_hastings">metropolis_hastings</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
 
 
-    <h3>Arguments</h3>
+      </section>
+      <br class="visible-xs visible-sm hidden-md">
+
+
+
+
+
+
+        <section>
+          <h2>Derived Types</h2>
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="type-metropolis_hastings"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='../type/metropolis_hastings.html'>metropolis_hastings</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>An implementation of the Metropolis-Hastings algorithm for the
+generation of a Markov chain.</p>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
         <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x1~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x1</strong>(:)</td>
-            <td>
-                <p>An N-element array containing the first data set.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x2~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x2</strong>(:)</td>
-            <td>
-                <p>An M-element array containing the second data set.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-stat~5"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>stat</strong></td>
-            <td>
-                <p>The F-statistic.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-p~6"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>p</strong></td>
-            <td>
-                <p>The probability value that the two samples are likely to
-have come from the two underlying populations that 
-have the same variance.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-dof1"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>dof1</strong></td>
-            <td>
-                <p>A measure of the degrees of freedom.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-dof2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>dof2</strong></td>
-            <td>
-                <p>A measure of the degrees of freedom.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-estimate_covariance'>estimate_covariance</a></strong>
+ =>
+                    mh_init_covariance
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-evaluate'>evaluate</a></strong>
+ =>
+                    mh_eval
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
+ =>
+                    mh_get_chain_length
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_state_variable_count'>get_state_variable_count</a></strong>
+ =>
+                    mh_get_nvars
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-proposal'>proposal</a></strong>
+ =>
+                    mh_proposal_sampler
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-push_new_state'>push_new_state</a></strong>
+ =>
+                    mh_push
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-target_density'>target_density</a></strong>
+ =>
+                    mh_target_density
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
 
-    <br>
-
-    <section class="visible-xs visible-sm hidden-md">
-        <h3>Contents</h3>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+        </section>
+        <br>
 
 
-    </section>
-    <br class="visible-xs visible-sm hidden-md">
 
 
-    
-    
 
-    
-    
-
-
-    
-    
     </div>
   </div>
 

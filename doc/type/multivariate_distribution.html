@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>f_test &ndash; FSTATS</title>
+    <title>multivariate_distribution &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>f_test
-      <small>Subroutine</small>
+    <h1>multivariate_distribution
+      <small>Derived Type</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,18 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 2.0% of total for procedures.">32 statements</a>
+               title="<p> 2.2% of total for derived types.</p>Including implementation: 4 statements,  0.5% of total for derived types.">4 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_hypothesis.f90"> Source File</a>
+              <a href="../src/fstats_distributions.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_hypothesis.f90.html'>fstats_hypothesis.f90</a></li>
-              <li><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></li>
-          <li class="active">f_test</li>
+              <li><a href='../sourcefile/fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
+              <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+          <li class="active">multivariate_distribution</li>
         </ol>
       </div>
     </div>
@@ -141,7 +141,19 @@
   
   
   
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#boundprocs-0">Type-Bound Procedures</a>
+        </h3>
+      </div>
+      <div id="boundprocs-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../type/multivariate_distribution.html#boundprocedure-pdf~2">pdf</a>
+        </div>
+      </div>
+    </div>
+
   
 
 
@@ -150,124 +162,8 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public  subroutine f_test(x1, x2, stat, p, dof1, dof2)  
-</h2>
-    
-
-    <p>Computes the F-test and returns the probability (two-tailed) that
-the variances of two data sets are not significantly different.</p>
-<p>See Also</p>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/F-test">Wikipedia</a></li>
-</ul>
-
-
-    <h3>Arguments</h3>
-        <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x1~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x1</strong>(:)</td>
-            <td>
-                <p>An N-element array containing the first data set.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x2~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x2</strong>(:)</td>
-            <td>
-                <p>An M-element array containing the second data set.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-stat~5"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>stat</strong></td>
-            <td>
-                <p>The F-statistic.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-p~6"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>p</strong></td>
-            <td>
-                <p>The probability value that the two samples are likely to
-have come from the two underlying populations that 
-have the same variance.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-dof1"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>dof1</strong></td>
-            <td>
-                <p>A measure of the degrees of freedom.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-dof2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>dof2</strong></td>
-            <td>
-                <p>A measure of the degrees of freedom.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
+      <h2>type, public, abstract :: multivariate_distribution</h2>
+    <p>Defines a multivariate probability distribution.</p>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
@@ -289,22 +185,101 @@ have the same variance.</p>
   
   
   
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#boundprocs-1">Type-Bound Procedures</a>
+        </h3>
+      </div>
+      <div id="boundprocs-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../type/multivariate_distribution.html#boundprocedure-pdf~2">pdf</a>
+        </div>
+      </div>
+    </div>
+
   
 
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
 
-
-    
-    
-
-    
     
 
 
-    
+      <section>
+        <h2>Type-Bound Procedures</h2>
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~2"></span><h3>procedure(<a href='../interface/multivariate_distribution_function.html'>multivariate_distribution_function</a>), public, deferred, pass :: <strong>pdf</strong>          
+    </h3></div>
+      <div class="panel-body">
+        
+        <p>Computes the probability density function.</p>
+      </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    pure function multivariate_distribution_function(this, x) result(rst)  
+<small>Prototype</small></h3>
+  <p>Defines an interface for a multivariate probability distribution
+function.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/multivariate_distribution.html'>multivariate_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The values at which to evaluate the function.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The value of the function.</p>
+
+        </li>
+    </ul>
+  </div>
+
+      </section>
+
     
     </div>
   </div>

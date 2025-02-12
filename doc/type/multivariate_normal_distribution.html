@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>binomial_distribution &ndash; FSTATS </title>
+    <title>multivariate_normal_distribution &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,7 +84,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>binomial_distribution
+    <h1>multivariate_normal_distribution
       <small>Derived Type</small>
       
     </h1>
@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 6.1% of total for derived types.</p>Including implementation: 66 statements,  7.9% of total for derived types.">11 statements</a>
+               title="<p> 7.8% of total for derived types.</p>Including implementation: 139 statements, 16.6% of total for derived types.">14 statements</a>
           </li>
 
             <li id="source-file">
@@ -107,7 +107,7 @@
         <ol class="breadcrumb in-well text-right">
               <li><a href='../sourcefile/fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
               <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
-          <li class="active">binomial_distribution</li>
+          <li class="active">multivariate_normal_distribution</li>
         </ol>
       </div>
     </div>
@@ -125,20 +125,7 @@
       <div id="sidebar">
       <h3>Contents</h3>
   
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-0">Variables</a>
-        </h3>
-      </div>
-      <div id="vars-0" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../type/binomial_distribution.html#variable-n">n</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#variable-p~2">p</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -162,13 +149,12 @@
       </div>
       <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-cdf~2">cdf</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mean~2">mean</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-median~2">median</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mode~2">mode</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-pdf~3">pdf</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~3">variance</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-get_cholesky_factored_matrix">get_cholesky_factored_matrix</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-get_covariance">get_covariance</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-get_means">get_means</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-initialize">initialize</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-pdf~6">pdf</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-set_means">set_means</a>
         </div>
       </div>
     </div>
@@ -181,28 +167,14 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>type, public, extends(<a href='../type/distribution.html'>distribution</a>) :: binomial_distribution</h2>
-    <p>Defines a binomial distribution.  The binomial distribution describes
-the probability p of getting k successes in n independent trials.</p>
+      <h2>type, public, extends(<a href='../type/multivariate_distribution.html'>multivariate_distribution</a>) :: multivariate_normal_distribution</h2>
+    <p>Defines a multivariate normal (Gaussian) distribution.</p>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
         <h3>Contents</h3>
   
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-1">Variables</a>
-        </h3>
-      </div>
-      <div id="vars-1" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../type/binomial_distribution.html#variable-n">n</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#variable-p~2">p</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -226,13 +198,12 @@ the probability p of getting k successes in n independent trials.</p>
       </div>
       <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-cdf~2">cdf</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mean~2">mean</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-median~2">median</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mode~2">mode</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-pdf~3">pdf</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~3">variance</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-get_cholesky_factored_matrix">get_cholesky_factored_matrix</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-get_covariance">get_covariance</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-get_means">get_means</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-initialize">initialize</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-pdf~6">pdf</a>
+            <a class="list-group-item" href="../type/multivariate_normal_distribution.html#boundprocedure-set_means">set_means</a>
         </div>
       </div>
     </div>
@@ -243,75 +214,21 @@ the probability p of getting k successes in n independent trials.</p>
     </section>
     <br class="visible-xs visible-sm hidden-md">
 
-    <section>
-    <h2>Components</h2>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Visibility</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-<th></th><th>Initial</th>        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-n"></span>
-              integer(kind=int32),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>n</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The number of independent trials.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-p~2"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>p</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The success probability for each trial.  This parameter must
-exist on the set [0, 1].</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    </section>
-    <br>
     
 
 
       <section>
         <h2>Type-Bound Procedures</h2>
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf~2"></span><h3>procedure, public :: <strong>cdf</strong>  => bd_cdf         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_cholesky_factored_matrix"></span><h3>procedure, public :: <strong>get_cholesky_factored_matrix</strong>  => mvnd_get_cholesky         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure elemental function bd_cdf(this, x) result(rst)  
+    private pure function mvnd_get_cholesky(this) result(rst)  
 </h3>
-  <p>Computes the cumulative distribution funtion.</p>
-<p>The CDF for a binomial distribution is given as 
-<script type="math/tex; mode=display"> F(k,n,p) = I_{1-p} \left( n - k, 1 + k \right) </script>, which is simply
-the regularized incomplete beta function.</p>
+  <p>Gets the lower triangular form of the Cholesky factorization of the
+covariance matrix of the distribution.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -327,7 +244,7 @@ the regularized incomplete beta function.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/binomial_distribution.html'>binomial_distribution</a>),
+              class(<a href='../type/multivariate_normal_distribution.html'>multivariate_normal_distribution</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -336,7 +253,155 @@ the regularized incomplete beta function.</p>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The binomial_distribution object.</p>
+                <p>The multivariate_normal_distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:,:)</small>
+    </h4>
+    <p>The Cholesky factored matrix.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_covariance"></span><h3>procedure, public :: <strong>get_covariance</strong>  => mvnd_get_covariance         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function mvnd_get_covariance(this) result(rst)  
+</h3>
+  <p>Gets the covariance matrix of the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/multivariate_normal_distribution.html'>multivariate_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The multivariate_normal_distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:,:)</small>
+    </h4>
+    <p>The covariance matrix.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_means"></span><h3>procedure, public :: <strong>get_means</strong>  => mvnd_get_means         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function mvnd_get_means(this) result(rst)  
+</h3>
+  <p>Gets the mean values of the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/multivariate_normal_distribution.html'>multivariate_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The multivariate_normal_distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:)</small>
+    </h4>
+    <p>The mean values.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-initialize"></span><h3>procedure, public :: <strong>initialize</strong>  => mvnd_init         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine mvnd_init(this, mu, sigma, err)  
+</h3>
+  <p>Initializes the multivariate normal distribution by defining the mean
+values and covariance matrix.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/multivariate_normal_distribution.html'>multivariate_normal_distribution</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The multivariate_normal_distribution object.</p>
             </td>
         </tr>
         <tr>
@@ -344,16 +409,106 @@ the regularized incomplete beta function.</p>
               <span class="anchor" ></span>
               real(kind=real64),
             </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>mu</strong></td>
+            <td>
+                <p>An N-element array containing the mean values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>sigma</strong></td>
+            <td>
+                <p>The N-by-N covariance matrix.  The PDF exists only if this matrix
+is positive-definite; therefore, the positive-definite constraint 
+is checked within this routine and enforced.  An error is thrown if
+the supplied matrix is not positive-definite.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>The error handling object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~6"></span><h3>procedure, public :: <strong>pdf</strong>  => mvnd_pdf         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function mvnd_pdf(this, x) result(rst)  
+</h3>
+  <p>Evaluates the PDF for the multivariate normal distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/multivariate_normal_distribution.html'>multivariate_normal_distribution</a>),
+            </td>
 <td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The multivariate_normal_distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                <p>The value at which to evaluate the function.  This parameter
-is the number k successes in the n independent trials.  As
-such, this parameter must exist on the set [0, n].</p>
+                <p>The values at which to evaluate the function.</p>
             </td>
         </tr>
     </tbody>
@@ -370,14 +525,14 @@ such, this parameter must exist on the set [0, n].</p>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean~2"></span><h3>procedure, public :: <strong>mean</strong>  => bd_mean         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-set_means"></span><h3>procedure, public :: <strong>set_means</strong>  => mvnd_update_mean         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function bd_mean(this) result(rst)  
+    private  subroutine mvnd_update_mean(this, x, err)  
 </h3>
-  <p>Computes the mean of the distribution.</p>
+  <p>Updates the mean value array.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -393,166 +548,16 @@ such, this parameter must exist on the set [0, n].</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/binomial_distribution.html'>binomial_distribution</a>),
+              class(<a href='../type/multivariate_normal_distribution.html'>multivariate_normal_distribution</a>),
             </td>
-<td>intent(in)</td>
+<td>intent(inout)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The binomial_distribution object.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The mean.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median~2"></span><h3>procedure, public :: <strong>median</strong>  => bd_median         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure function bd_median(this) result(rst)  
-</h3>
-  <p>Computes the median of the distribution.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(<a href='../type/binomial_distribution.html'>binomial_distribution</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>this</strong></td>
-            <td>
-                <p>The binomial_distribution object.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The median.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode~2"></span><h3>procedure, public :: <strong>mode</strong>  => bd_mode         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure function bd_mode(this) result(rst)  
-</h3>
-  <p>Computes the mode of the distribution.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(<a href='../type/binomial_distribution.html'>binomial_distribution</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>this</strong></td>
-            <td>
-                <p>The binomial_distribution object.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The mode.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~3"></span><h3>procedure, public :: <strong>pdf</strong>  => bd_pdf         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure elemental function bd_pdf(this, x) result(rst)  
-</h3>
-  <p>Computes the probability mass function.</p>
-<p>The PMF for a binomial distribution is given as 
-<script type="math/tex; mode=display"> f(k,n,p) = \frac{n!}{k! \left( n - k! \right)} p^k 
-\left( 1 - p \right)^{n-k} </script>.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(<a href='../type/binomial_distribution.html'>binomial_distribution</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>this</strong></td>
-            <td>
-                <p>The binomial_distribution object.</p>
+                <p>The multivariate_normal_distribution object.</p>
             </td>
         </tr>
         <tr>
@@ -560,143 +565,35 @@ such, this parameter must exist on the set [0, n].</p>
               <span class="anchor" ></span>
               real(kind=real64),
             </td>
-<td>intent(in)</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              
+              dimension(:)
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                <p>The value at which to evaluate the function.  This parameter
-is the number k successes in the n independent trials.  As
-such, this parameter must exist on the set [0, n].</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The value of the function.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-standardized_variable"></span><h3>procedure, public :: <strong>standardized_variable</strong>  => dist_std_var         
-    </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the standardized variable for the distribution.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure elemental function dist_std_var(this, x) result(rst)  
-</h3>
-  <p>Computes the standardized variable for the distribution.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(<a href='../type/distribution.html'>distribution</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>this</strong></td>
-            <td>
-                <p>The distribution object.</p>
+                <p>The N-element array of new mean values.</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" ></span>
-              real(kind=real64),
+              class(errors),
             </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
             </td>
             <td>::</td>
-            <td><strong>x</strong></td>
+            <td><strong>err</strong></td>
             <td>
-                <p>The value of interest.</p>
+                <p>The error handling object.  This is referenced only in the event that
+the size of x is not compatible with the existing state.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The result.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~3"></span><h3>procedure, public :: <strong>variance</strong>  => bd_variance         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure function bd_variance(this) result(rst)  
-</h3>
-  <p>Computes the variance of the distribution.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(<a href='../type/binomial_distribution.html'>binomial_distribution</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>this</strong></td>
-            <td>
-                <p>The binomial_distribution object.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The variance.</p>
 
         </li>
     </ul>

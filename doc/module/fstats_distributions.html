@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="10.7% of total for modules and submodules.">323 statements</a>
+               title="15.2% of total for modules and submodules.">524 statements</a>
           </li>
 
             <li id="source-file">
@@ -141,6 +141,7 @@
         <div class="list-group">
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_function">distribution_function</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_property">distribution_property</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#interface-multivariate_distribution_function">multivariate_distribution_function</a>
         </div>
       </div>
     </div>
@@ -158,6 +159,8 @@
             <a class="list-group-item" href="../module/fstats_distributions.html#type-chi_squared_distribution">chi_squared_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-distribution">distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-f_distribution">f_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_distribution">multivariate_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_normal_distribution">multivariate_normal_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-normal_distribution">normal_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-t_distribution">t_distribution</a>
         </div>
@@ -187,10 +190,12 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
-                <li><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></li>
                 <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
+                <li><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></li>
+                <li>ferror</li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
             </ul>
           </li>
       </ul>
@@ -219,6 +224,7 @@
         <div class="list-group">
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_function">distribution_function</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_property">distribution_property</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#interface-multivariate_distribution_function">multivariate_distribution_function</a>
         </div>
       </div>
     </div>
@@ -236,6 +242,8 @@
             <a class="list-group-item" href="../module/fstats_distributions.html#type-chi_squared_distribution">chi_squared_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-distribution">distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-f_distribution">f_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_distribution">multivariate_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_normal_distribution">multivariate_normal_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-normal_distribution">normal_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-t_distribution">t_distribution</a>
         </div>
@@ -381,6 +389,75 @@
     </ul>
   </div>
 
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="interface-multivariate_distribution_function"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public pure function multivariate_distribution_function(this, x) result(rst)  
+
+    </h3>
+  <p>Defines an interface for a multivariate probability distribution
+function.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/multivariate_distribution.html'>multivariate_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The values at which to evaluate the function.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The value of the function.</p>
+
+        </li>
+    </ul>
+  </div>
+
         </section>
         <br>
 
@@ -499,7 +576,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-pdf~2'>pdf</a></strong>
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-pdf~3'>pdf</a></strong>
  =>
                     bd_pdf
 <small>Function</small>                </td>
@@ -623,7 +700,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-pdf~3'>pdf</a></strong>
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-pdf~4'>pdf</a></strong>
  =>
                     cs_pdf
 <small>Function</small>                </td>
@@ -845,7 +922,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/f_distribution.html#boundprocedure-pdf~4'>pdf</a></strong>
+                  :: <strong><a href='../type/f_distribution.html#boundprocedure-pdf~5'>pdf</a></strong>
  =>
                     fd_pdf
 <small>Function</small>                </td>
@@ -869,6 +946,120 @@ exist on the set [0, 1].</p>
  =>
                     fd_variance
 <small>Function</small>                </td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="type-multivariate_distribution"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='../type/multivariate_distribution.html'>multivariate_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>Defines a multivariate probability distribution.</p>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+(multivariate_distribution_function)                    ,                  public
+, pass                  :: <strong><a href='../type/multivariate_distribution.html#boundprocedure-pdf~2'>pdf</a></strong>
+<small></small>                </td>
+                <td><p>Computes the probability density function.</p></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="type-multivariate_normal_distribution"></span>
+      <h3>
+        type, public, extends(<a href='../type/multivariate_distribution.html'>multivariate_distribution</a>)&nbsp;::&nbsp;
+        <a href='../type/multivariate_normal_distribution.html'>multivariate_normal_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>Defines a multivariate normal (Gaussian) distribution.</p>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/multivariate_normal_distribution.html#boundprocedure-get_cholesky_factored_matrix'>get_cholesky_factored_matrix</a></strong>
+ =>
+                    mvnd_get_cholesky
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/multivariate_normal_distribution.html#boundprocedure-get_covariance'>get_covariance</a></strong>
+ =>
+                    mvnd_get_covariance
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/multivariate_normal_distribution.html#boundprocedure-get_means'>get_means</a></strong>
+ =>
+                    mvnd_get_means
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/multivariate_normal_distribution.html#boundprocedure-initialize'>initialize</a></strong>
+ =>
+                    mvnd_init
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/multivariate_normal_distribution.html#boundprocedure-pdf~6'>pdf</a></strong>
+ =>
+                    mvnd_pdf
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/multivariate_normal_distribution.html#boundprocedure-set_means'>set_means</a></strong>
+ =>
+                    mvnd_update_mean
+<small>Subroutine</small>                </td>
                 <td></td>
               </tr>
           </tbody>
@@ -986,7 +1177,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/normal_distribution.html#boundprocedure-pdf~5'>pdf</a></strong>
+                  :: <strong><a href='../type/normal_distribution.html#boundprocedure-pdf~7'>pdf</a></strong>
  =>
                     nd_pdf
 <small>Function</small>                </td>
@@ -1120,7 +1311,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-pdf~6'>pdf</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-pdf~8'>pdf</a></strong>
  =>
                     td_pdf
 <small>Function</small>                </td>
@@ -1173,7 +1364,7 @@ exist on the set [0, 1].</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-03 12:00              </p>
+ on 2025-02-12 15:59              </p>
           </div>
         </div>
         <br>
