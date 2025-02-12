@@ -185,7 +185,7 @@ subroutine mh_push(this, x, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine mh_proposal_sampler(this, mu, x, x1, x2)
+subroutine mh_proposal_sampler(this, mu, x, f, x1, x2)
     !! A sampler capable of generating the next proposed step in the chain.  The
     !! default sampler is a multivariate Gaussian of the form.
     !!
@@ -201,6 +201,9 @@ subroutine mh_proposal_sampler(this, mu, x, x1, x2)
         !! An N-element array containing the current state.
     real(real64), intent(out), dimension(size(mu)) :: x
         !! An N-element array containing the proposed state.
+    real(real64), intent(out) :: f
+        !! The value of the probability distribution function at the proposed 
+        !! state centered around the current state.
     real(real64), intent(in), optional, dimension(size(mu)) :: x1
         !! An optional N-element array containing the lower limits for the state 
         !! variables.  If not supplied, no limits are imposed.
@@ -236,6 +239,9 @@ subroutine mh_proposal_sampler(this, mu, x, x1, x2)
         ! upper limits
         x = min(x, x2)
     end if
+
+    ! Evaluate the pdf
+    f = this%m_sampleDist%pdf(x)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -349,7 +355,7 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)
 
     ! Local Variables
     integer(int32) :: i, n, flag, maxiter
-    real(real64) :: alpha, pc, pp, r, a
+    real(real64) :: alpha, pc, pp, r, a, a1, a2, gc, gp
     real(real64), allocatable, dimension(:) :: xp, xc
     real(real64), allocatable, dimension(:,:) :: sigma
     class(errors), pointer :: errmgr
@@ -386,7 +392,7 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)
     if (errmgr%has_error_occurred()) return
 
     ! Evaluate the next step
-    call this%proposal(xc, xp, x1, x2)
+    call this%proposal(xc, xp, gc, x1, x2)
 
     ! Compute the target density
     pc = this%target_density(x, y, xc)
@@ -395,13 +401,15 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)
     ! established
     do i = 2, maxiter
         ! Define a new proposal
-        call this%proposal(xc, xp, x1, x2)
+        call this%proposal(xc, xp, gp, x1, x2)
 
         ! Compute the target density
         pp = this%target_density(x, y, xp)
 
         ! Compute the acceptance ratio & see if the step is good enough
-        a = pp / pc
+        a1 = pp / pc
+        a2 = gp / gc
+        a = a1 * a2
         alpha = min(1.0d0, a)
         call random_number(r)
         if (r < alpha) then
@@ -410,6 +418,7 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)
             if (errmgr%has_error_occurred()) return
             xc = xp
             pc = pp
+            gc = gp
 
             ! Update the covariance matrix???
         end if
