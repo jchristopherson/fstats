@@ -30,6 +30,9 @@ program tests
     local = binomial_distribution_test_1()
     if (.not.local) overall = .false.
 
+    local = test_multivariate_normal_distribution()
+    if (.not.local) overall = .false.
+
     ! Statistics Tests
     local = mean_test_1()
     if (.not.local) overall = .false.

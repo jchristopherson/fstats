@@ -25,6 +25,9 @@ module fstats
     public :: f_distribution
     public :: chi_squared_distribution
     public :: binomial_distribution
+    public :: multivariate_distribution
+    public :: multivariate_distribution_function
+    public :: multivariate_normal_distribution
     public :: mean
     public :: variance
     public :: standard_deviation
