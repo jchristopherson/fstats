@@ -175,6 +175,9 @@ module fstats_distributions
         real(real64), private, allocatable, dimension(:,:) :: m_cov
             !! The N-by-N covariance matrix.  This matrix must be 
             !! positive-definite.
+        real(real64), private, allocatable, dimension(:,:) :: m_cholesky
+            !! The N-by-N Cholesky factored form (lower) of the covariance
+            !! matrix.
         real(real64), private, allocatable, dimension(:,:) :: m_covInv
             !! The N-by-N inverse of the covariance matrix.
         real(real64), private :: m_covDet
@@ -182,7 +185,10 @@ module fstats_distributions
     contains
         procedure, public :: initialize => mvnd_init
         procedure, public :: pdf => mvnd_pdf
+        procedure, public :: get_means => mvnd_get_means
         procedure, public :: set_means => mvnd_update_mean
+        procedure, public :: get_covariance => mvnd_get_covariance
+        procedure, public :: get_cholesky_factored_matrix => mvnd_get_cholesky
     end type
 
 contains
@@ -727,7 +733,6 @@ subroutine mvnd_init(this, mu, sigma, err)
 
     ! Local Variables
     integer(int32) :: n, flag
-    real(real64), allocatable, dimension(:,:) :: L
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
     
@@ -749,8 +754,6 @@ subroutine mvnd_init(this, mu, sigma, err)
     ! Store the matrices
     this%m_means = mu
     this%m_cov = sigma
-    allocate(L(n, n), stat = flag, source = sigma)
-    if (flag /= 0) go to 10
     if (allocated(this%m_covInv)) then
         if (size(this%m_covInv, 1) /= n .or. size(this%m_covInv, 2) /= n) then
             deallocate(this%m_covInv)
@@ -761,15 +764,25 @@ subroutine mvnd_init(this, mu, sigma, err)
         allocate(this%m_covInv(n, n), stat = flag)
         if (flag /= 0) go to 10
     end if
+    if (allocated(this%m_cholesky)) then
+        if (size(this%m_cholesky, 1) /= n .or. size(this%m_cholesky, 2) /= n) then
+            deallocate(this%m_cholesky)
+            allocate(this%m_cholesky(n, n), stat = flag)
+            if (flag /= 0) go to 10
+        end if
+    else
+        allocate(this%m_cholesky(n, n), stat = flag, source = sigma)
+        if (flag /= 0) go to 10
+    end if
 
     ! Compute the Cholesky factorization of the covariance matrix
-    call cholesky_factor(L, upper = .false., err = errmgr)
+    call cholesky_factor(this%m_cholesky, upper = .false., err = errmgr)
     if (errmgr%has_error_occurred()) return
 
     ! Compute the inverse and determinant
     call populate_identity(this%m_covInv)
-    call cholesky_inverse(L, this%m_covInv)
-    this%m_covDet = cholesky_determinant(L)
+    call cholesky_inverse(this%m_cholesky, this%m_covInv)
+    this%m_covDet = cholesky_determinant(this%m_cholesky)
 
     ! End
     return
@@ -846,6 +859,61 @@ subroutine mvnd_update_mean(this, x, err)
     end if
     this%m_means = x
 end subroutine
+
+! ------------------------------------------------------------------------------
+pure function mvnd_get_means(this) result(rst)
+    !! Gets the mean values of the distribution.
+    class(multivariate_normal_distribution), intent(in) :: this
+        !! The multivariate_normal_distribution object.
+    real(real64), allocatable, dimension(:) :: rst
+        !! The mean values.
+
+    ! Process
+    integer(int32) :: n
+    if (allocated(this%m_means)) then
+        n = size(this%m_means)
+        allocate(rst(n), source = this%m_means)
+    else
+        allocate(rst(0))
+    end if
+end function
+
+! ------------------------------------------------------------------------------
+pure function mvnd_get_covariance(this) result(rst)
+    !! Gets the covariance matrix of the distribution.
+    class(multivariate_normal_distribution), intent(in) :: this
+        !! The multivariate_normal_distribution object.
+    real(real64), allocatable, dimension(:,:) :: rst
+        !! The covariance matrix.
+
+    ! Process
+    integer(int32) :: n
+    if (allocated(this%m_cov)) then
+        n = size(this%m_cov)
+        allocate(rst(n, n), source = this%m_cov)
+    else
+        allocate(rst(0, 0))
+    end if
+end function
+
+! ------------------------------------------------------------------------------
+pure function mvnd_get_cholesky(this) result(rst)
+    !! Gets the lower triangular form of the Cholesky factorization of the
+    !! covariance matrix of the distribution.
+    class(multivariate_normal_distribution), intent(in) :: this
+        !! The multivariate_normal_distribution object.
+    real(real64), allocatable, dimension(:,:) :: rst
+        !! The Cholesky factored matrix.
+
+    ! Process
+    integer(int32) :: n
+    if (allocated(this%m_cholesky)) then
+        n = size(this%m_cholesky)
+        allocate(rst(n, n), source = this%m_cov)
+    else
+        allocate(rst(0, 0))
+    end if
+end function
 
 ! ******************************************************************************
 ! SUPPORTING ROUTINES

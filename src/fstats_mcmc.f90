@@ -110,7 +110,7 @@ subroutine mh_resize_buffer(this, err)
     allocate(copy(m, n), stat = flag, source = this%m_buffer)
     if (flag /= 0) go to 10
     deallocate(this%m_buffer)
-    m = m + default_buffer_size
+    m = m + this%initial_iteration_estimate
     allocate(this%m_buffer(m, n), stat = flag)
     if (flag /= 0) go to 10
     this%m_buffer(1:mOld,:) = copy
@@ -185,7 +185,7 @@ subroutine mh_push(this, x, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine mh_proposal_sampler(this, mu, x, f)
+subroutine mh_proposal_sampler(this, mu, x, x1, x2)
     !! A sampler capable of generating the next proposed step in the chain.  The
     !! default sampler is a multivariate Gaussian of the form.
     !!
@@ -201,28 +201,41 @@ subroutine mh_proposal_sampler(this, mu, x, f)
         !! An N-element array containing the current state.
     real(real64), intent(out), dimension(size(mu)) :: x
         !! An N-element array containing the proposed state.
-    real(real64), intent(out) :: f
-        !! The value of the probability distribution corresponding to the
-        !! proposed state relative to the current state.
+    real(real64), intent(in), optional, dimension(size(mu)) :: x1
+        !! An optional N-element array containing the lower limits for the state 
+        !! variables.  If not supplied, no limits are imposed.
+    real(real64), intent(in), optional, dimension(size(mu)) :: x2
+        !! An optional N-element array containing the upper limits for the state 
+        !! variables.  If not supplied, no limits are imposed.
 
     ! Local Variables
-    integer(int32) :: n
+    integer(int32) :: i, j, jmax, n
     real(real64), allocatable, dimension(:) :: u
+    real(real64), allocatable, dimension(:,:) :: L
     type(normal_distribution) :: dist
 
     ! Initialization
     n = this%get_state_variable_count()
+    allocate(u(n))
 
-    ! Update the mean distribution
+    ! Update the mean of the distribution
     call this%m_sampleDist%set_means(mu)
 
-    ! Define the sampling distribution
-    dist%mean_value = 0.0d0
-    dist%standard_deviation = 1.0d0
-    x = rejection_sample(dist, n, -1.0d0, 1.0d0) + mu
+    ! Generate the next state by sampling the distribution
+    call random_number(u)
+    L = this%m_sampleDist%get_cholesky_factored_matrix()
+    x = mu + matmul(L, u)
 
-    ! Sample the multivariate distribution
-    f = this%m_sampleDist%pdf(x)
+    ! Do we need to impose limits
+    if (present(x1)) then
+        ! lower limits
+        x = max(x, x1)
+    end if
+
+    if (present(x2)) then
+        ! upper limits
+        x = min(x, x2)
+    end if
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -306,7 +319,7 @@ end function
 ! TO DO: Update covariance matrix????
 
 ! ------------------------------------------------------------------------------
-subroutine mh_eval(this, fcn, x, y, mdl, niter, err)
+subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)
     !! Initializes and evaluates the Metropolis-Hastings algorithm to generate 
     !! the Markov chain.
     class(metropolis_hastings), intent(inout) :: this
@@ -320,16 +333,23 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, err)
         !! An N-element array containing the dependent data points from the
         !! experimental data.
     real(real64), intent(in), dimension(:) :: mdl
-        !! An initial estimate of the model coefficients.
+        !! An M-element array containing an initial estimate of the model 
+        !! coefficients (state variables).
     integer(int32), intent(in), optional :: niter
         !! An optional input that limits the number of iterations.  The default
         !! value is 10,000.
+    real(real64), intent(in), optional, dimension(size(mdl)) :: x1
+        !! An optional M-element array containing the lower limits for the state 
+        !! variables.  If not supplied, no limits are imposed.
+    real(real64), intent(in), optional, dimension(size(mdl)) :: x2
+        !! An optional M-element array containing the upper limits for the state 
+        !! variables.  If not supplied, no limits are imposed.
     class(errors), intent(inout), optional, target :: err
         !! The error handling object.
 
     ! Local Variables
     integer(int32) :: i, n, flag, maxiter
-    real(real64) :: alpha, gp, gc, pc, pp, r, p
+    real(real64) :: alpha, pc, pp, r, a
     real(real64), allocatable, dimension(:) :: xp, xc
     real(real64), allocatable, dimension(:,:) :: sigma
     class(errors), pointer :: errmgr
@@ -366,7 +386,7 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, err)
     if (errmgr%has_error_occurred()) return
 
     ! Evaluate the next step
-    call this%proposal(xc, xp, gc)
+    call this%proposal(xc, xp, x1, x2)
 
     ! Compute the target density
     pc = this%target_density(x, y, xc)
@@ -375,21 +395,20 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, err)
     ! established
     do i = 2, maxiter
         ! Define a new proposal
-        call this%proposal(xc, xp, gp)
+        call this%proposal(xc, xp, x1, x2)
 
         ! Compute the target density
         pp = this%target_density(x, y, xp)
 
         ! Compute the acceptance ratio & see if the step is good enough
-        p = pp * gp / (pc * gc)
-        alpha = min(1.0d0, p)
+        a = pp / pc
+        alpha = min(1.0d0, a)
         call random_number(r)
         if (r < alpha) then
             ! Accept the step
             call this%push_new_state(xp, errmgr)
             if (errmgr%has_error_occurred()) return
             xc = xp
-            gc = gp
             pc = pp
 
             ! Update the covariance matrix???
@@ -406,6 +425,14 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
+! function mh_get_chain(this, err) result(rst)
+!     !! Gets a copy of the chain
+
+! TO DO: Define burn-in limits
+! end function
+
+! TO DO: Reset chain to zero length
+! TO DO: Get covariance matrix
 
 ! ------------------------------------------------------------------------------
 end module
