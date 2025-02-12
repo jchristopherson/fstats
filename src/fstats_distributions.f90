@@ -182,6 +182,7 @@ module fstats_distributions
     contains
         procedure, public :: initialize => mvnd_init
         procedure, public :: pdf => mvnd_pdf
+        procedure, public :: set_means => mvnd_update_mean
     end type
 
 contains
@@ -801,6 +802,50 @@ pure function mvnd_pdf(this, x) result(rst)
     arg = dot_product(delta, prod)      ! arg = (x - mu)**T * prod
     rst = exp(-0.5d0 * arg) / sqrt((2.0d0 * pi)**n * this%m_covDet)
 end function
+
+! ------------------------------------------------------------------------------
+subroutine mvnd_update_mean(this, x, err)
+    !! Updates the mean value array.
+    class(multivariate_normal_distribution), intent(inout) :: this
+        !! The multivariate_normal_distribution object.
+    real(real64), intent(in), dimension(:) :: x
+        !! The N-element array of new mean values.
+    class(errors), intent(inout), optional, target :: err
+        !! The error handling object.  This is referenced only in the event that
+        !! the size of x is not compatible with the existing state.
+
+    ! Local Variables
+    integer(int32) :: n, nc, flag
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(x)
+    nc = size(this%m_means)
+
+    ! Process
+    if (.not.allocated(this%m_means)) then
+        ! This is an initial set-up - just store the values and be done
+        allocate(this%m_means(n), stat = flag, source = x)
+        if (flag /= 0) then
+            call report_memory_error(errmgr, "mvnd_update_mean", flag)
+            return
+        end if
+        return
+    end if
+
+    ! Else, ensure the array is of the correct size before updating
+    if (n /= nc) then
+        call report_array_size_error(errmgr, "mvnd_update_mean", "x", nc, n)
+        return
+    end if
+    this%m_means = x
+end subroutine
 
 ! ******************************************************************************
 ! SUPPORTING ROUTINES

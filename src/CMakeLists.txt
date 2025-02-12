@@ -18,5 +18,6 @@ set(FSTATS_SOURCES
     ${dir}/fstats_sampling.f90
     ${dir}/fstats_smoothing.f90
     ${dir}/fstats_types.f90
+    ${dir}/fstats_mcmc.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
