@@ -31,7 +31,6 @@ module fstats_mcmc
             !! value will be set based upon variances computed as part of the
             !! initialization process, or user definition during the 
             !! initialization process.
-        logical, private :: m_updateCov = .true.
     contains
         procedure, public :: get_state_variable_count => mh_get_nvars
         procedure, public :: get_chain_length => mh_get_chain_length
@@ -42,8 +41,6 @@ module fstats_mcmc
         procedure, public :: evaluate => mh_eval
         procedure, public :: get_chain => mh_get_chain
         procedure, public :: initialize => mh_init
-        procedure, public :: get_update_covariance => mh_get_update_cov
-        procedure, public :: set_update_covariance => mh_set_update_cov
         procedure, private :: resize_buffer => mh_resize_buffer
         procedure, private :: get_buffer_length => mh_get_buffer_length
     end type
@@ -381,16 +378,6 @@ subroutine mh_eval(this, fcn, x, y, niter, x1, x2, err)
             if (errmgr%has_error_occurred()) return
             xc = xp
             pc = pp
-
-            ! Update the covariance matrix estimate
-            if (this%get_update_covariance()) then
-                sigma = this%estimate_covariance(fcn, x, xc, check, err = errmgr)
-                if (errmgr%has_error_occurred()) return
-                if (check) return
-
-                call this%m_sampleDist%initialize(xc, sigma, err = errmgr)
-                if (errmgr%has_error_occurred()) return
-            end if
         else
             ! Stay where we're at
             call this%push_new_state(xc, errmgr)
@@ -567,30 +554,6 @@ function mh_create_cov_mtx(this, fcn, x, mdl, stop, err) result(rst)
     call covariance_matrix(this%m_jac, rst, err = errmgr)
     if (errmgr%has_error_occurred()) return
 end function
-
-! ------------------------------------------------------------------------------
-pure function mh_get_update_cov(this) result(rst)
-    !! Get a value determining if the covariance matrix should be updated after
-    !! each successful step.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
-    logical :: rst
-        !! True if the covariance matrix is updated after each successful step;
-        !! else, false.
-    rst = this%m_updateCov
-end function
-
-! ------------------------------------------------------------------------------
-subroutine mh_set_update_cov(this, x)
-    !! Sets a value determining if the covariance matrix should be updated after
-    !! each successful step.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    logical, intent(in) :: x
-        !! True if the covariance matrix is updated after each successful step;
-        !! else, false.
-    this%m_updateCov = x
-end subroutine
 
 ! ------------------------------------------------------------------------------
 ! TO DO: Define burn-in limits
