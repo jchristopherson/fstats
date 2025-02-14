@@ -908,8 +908,8 @@ pure function mvnd_get_cholesky(this) result(rst)
     ! Process
     integer(int32) :: n
     if (allocated(this%m_cholesky)) then
-        n = size(this%m_cholesky)
-        allocate(rst(n, n), source = this%m_cov)
+        n = size(this%m_cholesky, 1)
+        allocate(rst(n, n), source = this%m_cholesky)
     else
         allocate(rst(0, 0))
     end if

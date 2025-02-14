@@ -15,6 +15,7 @@ module fstats
     use fstats_bootstrap
     use fstats_sampling
     use fstats_smoothing
+    use fstats_mcmc
     implicit none
     private
     public :: distribution
@@ -88,5 +89,8 @@ module fstats
     public :: doe_fit_model
     public :: doe_evaluate_model
     public :: doe_model
+
+    ! FSTATS_MCMC.F90
+    public :: metropolis_hastings
    
 end module

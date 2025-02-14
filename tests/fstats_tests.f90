@@ -6,6 +6,7 @@ program tests
     use fstats_experimental_design_tests
     use fstats_nonlinear_regression_tests
     use fstats_allan_tests
+    use fstats_mcmc_tests
     implicit none
 
     ! Variables
@@ -141,6 +142,13 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_sample_size()
+    if (.not.local) overall = .false.
+
+    ! MCMC Tests
+    local = test_mh_push()
+    if (.not.local) overall = .false.
+
+    local = test_mh_proposal()
     if (.not.local) overall = .false.
 
     ! End
