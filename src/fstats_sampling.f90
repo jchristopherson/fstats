@@ -6,6 +6,7 @@ module fstats_sampling
     private
     public :: box_muller_sample
     public :: rejection_sample
+    public :: sample_normal_multivariate
 
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
     real(real64), parameter :: twopi = 2.0d0 * pi
@@ -129,6 +130,34 @@ function rejection_sample(tdist, n, xmin, xmax) result(rst)
         j = j + 1
         if (j == jmax) exit
     end do
+end function
+
+! ******************************************************************************
+! MULTIVARIATE SAMPLING
+! ------------------------------------------------------------------------------
+function sample_normal_multivariate(dist) result(rst)
+    !! Samples a multivariate normal distribution such that \(\vec{x} = 
+    !! \vec{mu} + L \vec{u}\), where \(L\) is the lower form of the Cholesky 
+    !! factorization of the covariance matrix, and \(\vec{u}\) is a randomly 
+    !! generated vector that exists on the set \([0 1]\)
+    class(multivariate_normal_distribution), intent(in) :: dist
+        !! The multivariate normal distribution to sample.
+    real(real64), allocatable, dimension(:) :: rst
+        !! The resulting vector.
+
+    ! Local Variables
+    integer(int32) :: n
+    real(real64), allocatable, dimension(:) :: u
+    real(real64), allocatable, dimension(:,:) :: L
+
+    ! Initialization
+    L = dist%get_cholesky_factored_matrix()
+    n = size(L, 1)
+    allocate(u(n))
+    call random_number(u)   ! populating u from [0, 1].
+
+    ! Process
+    rst = dist%get_means() + matmul(L, u)
 end function
 
 ! ------------------------------------------------------------------------------

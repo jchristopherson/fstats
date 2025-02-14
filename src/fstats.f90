@@ -76,8 +76,7 @@ module fstats
     public :: scaled_random_resample
     public :: bootstrap_statistics
     public :: bootstrap
-    public :: box_muller_sample
-    public :: rejection_sample
+    
     public :: lowess
     public :: pooled_variance
     public :: bartletts_test
@@ -89,6 +88,11 @@ module fstats
     public :: doe_fit_model
     public :: doe_evaluate_model
     public :: doe_model
+
+    ! FSTATS_SAMPLING.F90
+    public :: box_muller_sample
+    public :: rejection_sample
+    public :: sample_normal_multivariate
 
     ! FSTATS_MCMC.F90
     public :: metropolis_hastings
