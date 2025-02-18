@@ -139,7 +139,7 @@ function sample_normal_multivariate(dist) result(rst)
     !! Samples a multivariate normal distribution such that \(\vec{x} = 
     !! \vec{mu} + L \vec{u}\), where \(L\) is the lower form of the Cholesky 
     !! factorization of the covariance matrix, and \(\vec{u}\) is a randomly 
-    !! generated vector that exists on the set \([0 1]\)
+    !! generated vector that exists on the set \([-1 1]\)
     class(multivariate_normal_distribution), intent(in) :: dist
         !! The multivariate normal distribution to sample.
     real(real64), allocatable, dimension(:) :: rst
@@ -155,6 +155,7 @@ function sample_normal_multivariate(dist) result(rst)
     n = size(L, 1)
     allocate(u(n))
     call random_number(u)   ! populating u from [0, 1].
+    u = 2.0d0 * (u - 0.5d0) ! centering u around 0 over the range [-1, 1]
 
     ! Process
     rst = dist%get_means() + matmul(L, u)
