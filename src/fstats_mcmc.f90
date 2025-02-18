@@ -202,7 +202,7 @@ function mh_get_chain(this, bin, err) result(rst)
         !! The resulting chain with each parameter represented by a column.
 
     ! Local Variables
-    integer(int32) :: npts, nvar, flag, nstart
+    integer(int32) :: npts, nvar, flag, nstart, n
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
     
@@ -213,6 +213,7 @@ function mh_get_chain(this, bin, err) result(rst)
         errmgr => deferr
     end if
     npts = this%get_chain_length()
+    n = npts
     nvar = this%get_state_variable_count()
     if (present(bin)) then
         nstart = floor(bin * npts)
@@ -223,7 +224,7 @@ function mh_get_chain(this, bin, err) result(rst)
 
     ! Process
     allocate(rst(npts, nvar), stat = flag, &
-        source = this%m_buffer(nstart:,1:nvar))
+        source = this%m_buffer(nstart:n,1:nvar))
     if (flag /= 0) then
         call report_memory_error(errmgr, "mh_get_chain", flag)
         return
