@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,77 +12,53 @@
 
     <title>metropolis_hastings &ndash; FSTATS </title>
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <script src="../js/jquery-2.1.3.min.js"></script>
-         <script src="../js/svg-pan-zoom.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
           <a class="navbar-brand" href="../index.html">FSTATS </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
-              <a href="#" class="dropdown-toggle"
-                 data-toggle="dropdown" role="button"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                 Contents <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
-                  <li><a href="../lists/modules.html">Modules</a></li>
-                  <li><a href="../lists/procedures.html">Procedures</a></li>
-                  <li><a href="../lists/types.html">Derived Types</a></li>
-              </ul>
-            </li>
-                <li class="visible-xs hidden-sm visible-lg">
-                  <a href="../lists/files.html">Source Files</a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
                 </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/modules.html">Modules</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/procedures.html">Procedures</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/types.html">Derived Types</a>
-              </li>
-          </ul>
-            <form action="../search.html" class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
               </div>
-              <!--
-                  <button type="submit" class="btn btn-default">Submit</button>
-                  -->
-            </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
   <div class="row">
@@ -88,33 +66,37 @@
       <small>Derived Type</small>
       
     </h1>
-      <div class="row" id="info-bar">
-    <div class="col-lg-12">
-      <div class="well well-sm">
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
-          <li id="statements"><i class="fa fa-list-ol"></i>
-            <a data-toggle="tooltip"
-               data-placement="bottom" data-html="true"
-               title="<p>10.0% of total for derived types.</p>Including implementation: 212 statements, 25.3% of total for derived types.">18 statements</a>
-          </li>
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="<p>11.5% of total for derived types.</p>Including implementation: 248 statements, 28.4% of total for derived types.">21 statements</a>
+            </li>
 
-            <li id="source-file">
+            <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
               <a href="../src/fstats_mcmc.f90"> Source File</a>
             </li>
         </ul>
-        <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_mcmc.f90.html'>fstats_mcmc.f90</a></li>
-              <li><a href='../module/fstats_mcmc.html'>fstats_mcmc</a></li>
-          <li class="active">metropolis_hastings</li>
-        </ol>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_mcmc.f90.html'>fstats_mcmc.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_mcmc.html'>fstats_mcmc</a></li>
+            <li class="breadcrumb-item active" aria-current="page">metropolis_hastings</li>
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
   <script>
     $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-bs-toggle="tooltip"]').tooltip()
     })
   </script>
 
@@ -125,41 +107,56 @@
       <div id="sidebar">
       <h3>Contents</h3>
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#boundprocs-0">Type-Bound Procedures</a>
-        </h3>
-      </div>
-      <div id="boundprocs-0" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-estimate_covariance">estimate_covariance</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-evaluate">evaluate</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-get_chain_length">get_chain_length</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-get_state_variable_count">get_state_variable_count</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-proposal">proposal</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-push_new_state">push_new_state</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-target_density">target_density</a>
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/metropolis_hastings.html#variable-m_propdist">m_propDist</a>
         </div>
       </div>
     </div>
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#boundprocs-0"
+         aria-expanded="false" aria-controls="boundprocs-0">
+         <h4 class="card-header bg-primary text-white">Type-Bound Procedures</h4>
+      </a>
+      <div id="boundprocs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-compute_hastings_ratio">compute_hastings_ratio</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-generate_proposal">generate_proposal</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-get_chain">get_chain</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-get_chain_length">get_chain_length</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-get_state_variable_count">get_state_variable_count</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-on_acceptance">on_acceptance</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-on_rejection">on_rejection</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-push_new_state">push_new_state</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-reset">reset</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-sample">sample</a>
+            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-target_distribution">target_distribution</a>
+        </div>
+      </div>
+    </div>
+
+  
   
 
 
@@ -168,88 +165,254 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>type, public :: metropolis_hastings</h2>
+      <h2>
+        type, public :: metropolis_hastings</h2>
     <p>An implementation of the Metropolis-Hastings algorithm for the
-generation of a Markov chain.</p>
+generation of a Markov chain.  This is a default implementation
+that allows sampling of normally distributed posterior distributions
+centered on zero with unit standard deviations.  Proposals are
+generated from a multivariate normal distribution with an identity
+covariance matrix and centered on zero.  To alter these sampling
+and target distributions simply create a new class inheriting from 
+this class and override the appropriate routines.</p>
     <br>
 
-    <section class="visible-xs visible-sm hidden-md">
-        <h3>Contents</h3>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#boundprocs-1">Type-Bound Procedures</a>
-        </h3>
-      </div>
-      <div id="boundprocs-1" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-estimate_covariance">estimate_covariance</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-evaluate">evaluate</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-get_chain_length">get_chain_length</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-get_state_variable_count">get_state_variable_count</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-proposal">proposal</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-push_new_state">push_new_state</a>
-            <a class="list-group-item" href="../type/metropolis_hastings.html#boundprocedure-target_density">target_density</a>
-        </div>
-      </div>
-    </div>
-
-  
-
+    <section>
+    <h2>Components</h2>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m_propdist"></span>
+              type(<a href='multivariate_normal_distribution.html'>multivariate_normal_distribution</a>),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m_propDist</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>The proposal distribution from which to draw samples.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
 
     </section>
-    <br class="visible-xs visible-sm hidden-md">
-
+    <br>
     
 
 
       <section>
         <h2>Type-Bound Procedures</h2>
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-estimate_covariance"></span><h3>procedure, public :: <strong>estimate_covariance</strong>  => mh_init_covariance         
-    </h3></div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-compute_hastings_ratio"></span>
+      <h3>
+          procedure, public ::
+  <strong>compute_hastings_ratio</strong> => mh_hastings_ratio
+        
+      </h3>
+    </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  function mh_init_covariance(this, x, y, mdl) result(rst)  
+    private  function mh_hastings_ratio(this, xc, xp) result(rst)  
 </h3>
-  <p>Generates an initial estimate of the covariance matrix.  The approach
-used by this routine is to assume the covariance matrix takes the form
-of an identity matrix scaled by the variance of the error of the current
-model state.</p>
+
+  <p>Evaluates the Hasting's ratio.  If the proposal distribution is 
+symmetric, this ratio is unity; however, in the case of an asymmetric
+distribution this ratio is not ensured to be unity.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>),
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The metropolis_hastings object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>The current state vector.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(size(xc))
+            </td>
+            <td>::</td>
+            <td><strong>xp</strong></td>
+            <td>
+                <p>The proposed state vector.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The ratio.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-generate_proposal"></span>
+      <h3>
+          procedure, public ::
+  <strong>generate_proposal</strong> => mh_proposal
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function mh_proposal(this, xc) result(rst)  
+</h3>
+
+  <p>Proposes a new sample set of variables.  The sample is generated by
+sampling a multivariate normal distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The metropolis_hastings object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>The current set of variables.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:)</small>
+    </h4>
+    <p>The proposed set of variables.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-get_chain"></span>
+      <h3>
+          procedure, public ::
+  <strong>get_chain</strong> => mh_get_chain
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function mh_get_chain(this, bin, err) result(rst)  
+</h3>
+
+  <p>Gets a copy of the stored Markov chain.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -267,206 +430,16 @@ model state.</p>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-                <p>An N-element array containing the independent data points from the 
-experimental data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(size(x))
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-                <p>An N-element array containing the dependent data points from the
-experimental data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-                <p>An initial estimate of the model coefficients.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64), allocatable, dimension(:,:)</small>
-    </h4>
-    <p>The initial covariance matrix estimate.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-evaluate"></span><h3>procedure, public :: <strong>evaluate</strong>  => mh_eval         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private  subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)  
-</h3>
-  <p>Initializes and evaluates the Metropolis-Hastings algorithm to generate 
-the Markov chain.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>),
-            </td>
-<td>intent(inout)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>this</strong></td>
-            <td>
-                <p>The metropolis_hastings object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              procedure(fit_function),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              pointer
-            </td>
-            <td>::</td>
-            <td><strong>fcn</strong></td>
-            <td>
-                <p>A pointer to the function to fit.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-                <p>An N-element array containing the independent data points from the 
-experimental data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(size(x))
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-                <p>An N-element array containing the dependent data points from the
-experimental data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-                <p>An M-element array containing an initial estimate of the model 
-coefficients (state variables).</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in),</td>
               <td>optional</td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>niter</strong></td>
+            <td><strong>bin</strong></td>
             <td>
-                <p>An optional input that limits the number of iterations.  The default
-value is 10,000.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              dimension(size(mdl))
-            </td>
-            <td>::</td>
-            <td><strong>x1</strong></td>
-            <td>
-                <p>An optional M-element array containing the lower limits for the state 
-variables.  If not supplied, no limits are imposed.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              dimension(size(mdl))
-            </td>
-            <td>::</td>
-            <td><strong>x2</strong></td>
-            <td>
-                <p>An optional M-element array containing the upper limits for the state 
-variables.  If not supplied, no limits are imposed.</p>
+                <p>An optional input allowing for a burn-in region.  The parameter
+represents the amount (percentage-based) of the overall chain to 
+disregard as "burn-in" values.  The value shoud exist on [0, 1).
+The default value is 0 such that no values are disregarded.</p>
             </td>
         </tr>
         <tr>
@@ -487,36 +460,50 @@ variables.  If not supplied, no limits are imposed.</p>
     </tbody>
   </table>
 
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:,:)</small>
+    </h4>
+    <p>The resulting chain with each parameter represented by a column.</p>
 
         </li>
     </ul>
   </div>
 
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_chain_length"></span><h3>procedure, public :: <strong>get_chain_length</strong>  => mh_get_chain_length         
-    </h3></div>
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-get_chain_length"></span>
+      <h3>
+          procedure, public ::
+  <strong>get_chain_length</strong> => mh_get_chain_length
+        
+      </h3>
+    </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
     private pure function mh_get_chain_length(this) result(rst)  
 </h3>
+
   <p>Gets the length of the chain (number of stored state variables).</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>),
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -541,31 +528,40 @@ variables.  If not supplied, no limits are imposed.</p>
     </ul>
   </div>
 
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_state_variable_count"></span><h3>procedure, public :: <strong>get_state_variable_count</strong>  => mh_get_nvars         
-    </h3></div>
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-get_state_variable_count"></span>
+      <h3>
+          procedure, public ::
+  <strong>get_state_variable_count</strong> => mh_get_nvars
+        
+      </h3>
+    </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
     private pure function mh_get_nvars(this) result(rst)  
 </h3>
+
   <p>Gets the number of state variables.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>),
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -590,39 +586,42 @@ variables.  If not supplied, no limits are imposed.</p>
     </ul>
   </div>
 
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-proposal"></span><h3>procedure, public :: <strong>proposal</strong>  => mh_proposal_sampler         
-    </h3></div>
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-on_acceptance"></span>
+      <h3>
+          procedure, public ::
+  <strong>on_acceptance</strong> => mh_on_success
+        
+      </h3>
+    </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine mh_proposal_sampler(this, mu, x, x1, x2)  
+    private  subroutine mh_on_success(this, iter, alpha, xc, xp, err)  
 </h3>
-  <p>A sampler capable of generating the next proposed step in the chain.  The
-default sampler is a multivariate Gaussian of the form.</p>
-<p>
-<script type="math/tex; mode=display"> f(\vec{x}) = \frac{1}{\sqrt{\left( 2 \pi \right)^n | \Sigma |}} 
-\exp{ \left( -\frac{1}{2} \left( \vec{x} - \vec{\mu} \right)^T 
-\Sigma^{-1} \left( \vec{x} - \vec{\mu} \right) \right) } </script>
-</p>
-<p>where, <script type="math/tex"> \vec{\mu} </script> is the previously accepted state and <script type="math/tex"> \vec{x} </script>
-is the proposed state.</p>
+
+  <p>Currently, this routine does nothing and is a placeholder for the user
+that inherits this class to provide functionallity upon acceptance of
+a proposed value.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>),
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -637,6 +636,36 @@ is the proposed state.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>iter</strong></td>
+            <td>
+                <p>The current iteration number.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>The proposal probabilty term used for acceptance criteria.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -644,9 +673,9 @@ is the proposed state.</p>
               dimension(:)
             </td>
             <td>::</td>
-            <td><strong>mu</strong></td>
+            <td><strong>xc</strong></td>
             <td>
-                <p>An N-element array containing the current state.</p>
+                <p>An N-element array containing the current state variables.</p>
             </td>
         </tr>
         <tr>
@@ -654,46 +683,30 @@ is the proposed state.</p>
               <span class="anchor" ></span>
               real(kind=real64),
             </td>
-<td>intent(out),</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              dimension(size(mu))
+              dimension(size(xc))
             </td>
             <td>::</td>
-            <td><strong>x</strong></td>
+            <td><strong>xp</strong></td>
             <td>
-                <p>An N-element array containing the proposed state.</p>
+                <p>An N-element array containing the proposed state variables that
+were just accepted.</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" ></span>
-              real(kind=real64),
+              class(errors),
             </td>
-<td>intent(in),</td>
+<td>intent(inout),</td>
               <td>optional,</td>            <td>
-              dimension(size(mu))
+              target
             </td>
             <td>::</td>
-            <td><strong>x1</strong></td>
+            <td><strong>err</strong></td>
             <td>
-                <p>An optional N-element array containing the lower limits for the state 
-variables.  If not supplied, no limits are imposed.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              dimension(size(mu))
-            </td>
-            <td>::</td>
-            <td><strong>x2</strong></td>
-            <td>
-                <p>An optional N-element array containing the upper limits for the state 
-variables.  If not supplied, no limits are imposed.</p>
+                <p>An error handling object.</p>
             </td>
         </tr>
     </tbody>
@@ -704,31 +717,171 @@ variables.  If not supplied, no limits are imposed.</p>
     </ul>
   </div>
 
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-push_new_state"></span><h3>procedure, public :: <strong>push_new_state</strong>  => mh_push         
-    </h3></div>
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-on_rejection"></span>
+      <h3>
+          procedure, public ::
+  <strong>on_rejection</strong> => mh_on_rejection
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine mh_on_rejection(this, iter, alpha, xc, xp, err)  
+</h3>
+
+  <p>Currently, this routine does nothing and is a placeholder for the user
+that inherits this class to provide functionallity upon rejection of
+a proposed value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The metropolis_hastings object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>iter</strong></td>
+            <td>
+                <p>The current iteration number.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>The proposal probabilty term used for acceptance criteria.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>An N-element array containing the current state variables.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(size(xc))
+            </td>
+            <td>::</td>
+            <td><strong>xp</strong></td>
+            <td>
+                <p>An N-element array containing the proposed state variables that
+were just rejected.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>An error handling object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-push_new_state"></span>
+      <h3>
+          procedure, public ::
+  <strong>push_new_state</strong> => mh_push
+        
+      </h3>
+    </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
     private  subroutine mh_push(this, x, err)  
 </h3>
+
   <p>Pushes a new set of state variables onto the buffer.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>),
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -778,38 +931,199 @@ variables.  If not supplied, no limits are imposed.</p>
     </ul>
   </div>
 
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-target_density"></span><h3>procedure, public :: <strong>target_density</strong>  => mh_target_density         
-    </h3></div>
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-reset"></span>
+      <h3>
+          procedure, public ::
+  <strong>reset</strong> => mh_clear_chain
+        
+      </h3>
+    </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  function mh_target_density(this, x, y, s) result(rst)  
+    private  subroutine mh_clear_chain(this)  
 </h3>
-  <p>Computes the target density given the current state.  The target density
-is calculated as follows.</p>
-<p>
-<script type="math/tex; mode=display"> f(\vec{x}) = \frac{1}{\sqrt{2 \pi}^n \sigma} \exp{\left(-\frac{1}{2} 
-\left(n - 1 \right) \chi^2 \right)} </script>
-</p>
+
+  <p>Resets the object and clears out the buffer storing the chain values.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>),
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
             </td>
-<td>intent(in)</td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The metropolis_hastings object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-sample"></span>
+      <h3>
+          procedure, public ::
+  <strong>sample</strong> => mh_sample
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine mh_sample(this, xi, niter, err)  
+</h3>
+
+  <p>Samples the distribution using the Metropolis-Hastings algorithm.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The metropolis_hastings object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xi</strong></td>
+            <td>
+                <p>An N-element array containing initial starting values of the state 
+variables.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>niter</strong></td>
+            <td>
+                <p>An optional input defining the number of iterations to take.  The
+default is 10,000.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>The error handling object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-target_distribution"></span>
+      <h3>
+          procedure, public ::
+  <strong>target_distribution</strong> => mh_target
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function mh_target(this, x) result(rst)  
+</h3>
+
+  <p>Returns the probability value from the target distribution at the
+specified state.  The user is expected to overload this routine to
+define the desired distribution.  The default behavior of this
+routine is to sample a multivariate normal distribution with a mean
+of zero and a variance of one (identity covariance matrix).</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
+            </td>
+<td>intent(inout)</td>
               <td></td>            <td>
               
             </td>
@@ -831,39 +1145,7 @@ is calculated as follows.</p>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                <p>An N-element array containing the independent data points from the 
-experimental data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(size(x))
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-                <p>An N-element array containing the dependent data points from the
-experimental data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>s</strong></td>
-            <td>
-                <p>An array containing the current state (model parameters).</p>
+                <p>The state vector.</p>
             </td>
         </tr>
     </tbody>
@@ -873,12 +1155,14 @@ experimental data.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The function value.</p>
+    <p>The value of the probability density function of the distribution
+being sampled.</p>
 
         </li>
     </ul>
   </div>
 
+          </div>
       </section>
 
     
@@ -889,32 +1173,27 @@ experimental data.</p>
     </div> <!-- /container -->
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="col-xs-6 col-md-6"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2025 
+        <div class="row justify-content-between">
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2025 
 </p>
           </div>
-          <div class="col-xs-6 col-md-6">
-            <p class="text-right">
+          <div class="col">
+            <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-12 15:59              </p>
+ on 2025-02-18 07:50              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript
-         ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        -->
-        <script src="../js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
 
-        <!-- MathJax JavaScript
+    <!-- MathJax JavaScript
              ================================================== -->
              <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/x-mathjax-config">

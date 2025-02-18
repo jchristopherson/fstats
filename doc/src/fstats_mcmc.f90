@@ -5,28 +5,22 @@ module fstats_mcmc
     use ferror
     use fstats_errors
     use fstats_descriptive_statistics
+    use fstats_types
+    use fstats_regression
+    use fstats_sampling
     implicit none
     private
     public :: metropolis_hastings
 
-    interface
-        pure function fit_function(x, mdl) result(rst)
-            use iso_fortran_env, only : real64
-            !! The signature of the function to be fit.
-            real(real64), intent(in), dimension(:) :: x
-                !! An N-element array containing the independent variable values
-                !! at which to evaluate the function.
-            real(real64), intent(in), dimension(:) :: mdl
-                !! The model parameters.
-            real(real64), dimension(size(x)) :: rst
-                !! An N-element array containing the values of the function at
-                !! each value in x.
-        end function
-    end interface
-
     type metropolis_hastings
         !! An implementation of the Metropolis-Hastings algorithm for the
-        !! generation of a Markov chain.
+        !! generation of a Markov chain.  This is a default implementation
+        !! that allows sampling of normally distributed posterior distributions
+        !! centered on zero with unit standard deviations.  Proposals are
+        !! generated from a multivariate normal distribution with an identity
+        !! covariance matrix and centered on zero.  To alter these sampling
+        !! and target distributions simply create a new class inheriting from 
+        !! this class and override the appropriate routines.
         integer(int32), private :: initial_iteration_estimate = 10000
             !! An initial estimate at the number of allowed iterations.
         integer(int32), private :: m_bufferSize = 0
@@ -35,18 +29,20 @@ module fstats_mcmc
             !! The buffer where each new state is stored as a row in the matrix.
         integer(int32), private :: m_numVars = 0
             !! The number of state variables.
-        type(multivariate_normal_distribution), private :: m_sampleDist
-            !! The sampling distribution.
-        procedure(fit_function), private, pointer, nopass :: fcn
-            !! The function to fit.
+        type(multivariate_normal_distribution) :: m_propDist
+            !! The proposal distribution from which to draw samples.
     contains
         procedure, public :: get_state_variable_count => mh_get_nvars
         procedure, public :: get_chain_length => mh_get_chain_length
         procedure, public :: push_new_state => mh_push
-        procedure, public :: proposal => mh_proposal_sampler
-        procedure, public :: target_density => mh_target_density
-        procedure, public :: estimate_covariance => mh_init_covariance
-        procedure, public :: evaluate => mh_eval
+        procedure, public :: get_chain => mh_get_chain
+        procedure, public :: generate_proposal => mh_proposal
+        procedure, public :: compute_hastings_ratio => mh_hastings_ratio
+        procedure, public :: target_distribution => mh_target
+        procedure, public :: sample => mh_sample
+        procedure, public :: reset => mh_clear_chain
+        procedure, public :: on_acceptance => mh_on_success
+        procedure, public :: on_rejection => mh_on_rejection
         procedure, private :: resize_buffer => mh_resize_buffer
         procedure, private :: get_buffer_length => mh_get_buffer_length
     end type
@@ -130,7 +126,7 @@ pure function mh_get_buffer_length(this) result(rst)
     !! Gets the actual length of the buffer.  This value will likely exceed the
     !! actual number of items in the chain.
     class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hasings object.
+        !! The metropolis_hastings object.
     integer(int32) :: rst
         !! The actual buffer length.
 
@@ -167,6 +163,11 @@ subroutine mh_push(this, x, err)
     nbuffer = this%get_buffer_length()
     nvars = size(x)
 
+    ! If this is the first time, ensure the collection is initialized
+    if (this%get_state_variable_count() == 0) then
+        this%m_numVars = nvars
+    end if
+
     ! Input Checking
     if (nvars /= this%get_state_variable_count()) then
         call report_array_size_error(errmgr, "mh_push", "x", &
@@ -182,175 +183,154 @@ subroutine mh_push(this, x, err)
 
     ! Store the new state
     this%m_buffer(n1,:) = x
+    this%m_bufferSize = this%m_bufferSize + 1
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine mh_proposal_sampler(this, mu, x, x1, x2)
-    !! A sampler capable of generating the next proposed step in the chain.  The
-    !! default sampler is a multivariate Gaussian of the form.
-    !!
-    !! $$ f(\vec{x}) = \frac{1}{\sqrt{\left( 2 \pi \right)^n | \Sigma |}} 
-    !! \exp{ \left( -\frac{1}{2} \left( \vec{x} - \vec{\mu} \right)^T 
-    !! \Sigma^{-1} \left( \vec{x} - \vec{\mu} \right) \right) } $$
-    !!
-    !! where, \( \vec{\mu} \) is the previously accepted state and \( \vec{x} \)
-    !! is the proposed state.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: mu
-        !! An N-element array containing the current state.
-    real(real64), intent(out), dimension(size(mu)) :: x
-        !! An N-element array containing the proposed state.
-    real(real64), intent(in), optional, dimension(size(mu)) :: x1
-        !! An optional N-element array containing the lower limits for the state 
-        !! variables.  If not supplied, no limits are imposed.
-    real(real64), intent(in), optional, dimension(size(mu)) :: x2
-        !! An optional N-element array containing the upper limits for the state 
-        !! variables.  If not supplied, no limits are imposed.
-
-    ! Local Variables
-    integer(int32) :: i, j, jmax, n
-    real(real64), allocatable, dimension(:) :: u
-    real(real64), allocatable, dimension(:,:) :: L
-    type(normal_distribution) :: dist
-
-    ! Initialization
-    n = this%get_state_variable_count()
-    allocate(u(n))
-
-    ! Update the mean of the distribution
-    call this%m_sampleDist%set_means(mu)
-
-    ! Generate the next state by sampling the distribution
-    call random_number(u)
-    L = this%m_sampleDist%get_cholesky_factored_matrix()
-    x = mu + matmul(L, u)
-
-    ! Do we need to impose limits
-    if (present(x1)) then
-        ! lower limits
-        x = max(x, x1)
-    end if
-
-    if (present(x2)) then
-        ! upper limits
-        x = min(x, x2)
-    end if
-end subroutine
-
-! ------------------------------------------------------------------------------
-function mh_target_density(this, x, y, s) result(rst)
-    !! Computes the target density given the current state.  The target density
-    !! is calculated as follows.
-    !!
-    !! $$ f(\vec{x}) = \frac{1}{\sqrt{2 \pi}^n \sigma} \exp{\left(-\frac{1}{2} 
-    !! \left(n - 1 \right) \chi^2 \right)} $$
+function mh_get_chain(this, bin, err) result(rst)
+    !! Gets a copy of the stored Markov chain.
     class(metropolis_hastings), intent(in) :: this
         !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: x
-        !! An N-element array containing the independent data points from the 
-        !! experimental data.
-    real(real64), intent(in), dimension(size(x)) :: y
-        !! An N-element array containing the dependent data points from the
-        !! experimental data.
-    real(real64), intent(in), dimension(:) :: s
-        !! An array containing the current state (model parameters).
-    real(real64) :: rst
-        !! The function value.
-
-    ! Parameters
-    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+    real(real64), intent(in), optional :: bin
+        !! An optional input allowing for a burn-in region.  The parameter
+        !! represents the amount (percentage-based) of the overall chain to 
+        !! disregard as "burn-in" values.  The value shoud exist on [0, 1).
+        !! The default value is 0 such that no values are disregarded.
+    class(errors), intent(inout), optional, target :: err
+        !! The error handling object.
+    real(real64), allocatable, dimension(:,:) :: rst
+        !! The resulting chain with each parameter represented by a column.
 
     ! Local Variables
-    integer(int32) :: n
-    real(real64) :: se, x2
-    real(real64), allocatable, dimension(:) :: f, e
+    integer(int32) :: npts, nvar, flag, nstart
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    npts = this%get_chain_length()
+    nvar = this%get_state_variable_count()
+    if (present(bin)) then
+        nstart = floor(bin * npts)
+        npts = npts - nstart
+    else
+        nstart = 1
+    end if
 
-    ! Evaluate the function and compute the standard deviation and Chi-squared
-    ! as a measure of the error of the fit.
-    n = this%get_state_variable_count()
-    f = this%fcn(x, s)
-    e = f - y
-    se = standard_deviation(e)
-    x2 = sum(e**2 / y)
-
-    ! Compute the value of the density function
-    rst = exp(-0.5d0 * (n - 1.0d0) * x2) / (sqrt(2.0d0 * pi)**n * se)
+    ! Process
+    allocate(rst(npts, nvar), stat = flag, &
+        source = this%m_buffer(nstart:,1:nvar))
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "mh_get_chain", flag)
+        return
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
-function mh_init_covariance(this, x, y, mdl) result(rst)
-    !! Generates an initial estimate of the covariance matrix.  The approach
-    !! used by this routine is to assume the covariance matrix takes the form
-    !! of an identity matrix scaled by the variance of the error of the current
-    !! model state.
-    class(metropolis_hastings), intent(in) :: this
+function mh_proposal(this, xc) result(rst)
+    !! Proposes a new sample set of variables.  The sample is generated by
+    !! sampling a multivariate normal distribution.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    real(real64), intent(in), dimension(:) :: xc
+        !! The current set of variables.
+    real(real64), allocatable, dimension(:) :: rst
+        !! The proposed set of variables.
+
+    ! Sample from the distribution
+    call this%m_propDist%set_means(xc) ! center the distribution at the current state
+    rst = sample_normal_multivariate(this%m_propDist)
+end function
+
+! ------------------------------------------------------------------------------
+function mh_hastings_ratio(this, xc, xp) result(rst)
+    !! Evaluates the Hasting's ratio.  If the proposal distribution is 
+    !! symmetric, this ratio is unity; however, in the case of an asymmetric
+    !! distribution this ratio is not ensured to be unity.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    real(real64), intent(in), dimension(:) :: xc
+        !! The current state vector.
+    real(real64), intent(in), dimension(size(xc)) :: xp
+        !! The proposed state vector.
+    real(real64) :: rst
+        !! The ratio.
+
+    ! Local Variables
+    real(real64), allocatable, dimension(:) :: means
+    real(real64) :: q1, q2
+
+    ! Initialization
+    means = this%m_propDist%get_means()
+
+    ! Process
+    call this%m_propDist%set_means(xc)
+    q1 = this%m_propDist%pdf(xp)
+
+    call this%m_propDist%set_means(xp)
+    q2 = this%m_propDist%pdf(xc)
+
+    ! Restore the state of the object
+    call this%m_propDist%set_means(means)
+
+    ! Compute the ratio
+    rst = q2 / q1
+end function
+
+! ------------------------------------------------------------------------------
+function mh_target(this, x) result(rst)
+    !! Returns the probability value from the target distribution at the
+    !! specified state.  The user is expected to overload this routine to
+    !! define the desired distribution.  The default behavior of this
+    !! routine is to sample a multivariate normal distribution with a mean
+    !! of zero and a variance of one (identity covariance matrix).
+    class(metropolis_hastings), intent(inout) :: this
         !! The metropolis_hastings object.
     real(real64), intent(in), dimension(:) :: x
-        !! An N-element array containing the independent data points from the 
-        !! experimental data.
-    real(real64), intent(in), dimension(size(x)) :: y
-        !! An N-element array containing the dependent data points from the
-        !! experimental data.
-    real(real64), intent(in), dimension(:) :: mdl
-        !! An initial estimate of the model coefficients.
-    real(real64), allocatable, dimension(:,:) :: rst
-        !! The initial covariance matrix estimate.
+        !! The state vector.
+    real(real64) :: rst
+        !! The value of the probability density function of the distribution
+        !! being sampled.
 
     ! Local Variables
     integer(int32) :: i, n
-    real(real64) :: s2
-    real(real64), allocatable, dimension(:) :: f, e
+    real(real64), allocatable, dimension(:) :: mu
+    real(real64), allocatable, dimension(:,:) :: sigma
+    type(multivariate_normal_distribution) :: dist
 
-    ! Evaluate the model
-    f = this%fcn(x, mdl)
-    e = f - y
-    s2 = variance(e)
-
-    ! Generate the matrix
-    n = size(mdl)
-    allocate(rst(n, n), source = 0.0d0)
+    ! The default will be a multivariate normal distribution with an identity
+    ! matrix for the covariance matrix
+    n = size(x)
+    allocate(mu(n), sigma(n, n), source = 0.0d0)
     do i = 1, n
-        rst(i,i) = s2
+        sigma(i,i) = 1.0d0
     end do
+    call dist%initialize(mu, sigma)
+    rst = dist%pdf(x)
 end function
 
 ! ------------------------------------------------------------------------------
-! TO DO: Update covariance matrix????
-
-! ------------------------------------------------------------------------------
-subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)
-    !! Initializes and evaluates the Metropolis-Hastings algorithm to generate 
-    !! the Markov chain.
+subroutine mh_sample(this, xi, niter, err)
+    !! Samples the distribution using the Metropolis-Hastings algorithm.
     class(metropolis_hastings), intent(inout) :: this
         !! The metropolis_hastings object.
-    procedure(fit_function), pointer, intent(in) :: fcn
-        !! A pointer to the function to fit.
-    real(real64), intent(in), dimension(:) :: x
-        !! An N-element array containing the independent data points from the 
-        !! experimental data.
-    real(real64), intent(in), dimension(size(x)) :: y
-        !! An N-element array containing the dependent data points from the
-        !! experimental data.
-    real(real64), intent(in), dimension(:) :: mdl
-        !! An M-element array containing an initial estimate of the model 
-        !! coefficients (state variables).
+    real(real64), intent(in), dimension(:) :: xi
+        !! An N-element array containing initial starting values of the state 
+        !! variables.
     integer(int32), intent(in), optional :: niter
-        !! An optional input that limits the number of iterations.  The default
-        !! value is 10,000.
-    real(real64), intent(in), optional, dimension(size(mdl)) :: x1
-        !! An optional M-element array containing the lower limits for the state 
-        !! variables.  If not supplied, no limits are imposed.
-    real(real64), intent(in), optional, dimension(size(mdl)) :: x2
-        !! An optional M-element array containing the upper limits for the state 
-        !! variables.  If not supplied, no limits are imposed.
+        !! An optional input defining the number of iterations to take.  The
+        !! default is 10,000.
     class(errors), intent(inout), optional, target :: err
         !! The error handling object.
 
     ! Local Variables
-    integer(int32) :: i, n, flag, maxiter
-    real(real64) :: alpha, pc, pp, r, a
-    real(real64), allocatable, dimension(:) :: xp, xc
+    integer(int32) :: i, n, npts, flag
+    real(real64) :: r, pp, pc, a, a1, a2, alpha
+    real(real64), allocatable, dimension(:) :: xc, xp, means
     real(real64), allocatable, dimension(:,:) :: sigma
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
@@ -361,78 +341,119 @@ subroutine mh_eval(this, fcn, x, y, mdl, niter, x1, x2, err)
     else
         errmgr => deferr
     end if
-    n = size(mdl)
-    this%fcn => fcn
     if (present(niter)) then
-        maxiter = niter
+        npts = niter
     else
-        maxiter = this%initial_iteration_estimate
+        npts = this%initial_iteration_estimate
     end if
+    n = size(xi)
 
-    ! Memory Allocations
-    allocate(xc(n), stat = flag, source = mdl)
-    if (flag /= 0) go to 10
-    allocate(xp(n), stat = flag)
-    if (flag /= 0) go to 10
-
-    ! Create an initial covariance matrix estimate & initial the proposal 
-    ! distribution
-    sigma = this%estimate_covariance(x, y, xc)
-    call this%m_sampleDist%initialize(xc, sigma, errmgr)
+    ! Initialize the proposal distribution.  Use an identity matrix for the
+    ! covariance matrix and assume a zero mean.
+    allocate(sigma(n, n), means(n), source = 0.0d0, stat = flag)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "mh_sample", flag)
+        return
+    end if
+    do i = 1, n
+        sigma(i,i) = 1.0d0
+    end do
+    call this%m_propDist%initialize(means, sigma, err = errmgr)
     if (errmgr%has_error_occurred()) return
 
-    ! Store the initial estimate of the model parameters
-    call this%push_new_state(mdl, errmgr)
+    ! Store the initial value
+    call this%push_new_state(xi, err = errmgr)
     if (errmgr%has_error_occurred()) return
 
-    ! Evaluate the next step
-    call this%proposal(xc, xp, x1, x2)
+    ! Iteration Process
+    xc = xi
+    pc = this%target_distribution(xc)
+    do i = 2, npts
+        ! Create a proposal & evaluate it's PDF
+        xp = this%generate_proposal(xc)
+        pp = this%target_distribution(xp)
 
-    ! Compute the target density
-    pc = this%target_density(x, y, xc)
+        ! Evaluate the probabilities
+        a1 = this%compute_hastings_ratio(xc, xp)
+        a2 = pp / pc
+        alpha = min(1.0d0, a1 * a2)
 
-    ! Continue the iteration process now that initial values have all been
-    ! established
-    do i = 2, maxiter
-        ! Define a new proposal
-        call this%proposal(xc, xp, x1, x2)
-
-        ! Compute the target density
-        pp = this%target_density(x, y, xp)
-
-        ! Compute the acceptance ratio & see if the step is good enough
-        a = pp / pc
-        alpha = min(1.0d0, a)
+        ! Do we keep our current state or move to the new state?
         call random_number(r)
-        if (r < alpha) then
-            ! Accept the step
-            call this%push_new_state(xp, errmgr)
+        if (r <= alpha) then
+            ! Take the new value
+            call this%push_new_state(xp, err = errmgr)
             if (errmgr%has_error_occurred()) return
+
+            ! Update the values
             xc = xp
             pc = pp
 
-            ! Update the covariance matrix???
+            ! Take additional actions on success???
+            call this%on_acceptance(i, alpha, xc, xp, err = errmgr)
+            if (errmgr%has_error_occurred()) return
+        else
+            ! Keep our current estimate
+            call this%push_new_state(xc, err = errmgr)
+            if (errmgr%has_error_occurred()) return
+
+            ! Take additional actions on failure???
+            call this%on_rejection(i, alpha, xc, xp, err = errmgr)
+            if (errmgr%has_error_occurred()) return
         end if
     end do
-
-    ! End
-    return
-
-    ! Memory Error Handler
-10  continue
-    call report_memory_error(errmgr, "mh_eval", flag)
-    return
 end subroutine
 
 ! ------------------------------------------------------------------------------
-! function mh_get_chain(this, err) result(rst)
-!     !! Gets a copy of the chain
+subroutine mh_clear_chain(this)
+    !! Resets the object and clears out the buffer storing the chain values.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
 
-! TO DO: Define burn-in limits
-! end function
+    ! Clear the buffer
+    this%m_bufferSize = 0
+    this%m_numVars = 0
+end subroutine
 
-! TO DO: Reset chain to zero length
-! TO DO: Get covariance matrix
+! ------------------------------------------------------------------------------
+subroutine mh_on_success(this, iter, alpha, xc, xp, err)
+    !! Currently, this routine does nothing and is a placeholder for the user
+    !! that inherits this class to provide functionallity upon acceptance of
+    !! a proposed value.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    integer(int32), intent(in) :: iter
+        !! The current iteration number.
+    real(real64), intent(in) :: alpha
+        !! The proposal probabilty term used for acceptance criteria.
+    real(real64), intent(in), dimension(:) :: xc
+        !! An N-element array containing the current state variables.
+    real(real64), intent(in), dimension(size(xc)) :: xp
+        !! An N-element array containing the proposed state variables that
+        !! were just accepted.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine mh_on_rejection(this, iter, alpha, xc, xp, err)
+    !! Currently, this routine does nothing and is a placeholder for the user
+    !! that inherits this class to provide functionallity upon rejection of
+    !! a proposed value.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    integer(int32), intent(in) :: iter
+        !! The current iteration number.
+    real(real64), intent(in) :: alpha
+        !! The proposal probabilty term used for acceptance criteria.
+    real(real64), intent(in), dimension(:) :: xc
+        !! An N-element array containing the current state variables.
+    real(real64), intent(in), dimension(size(xc)) :: xp
+        !! An N-element array containing the proposed state variables that
+        !! were just rejected.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+end subroutine
 
 ! ------------------------------------------------------------------------------
 end module

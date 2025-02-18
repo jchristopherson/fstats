@@ -286,7 +286,7 @@ function mh_target(this, x) result(rst)
     !! Returns the probability value from the target distribution at the
     !! specified state.  The user is expected to overload this routine to
     !! define the desired distribution.  The default behavior of this
-    !! routine is to sammple a multivariate normal distribution with a mean
+    !! routine is to sample a multivariate normal distribution with a mean
     !! of zero and a variance of one (identity covariance matrix).
     class(metropolis_hastings), intent(inout) :: this
         !! The metropolis_hastings object.
