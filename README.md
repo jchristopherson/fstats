@@ -37,3 +37,4 @@ Here is a list of external code libraries utilized by this library.  The CMake b
 - Allan Variance
 - Smoothing
 - Experimental Design
+- Markov Chain Monte Carlo
