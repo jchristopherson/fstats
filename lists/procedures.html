@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,77 +13,53 @@
     <title>All Procedures &ndash; FSTATS
 </title>
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <script src="../js/jquery-2.1.3.min.js"></script>
-         <script src="../js/svg-pan-zoom.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
           <a class="navbar-brand" href="../index.html">FSTATS </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
-              <a href="#" class="dropdown-toggle"
-                 data-toggle="dropdown" role="button"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                 Contents <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
-                  <li><a href="../lists/modules.html">Modules</a></li>
-                  <li><a href="../lists/procedures.html">Procedures</a></li>
-                  <li><a href="../lists/types.html">Derived Types</a></li>
-              </ul>
-            </li>
-                <li class="visible-xs hidden-sm visible-lg">
-                  <a href="../lists/files.html">Source Files</a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
                 </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/modules.html">Modules</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/procedures.html">Procedures</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/types.html">Derived Types</a>
-              </li>
-          </ul>
-            <form action="../search.html" class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
               </div>
-              <!--
-                  <button type="submit" class="btn btn-default">Submit</button>
-                  -->
-            </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
       <div class="row">
@@ -90,88 +68,389 @@
 			 <table class="table table-striped">
 			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
 			 <tbody>
-			   <tr><td><a href='../proc/adjusted_r_squared.html'>adjusted_r_squared</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Function</td><td><p>Computes the adjusted R-squared value for a data set.</p><a href="../proc/adjusted_r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/allan_variance.html'>allan_variance</a></td><td><a href='../module/fstats_allan.html'>fstats_allan</a></td><td>Function</td><td><p>Computes the Allan variance of a data set.</p><a href="../proc/allan_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../interface/anova.html'>anova</a></td><td><a href='../module/fstats_anova.html'>fstats_anova</a></td><td>Interface</td><td><p>Performs an analysis of variance (ANOVA) on the supplied data 
-set.</p><a href="../interface/anova.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/bartletts_test.html'>bartletts_test</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Subroutine</td><td><p>Computes Bartlett's test statistic and associated probability.</p><a href="../proc/bartletts_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/beta.html'>beta</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the beta function.</p><a href="../proc/beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/bootstrap.html'>bootstrap</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Function</td><td><p>Performs a bootstrap calculation on the supplied data set for the given
+			   <tr>
+                 <td><a href='..\proc\adjusted_r_squared.html'>adjusted_r_squared</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the adjusted R-squared value for a data set.</p><a href="../proc/adjusted_r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\allan_variance.html'>allan_variance</a></td>
+                 <td><a href='..\module\fstats_allan.html'>fstats_allan</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the Allan variance of a data set.</p><a href="../proc/allan_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\anova.html'>anova</a></td>
+                 <td><a href='..\module\fstats_anova.html'>fstats_anova</a></td>
+                 <td>Interface</td>
+                 <td><p>Performs an analysis of variance (ANOVA) on the supplied data 
+set.</p><a href="../interface/anova.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\bartletts_test.html'>bartletts_test</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes Bartlett's test statistic and associated probability.</p><a href="../proc/bartletts_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\beta.html'>beta</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the beta function.</p><a href="../proc/beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\bootstrap.html'>bootstrap</a></td>
+                 <td><a href='..\module\fstats_bootstrap.html'>fstats_bootstrap</a></td>
+                 <td>Function</td>
+                 <td><p>Performs a bootstrap calculation on the supplied data set for the given
 statistic.  The default implementation utlizes a random resampling with 
 replacement.  Other resampling methods may be defined by specifying an 
-appropriate routine by means of the method input.</p></td></tr>
-			   <tr><td><a href='../interface/bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../interface/bootstrap_statistic_routine.html'>bootstrap_statistic_routine</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../interface/box_muller_sample.html'>box_muller_sample</a></td><td><a href='../module/fstats_sampling.html'>fstats_sampling</a></td><td>Interface</td><td><p>Generates random, normally distributed values via the Box-Muller 
-transform.</p></td></tr>
-			   <tr><td><a href='../proc/calculate_regression_statistics.html'>calculate_regression_statistics</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Function</td><td><p>Computes statistics for the quality of fit for a regression 
-model.</p></td></tr>
-			   <tr><td><a href='../interface/confidence_interval.html'>confidence_interval</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Interface</td><td><p>Computes the confidence interval for the specified distribution.</p><a href="../interface/confidence_interval.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/correlation.html'>correlation</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Function</td><td><p>Computes the sample correlation coefficient (an estimate to the 
-population Pearson correlation) as follows.</p><a href="../proc/correlation.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/covariance.html'>covariance</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the sample covariance of two data sets.</p><a href="../proc/covariance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/covariance_matrix.html'>covariance_matrix</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Computes the covariance matrix <script type="math/tex"> C </script> where 
+appropriate routine by means of the method input.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a></td>
+                 <td><a href='..\module\fstats_bootstrap.html'>fstats_bootstrap</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\bootstrap_statistic_routine.html'>bootstrap_statistic_routine</a></td>
+                 <td><a href='..\module\fstats_bootstrap.html'>fstats_bootstrap</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\box_muller_sample.html'>box_muller_sample</a></td>
+                 <td><a href='..\module\fstats_sampling.html'>fstats_sampling</a></td>
+                 <td>Interface</td>
+                 <td><p>Generates random, normally distributed values via the Box-Muller 
+transform.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\calculate_regression_statistics.html'>calculate_regression_statistics</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Function</td>
+                 <td><p>Computes statistics for the quality of fit for a regression 
+model.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\confidence_interval.html'>confidence_interval</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Interface</td>
+                 <td><p>Computes the confidence interval for the specified distribution.</p><a href="../interface/confidence_interval.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\correlation.html'>correlation</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the sample correlation coefficient (an estimate to the 
+population Pearson correlation) as follows.</p><a href="../proc/correlation.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\covariance.html'>covariance</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the sample covariance of two data sets.</p><a href="../proc/covariance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\covariance_matrix.html'>covariance_matrix</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the covariance matrix <script type="math/tex"> C </script> where 
 <script type="math/tex"> C = \left( X^{T} X \right)^{-1} </script> and <script type="math/tex"> X </script> is computed
-by design_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/design_matrix.html'>design_matrix</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Computes the design matrix <script type="math/tex"> X </script> for the linear 
+by design_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\design_matrix.html'>design_matrix</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the design matrix <script type="math/tex"> X </script> for the linear 
 least-squares regression problem of <script type="math/tex"> X \beta = y </script>, where 
 <script type="math/tex"> X </script> is the matrix computed here, <script type="math/tex"> \beta </script> is 
 the vector of coefficients to be determined, and <script type="math/tex"> y </script> is the 
-vector of measured dependent variables.</p><a href="../proc/design_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/difference.html'>difference</a></td><td><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></td><td>Function</td><td><p>Computes the difference between elements in an array.</p></td></tr>
-			   <tr><td><a href='../proc/digamma.html'>digamma</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the digamma function.</p><a href="../proc/digamma.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../interface/distribution_function.html'>distribution_function</a></td><td><a href='../module/fstats_distributions.html'>fstats_distributions</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../interface/distribution_property.html'>distribution_property</a></td><td><a href='../module/fstats_distributions.html'>fstats_distributions</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../interface/doe_evaluate_model.html'>doe_evaluate_model</a></td><td><a href='../module/fstats_experimental_design.html'>fstats_experimental_design</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../proc/doe_fit_model.html'>doe_fit_model</a></td><td><a href='../module/fstats_experimental_design.html'>fstats_experimental_design</a></td><td>Function</td><td><p>Fits a Taylor series model to the provided data.</p><a href="../proc/doe_fit_model.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/f_test.html'>f_test</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Subroutine</td><td><p>Computes the F-test and returns the probability (two-tailed) that
-the variances of two data sets are not significantly different.</p><a href="../proc/f_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/factorial.html'>factorial</a></td><td><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></td><td>Function</td><td><p>Computes the factorial of X.</p></td></tr>
-			   <tr><td><a href='../proc/full_factorial.html'>full_factorial</a></td><td><a href='../module/fstats_experimental_design.html'>fstats_experimental_design</a></td><td>Subroutine</td><td><p>Computes a table with values scaled from 1 to N describing a 
-full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/get_full_factorial_matrix_size.html'>get_full_factorial_matrix_size</a></td><td><a href='../module/fstats_experimental_design.html'>fstats_experimental_design</a></td><td>Subroutine</td><td><p>Computes the appropriate size for a full-factorial design table.</p></td></tr>
-			   <tr><td><a href='../proc/incomplete_beta.html'>incomplete_beta</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the incomplete beta function.</p><a href="../proc/incomplete_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/incomplete_gamma_lower.html'>incomplete_gamma_lower</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the lower incomplete gamma function.</p><a href="../proc/incomplete_gamma_lower.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/incomplete_gamma_upper.html'>incomplete_gamma_upper</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the upper incomplete gamma function.</p><a href="../proc/incomplete_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../interface/iteration_update.html'>iteration_update</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../proc/jacobian.html'>jacobian</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Computes the Jacobian matrix for a nonlinear regression problem.</p></td></tr>
-			   <tr><td><a href='../proc/levenes_test.html'>levenes_test</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Subroutine</td><td><p>Computes Levene's test statistic and associated probability.</p><a href="../proc/levenes_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/linear_least_squares.html'>linear_least_squares</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Computes a linear least-squares regression to fit a set of data.</p><a href="../proc/linear_least_squares.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/lowess.html'>lowess</a></td><td><a href='../module/fstats_smoothing.html'>fstats_smoothing</a></td><td>Subroutine</td><td><p>Computes the smoothing of a data set using a robust locally weighted
+vector of measured dependent variables.</p><a href="../proc/design_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\difference.html'>difference</a></td>
+                 <td><a href='..\module\fstats_helper_routines.html'>fstats_helper_routines</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the difference between elements in an array.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\digamma.html'>digamma</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the digamma function.</p><a href="../proc/digamma.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\distribution_function.html'>distribution_function</a></td>
+                 <td><a href='..\module\fstats_distributions.html'>fstats_distributions</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\distribution_property.html'>distribution_property</a></td>
+                 <td><a href='..\module\fstats_distributions.html'>fstats_distributions</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\doe_evaluate_model.html'>doe_evaluate_model</a></td>
+                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\doe_fit_model.html'>doe_fit_model</a></td>
+                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td>Function</td>
+                 <td><p>Fits a Taylor series model to the provided data.</p><a href="../proc/doe_fit_model.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\f_test.html'>f_test</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the F-test and returns the probability (two-tailed) that
+the variances of two data sets are not significantly different.</p><a href="../proc/f_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\factorial.html'>factorial</a></td>
+                 <td><a href='..\module\fstats_helper_routines.html'>fstats_helper_routines</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the factorial of X.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\full_factorial.html'>full_factorial</a></td>
+                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes a table with values scaled from 1 to N describing a 
+full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\get_full_factorial_matrix_size.html'>get_full_factorial_matrix_size</a></td>
+                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the appropriate size for a full-factorial design table.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\incomplete_beta.html'>incomplete_beta</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the incomplete beta function.</p><a href="../proc/incomplete_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\incomplete_gamma_lower.html'>incomplete_gamma_lower</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the lower incomplete gamma function.</p><a href="../proc/incomplete_gamma_lower.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\incomplete_gamma_upper.html'>incomplete_gamma_upper</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the upper incomplete gamma function.</p><a href="../proc/incomplete_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\iteration_update.html'>iteration_update</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\jacobian.html'>jacobian</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the Jacobian matrix for a nonlinear regression problem.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\levenes_test.html'>levenes_test</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes Levene's test statistic and associated probability.</p><a href="../proc/levenes_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\linear_least_squares.html'>linear_least_squares</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes a linear least-squares regression to fit a set of data.</p><a href="../proc/linear_least_squares.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\lowess.html'>lowess</a></td>
+                 <td><a href='..\module\fstats_smoothing.html'>fstats_smoothing</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the smoothing of a data set using a robust locally weighted
 scatterplot smoothing (LOWESS) algorithm.  Fitted values are computed at
-each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/mean.html'>mean</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the mean of the values in an array.</p></td></tr>
-			   <tr><td><a href='../proc/median.html'>median</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the median of the values in an array.</p></td></tr>
-			   <tr><td><a href='../proc/nonlinear_least_squares.html'>nonlinear_least_squares</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Performs a nonlinear regression to fit a model using a version
-of the Levenberg-Marquardt algorithm.</p></td></tr>
-			   <tr><td><a href='../interface/pooled_variance.html'>pooled_variance</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Interface</td><td><p>Computes the pooled estimate of variance.</p></td></tr>
-			   <tr><td><a href='../proc/quantile.html'>quantile</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the specified quantile of a data set using the SAS 
-Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/r_squared.html'>r_squared</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Function</td><td><p>Computes the R-squared value for a data set.</p><a href="../proc/r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/random_resample.html'>random_resample</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Subroutine</td><td><p>Random resampling, with replacement, based upon a normal distribution.</p></td></tr>
-			   <tr><td><a href='../interface/regression_function.html'>regression_function</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../proc/regularized_beta.html'>regularized_beta</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the regularized beta function.</p><a href="../proc/regularized_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/rejection_sample.html'>rejection_sample</a></td><td><a href='../module/fstats_sampling.html'>fstats_sampling</a></td><td>Function</td><td><p>Uses rejection sampling to randomly sample a target distribution.</p></td></tr>
-			   <tr><td><a href='../proc/report_array_size_error.html'>report_array_size_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an array size error.</p></td></tr>
-			   <tr><td><a href='../proc/report_arrays_not_same_size_error.html'>report_arrays_not_same_size_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an error relating to two arrays not being the same size
-when they should be the same size.</p></td></tr>
-			   <tr><td><a href='../proc/report_iteration_count_error.html'>report_iteration_count_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an iteration count error.</p></td></tr>
-			   <tr><td><a href='../proc/report_matrix_size_error.html'>report_matrix_size_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports a matrix size error.</p></td></tr>
-			   <tr><td><a href='../proc/report_memory_error.html'>report_memory_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports a memory allocation related error.</p></td></tr>
-			   <tr><td><a href='../proc/report_underdefined_error.html'>report_underdefined_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an underdefined problem error.</p></td></tr>
-			   <tr><td><a href='../proc/sample_size.html'>sample_size</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Function</td><td><p>Estimates the sample size required to achieve an experiment with the
+each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\mean.html'>mean</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the mean of the values in an array.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\median.html'>median</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the median of the values in an array.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\multivariate_distribution_function.html'>multivariate_distribution_function</a></td>
+                 <td><a href='..\module\fstats_distributions.html'>fstats_distributions</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\nonlinear_least_squares.html'>nonlinear_least_squares</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Performs a nonlinear regression to fit a model using a version
+of the Levenberg-Marquardt algorithm.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\pooled_variance.html'>pooled_variance</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Interface</td>
+                 <td><p>Computes the pooled estimate of variance.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\quantile.html'>quantile</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the specified quantile of a data set using the SAS 
+Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\r_squared.html'>r_squared</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the R-squared value for a data set.</p><a href="../proc/r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\random_resample.html'>random_resample</a></td>
+                 <td><a href='..\module\fstats_bootstrap.html'>fstats_bootstrap</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Random resampling, with replacement, based upon a normal distribution.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\regression_function.html'>regression_function</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\regularized_beta.html'>regularized_beta</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the regularized beta function.</p><a href="../proc/regularized_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\rejection_sample.html'>rejection_sample</a></td>
+                 <td><a href='..\module\fstats_sampling.html'>fstats_sampling</a></td>
+                 <td>Function</td>
+                 <td><p>Uses rejection sampling to randomly sample a target distribution.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\report_array_size_error.html'>report_array_size_error</a></td>
+                 <td><a href='..\module\fstats_errors.html'>fstats_errors</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reports an array size error.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\report_arrays_not_same_size_error.html'>report_arrays_not_same_size_error</a></td>
+                 <td><a href='..\module\fstats_errors.html'>fstats_errors</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reports an error relating to two arrays not being the same size
+when they should be the same size.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\report_iteration_count_error.html'>report_iteration_count_error</a></td>
+                 <td><a href='..\module\fstats_errors.html'>fstats_errors</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reports an iteration count error.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\report_matrix_size_error.html'>report_matrix_size_error</a></td>
+                 <td><a href='..\module\fstats_errors.html'>fstats_errors</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reports a matrix size error.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\report_memory_error.html'>report_memory_error</a></td>
+                 <td><a href='..\module\fstats_errors.html'>fstats_errors</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reports a memory allocation related error.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\report_underdefined_error.html'>report_underdefined_error</a></td>
+                 <td><a href='..\module\fstats_errors.html'>fstats_errors</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reports an underdefined problem error.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\sample_normal_multivariate.html'>sample_normal_multivariate</a></td>
+                 <td><a href='..\module\fstats_sampling.html'>fstats_sampling</a></td>
+                 <td>Function</td>
+                 <td><p>Samples a multivariate normal distribution such that <script type="math/tex">\vec{x} = 
+\vec{mu} + L \vec{u}</script>, where <script type="math/tex">L</script> is the lower form of the Cholesky 
+factorization of the covariance matrix, and <script type="math/tex">\vec{u}</script> is a randomly 
+generated vector that exists on the set <script type="math/tex">[-1 1]</script>
+</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\sample_size.html'>sample_size</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Function</td>
+                 <td><p>Estimates the sample size required to achieve an experiment with the
 desired power and significance levels to ascertain the desired 
-difference in parameter.</p><a href="../proc/sample_size.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/scaled_random_resample.html'>scaled_random_resample</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Subroutine</td><td><p>A random resampling, scaled by the standard deviation of the original
-data, but based upon a normal distribution.</p></td></tr>
-			   <tr><td><a href='../proc/standard_deviation.html'>standard_deviation</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the sample standard deviation of the values in an array.</p><a href="../proc/standard_deviation.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/t_test_equal_variance.html'>t_test_equal_variance</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Subroutine</td><td><p>Computes the 2-tailed Student's T-Test for two data sets of 
-assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/t_test_paired.html'>t_test_paired</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Subroutine</td><td><p>Computes the 2-tailed Student's T-Test for two paired data sets.</p><a href="../proc/t_test_paired.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/t_test_unequal_variance.html'>t_test_unequal_variance</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Subroutine</td><td><p>Computes the 2-tailed Student's T-Test for two data sets of 
-assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../proc/trimmed_mean.html'>trimmed_mean</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the trimmed mean of a data set.</p></td></tr>
-			   <tr><td><a href='../proc/variance.html'>variance</a></td><td><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td><td>Function</td><td><p>Computes the sample variance of the values in an array.</p><a href="../proc/variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+difference in parameter.</p><a href="../proc/sample_size.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\scaled_random_resample.html'>scaled_random_resample</a></td>
+                 <td><a href='..\module\fstats_bootstrap.html'>fstats_bootstrap</a></td>
+                 <td>Subroutine</td>
+                 <td><p>A random resampling, scaled by the standard deviation of the original
+data, but based upon a normal distribution.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\standard_deviation.html'>standard_deviation</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the sample standard deviation of the values in an array.</p><a href="../proc/standard_deviation.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\t_test_equal_variance.html'>t_test_equal_variance</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the 2-tailed Student's T-Test for two data sets of 
+assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\t_test_paired.html'>t_test_paired</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the 2-tailed Student's T-Test for two paired data sets.</p><a href="../proc/t_test_paired.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\t_test_unequal_variance.html'>t_test_unequal_variance</a></td>
+                 <td><a href='..\module\fstats_hypothesis.html'>fstats_hypothesis</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the 2-tailed Student's T-Test for two data sets of 
+assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\trimmed_mean.html'>trimmed_mean</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the trimmed mean of a data set.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\variance.html'>variance</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the sample variance of the values in an array.</p><a href="../proc/variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
 			 </tbody></table>
              
         </div>
@@ -180,32 +459,27 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
     </div> <!-- /container -->
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="col-xs-6 col-md-6"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2025 
+        <div class="row justify-content-between">
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2025 
 </p>
           </div>
-          <div class="col-xs-6 col-md-6">
-            <p class="text-right">
+          <div class="col">
+            <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-03 12:00              </p>
+ on 2025-02-18 07:50              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript
-         ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        -->
-        <script src="../js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
 
-        <!-- MathJax JavaScript
+    <!-- MathJax JavaScript
              ================================================== -->
              <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/x-mathjax-config">
