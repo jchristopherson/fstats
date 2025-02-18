@@ -220,4 +220,44 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_multivariate_normal_distribution() result(rst)
+        use linalg, only : mtx_inverse, det
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+        real(real64), parameter :: tol = 1.0d-8
+
+        ! Local Variables
+        real(real64) :: x(2), mu(2), rho, s1, s2, sigma(2, 2), arg, ans, phi, &
+            dsig, inv(2, 2)
+        type(multivariate_normal_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+        call random_number(x)
+        call random_number(mu)
+        call random_number(rho)
+        call random_number(s1)
+        call random_number(s2)
+        sigma = reshape([s2**2, -rho * s1 * s2, -rho * s1 * s2, s1**2], [2, 2])
+        call dist%initialize(mu, sigma)
+
+        ! Compute the actual solution
+        inv = sigma
+        call mtx_inverse(inv)
+        arg = -0.5d0 * dot_product(x - mu, matmul(inv, x - mu))
+        dsig = det(sigma)
+        ans = exp(arg) / sqrt((2.0d0 * pi)**2 * dsig)
+
+        ! Test
+        phi = dist%pdf(x)
+        if (.not.is_equal(phi, ans, tol)) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_multivariate_normal_distribution -1"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module
