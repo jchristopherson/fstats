@@ -29,8 +29,11 @@ module fstats_mcmc
             !! The buffer where each new state is stored as a row in the matrix.
         integer(int32), private :: m_numVars = 0
             !! The number of state variables.
-        type(multivariate_normal_distribution) :: m_propDist
+        type(multivariate_normal_distribution), private :: m_propDist
             !! The proposal distribution from which to draw samples.
+        logical, private :: m_propDistInitialized = .false.
+            !! Set to true if the proposal distribution object has been
+            !! initialized; else, false.
     contains
         procedure, public :: get_state_variable_count => mh_get_nvars
         procedure, public :: get_chain_length => mh_get_chain_length
@@ -43,8 +46,20 @@ module fstats_mcmc
         procedure, public :: reset => mh_clear_chain
         procedure, public :: on_acceptance => mh_on_success
         procedure, public :: on_rejection => mh_on_rejection
+        generic, public :: initialize_proposal => mh_init_proposal_1, &
+            mh_init_proposal_2
+        procedure, public :: get_proposal_initialized => mh_get_is_prop_init
+        procedure, public :: get_proposal_means => mh_get_prop_mean
+        procedure, public :: set_proposal_means => mh_set_prop_mean
+        procedure, public :: get_proposal_covariance => mh_get_prop_cov
+        procedure, public :: set_proposal_covariance => mh_set_prop_cov
+        procedure, public :: get_proposal_cholesky => mh_get_prop_chol_cov
+
+        ! Private Routines
         procedure, private :: resize_buffer => mh_resize_buffer
         procedure, private :: get_buffer_length => mh_get_buffer_length
+        procedure, private :: mh_init_proposal_1
+        procedure, private :: mh_init_proposal_2
     end type
 
 contains
@@ -351,16 +366,10 @@ subroutine mh_sample(this, xi, niter, err)
 
     ! Initialize the proposal distribution.  Use an identity matrix for the
     ! covariance matrix and assume a zero mean.
-    allocate(sigma(n, n), means(n), source = 0.0d0, stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "mh_sample", flag)
-        return
+    if (.not.this%get_proposal_initialized()) then
+        call this%initialize_proposal(n, err = errmgr)
+        if (errmgr%has_error_occurred()) return
     end if
-    do i = 1, n
-        sigma(i,i) = 1.0d0
-    end do
-    call this%m_propDist%initialize(means, sigma, err = errmgr)
-    if (errmgr%has_error_occurred()) return
 
     ! Store the initial value
     call this%push_new_state(xi, err = errmgr)
@@ -455,6 +464,190 @@ subroutine mh_on_rejection(this, iter, alpha, xc, xp, err)
     class(errors), intent(inout), optional, target :: err
         !! An error handling object.
 end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine mh_init_proposal_1(this, mu, sigma, err)
+    !! Initializes the multivariate normal distribution used to generate
+    !! proposals.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    real(real64), intent(in), dimension(:) :: mu
+        !! An N-element array containing the mean values for the distribution.
+    real(real64), intent(in), dimension(:,:) :: sigma
+        !! An N-by-N covariance matrix for the distribution.  This matrix must
+        !! be positive-definite.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Initialize the proposal distribution
+    call this%m_propDist%initialize(mu, sigma, err = errmgr)
+    if (errmgr%has_error_occurred()) return
+    this%m_propDistInitialized = .true.
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine mh_init_proposal_2(this, n, err)
+    !! Initializes the multivariate normal distribution to a mean of zero and
+    !! a variance of one.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    integer(int32), intent(in) :: n
+        !! The number of state variables.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: i, flag
+    real(real64), allocatable, dimension(:) :: mu
+    real(real64), allocatable, dimension(:,:) :: sigma
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Process
+    allocate(mu(n), sigma(n, n), source = 0.0d0, stat = flag)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "mh_init_proposal_2", flag)
+        return
+    end if
+    do i = 1, n
+        sigma(i,i) = 1.0d0
+    end do
+    call this%m_propDist%initialize(mu, sigma, err = errmgr)
+    if (errmgr%has_error_occurred()) return
+    this%m_propDistInitialized = .true.
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure function mh_get_is_prop_init(this) result(rst)
+    !! Gets a value determining if the proposal distribution object has been
+    !! initialized.
+    class(metropolis_hastings), intent(in) :: this
+        !! The metropolis_hastings object.
+    logical :: rst
+        !! Returns true if the object has been initialized; else, false.
+
+    rst = this%m_propDistInitialized
+end function
+
+! ------------------------------------------------------------------------------
+pure function mh_get_prop_mean(this) result(rst)
+    !! Gets the mean values of the proposal distribution.
+    class(metropolis_hastings), intent(in) :: this
+        !! The metropolis_hastings object.
+    real(real64), allocatable, dimension(:) :: rst
+        !! An array containing the mean values.
+
+    if (this%get_proposal_initialized()) then
+        rst = this%m_propDist%get_means()
+    else
+        allocate(rst(0))
+    end if
+end function
+
+! ------------------------------------------------------------------------------
+subroutine mh_set_prop_mean(this, x, err)
+    !! Sets the mean values of the proposal distribution.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    real(real64), intent(in), dimension(:) :: x
+        !! The updated mean values.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    if (this%get_proposal_initialized()) then
+        call this%m_propDist%set_means(x, err)
+    else
+        call this%initialize_proposal(size(x), err)
+        call this%m_propDist%set_means(x, err)
+    end if
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure function mh_get_prop_cov(this) result(rst)
+    !! Gets the covariance matrix of the proposal distribution.
+    class(metropolis_hastings), intent(in) :: this
+        !! The metropolis_hastings object.
+    real(real64), allocatable, dimension(:,:) :: rst
+        !! The covariance matrix.
+
+    if (this%get_proposal_initialized()) then
+        rst = this%m_propDist%get_covariance()
+    else
+        allocate(rst(0,0))
+    end if
+end function
+
+! ------------------------------------------------------------------------------
+subroutine mh_set_prop_cov(this, x, err)
+    !! Sets the covariance matrix of the proposal distribution.
+    class(metropolis_hastings), intent(inout) :: this
+        !! The metropolis_hastings object.
+    real(real64), intent(in), dimension(:,:) :: x
+        !! The covariance matrix.  This matrix must be positive-definite.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: n, flag
+    real(real64), allocatable, dimension(:) :: mu
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Process
+    n = size(x, 1)
+    if (this%get_proposal_initialized()) then
+        mu = this%m_propDist%get_means()
+    else
+        allocate(mu(n), source = 0.0d0, stat = flag)
+        if (flag /= 0) then
+            call report_memory_error(errmgr, "mh_set_prop_cov", flag)
+            return
+        end if
+    end if
+    call this%m_propDist%initialize(mu, x, err = errmgr)
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure function mh_get_prop_chol_cov(this) result(rst)
+    !! Gets the Cholesky-factored (lower-triangular) form of the proposal
+    !! covariance matrix.
+    class(metropolis_hastings), intent(in) :: this
+        !! The metropolis_hastings object.
+    real(real64), allocatable, dimension(:,:) :: rst
+        !! The Cholesky-factored form of the proposal covariance matrix store
+        !! in lower-triangular form.
+
+    if (this%get_proposal_initialized()) then
+        rst = this%m_propDist%get_cholesky_factored_matrix()
+    else
+        allocate(rst(0,0))
+    end if
+end function
 
 ! ------------------------------------------------------------------------------
 end module

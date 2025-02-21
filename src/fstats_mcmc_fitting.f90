@@ -12,36 +12,55 @@ module fstats_mcmc_fitting
     public :: mcmc_regression
 
     type, extends(metropolis_hastings) :: mcmc_regression
+        !! The mcmc_regression type extends the metropolis_hastings type to
+        !! specifically target regression problems.  The problem is formulated
+        !! such that the target distribution takes the form \(y ~ 
+        !! N \left( f(\vec{x}), \sigma^{2} \right) \), where \(N\) is a normal
+        !! distribution with \(f(x)\) as the mean and the model variance, 
+        !! \(\sigma^2\) as an additional parameter for the algorithm to find; 
+        !! therefore, the parameter state vector is of length \(N + 1\), where
+        !! \(N\) is the number of model parameters and the +1 accounts for the
+        !! model variance term.  The model variance proposals originate from
+        !! a log-normal distribution that is seperated from the multivariate
+        !! normal distribution used to generate the proposals for the model
+        !! parameters.  For this reason, pay attention to the specifics of 
+        !! calling each routine where model parameters are required.
         real(real64), public, allocatable, dimension(:) :: x
             !! The independent-variable data to fit.
         real(real64), public, allocatable, dimension(:) :: y
             !! The dependent-variable data to fit.
         procedure(regression_function), pointer, nopass :: fcn
             !! The function to fit.
-        class(distribution), public, allocatable, dimension(:) :: proposals
-            !! A collection of proposal generators.  There must be one 
-            !! distribution object for each model parameter.  They may each
-            !! be different so long as they derive from the distribution type.
         type(log_normal_distribution), public :: variance_distribution
             !! The proposal distribution representing the variance of the fit.
             !! A log-normal distribution is chosen as the values for the
             !! variance parameter are always positive by definition.
-        real(real64), public, allocatable, dimension(:) :: max_parameter_values
-            !! A list of upper limits for the sampling of each model parameter, 
-            !! including the model variance as the last term in the array.
-        real(real64), public, allocatable, dimension(:) :: min_parameter_values
-            !! A list of lower limits for the sampling of each model parameter, 
-            !! including the model variance as the last term in the array.
+        real(real64), public :: max_model_variance = 1.0d3
+            !! The maximum value in the search region used to sample the
+            !! variance_distribution object.
+        real(real64), public :: min_model_variance = 1.0d-8
+            !! The minimum value in the search region used to sample the
+            !! variance_distribution object.
 
         ! -----
         ! Private Workspace Arrays
         real(real64), private, allocatable, dimension(:) :: m_f0
             !! An N-element array used for containing the current function 
             !! estimate (N = size(x)).
+
+        ! -----
+        ! Private Member Variables
+        logical, private :: m_updatePropMeans = .false.
+            !! True if the the proposal means should be updated based upon the 
+            !! current parameter set; else, false.
     contains
         procedure, public :: generate_proposal => mr_proposal
         procedure, public :: target_distribution => mr_target
         procedure, public :: covariance_matrix => mr_covariance
+        procedure, public :: get_update_proposal_means => &
+            mr_get_update_prop_means
+        procedure, public :: set_update_proposal_means => &
+            mr_set_update_prop_means
     end type
 
 contains
@@ -49,7 +68,7 @@ contains
 function mr_proposal(this, xc) result(rst)
     !! Proposes a new sample set of variables.  Be sure to have defined all
     !! distributions prior to calling this routine.  If the distributions are
-    !! not defined, NaN will be returned.
+    !! not defined, default implementations with unit variance will be employed.
     class(mcmc_regression), intent(inout) :: this
         !! The mcmc_regression object.
     real(real64), intent(in), dimension(:) :: xc
@@ -63,30 +82,29 @@ function mr_proposal(this, xc) result(rst)
 
     ! Local Variables
     integer(int32) :: i, n, n1
-    real(real64) :: nan, sample(nsamples)
+    real(real64) :: samples(nsamples)
 
     ! Initialization
     n1 = size(xc)
     n = n1 - 1  ! -1 accounts for the variance term
-    nan = ieee_value(nan, ieee_quiet_nan)
-    allocate(rst(n1), source = nan)
+    allocate(rst(n1))
 
-    ! Input Checking
-    if (.not.allocated(this%proposals)) return
-    if (size(this%proposals) /= n) return
+    ! Update the means
+    if (this%get_update_proposal_means()) then
+        call this%set_proposal_means(xc(1:n))
+    end if
 
-    ! Process
-    do i = 1, n
-        sample = rejection_sample(this%proposals(i), nsamples, &
-            this%min_parameter_values(i), this%max_parameter_values(i))
-        rst(i) = sample(1)
-    end do
-    sample = rejection_sample(this%variance_distribution, nsamples, &
-        this%min_parameter_values(n1), this%max_parameter_values(n1))
-    rst(n1) = sample(1)
+    ! Sample the parameters
+    rst(1:n) = this%metropolis_hastings%generate_proposal(xc(1:n))
+
+    ! Sample the model variance distribution
+    samples = rejection_sample(this%variance_distribution, nsamples, &
+        this%min_model_variance, this%max_model_variance)
+    rst(n1) = samples(1)
 end function
 
 ! ------------------------------------------------------------------------------
+! https://scalismo.org/docs/Tutorials/tutorial14
 function mr_target(this, x) result(rst)
     !! Returns the probability value from the target distribution given the
     !! current set of model parameters.
@@ -207,6 +225,32 @@ function mr_covariance(this, xc, err) result(rst)
     call report_memory_error(errmgr, "mr_covariance", flag)
     return
 end function
+
+! ------------------------------------------------------------------------------
+pure function mr_get_update_prop_means(this) result(rst)
+    !! Gets a value indicating if the proposal means should be updated with
+    !! the current parameter set.
+    class(mcmc_regression), intent(in) :: this
+        !! The mcmc_regression object.
+    logical :: rst
+        !! True if the the proposal means should be updated based upon the 
+        !! current parameter set; else, false.
+
+    rst = this%m_updatePropMeans
+end function
+
+! ------------------------------------------------------------------------------
+subroutine mr_set_update_prop_means(this, x) 
+    !! Sets a value indicating if the proposal means should be updated with the
+    !! current parameter set.
+    class(mcmc_regression), intent(inout) :: this
+        !! The mcmc_regression object.
+    logical, intent(in) :: x
+        !! True if the the proposal means should be updated based upon the 
+        !! current parameter set; else, false.
+
+    this%m_updatePropMeans = x
+end subroutine
 
 ! ------------------------------------------------------------------------------
 end module
