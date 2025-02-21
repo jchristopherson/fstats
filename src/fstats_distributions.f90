@@ -939,8 +939,8 @@ pure elemental function lnd_pdf(this, x) result(rst)
     !! Computes the probability density function.
     !!
     !! The PDF for a log-normal distribution is given as
-    !! $$ f(x) = \frac{1}{x \sigma \sqrt{2 \pi}} \exp{ \left( -\frac{ \left( 
-    !! \ln{x} - \mu} \right)^2 }{2 \sigma^2} \right) } $$
+    !! $$ f(x) = \frac{1}{x \sigma \sqrt{2 \pi}} \exp{\left(- \frac{\left( 
+    !! \ln{x} - \mu \right)^2}{2 \sigma^2} \right)} $$
     class(log_normal_distribution), intent(in) :: this
         !! The log_normal_distribution object.
     real(real64), intent(in) :: x
@@ -958,8 +958,8 @@ pure elemental function lnd_cdf(this, x) result(rst)
     !! Computes the cumulative distribution function.
     !!
     !! The CDF for a log-normal distribution is given as
-    !! $$ F(x) = \frac{1}{2} \left(1 + \erf{\left( \frac{\ln{x} - \mu}
-    !! {\sigma \sqrt{2}} \right)} \right) $$
+    !! $$ F(x) = \frac{1}{2} \left(1 + erf\left( \frac{\ln{x} - \mu}
+    !! {\sigma \sqrt{2}} \right) \right) $$
     class(log_normal_distribution), intent(in) :: this
         !! The log_normal_distribution object.
     real(real64), intent(in) :: x
