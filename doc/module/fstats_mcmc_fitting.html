@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 4.1% of total for modules and submodules.">157 statements</a>
+                 title=" 4.1% of total for modules and submodules.">158 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -150,14 +150,15 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
-                  <li class="list-inline-item"><a href='fstats_sampling.html'>fstats_sampling</a></li>
-                  <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
-                  <li class="list-inline-item"><a href='fstats_mcmc.html'>fstats_mcmc</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
                   <li class="list-inline-item">ferror</li>
                   <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_mcmc.html'>fstats_mcmc</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
+                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                  <li class="list-inline-item"><a href='fstats_sampling.html'>fstats_sampling</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
               </ul>
             </li>
         </ul>
@@ -189,14 +190,8 @@ specifically target regression problems.  The problem is formulated
 such that the target distribution takes the form <script type="math/tex">y \sim 
 N \left( f(x), \sigma^{2} \right) </script>, where <script type="math/tex">N</script> is a normal
 distribution with <script type="math/tex">f(x)</script> as the mean and the model variance, 
-<script type="math/tex">\sigma^2</script> as an additional parameter for the algorithm to find; 
-therefore, the parameter state vector is of length <script type="math/tex">n + 1</script>, where
-<script type="math/tex">n</script> is the number of model parameters and the +1 accounts for the
-model variance term.  The model variance proposals originate from
-a log-normal distribution that is seperated from the multivariate
-normal distribution used to generate the proposals for the model
-parameters.  For this reason, pay attention to the specifics of 
-calling each routine where model parameters are required.</p>
+<script type="math/tex">\sigma^2</script> is determined by computing the variance for the current
+estimate of the model.</p>
 
         <h4>Components</h4>
           <table class="table table-striped varlist">
@@ -228,62 +223,7 @@ calling each routine where model parameters are required.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-max_model_variance"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>max_model_variance</strong></td>
-<td> =</td>
-                <td>1.0d3</td>
-            <td>
-<p>The maximum value in the search region used to sample the
-variance_distribution object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-min_model_variance"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>min_model_variance</strong></td>
-<td> =</td>
-                <td>1.0d-8</td>
-            <td>
-<p>The minimum value in the search region used to sample the
-variance_distribution object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-variance_distribution"></span>
-              type(<a href='..\type\log_normal_distribution.html'>log_normal_distribution</a>),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>variance_distribution</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-<p>The proposal distribution representing the variance of the fit.
-A log-normal distribution is chosen as the values for the
-variance parameter are always positive by definition.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~8"></span>
+              <span class="anchor" id="variable-x~52"></span>
               real(kind=real64),
             </td>
               <td>public,</td>
@@ -300,7 +240,7 @@ variance parameter are always positive by definition.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~2"></span>
+              <span class="anchor" id="variable-y~9"></span>
               real(kind=real64),
             </td>
               <td>public,</td>
@@ -331,7 +271,7 @@ variance parameter are always positive by definition.</p>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\metropolis_hastings.html#boundprocedure-compute_hastings_ratio'>compute_hastings_ratio</a></strong> => mh_hastings_ratio</td>
+  <strong><a href='..\type\mcmc_regression.html#boundprocedure-compute_hastings_ratio~2'>compute_hastings_ratio</a></strong> => mr_hastings_ratio</td>
                 <td></td>
               </tr>
               <tr>
@@ -341,7 +281,7 @@ variance parameter are always positive by definition.</p>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\mcmc_regression.html#boundprocedure-generate_proposal'>generate_proposal</a></strong> => mr_proposal</td>
+  <strong><a href='..\type\mcmc_regression.html#boundprocedure-generate_proposal~2'>generate_proposal</a></strong> => mr_proposal</td>
                 <td></td>
               </tr>
               <tr>
@@ -431,7 +371,7 @@ variance parameter are always positive by definition.</p>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\mcmc_regression.html#boundprocedure-target_distribution'>target_distribution</a></strong> => mr_target</td>
+  <strong><a href='..\type\mcmc_regression.html#boundprocedure-target_distribution~2'>target_distribution</a></strong> => mr_target</td>
                 <td></td>
               </tr>
           </tbody>
@@ -461,7 +401,7 @@ variance parameter are always positive by definition.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-21 12:00              </p>
+ on 2025-02-21 14:37              </p>
           </div>
         </div>
         <br>

@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p> 7.7% of total for derived types.</p>Including implementation: 360 statements, 25.5% of total for derived types.">17 statements</a>
+                 title="<p> 7.3% of total for derived types.</p>Including implementation: 341 statements, 24.5% of total for derived types.">16 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -115,11 +115,8 @@
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../type/mcmc_regression.html#variable-fcn">fcn</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#variable-max_model_variance">max_model_variance</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#variable-min_model_variance">min_model_variance</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#variable-variance_distribution">variance_distribution</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#variable-x~8">x</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#variable-y~2">y</a>
+            <a class="list-group-item" href="../type/mcmc_regression.html#variable-x~52">x</a>
+            <a class="list-group-item" href="../type/mcmc_regression.html#variable-y~9">y</a>
         </div>
       </div>
     </div>
@@ -147,9 +144,9 @@
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-compute_fit_statistics">compute_fit_statistics</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-compute_hastings_ratio">compute_hastings_ratio</a>
+            <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-compute_hastings_ratio~2">compute_hastings_ratio</a>
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-covariance_matrix">covariance_matrix</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-generate_proposal">generate_proposal</a>
+            <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-generate_proposal~2">generate_proposal</a>
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-get_chain">get_chain</a>
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-get_chain_length">get_chain_length</a>
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-get_proposal_cholesky">get_proposal_cholesky</a>
@@ -167,7 +164,7 @@
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-set_proposal_covariance">set_proposal_covariance</a>
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-set_proposal_means">set_proposal_means</a>
             <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-set_update_proposal_means">set_update_proposal_means</a>
-            <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-target_distribution">target_distribution</a>
+            <a class="list-group-item" href="../type/mcmc_regression.html#boundprocedure-target_distribution~2">target_distribution</a>
         </div>
       </div>
     </div>
@@ -188,14 +185,8 @@ specifically target regression problems.  The problem is formulated
 such that the target distribution takes the form <script type="math/tex">y \sim 
 N \left( f(x), \sigma^{2} \right) </script>, where <script type="math/tex">N</script> is a normal
 distribution with <script type="math/tex">f(x)</script> as the mean and the model variance, 
-<script type="math/tex">\sigma^2</script> as an additional parameter for the algorithm to find; 
-therefore, the parameter state vector is of length <script type="math/tex">n + 1</script>, where
-<script type="math/tex">n</script> is the number of model parameters and the +1 accounts for the
-model variance term.  The model variance proposals originate from
-a log-normal distribution that is seperated from the multivariate
-normal distribution used to generate the proposals for the model
-parameters.  For this reason, pay attention to the specifics of 
-calling each routine where model parameters are required.</p>
+<script type="math/tex">\sigma^2</script> is determined by computing the variance for the current
+estimate of the model.</p>
     <br>
 
     <section>
@@ -229,62 +220,7 @@ calling each routine where model parameters are required.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-max_model_variance"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>max_model_variance</strong></td>
-<td> =</td>
-                <td>1.0d3</td>
-            <td>
-                <p>The maximum value in the search region used to sample the
-variance_distribution object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-min_model_variance"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>min_model_variance</strong></td>
-<td> =</td>
-                <td>1.0d-8</td>
-            <td>
-                <p>The minimum value in the search region used to sample the
-variance_distribution object.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-variance_distribution"></span>
-              type(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>variance_distribution</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                <p>The proposal distribution representing the variance of the fit.
-A log-normal distribution is chosen as the values for the
-variance parameter are always positive by definition.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~8"></span>
+              <span class="anchor" id="variable-x~52"></span>
               real(kind=real64),
             </td>
               <td>public,</td>
@@ -301,7 +237,7 @@ variance parameter are always positive by definition.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~2"></span>
+              <span class="anchor" id="variable-y~9"></span>
               real(kind=real64),
             </td>
               <td>public,</td>
@@ -382,9 +318,7 @@ variance parameter are always positive by definition.</p>
             <td>::</td>
             <td><strong>xc</strong></td>
             <td>
-                <p>The model parameters.  Be sure to only include the model parameters.
-Do not include the model variance that is also found as part of this
-analysis.</p>
+                <p>The model parameters.  Be sure to only include the model parameters.</p>
             </td>
         </tr>
         <tr>
@@ -436,21 +370,21 @@ calculated.</p>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-compute_hastings_ratio"></span>
+      <span class="anchor" id="boundprocedure-compute_hastings_ratio~2"></span>
       <h3>
           procedure, public ::
-  <strong>compute_hastings_ratio</strong> => mh_hastings_ratio
+  <strong>compute_hastings_ratio</strong> => mr_hastings_ratio
         
       </h3>
     </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  function mh_hastings_ratio(this, xc, xp) result(rst)  
+    private  function mr_hastings_ratio(this, xc, xp) result(rst)  
 </h3>
 
   <p>Evaluates the Hasting's ratio.  If the proposal distribution is 
-symmetric, this ratio is unity; however, in the case of an asymmetric
+symmetric, this ratio is unity; however, in the case of an asymmetric 
 distribution this ratio is not ensured to be unity.</p>
 
   <h4>Arguments</h4>
@@ -467,7 +401,7 @@ distribution this ratio is not ensured to be unity.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='metropolis_hastings.html'>metropolis_hastings</a>),
+              class(<a href='mcmc_regression.html'>mcmc_regression</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -476,7 +410,7 @@ distribution this ratio is not ensured to be unity.</p>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The metropolis_hastings object.</p>
+                <p>The mcmc_regression object.</p>
             </td>
         </tr>
         <tr>
@@ -491,7 +425,7 @@ distribution this ratio is not ensured to be unity.</p>
             <td>::</td>
             <td><strong>xc</strong></td>
             <td>
-                <p>The current state vector.</p>
+                <p>The current set of model parameters.</p>
             </td>
         </tr>
         <tr>
@@ -506,7 +440,7 @@ distribution this ratio is not ensured to be unity.</p>
             <td>::</td>
             <td><strong>xp</strong></td>
             <td>
-                <p>The proposed state vector.</p>
+                <p>The proposed set of model parameters.</p>
             </td>
         </tr>
     </tbody>
@@ -580,8 +514,7 @@ parameters.</p>
             <td>::</td>
             <td><strong>xc</strong></td>
             <td>
-                <p>The current set of model parameters, not including the model
-variance term.</p>
+                <p>The current set of model parameters.</p>
             </td>
         </tr>
         <tr>
@@ -616,7 +549,7 @@ variance term.</p>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-generate_proposal"></span>
+      <span class="anchor" id="boundprocedure-generate_proposal~2"></span>
       <h3>
           procedure, public ::
   <strong>generate_proposal</strong> => mr_proposal
@@ -671,8 +604,7 @@ not defined, default implementations with unit variance will be employed.</p>
             <td>::</td>
             <td><strong>xc</strong></td>
             <td>
-                <p>The current set of model parameters.  The last entry must be the
-variance of the fit parameter.</p>
+                <p>The current set of model parameters.</p>
             </td>
         </tr>
     </tbody>
@@ -2097,7 +2029,7 @@ current parameter set; else, false.</p>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-target_distribution"></span>
+      <span class="anchor" id="boundprocedure-target_distribution~2"></span>
       <h3>
           procedure, public ::
   <strong>target_distribution</strong> => mr_target
@@ -2155,8 +2087,7 @@ is the function value.
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                <p>The current set of model parameters, including the model variance
-term as the last term in the array.</p>
+                <p>The current set of model parameters.</p>
             </td>
         </tr>
     </tbody>
@@ -2191,7 +2122,7 @@ term as the last term in the array.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-21 12:00              </p>
+ on 2025-02-21 14:37              </p>
           </div>
         </div>
         <br>

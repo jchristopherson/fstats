@@ -7,6 +7,7 @@ module fstats_mcmc_fitting
     use fstats_regression
     use fstats_distributions
     use fstats_sampling
+    use fstats_descriptive_statistics
     implicit none
     private
     public :: mcmc_regression
@@ -17,30 +18,14 @@ module fstats_mcmc_fitting
         !! such that the target distribution takes the form \(y \sim 
         !! N \left( f(x), \sigma^{2} \right) \), where \(N\) is a normal
         !! distribution with \(f(x)\) as the mean and the model variance, 
-        !! \(\sigma^2\) as an additional parameter for the algorithm to find; 
-        !! therefore, the parameter state vector is of length \(n + 1\), where
-        !! \(n\) is the number of model parameters and the +1 accounts for the
-        !! model variance term.  The model variance proposals originate from
-        !! a log-normal distribution that is seperated from the multivariate
-        !! normal distribution used to generate the proposals for the model
-        !! parameters.  For this reason, pay attention to the specifics of 
-        !! calling each routine where model parameters are required.
+        !! \(\sigma^2\) is determined by computing the variance for the current
+        !! estimate of the model.
         real(real64), public, allocatable, dimension(:) :: x
             !! The independent-variable data to fit.
         real(real64), public, allocatable, dimension(:) :: y
             !! The dependent-variable data to fit.
         procedure(regression_function), pointer, nopass :: fcn
             !! The function to fit.
-        type(log_normal_distribution), public :: variance_distribution
-            !! The proposal distribution representing the variance of the fit.
-            !! A log-normal distribution is chosen as the values for the
-            !! variance parameter are always positive by definition.
-        real(real64), public :: max_model_variance = 1.0d3
-            !! The maximum value in the search region used to sample the
-            !! variance_distribution object.
-        real(real64), public :: min_model_variance = 1.0d-8
-            !! The minimum value in the search region used to sample the
-            !! variance_distribution object.
 
         ! -----
         ! Private Workspace Arrays
@@ -53,6 +38,8 @@ module fstats_mcmc_fitting
         logical, private :: m_updatePropMeans = .false.
             !! True if the the proposal means should be updated based upon the 
             !! current parameter set; else, false.
+        real(real64), private :: m_modelVariance = 1.0d0
+            !! The variance of the residual error of the current model.
     contains
         procedure, public :: generate_proposal => mr_proposal
         procedure, public :: target_distribution => mr_target
@@ -62,6 +49,7 @@ module fstats_mcmc_fitting
         procedure, public :: set_update_proposal_means => &
             mr_set_update_prop_means
         procedure, public :: compute_fit_statistics => mr_calc_regression_stats
+        procedure, public :: compute_hastings_ratio => mr_hastings_ratio
     end type
 
 contains
@@ -73,35 +61,17 @@ function mr_proposal(this, xc) result(rst)
     class(mcmc_regression), intent(inout) :: this
         !! The mcmc_regression object.
     real(real64), intent(in), dimension(:) :: xc
-        !! The current set of model parameters.  The last entry must be the
-        !! variance of the fit parameter.
+        !! The current set of model parameters.
     real(real64), allocatable, dimension(:) :: rst
         !! The proposed set of model parameters.
 
-    ! Parameters
-    integer(int32), parameter :: nsamples = 1
-
-    ! Local Variables
-    integer(int32) :: i, n, n1
-    real(real64) :: samples(nsamples)
-
-    ! Initialization
-    n1 = size(xc)
-    n = n1 - 1  ! -1 accounts for the variance term
-    allocate(rst(n1))
-
     ! Update the means
     if (this%get_update_proposal_means()) then
-        call this%set_proposal_means(xc(1:n))
+        call this%set_proposal_means(xc)
     end if
 
     ! Sample the parameters
-    rst(1:n) = this%metropolis_hastings%generate_proposal(xc(1:n))
-
-    ! Sample the model variance distribution
-    samples = rejection_sample(this%variance_distribution, nsamples, &
-        this%min_model_variance, this%max_model_variance)
-    rst(n1) = samples(1)
+    rst = this%metropolis_hastings%generate_proposal(xc)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -117,30 +87,27 @@ function mr_target(this, x) result(rst)
     class(mcmc_regression), intent(inout) :: this
         !! The mcmc_regression object.
     real(real64), intent(in), dimension(:) :: x
-        !! The current set of model parameters, including the model variance
-        !! term as the last term in the array.
+        !! The current set of model parameters.
     real(real64) :: rst
         !! The value of the probability density function being sampled.
 
     ! Local Variables
     type(normal_distribution) :: dist
-    integer(int32) :: i, npts, n, n1
+    integer(int32) :: i, npts
     real(real64) :: p
     logical :: stop
 
     ! Initialization
     npts = size(this%x)
-    n1 = size(x)
-    n = n1 - 1
 
     ! Evaluate the model given the current parameters
     if (.not.allocated(this%m_f0)) allocate(this%m_f0(npts))
-    call this%fcn(this%x, x(1:n), this%m_f0, stop)
+    call this%fcn(this%x, x, this%m_f0, stop)
     if (stop) return
 
     ! Evaluate the probibility distribution
     rst = 0.0d0
-    dist%standard_deviation = x(n1)
+    dist%standard_deviation = sqrt(this%m_modelVariance)
     do i = 1, npts
         dist%mean_value = this%m_f0(i)
         p = log(dist%pdf(this%y(i)))
@@ -173,8 +140,7 @@ function mr_covariance(this, xc, err) result(rst)
     class(mcmc_regression), intent(inout) :: this
         !! The mcmc_regression object.
     real(real64), intent(in), dimension(:) :: xc
-        !! The current set of model parameters, not including the model
-        !! variance term.
+        !! The current set of model parameters.
     class(errors), intent(inout), optional, target :: err
         !! The error handling object.
     real(real64), allocatable, dimension(:,:) :: rst
@@ -195,7 +161,7 @@ function mr_covariance(this, xc, err) result(rst)
         errmgr => deferr
     end if
     if (allocated(this%x)) then
-        m = size(xc)
+        m = size(this%x)
     else
         m = 0
     end if
@@ -260,8 +226,6 @@ function mr_calc_regression_stats(this, xc, alpha, err) result(rst)
         !! The mcmc_regression object.
     real(real64), intent(in), dimension(:) :: xc
         !! The model parameters.  Be sure to only include the model parameters.
-        !! Do not include the model variance that is also found as part of this
-        !! analysis.
     real(real64), intent(in), optional :: alpha
         !! The significance level at which to evaluate the confidence intervals.
         !! The default value is 0.05 such that a 95% confidence interval is
@@ -307,6 +271,33 @@ function mr_calc_regression_stats(this, xc, alpha, err) result(rst)
         err = errmgr)
     if (errmgr%has_error_occurred()) return
 end function
+
+! ------------------------------------------------------------------------------
+subroutine mr_on_success(this, iter, alpha, xc, xp, err)
+    !! Updates the estimate of the model variance when a successful step is
+    !! encountered.
+    class(mcmc_regression), intent(inout) :: this
+        !! The mcmc_regression object.
+    integer(int32), intent(in) :: iter
+        !! The current iteration number.
+    real(real64), intent(in) :: alpha
+        !! The proposal probabilty term used for acceptance criteria.
+    real(real64), intent(in), dimension(:) :: xc
+        !! An N-element array containing the current state variables.
+    real(real64), intent(in), dimension(:) :: xp
+        !! An N-element array containing the proposed state variables that were just accepted.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    real(real64), allocatable, dimension(:) :: resid
+
+    ! Compute the residual
+    resid = this%m_f0 - this%y
+
+    ! Update the variance
+    this%m_modelVariance = variance(resid)
+end subroutine
 
 ! ------------------------------------------------------------------------------
 end module
