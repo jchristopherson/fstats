@@ -61,6 +61,7 @@ module fstats_mcmc_fitting
             mr_get_update_prop_means
         procedure, public :: set_update_proposal_means => &
             mr_set_update_prop_means
+        procedure, public :: compute_fit_statistics => mr_calc_regression_stats
     end type
 
 contains
@@ -251,6 +252,61 @@ subroutine mr_set_update_prop_means(this, x)
 
     this%m_updatePropMeans = x
 end subroutine
+
+! ------------------------------------------------------------------------------
+function mr_calc_regression_stats(this, xc, alpha, err) result(rst)
+    !! Calculates statistics for the quality of fit for the regression.
+    class(mcmc_regression), intent(inout) :: this
+        !! The mcmc_regression object.
+    real(real64), intent(in), dimension(:) :: xc
+        !! The model parameters.  Be sure to only include the model parameters.
+        !! Do not include the model variance that is also found as part of this
+        !! analysis.
+    real(real64), intent(in), optional :: alpha
+        !! The significance level at which to evaluate the confidence intervals.
+        !! The default value is 0.05 such that a 95% confidence interval is
+        !! calculated.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+    type(regression_statistics), allocatable, dimension(:) :: rst
+        !! The resulting statistics for each parameter.
+
+    ! Local Variables
+    logical :: stop
+    integer(int32) :: n, flag
+    real(real64), allocatable, dimension(:) :: resid
+    real(real64), allocatable, dimension(:,:) :: c
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Compute the covariance matrix
+    c = this%covariance_matrix(xc, err = errmgr)
+    if (errmgr%has_error_occurred()) return
+
+    ! Evaluate the model to compute the residuals
+    n = size(this%x)
+    if (.not.allocated(this%m_f0)) then
+        allocate(this%m_f0(n), stat = flag)
+        if (flag /= 0) then
+            call report_memory_error(errmgr, "mr_calc_regression_stats", flag)
+            return
+        end if
+    end if
+    call this%fcn(this%x, xc, this%m_f0, stop)
+    resid = this%m_f0 - this%y
+
+    ! Compute the statistics
+    rst = calculate_regression_statistics(resid, xc, c, alpha = alpha, &
+        err = errmgr)
+    if (errmgr%has_error_occurred()) return
+end function
 
 ! ------------------------------------------------------------------------------
 end module
