@@ -18,6 +18,7 @@ module fstats_distributions
     public :: multivariate_distribution
     public :: multivariate_distribution_function
     public :: multivariate_normal_distribution
+    public :: log_normal_distribution
 
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 
@@ -140,6 +141,22 @@ module fstats_distributions
         procedure, public :: median => bd_median
         procedure, public :: mode => bd_mode
         procedure, public :: variance => bd_variance
+    end type
+
+! ------------------------------------------------------------------------------
+    type, extends(distribution) :: log_normal_distribution
+        !! Defines a normal distribution.
+        real(real64) :: standard_deviation
+            !! The standard deviation of the distribution.
+        real(real64) :: mean_value
+            !! The mean value of the distribution.
+    contains
+        procedure, public :: pdf => lnd_pdf
+        procedure, public :: cdf => lnd_cdf
+        procedure, public :: mean => lnd_mean
+        procedure, public :: median => lnd_median
+        procedure, public :: mode => lnd_mode
+        procedure, public :: variance => lnd_variance
     end type
 
 ! ******************************************************************************
@@ -913,6 +930,86 @@ pure function mvnd_get_cholesky(this) result(rst)
     else
         allocate(rst(0, 0))
     end if
+end function
+
+! ******************************************************************************
+! LOG NORMAL DISTRIBUTION
+! ------------------------------------------------------------------------------
+pure elemental function lnd_pdf(this, x) result(rst)
+    !! Computes the probability density function.
+    !!
+    !! The PDF for a log-normal distribution is given as
+    !! $$ f(x) = \frac{1}{x \sigma \sqrt{2 \pi}} \exp{ \left( -\frac{ \left( 
+    !! \ln{x} - \mu} \right)^2 }{2 \sigma^2} \right) } $$
+    class(log_normal_distribution), intent(in) :: this
+        !! The log_normal_distribution object.
+    real(real64), intent(in) :: x
+        !! The value at which to evaluate the function.
+    real(real64) :: rst
+        !! The value of the function.
+
+    rst = exp(-(log(x) - this%mean_value)**2 / &
+        (2.0d0 * this%standard_deviation**2)) / &
+        (x * this%standard_deviation * sqrt(2.0d0 * pi))
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental function lnd_cdf(this, x) result(rst)
+    !! Computes the cumulative distribution function.
+    !!
+    !! The CDF for a log-normal distribution is given as
+    !! $$ F(x) = \frac{1}{2} \left(1 + \erf{\left( \frac{\ln{x} - \mu}
+    !! {\sigma \sqrt{2}} \right)} \right) $$
+    class(log_normal_distribution), intent(in) :: this
+        !! The log_normal_distribution object.
+    real(real64), intent(in) :: x
+        !! The value at which to evaluate the function.
+    real(real64) :: rst
+        !! The value of the function.
+
+    rst = 0.5d0 * (1.0d0 + erf((log(x) - this%standard_deviation) / &
+        (this%standard_deviation * sqrt(2.0d0))))
+end function
+
+! ------------------------------------------------------------------------------
+pure function lnd_mean(this) result(rst)
+    !! Computes the mean of the distribution
+    class(log_normal_distribution), intent(in) :: this
+        !! The log_normal distribution object.
+    real(real64) :: rst
+        !! The mean
+    rst = exp(this%mean_value + 0.5d0 * this%standard_deviation**2)
+end function
+
+! ------------------------------------------------------------------------------
+pure function lnd_median(this) result(rst)
+    !! Computes the median of the distribution
+    class(log_normal_distribution), intent(in) :: this
+        !! The log_normal distribution object.
+    real(real64) :: rst
+        !! The median
+    rst = exp(this%mean_value)
+end function
+
+! ------------------------------------------------------------------------------
+pure function lnd_mode(this) result(rst)
+    !! Computes the mode of the distribution
+    class(log_normal_distribution), intent(in) :: this
+        !! The log_normal distribution object.
+    real(real64) :: rst
+        !! The mode
+    rst = exp(this%mean_value - this%standard_deviation**2)
+end function
+
+! ------------------------------------------------------------------------------
+pure function lnd_variance(this) result(rst)
+    !! Computes the variance of the distribution
+    class(log_normal_distribution), intent(in) :: this
+        !! The log_normal distribution object.
+    real(real64) :: rst
+        !! The variance
+    rst = (exp(this%standard_deviation**2) - 1.0d0) * &
+        exp(2.0d0 * this%mean_value + this%standard_deviation**2)
 end function
 
 ! ******************************************************************************

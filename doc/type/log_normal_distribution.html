@@ -10,7 +10,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>chi_squared_distribution &ndash; FSTATS </title>
+    <title>log_normal_distribution &ndash; FSTATS </title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -62,7 +62,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>chi_squared_distribution
+    <h1>log_normal_distribution
       <small>Derived Type</small>
       
     </h1>
@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p> 4.5% of total for derived types.</p>Including implementation: 65 statements,  4.7% of total for derived types.">10 statements</a>
+                 title="<p> 5.0% of total for derived types.</p>Including implementation: 62 statements,  4.5% of total for derived types.">11 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -88,7 +88,7 @@
           <ol class="breadcrumb justify-content-end mb-0">
                 <li class="breadcrumb-item"><a href='..\sourcefile\fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
                 <li class="breadcrumb-item"><a href='..\module\fstats_distributions.html'>fstats_distributions</a></li>
-            <li class="breadcrumb-item active" aria-current="page">chi_squared_distribution</li>
+            <li class="breadcrumb-item active" aria-current="page">log_normal_distribution</li>
           </ol>
         </nav>
       </div>
@@ -114,7 +114,8 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#variable-dof~3">dof</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-mean_value~2">mean_value</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-standard_deviation~2">standard_deviation</a>
         </div>
       </div>
     </div>
@@ -141,13 +142,13 @@
       </a>
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-cdf~5">cdf</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mean~5">mean</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-median~5">median</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mode~5">mode</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-pdf~5">pdf</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-variance~6">variance</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-cdf~7">cdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mean~7">mean</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-median~7">median</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mode~7">mode</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-pdf~7">pdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-variance~8">variance</a>
         </div>
       </div>
     </div>
@@ -162,8 +163,8 @@
     
     <div class="col-md-9" id='text'>
       <h2>
-        type, public, extends(<a href='distribution.html'>distribution</a>) :: chi_squared_distribution</h2>
-    <p>Defines a Chi-squared distribution.</p>
+        type, public, extends(<a href='distribution.html'>distribution</a>) :: log_normal_distribution</h2>
+    <p>Defines a normal distribution.</p>
     <br>
 
     <section>
@@ -180,19 +181,36 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof~3"></span>
-              integer(kind=int32),
+              <span class="anchor" id="variable-mean_value~2"></span>
+              real(kind=real64),
             </td>
               <td>public</td>
             <td>
               
             </td>
             <td>::</td>
-            <td><strong>dof</strong></td>
+            <td><strong>mean_value</strong></td>
                 <td></td>
                 <td></td>
             <td>
-                <p>The number of degrees of freedom.</p>
+                <p>The mean value of the distribution.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-standard_deviation~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>standard_deviation</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>The standard deviation of the distribution.</p>
             </td>
         </tr>
     </tbody>
@@ -208,23 +226,24 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-cdf~5"></span>
+      <span class="anchor" id="boundprocedure-cdf~7"></span>
       <h3>
           procedure, public ::
-  <strong>cdf</strong> => cs_cdf
+  <strong>cdf</strong> => lnd_cdf
         
       </h3>
     </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure elemental function cs_cdf(this, x) result(rst)  
+    private pure elemental function lnd_cdf(this, x) result(rst)  
 </h3>
 
   <p>Computes the cumulative distribution function.</p>
-<p>The CDF for a Chi-squared distribution is given as 
-<script type="math/tex; mode=display"> F(x) = \frac{ \gamma \left( \frac{k}{2}, \frac{x}{2} \right) }
-{ \Gamma \left( \frac{k}{2} \right)} </script>.</p>
+<p>The CDF for a log-normal distribution is given as
+<script type="math/tex; mode=display"> F(x) = \frac{1}{2} \left(1 + \erf{\left( \frac{\ln{x} - \mu}
+{\sigma \sqrt{2}} \right)} \right) </script>
+</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -240,7 +259,7 @@
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='chi_squared_distribution.html'>chi_squared_distribution</a>),
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -249,7 +268,7 @@
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The chi_squared_distribution object.</p>
+                <p>The log_normal_distribution object.</p>
             </td>
         </tr>
         <tr>
@@ -284,20 +303,20 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-mean~5"></span>
+      <span class="anchor" id="boundprocedure-mean~7"></span>
       <h3>
           procedure, public ::
-  <strong>mean</strong> => cs_mean
+  <strong>mean</strong> => lnd_mean
         
       </h3>
     </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function cs_mean(this) result(rst)  
+    private pure function lnd_mean(this) result(rst)  
 </h3>
 
-  <p>Computes the mean of the distribution.</p>
+  <p>Computes the mean of the distribution</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -313,7 +332,7 @@
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='chi_squared_distribution.html'>chi_squared_distribution</a>),
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -322,7 +341,7 @@
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The chi_squared_distribution object.</p>
+                <p>The log_normal distribution object.</p>
             </td>
         </tr>
     </tbody>
@@ -332,7 +351,7 @@
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The mean.</p>
+    <p>The mean</p>
 
         </li>
     </ul>
@@ -342,20 +361,20 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-median~5"></span>
+      <span class="anchor" id="boundprocedure-median~7"></span>
       <h3>
           procedure, public ::
-  <strong>median</strong> => cs_median
+  <strong>median</strong> => lnd_median
         
       </h3>
     </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function cs_median(this) result(rst)  
+    private pure function lnd_median(this) result(rst)  
 </h3>
 
-  <p>Computes the median of the distribution.</p>
+  <p>Computes the median of the distribution</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -371,7 +390,7 @@
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='chi_squared_distribution.html'>chi_squared_distribution</a>),
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -380,7 +399,7 @@
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The chi_squared_distribution object.</p>
+                <p>The log_normal distribution object.</p>
             </td>
         </tr>
     </tbody>
@@ -390,7 +409,7 @@
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The median.</p>
+    <p>The median</p>
 
         </li>
     </ul>
@@ -400,20 +419,20 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-mode~5"></span>
+      <span class="anchor" id="boundprocedure-mode~7"></span>
       <h3>
           procedure, public ::
-  <strong>mode</strong> => cs_mode
+  <strong>mode</strong> => lnd_mode
         
       </h3>
     </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function cs_mode(this) result(rst)  
+    private pure function lnd_mode(this) result(rst)  
 </h3>
 
-  <p>Computes the mode of the distribution.</p>
+  <p>Computes the mode of the distribution</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -429,7 +448,7 @@
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='chi_squared_distribution.html'>chi_squared_distribution</a>),
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -438,7 +457,7 @@
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The chi_squared_distribution object.</p>
+                <p>The log_normal distribution object.</p>
             </td>
         </tr>
     </tbody>
@@ -448,7 +467,7 @@
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The mode.</p>
+    <p>The mode</p>
 
         </li>
     </ul>
@@ -458,23 +477,24 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-pdf~5"></span>
+      <span class="anchor" id="boundprocedure-pdf~7"></span>
       <h3>
           procedure, public ::
-  <strong>pdf</strong> => cs_pdf
+  <strong>pdf</strong> => lnd_pdf
         
       </h3>
     </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure elemental function cs_pdf(this, x) result(rst)  
+    private pure elemental function lnd_pdf(this, x) result(rst)  
 </h3>
 
   <p>Computes the probability density function.</p>
-<p>The PDF for a Chi-squared distribution is given as 
-<script type="math/tex; mode=display"> f(x) = \frac{x^{k/2 - 1} \exp{-x / 2}} {2^{k / 2} 
-\Gamma \left( \frac{k}{2} \right)} </script>.</p>
+<p>The PDF for a log-normal distribution is given as
+<script type="math/tex; mode=display"> f(x) = \frac{1}{x \sigma \sqrt{2 \pi}} \exp{ \left( -\frac{ \left( 
+\ln{x} - \mu} \right)^2 }{2 \sigma^2} \right) } </script>
+</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -490,7 +510,7 @@
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='chi_squared_distribution.html'>chi_squared_distribution</a>),
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -499,7 +519,7 @@
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The chi_squared_distribution object.</p>
+                <p>The log_normal_distribution object.</p>
             </td>
         </tr>
         <tr>
@@ -611,20 +631,20 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-variance~6"></span>
+      <span class="anchor" id="boundprocedure-variance~8"></span>
       <h3>
           procedure, public ::
-  <strong>variance</strong> => cs_variance
+  <strong>variance</strong> => lnd_variance
         
       </h3>
     </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function cs_variance(this) result(rst)  
+    private pure function lnd_variance(this) result(rst)  
 </h3>
 
-  <p>Computes the variance of the distribution.</p>
+  <p>Computes the variance of the distribution</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -640,7 +660,7 @@
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='chi_squared_distribution.html'>chi_squared_distribution</a>),
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -649,7 +669,7 @@
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The chi_squared_distribution object.</p>
+                <p>The log_normal distribution object.</p>
             </td>
         </tr>
     </tbody>
@@ -659,7 +679,7 @@
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The variance.</p>
+    <p>The variance</p>
 
         </li>
     </ul>
