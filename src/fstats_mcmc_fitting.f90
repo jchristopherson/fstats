@@ -35,7 +35,7 @@ module fstats_mcmc_fitting
             !! The proposal distribution representing the variance of the fit.
             !! A log-normal distribution is chosen as the values for the
             !! variance parameter are always positive by definition.
-        real(real64), public :: max_model_variance = 1.0d3
+        real(real64), public :: max_model_variance = 1.0d4
             !! The maximum value in the search region used to sample the
             !! variance_distribution object.
         real(real64), public :: min_model_variance = 1.0d-8
@@ -62,6 +62,7 @@ module fstats_mcmc_fitting
         procedure, public :: set_update_proposal_means => &
             mr_set_update_prop_means
         procedure, public :: compute_fit_statistics => mr_calc_regression_stats
+        procedure, public :: compute_hastings_ratio => mr_hastings_ratio
     end type
 
 contains
