@@ -25,11 +25,17 @@ program example
     use regression_functions
     implicit none
 
+    ! Parameters
+    character, parameter :: tab = achar(9)
+    character, parameter :: nl = new_line('a')
+
     ! Local Variables
     logical :: stop
     type(mcmc_regression) :: solver
-    real(real64) :: xi(5), f(21), mdl(4)
+    integer(int32) :: i
+    real(real64) :: xi(4), f(21), mdl(4), sigma(4, 4)
     real(real64), allocatable, dimension(:,:) :: chain
+    type(regression_statistics), allocatable, dimension(:) :: stats
 
     ! Plot Variables
     type(plot_2d) :: plt, plt1, plt2, plt3, plt4
@@ -48,26 +54,54 @@ program example
         5.652854194d0, 6.784320119d0, 8.307936836d0, 8.395126494d0, &
         10.30252404d0]
     solver%fcn => fit_fcn
-    solver%variance_distribution%mean_value = 0.0d0
-    solver%variance_distribution%standard_deviation = 1.0d-2
-    solver%max_model_variance = 1.0d0
+    call solver%set_update_proposal_means(.true.)
 
-    ! Initialize the proposal distribution object as well.  We only set this up
-    ! for the actual model parameters, not the model variance term.
-    call solver%initialize_proposal(4)
+    ! Define an initial covariance matrix for the proposal
+    sigma = 0.0d0
+    sigma(1,1) = 1.0d-8
+    sigma(2,2) = 1.0d-8
+    sigma(3,3) = 1.0d-8
+    sigma(4,4) = 1.0d-8
 
     ! Define an initial guess
-    xi = [0.0d0, 0.0d0, 0.0d0, 0.0d0, 1.0d-3]
+    xi = [1.0d0, 0.5d0, -1.0d-1, 1.0d0]
+
+    ! Initialize the proposal distribution object as well
+    call solver%initialize_proposal(xi, sigma)
 
     ! Compute the fit
-    call solver%sample(xi)
+    call solver%sample(xi, niter = 100000)
 
-    ! Get the chain
-    chain = solver%get_chain()
-    mdl = chain(ubound(chain, 1), 1:4)
+    ! Get the chain - disregard the initial portion of the chain for burn-in
+    chain = solver%get_chain(bin = 0.9d0)
+    
+    ! Extract the model - use the mean values
+    mdl = [ &
+        mean(chain(:,1)), &
+        mean(chain(:,2)), &
+        mean(chain(:,3)), &
+        mean(chain(:,4)) &
+    ]
 
     ! Evaluate the model
     call fit_fcn(solver%x, mdl, f, stop)
+
+    ! Compute the statistics
+    stats = solver%compute_fit_statistics(mdl)
+
+    ! Display the results statistics
+    print '(A)', "Model:"
+    print 100, (tab // "mdl(", i, "): ", mdl(i), i = 1, size(mdl))
+    
+    print '(A)', "Statistics:"
+    print 101, ( &
+        "Coefficient ", i, ":" // nl // &
+        tab // "Standard Error: ", stats(i)%standard_error, nl // &
+        tab // "Confidence Interval: +/-", stats(i)%confidence_interval, nl // &
+        tab // "T-Statistic: ", stats(i)%t_statistic, nl // &
+        tab // "P-Value: ", stats(i)%probability, &
+        i = 1, size(stats) &
+    )
 
     ! Plot the fit
     call plt%initialize()
@@ -110,4 +144,8 @@ program example
     call mplt%set(2, 2, plt4)
 
     call mplt%draw()
+
+    ! -----
+100 format(A, I0, A, F8.5)
+101 format(A, I0, A, F6.3, A, F6.3, A, F6.3, A, F6.3)
 end program
