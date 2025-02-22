@@ -54,7 +54,7 @@ program example
         5.652854194d0, 6.784320119d0, 8.307936836d0, 8.395126494d0, &
         10.30252404d0]
     solver%fcn => fit_fcn
-    call solver%set_update_proposal_means(.true.)
+    call solver%set_update_proposal_means(.false.)
 
     ! Define an initial covariance matrix for the proposal
     sigma = 0.0d0
@@ -64,14 +64,13 @@ program example
     sigma(4,4) = 1.0d-3
 
     ! Define an initial guess
-    ! xi = [1.0d0, 0.5d0, -1.0d-1, 1.0d0]
     xi = 0.0d0
 
     ! Initialize the proposal distribution object as well
     call solver%initialize_proposal(xi, sigma)
 
     ! Compute the fit
-    call solver%sample(xi, niter = 250000)
+    call solver%sample(xi, niter = 25000)
 
     ! Get the chain - disregard the initial portion of the chain for burn-in
     chain = solver%get_chain(bin = 0.0d0)
