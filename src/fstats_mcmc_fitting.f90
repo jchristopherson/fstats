@@ -92,8 +92,8 @@ function mr_target(this, x) result(rst)
 
     ! Local Variables
     type(normal_distribution) :: dist
-    integer(int32) :: i, npts
-    real(real64) :: p
+    integer(int32) :: i, npts, ep
+    real(real64) :: p, temp
     logical :: stop
 
     ! Initialization
@@ -105,13 +105,30 @@ function mr_target(this, x) result(rst)
     if (stop) return
 
     ! Evaluate the probibility distribution
+    temp = 1.0d0
+    ep = 0
     rst = 1.0d0
     dist%standard_deviation = sqrt(this%m_modelVariance)
     do i = 1, npts
         dist%mean_value = this%m_f0(i)
         p = dist%pdf(this%y(i))
-        rst = p * rst
+        temp = p * temp
+        if (temp == 0.0d0) then
+            rst = 0.0d0
+            return
+        end if
+
+        do while (abs(temp) < 1.0d0)
+            temp = 1.0d1 * temp
+            ep = ep - 1
+        end do
+
+        do while (abs(temp) > 1.0d1)
+            temp = 1.0d-1 * temp
+            ep = ep + 1
+        end do
     end do
+    rst = temp * (1.0d1)**ep
 end function
 
 ! ------------------------------------------------------------------------------
