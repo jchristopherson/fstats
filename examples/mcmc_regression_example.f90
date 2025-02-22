@@ -62,10 +62,10 @@ program example
     call solver%initialize_proposal(4)
 
     ! Compute the fit
-    call solver%sample(xi, niter = 25000)
+    call solver%sample(xi, niter = 10000)
 
     ! Get the chain - disregard the initial portion of the chain for burn-in
-    chain = solver%get_chain(bin = 0.0d0)
+    chain = solver%get_chain(bin = 0.50d0)   ! Drop the first 50% as burn-in
     
     ! Extract the model - use the mean values
     mdl = [ &
