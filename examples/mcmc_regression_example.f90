@@ -33,7 +33,7 @@ program example
     logical :: stop
     type(mcmc_regression) :: solver
     integer(int32) :: i
-    real(real64) :: xi(4), f(21), mdl(4), sigma(4, 4)
+    real(real64) :: xi(4), f(21), mdl(4)
     real(real64), allocatable, dimension(:,:) :: chain
     type(regression_statistics), allocatable, dimension(:) :: stats
 
@@ -54,20 +54,12 @@ program example
         5.652854194d0, 6.784320119d0, 8.307936836d0, 8.395126494d0, &
         10.30252404d0]
     solver%fcn => fit_fcn
-    call solver%set_update_proposal_means(.false.)
-
-    ! Define an initial covariance matrix for the proposal
-    sigma = 0.0d0
-    sigma(1,1) = 1.0d-3
-    sigma(2,2) = 1.0d-3
-    sigma(3,3) = 1.0d-3
-    sigma(4,4) = 1.0d-3
 
     ! Define an initial guess
     xi = 0.0d0
 
     ! Initialize the proposal distribution object as well
-    call solver%initialize_proposal(xi, sigma)
+    call solver%initialize_proposal(4)
 
     ! Compute the fit
     call solver%sample(xi, niter = 25000)
