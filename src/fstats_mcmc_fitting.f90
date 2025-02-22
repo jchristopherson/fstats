@@ -49,7 +49,6 @@ module fstats_mcmc_fitting
         procedure, public :: set_update_proposal_means => &
             mr_set_update_prop_means
         procedure, public :: compute_fit_statistics => mr_calc_regression_stats
-        procedure, public :: compute_hastings_ratio => mr_hastings_ratio
     end type
 
 contains
@@ -113,24 +112,6 @@ function mr_target(this, x) result(rst)
         p = dist%pdf(this%y(i))
         rst = p * rst
     end do
-end function
-
-! ------------------------------------------------------------------------------
-function mr_hastings_ratio(this, xc, xp) result(rst)
-    !! Evaluates the Hasting's ratio.  If the proposal distribution is 
-    !! symmetric, this ratio is unity; however, in the case of an asymmetric 
-    !! distribution this ratio is not ensured to be unity.
-    class(mcmc_regression), intent(inout) :: this
-        !! The mcmc_regression object.
-    real(real64), intent(in), dimension(:) :: xc
-        !! The current set of model parameters.
-    real(real64), intent(in), dimension(size(xc)) :: xp
-        !! The proposed set of model parameters.
-    real(real64) :: rst
-        !! The ratio.
-
-    ! TO DO, for now, just return 1
-    rst = 1.0d0
 end function
 
 ! ------------------------------------------------------------------------------
@@ -296,8 +277,7 @@ subroutine mr_on_success(this, iter, alpha, xc, xp, err)
     resid = this%m_f0 - this%y
 
     ! Update the variance
-    ! this%m_modelVariance = variance(resid)
-    this%m_modelVariance = 1.0d-4
+    this%m_modelVariance = variance(resid)
 end subroutine
 
 ! ------------------------------------------------------------------------------
