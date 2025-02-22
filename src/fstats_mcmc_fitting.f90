@@ -296,7 +296,8 @@ subroutine mr_on_success(this, iter, alpha, xc, xp, err)
     resid = this%m_f0 - this%y
 
     ! Update the variance
-    this%m_modelVariance = variance(resid)
+    ! this%m_modelVariance = variance(resid)
+    this%m_modelVariance = 1.0d-4
 end subroutine
 
 ! ------------------------------------------------------------------------------

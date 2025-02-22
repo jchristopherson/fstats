@@ -58,22 +58,23 @@ program example
 
     ! Define an initial covariance matrix for the proposal
     sigma = 0.0d0
-    sigma(1,1) = 1.0d-8
-    sigma(2,2) = 1.0d-8
-    sigma(3,3) = 1.0d-8
-    sigma(4,4) = 1.0d-8
+    sigma(1,1) = 1.0d-3
+    sigma(2,2) = 1.0d-3
+    sigma(3,3) = 1.0d-3
+    sigma(4,4) = 1.0d-3
 
     ! Define an initial guess
-    xi = [1.0d0, 0.5d0, -1.0d-1, 1.0d0]
+    ! xi = [1.0d0, 0.5d0, -1.0d-1, 1.0d0]
+    xi = 0.0d0
 
     ! Initialize the proposal distribution object as well
     call solver%initialize_proposal(xi, sigma)
 
     ! Compute the fit
-    call solver%sample(xi, niter = 100000)
+    call solver%sample(xi, niter = 250000)
 
     ! Get the chain - disregard the initial portion of the chain for burn-in
-    chain = solver%get_chain(bin = 0.9d0)
+    chain = solver%get_chain(bin = 0.0d0)
     
     ! Extract the model - use the mean values
     mdl = [ &
