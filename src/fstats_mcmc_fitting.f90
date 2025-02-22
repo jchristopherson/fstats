@@ -106,12 +106,12 @@ function mr_target(this, x) result(rst)
     if (stop) return
 
     ! Evaluate the probibility distribution
-    rst = 0.0d0
+    rst = 1.0d0
     dist%standard_deviation = sqrt(this%m_modelVariance)
     do i = 1, npts
         dist%mean_value = this%m_f0(i)
-        p = log(dist%pdf(this%y(i)))
-        rst = p + rst ! the product becomes a sum when working with log probabilities
+        p = dist%pdf(this%y(i))
+        rst = p * rst
     end do
 end function
 
