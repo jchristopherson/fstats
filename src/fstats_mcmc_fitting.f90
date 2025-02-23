@@ -35,44 +35,15 @@ module fstats_mcmc_fitting
 
         ! -----
         ! Private Member Variables
-        logical, private :: m_updatePropMeans = .false.
-            !! True if the the proposal means should be updated based upon the 
-            !! current parameter set; else, false.
         real(real64), private :: m_modelVariance = 1.0d0
             !! The variance of the residual error of the current model.
     contains
-        procedure, public :: generate_proposal => mr_proposal
         procedure, public :: target_distribution => mr_target
         procedure, public :: covariance_matrix => mr_covariance
-        procedure, public :: get_update_proposal_means => &
-            mr_get_update_prop_means
-        procedure, public :: set_update_proposal_means => &
-            mr_set_update_prop_means
         procedure, public :: compute_fit_statistics => mr_calc_regression_stats
     end type
 
 contains
-! ------------------------------------------------------------------------------
-function mr_proposal(this, xc) result(rst)
-    !! Proposes a new sample set of variables.  Be sure to have defined all
-    !! distributions prior to calling this routine.  If the distributions are
-    !! not defined, default implementations with unit variance will be employed.
-    class(mcmc_regression), intent(inout) :: this
-        !! The mcmc_regression object.
-    real(real64), intent(in), dimension(:) :: xc
-        !! The current set of model parameters.
-    real(real64), allocatable, dimension(:) :: rst
-        !! The proposed set of model parameters.
-
-    ! Update the means
-    if (this%get_update_proposal_means()) then
-        call this%set_proposal_means(xc)
-    end if
-
-    ! Sample the parameters
-    rst = this%metropolis_hastings%generate_proposal(xc)
-end function
-
 ! ------------------------------------------------------------------------------
 ! https://scalismo.org/docs/Tutorials/tutorial14
 function mr_target(this, x) result(rst)
@@ -190,32 +161,6 @@ function mr_covariance(this, xc, err) result(rst)
     call report_memory_error(errmgr, "mr_covariance", flag)
     return
 end function
-
-! ------------------------------------------------------------------------------
-pure function mr_get_update_prop_means(this) result(rst)
-    !! Gets a value indicating if the proposal means should be updated with
-    !! the current parameter set.
-    class(mcmc_regression), intent(in) :: this
-        !! The mcmc_regression object.
-    logical :: rst
-        !! True if the the proposal means should be updated based upon the 
-        !! current parameter set; else, false.
-
-    rst = this%m_updatePropMeans
-end function
-
-! ------------------------------------------------------------------------------
-subroutine mr_set_update_prop_means(this, x) 
-    !! Sets a value indicating if the proposal means should be updated with the
-    !! current parameter set.
-    class(mcmc_regression), intent(inout) :: this
-        !! The mcmc_regression object.
-    logical, intent(in) :: x
-        !! True if the the proposal means should be updated based upon the 
-        !! current parameter set; else, false.
-
-    this%m_updatePropMeans = x
-end subroutine
 
 ! ------------------------------------------------------------------------------
 function mr_calc_regression_stats(this, xc, alpha, err) result(rst)
