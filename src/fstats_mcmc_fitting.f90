@@ -26,6 +26,18 @@ module fstats_mcmc_fitting
             !! The dependent-variable data to fit.
         procedure(regression_function), pointer, nopass :: fcn
             !! The function to fit.
+        real(real64), allocatable, dimension(:) :: upper_limits
+            !! An optional array that, if used, provides an upper limit to
+            !! each parameter in the model.  If used, be sure this array is the
+            !! same dimension as the parameter array.  If not used, leave this
+            !! alone and no upper limits will be placed on the parameters.
+            !! If used and the array is not sized correctly, it will be ignored.
+        real(real64), allocatable, dimension(:) :: lower_limits
+            !! An optional array that, if used, provides a lower limit to
+            !! each parameter in the model.  If used, be sure this array is the
+            !! same dimension as the parameter array.  If not used, leave this
+            !! alone and no lower limits will be placed on the parameters.
+            !! If used and the array is not sized correctly, it will be ignored.
 
         ! -----
         ! Private Workspace Arrays
@@ -38,12 +50,45 @@ module fstats_mcmc_fitting
         real(real64), private :: m_modelVariance = 1.0d0
             !! The variance of the residual error of the current model.
     contains
+        procedure, public :: generate_proposal => mr_proposal
         procedure, public :: target_distribution => mr_target
         procedure, public :: covariance_matrix => mr_covariance
         procedure, public :: compute_fit_statistics => mr_calc_regression_stats
+        procedure, public :: get_target_variance => mr_get_target_variance
+        procedure, public :: set_target_variance => mr_set_target_variance
     end type
 
 contains
+! ------------------------------------------------------------------------------
+function mr_proposal(this, xc) result(rst)
+    !! Arguments
+    class(mcmc_regression), intent(inout) :: this
+        !! The mcmc_regression object.
+    real(real64), intent(in), dimension(:) :: xc
+        !! The current model parameters.
+    real(real64), allocatable, dimension(:) :: rst
+        !! The proposed set of model parameters.
+
+    ! Local Variables
+    integer(int32) :: n
+
+    ! Establish the parameter guess
+    rst = this%metropolis_hastings%generate_proposal(xc)
+
+    ! Apply limits?
+    n = size(xc)
+    if (allocated(this%upper_limits)) then
+        if (size(this%upper_limits) == n) then
+            rst = min(this%upper_limits, rst)
+        end if
+    end if
+    if (allocated(this%lower_limits)) then
+        if (size(this%lower_limits) == n) then
+            rst = max(this%lower_limits, rst)
+        end if
+    end if
+end function
+
 ! ------------------------------------------------------------------------------
 ! https://scalismo.org/docs/Tutorials/tutorial14
 function mr_target(this, x) result(rst)
@@ -79,7 +124,7 @@ function mr_target(this, x) result(rst)
     temp = 1.0d0
     ep = 0
     rst = 1.0d0
-    dist%standard_deviation = sqrt(this%m_modelVariance)
+    dist%standard_deviation = sqrt(this%get_target_variance())
     do i = 1, npts
         dist%mean_value = this%m_f0(i)
         p = dist%pdf(this%y(i))
@@ -216,30 +261,25 @@ function mr_calc_regression_stats(this, xc, alpha, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mr_on_success(this, iter, alpha, xc, xp, err)
-    !! Updates the estimate of the model variance when a successful step is
-    !! encountered.
+pure function mr_get_target_variance(this) result(rst)
+    !! Gets the variance of the target distribution.
+    class(mcmc_regression), intent(in) :: this
+        !! The mcmc_regression object.
+    real(real64) :: rst
+        !! The variance.
+
+    rst = this%m_modelVariance
+end function
+
+! ------------------------------------------------------------------------------
+subroutine mr_set_target_variance(this, x)
+    !! Sets the variance of the target distribution.
     class(mcmc_regression), intent(inout) :: this
         !! The mcmc_regression object.
-    integer(int32), intent(in) :: iter
-        !! The current iteration number.
-    real(real64), intent(in) :: alpha
-        !! The proposal probabilty term used for acceptance criteria.
-    real(real64), intent(in), dimension(:) :: xc
-        !! An N-element array containing the current state variables.
-    real(real64), intent(in), dimension(:) :: xp
-        !! An N-element array containing the proposed state variables that were just accepted.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
+    real(real64), intent(in) :: x
+        !! The variance.
 
-    ! Local Variables
-    real(real64), allocatable, dimension(:) :: resid
-
-    ! Compute the residual
-    resid = this%m_f0 - this%y
-
-    ! Update the variance
-    this%m_modelVariance = variance(resid)
+    this%m_modelVariance = x
 end subroutine
 
 ! ------------------------------------------------------------------------------
