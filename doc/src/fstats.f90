@@ -16,8 +16,11 @@ module fstats
     use fstats_sampling
     use fstats_smoothing
     use fstats_mcmc
+    use fstats_mcmc_fitting
     implicit none
     private
+
+    ! FSTATS_DISTRIBUTION.F90
     public :: distribution
     public :: distribution_function
     public :: distribution_property
@@ -29,6 +32,8 @@ module fstats
     public :: multivariate_distribution
     public :: multivariate_distribution_function
     public :: multivariate_normal_distribution
+    public :: log_normal_distribution
+
     public :: mean
     public :: variance
     public :: standard_deviation
@@ -96,5 +101,8 @@ module fstats
 
     ! FSTATS_MCMC.F90
     public :: metropolis_hastings
+
+    ! FSTATS_MCMC_FITTING.F90
+    public :: mcmc_regression
    
 end module
