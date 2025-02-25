@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="22.3% of total for modules and submodules.">871 statements</a>
+               title="22.4% of total for modules and submodules.">875 statements</a>
           </li>
 
             <li id="source-file">
@@ -230,15 +230,15 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
-                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
-                <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
                 <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
-                <li><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></li>
+                <li>linalg</li>
                 <li>ferror</li>
                 <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
-                <li>linalg</li>
                 <li>blas</li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+                <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                <li><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></li>
             </ul>
           </li>
       </ul>
@@ -431,7 +431,8 @@ parameter
     public  subroutine iteration_update(iter, funvals, resid, params, step)  
 
     </h3>
-  
+  <p>Defines a routine for providing updates about an iteration
+process.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -456,7 +457,7 @@ parameter
             <td>::</td>
             <td><strong>iter</strong></td>
             <td>
-                
+                <p>The current iteration number.</p>
             </td>
         </tr>
         <tr>
@@ -464,14 +465,14 @@ parameter
               <span class="anchor" ></span>
               real(kind=real64),
             </td>
-<td>intent(in)</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              
+              dimension(:)
             </td>
             <td>::</td>
-            <td><strong>funvals</strong>(:)</td>
+            <td><strong>funvals</strong></td>
             <td>
-                
+                <p>The function values.</p>
             </td>
         </tr>
         <tr>
@@ -479,14 +480,14 @@ parameter
               <span class="anchor" ></span>
               real(kind=real64),
             </td>
-<td>intent(in)</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              
+              dimension(:)
             </td>
             <td>::</td>
-            <td><strong>resid</strong>(:)</td>
+            <td><strong>resid</strong></td>
             <td>
-                
+                <p>The residuals.</p>
             </td>
         </tr>
         <tr>
@@ -494,14 +495,14 @@ parameter
               <span class="anchor" ></span>
               real(kind=real64),
             </td>
-<td>intent(in)</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              
+              dimension(:)
             </td>
             <td>::</td>
-            <td><strong>params</strong>(:)</td>
+            <td><strong>params</strong></td>
             <td>
-                
+                <p>The model parameters.</p>
             </td>
         </tr>
         <tr>
@@ -509,14 +510,14 @@ parameter
               <span class="anchor" ></span>
               real(kind=real64),
             </td>
-<td>intent(in)</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              
+              dimension(:)
             </td>
             <td>::</td>
-            <td><strong>step</strong>(:)</td>
+            <td><strong>step</strong></td>
             <td>
-                
+                <p>Step sizes for each parameter.</p>
             </td>
         </tr>
     </tbody>
@@ -536,10 +537,12 @@ parameter
     <ul class="list-group">
         <li class="list-group-item">
               <h3>
-    public  subroutine regression_function(xdata, params, resid, stop)  
+    public  subroutine regression_function(xdata, params, f, stop)  
 
     </h3>
-  
+  <p>Defines the interface of a subroutine computing the function
+values at each of the N data points as part of a regression
+analysis.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -564,7 +567,7 @@ parameter
             <td>::</td>
             <td><strong>xdata</strong></td>
             <td>
-                
+                <p>An N-element array containing the N independent data points.</p>
             </td>
         </tr>
         <tr>
@@ -579,7 +582,7 @@ parameter
             <td>::</td>
             <td><strong>params</strong></td>
             <td>
-                
+                <p>An M-element array containing the M model parameters.</p>
             </td>
         </tr>
         <tr>
@@ -592,9 +595,10 @@ parameter
               dimension(:)
             </td>
             <td>::</td>
-            <td><strong>resid</strong></td>
+            <td><strong>f</strong></td>
             <td>
-                
+                <p>An N-element array where the results of the N function 
+evaluations will be written.</p>
             </td>
         </tr>
         <tr>
@@ -609,7 +613,10 @@ parameter
             <td>::</td>
             <td><strong>stop</strong></td>
             <td>
-                
+                <p>A mechanism to force a stop to the iteration process.  If
+set to true, the iteration process will terminate.  If set
+to false, the iteration process will continue along as 
+normal.</p>
             </td>
         </tr>
     </tbody>
@@ -2484,7 +2491,7 @@ caller.  Possible warning and error codes are as follows.</p><a href="../proc/no
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:36              </p>
+ on 2025-02-25 14:41              </p>
           </div>
         </div>
         <br>

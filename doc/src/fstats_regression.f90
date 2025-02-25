@@ -137,17 +137,39 @@ module fstats_regression
     end type
 
     interface
-        subroutine regression_function(xdata, params, resid, stop)
+        subroutine regression_function(xdata, params, f, stop)
+            !! Defines the interface of a subroutine computing the function
+            !! values at each of the N data points as part of a regression
+            !! analysis.
             use iso_fortran_env, only : real64
-            real(real64), intent(in), dimension(:) :: xdata, params
-            real(real64), intent(out), dimension(:) :: resid
+            real(real64), intent(in), dimension(:) :: xdata
+                !! An N-element array containing the N independent data points.
+            real(real64), intent(in), dimension(:) :: params
+                !! An M-element array containing the M model parameters.
+            real(real64), intent(out), dimension(:) :: f
+                !! An N-element array where the results of the N function 
+                !! evaluations will be written.
             logical, intent(out) :: stop
+                !! A mechanism to force a stop to the iteration process.  If
+                !! set to true, the iteration process will terminate.  If set
+                !! to false, the iteration process will continue along as 
+                !! normal.
         end subroutine
 
         subroutine iteration_update(iter, funvals, resid, params, step)
+            !! Defines a routine for providing updates about an iteration
+            !! process.
             use iso_fortran_env, only : int32, real64
             integer(int32), intent(in) :: iter
-            real(real64), intent(in) :: funvals(:), resid(:), params(:), step(:)
+                !! The current iteration number.
+            real(real64), intent(in), dimension(:) :: funvals
+                !! The function values.
+            real(real64), intent(in), dimension(:) :: resid
+                !! The residuals.
+            real(real64), intent(in), dimension(:) :: params
+                !! The model parameters.
+            real(real64), intent(in), dimension(:) :: step
+                !! Step sizes for each parameter.
         end subroutine
     end interface
 
