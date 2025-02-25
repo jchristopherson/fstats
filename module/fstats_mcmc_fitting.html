@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>fstats_mcmc &ndash; FSTATS</title>
+    <title>fstats_mcmc_fitting &ndash; FSTATS</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,7 +84,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>fstats_mcmc
+    <h1>fstats_mcmc_fitting
       <small>Module</small>
       
     </h1>
@@ -96,17 +96,17 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="10.1% of total for modules and submodules.">395 statements</a>
+               title=" 5.8% of total for modules and submodules.">228 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_mcmc.f90"> Source File</a>
+              <a href="../src/fstats_mcmc_fitting.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_mcmc.f90.html'>fstats_mcmc.f90</a></li>
-          <li class="active">fstats_mcmc</li>
+              <li><a href='../sourcefile/fstats_mcmc_fitting.f90.html'>fstats_mcmc_fitting.f90</a></li>
+          <li class="active">fstats_mcmc_fitting</li>
         </ol>
       </div>
     </div>
@@ -141,7 +141,7 @@
       </div>
       <div id="types-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_mcmc.html#type-metropolis_hastings">metropolis_hastings</a>
+            <a class="list-group-item" href="../module/fstats_mcmc_fitting.html#type-mcmc_regression">mcmc_regression</a>
         </div>
       </div>
     </div>
@@ -169,14 +169,15 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
                 <li>ferror</li>
                 <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
                 <li><a href='../module/fstats_regression.html'>fstats_regression</a></li>
                 <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
                 <li><a href='../module/fstats_sampling.html'>fstats_sampling</a></li>
-                <li><a href='../module/fstats_types.html'>fstats_types</a></li>
                 <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
                 <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                <li><a href='../module/fstats_mcmc.html'>fstats_mcmc</a></li>
             </ul>
           </li>
       </ul>
@@ -205,7 +206,7 @@
       </div>
       <div id="types-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_mcmc.html#type-metropolis_hastings">metropolis_hastings</a>
+            <a class="list-group-item" href="../module/fstats_mcmc_fitting.html#type-mcmc_regression">mcmc_regression</a>
         </div>
       </div>
     </div>
@@ -232,22 +233,128 @@
           <h2>Derived Types</h2>
               <div class="panel panel-default">
     <div class="panel-heading codesum">
-      <span class="anchor" id="type-metropolis_hastings"></span>
+      <span class="anchor" id="type-mcmc_regression"></span>
       <h3>
-        type, public&nbsp;::&nbsp;
-        <a href='../type/metropolis_hastings.html'>metropolis_hastings</a>
+        type, public, extends(<a href='../type/metropolis_hastings.html'>metropolis_hastings</a>)&nbsp;::&nbsp;
+        <a href='../type/mcmc_regression.html'>mcmc_regression</a>
         
       </h3>
     </div>
     <div class="panel-body">
-      <p>An implementation of the Metropolis-Hastings algorithm for the
-generation of a Markov chain.  This is a default implementation
-that allows sampling of normally distributed posterior distributions
-centered on zero with unit standard deviations.  Proposals are
-generated from a multivariate normal distribution with an identity
-covariance matrix and centered on zero.  To alter these sampling
-and target distributions simply create a new class inheriting from 
-this class and override the appropriate routines.</p>
+      <p>The mcmc_regression type extends the metropolis_hastings type to
+specifically target regression problems.  The problem is formulated
+such that the target distribution takes the form <script type="math/tex">y \sim 
+N \left( f(x), \sigma^{2} \right) </script>, where <script type="math/tex">N</script> is a normal
+distribution with <script type="math/tex">f(x)</script> as the mean and the model variance, 
+<script type="math/tex">\sigma^2</script> is determined by computing the variance for the current
+estimate of the model.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Visibility</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+<th></th><th>Initial</th>        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fcn"></span>
+              procedure(<a href='../interface/regression_function.html'>regression_function</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              pointer, nopass
+            </td>
+            <td>::</td>
+            <td><strong>fcn</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The function to fit.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-lower_limits"></span>
+              real(kind=real64),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>lower_limits</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>An optional array that, if used, provides a lower limit to
+each parameter in the model.  If used, be sure this array is the
+same dimension as the parameter array.  If not used, leave this
+alone and no lower limits will be placed on the parameters.
+If used and the array is not sized correctly, it will be ignored.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-upper_limits"></span>
+              real(kind=real64),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>upper_limits</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>An optional array that, if used, provides an upper limit to
+each parameter in the model.  If used, be sure this array is the
+same dimension as the parameter array.  If not used, leave this
+alone and no upper limits will be placed on the parameters.
+If used and the array is not sized correctly, it will be ignored.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~55"></span>
+              real(kind=real64),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The independent-variable data to fit.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~6"></span>
+              real(kind=real64),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable, dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The dependent-variable data to fit.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
 
 
 
@@ -259,9 +366,29 @@ this class and override the appropriate routines.</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-compute_fit_statistics'>compute_fit_statistics</a></strong>
+ =>
+                    mr_calc_regression_stats
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-compute_hastings_ratio'>compute_hastings_ratio</a></strong>
  =>
                     mh_hastings_ratio
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-covariance_matrix'>covariance_matrix</a></strong>
+ =>
+                    mr_covariance
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -279,9 +406,9 @@ this class and override the appropriate routines.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-generate_proposal'>generate_proposal</a></strong>
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-generate_proposal~2'>generate_proposal</a></strong>
  =>
-                    mh_proposal
+                    mr_proposal
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -312,6 +439,16 @@ this class and override the appropriate routines.</p>
                   :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
  =>
                     mh_get_chain_length
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-get_data_variance'>get_data_variance</a></strong>
+ =>
+                    mr_get_data_variance
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -369,7 +506,7 @@ this class and override the appropriate routines.</p>
                 <td>
 generic,
                   public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-initialize_proposal'>initialize_proposal</a></strong>
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-initialize_proposal~2'>initialize_proposal</a></strong>
  =>
                     mh_init_proposal_1, mh_init_proposal_2
                 </td>
@@ -379,9 +516,19 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-on_acceptance'>on_acceptance</a></strong>
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-likelihood'>likelihood</a></strong>
  =>
-                    mh_on_success
+                    mr_likelihood
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-on_acceptance~2'>on_acceptance</a></strong>
+ =>
+                    mr_on_success
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -399,9 +546,9 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-push_new_state'>push_new_state</a></strong>
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-push_new_state~2'>push_new_state</a></strong>
  =>
-                    mh_push
+                    mr_push
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -429,6 +576,16 @@ generic,
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-set_data_variance'>set_data_variance</a></strong>
+ =>
+                    mr_set_data_variance
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-set_proposal_covariance'>set_proposal_covariance</a></strong>
  =>
                     mh_set_prop_cov
@@ -449,9 +606,9 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-target_distribution'>target_distribution</a></strong>
+                  :: <strong><a href='../type/mcmc_regression.html#boundprocedure-target_distribution~2'>target_distribution</a></strong>
  =>
-                    mh_target
+                    mr_target
 <small>Function</small>                </td>
                 <td></td>
               </tr>

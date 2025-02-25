@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>fstats_special_functions &ndash; FSTATS</title>
+    <title>log_normal_distribution &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>fstats_special_functions
-      <small>Module</small>
+    <h1>log_normal_distribution
+      <small>Derived Type</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,17 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 4.3% of total for modules and submodules.">169 statements</a>
+               title="<p> 4.8% of total for derived types.</p>Including implementation: 62 statements,  4.0% of total for derived types.">11 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_special_functions.f90"> Source File</a>
+              <a href="../src/fstats_distributions.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_special_functions.f90.html'>fstats_special_functions.f90</a></li>
-          <li class="active">fstats_special_functions</li>
+              <li><a href='../sourcefile/fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
+              <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+          <li class="active">log_normal_distribution</li>
         </ol>
       </div>
     </div>
@@ -118,12 +119,31 @@
   </script>
 
   </div>
-
+  
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-        <div id="sidebar">
+      <div id="sidebar">
       <h3>Contents</h3>
   
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#vars-0">Variables</a>
+        </h3>
+      </div>
+      <div id="vars-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-mean_value~2">mean_value</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-standard_deviation~2">standard_deviation</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
   
   
   
@@ -137,55 +157,55 @@
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
-          <a data-toggle="collapse" href="#funcs-0">Functions</a>
+          <a data-toggle="collapse" href="#boundprocs-0">Type-Bound Procedures</a>
         </h3>
       </div>
-      <div id="funcs-0" class="panel-collapse collapse">
+      <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-beta">beta</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-digamma">digamma</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_beta">incomplete_beta</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_lower">incomplete_gamma_lower</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_upper">incomplete_gamma_upper</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_beta">regularized_beta</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-cdf~5">cdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mean~5">mean</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-median~5">median</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mode~5">mode</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-pdf~6">pdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-variance~6">variance</a>
         </div>
       </div>
     </div>
 
-  
-  
-  
-  
-  
-  
   
 
 
   </div>
 
     </div>
-
+    
     <div class="col-md-9" id='text'>
-      
-<br>          <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Uses</h3>
+      <h2>type, public, extends(<a href='../type/distribution.html'>distribution</a>) :: log_normal_distribution</h2>
+    <p>Defines a normal distribution.</p>
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+        <h3>Contents</h3>
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#vars-1">Variables</a>
+        </h3>
       </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-            <ul class="list-inline">
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
-            </ul>
-          </li>
-      </ul>
+      <div id="vars-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-mean_value~2">mean_value</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-standard_deviation~2">standard_deviation</a>
+        </div>
+      </div>
     </div>
 
-      
-      <br>
-
-      <section class="visible-xs visible-sm hidden-md">
-          <h3>Contents</h3>
+  
+  
+  
+  
   
   
   
@@ -200,422 +220,487 @@
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
-          <a data-toggle="collapse" href="#funcs-1">Functions</a>
+          <a data-toggle="collapse" href="#boundprocs-1">Type-Bound Procedures</a>
         </h3>
       </div>
-      <div id="funcs-1" class="panel-collapse collapse">
+      <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-beta">beta</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-digamma">digamma</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_beta">incomplete_beta</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_lower">incomplete_gamma_lower</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_upper">incomplete_gamma_upper</a>
-            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_beta">regularized_beta</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-cdf~5">cdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mean~5">mean</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-median~5">median</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mode~5">mode</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-pdf~6">pdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-variance~6">variance</a>
         </div>
       </div>
     </div>
 
   
-  
-  
-  
-  
-  
-  
 
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+    <h2>Components</h2>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Visibility</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+<th></th><th>Initial</th>        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-mean_value~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>mean_value</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>The mean value of the distribution.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-standard_deviation~2"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>standard_deviation</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>The standard deviation of the distribution.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </section>
+    <br>
+    
+
+
+      <section>
+        <h2>Type-Bound Procedures</h2>
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf~5"></span><h3>procedure, public :: <strong>cdf</strong>  => lnd_cdf         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function lnd_cdf(this, x) result(rst)  
+</h3>
+  <p>Computes the cumulative distribution function.</p>
+<p>The CDF for a log-normal distribution is given as
+<script type="math/tex; mode=display"> F(x) = \frac{1}{2} \left(1 + erf\left( \frac{\ln{x} - \mu}
+{\sigma \sqrt{2}} \right) \right) </script>
+</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal_distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value at which to evaluate the function.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The value of the function.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean~5"></span><h3>procedure, public :: <strong>mean</strong>  => lnd_mean         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function lnd_mean(this) result(rst)  
+</h3>
+  <p>Computes the mean of the distribution</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The mean</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median~5"></span><h3>procedure, public :: <strong>median</strong>  => lnd_median         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function lnd_median(this) result(rst)  
+</h3>
+  <p>Computes the median of the distribution</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The median</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode~5"></span><h3>procedure, public :: <strong>mode</strong>  => lnd_mode         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function lnd_mode(this) result(rst)  
+</h3>
+  <p>Computes the mode of the distribution</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The mode</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~6"></span><h3>procedure, public :: <strong>pdf</strong>  => lnd_pdf         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function lnd_pdf(this, x) result(rst)  
+</h3>
+  <p>Computes the probability density function.</p>
+<p>The PDF for a log-normal distribution is given as
+<script type="math/tex; mode=display"> f(x) = \frac{1}{x \sigma \sqrt{2 \pi}} \exp{\left(- \frac{\left( 
+\ln{x} - \mu \right)^2}{2 \sigma^2} \right)} </script>
+</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal_distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value at which to evaluate the function.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The value of the function.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-standardized_variable"></span><h3>procedure, public :: <strong>standardized_variable</strong>  => dist_std_var         
+    </h3></div>
+      <div class="panel-body">
+        
+        <p>Computes the standardized variable for the distribution.</p>
+      </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function dist_std_var(this, x) result(rst)  
+</h3>
+  <p>Computes the standardized variable for the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value of interest.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The result.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~6"></span><h3>procedure, public :: <strong>variance</strong>  => lnd_variance         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function lnd_variance(this) result(rst)  
+</h3>
+  <p>Computes the variance of the distribution</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The variance</p>
+
+        </li>
+    </ul>
+  </div>
 
       </section>
-      <br class="visible-xs visible-sm hidden-md">
 
-
-
-
-
-
-
-        <section>
-          <h2>Functions</h2>
-              <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-beta"></span><h3>public pure elemental function <a href='../proc/beta.html'>beta</a>(a, b) result(rst)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>Computes the beta function.</p><a href="../proc/beta.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>a</strong></td>
-            <td>
-<p>The first argument of the function.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>b</strong></td>
-            <td>
-<p>The second argument of the function.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The value of the beta function at <script type="math/tex"> a </script> and <script type="math/tex"> b </script>.</p>
-
-    </div>
-  </div>
-
-              <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-digamma"></span><h3>public pure elemental function <a href='../proc/digamma.html'>digamma</a>(x) result(rst)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>Computes the digamma function.</p><a href="../proc/digamma.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The value at which to evaluate the function.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The function value.</p>
-
-    </div>
-  </div>
-
-              <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-incomplete_beta"></span><h3>public pure elemental function <a href='../proc/incomplete_beta.html'>incomplete_beta</a>(a, b, x) result(rst)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>Computes the incomplete beta function.</p><a href="../proc/incomplete_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>a</strong></td>
-            <td>
-<p>The first argument of the function.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>b</strong></td>
-            <td>
-<p>The second argument of the function.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The upper limit of the integration.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The value of the incomplete beta function.</p>
-
-    </div>
-  </div>
-
-              <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-incomplete_gamma_lower"></span><h3>public pure elemental function <a href='../proc/incomplete_gamma_lower.html'>incomplete_gamma_lower</a>(a, x) result(rst)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>Computes the lower incomplete gamma function.</p><a href="../proc/incomplete_gamma_lower.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>a</strong></td>
-            <td>
-<p>The coefficient value.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The value at which to evaluate the function.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The function value.</p>
-
-    </div>
-  </div>
-
-              <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-incomplete_gamma_upper"></span><h3>public pure elemental function <a href='../proc/incomplete_gamma_upper.html'>incomplete_gamma_upper</a>(a, x) result(rst)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>Computes the upper incomplete gamma function.</p><a href="../proc/incomplete_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>a</strong></td>
-            <td>
-<p>The coefficient value.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The value at which to evaluate the function.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The function value.</p>
-
-    </div>
-  </div>
-
-              <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-regularized_beta"></span><h3>public pure elemental function <a href='../proc/regularized_beta.html'>regularized_beta</a>(a, b, x) result(rst)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>Computes the regularized beta function.</p><a href="../proc/regularized_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>a</strong></td>
-            <td>
-<p>The first argument of the function.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>b</strong></td>
-            <td>
-<p>The second argument of the function.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The upper limit of the integration.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The value of the regularized beta function.</p>
-
-    </div>
-  </div>
-
-        </section>
-        <br>
-
-
-
-
+    
     </div>
   </div>
 

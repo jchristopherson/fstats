@@ -137,17 +137,39 @@ module fstats_regression
     end type
 
     interface
-        subroutine regression_function(xdata, params, resid, stop)
+        subroutine regression_function(xdata, params, f, stop)
+            !! Defines the interface of a subroutine computing the function
+            !! values at each of the N data points as part of a regression
+            !! analysis.
             use iso_fortran_env, only : real64
-            real(real64), intent(in), dimension(:) :: xdata, params
-            real(real64), intent(out), dimension(:) :: resid
+            real(real64), intent(in), dimension(:) :: xdata
+                !! An N-element array containing the N independent data points.
+            real(real64), intent(in), dimension(:) :: params
+                !! An M-element array containing the M model parameters.
+            real(real64), intent(out), dimension(:) :: f
+                !! An N-element array where the results of the N function 
+                !! evaluations will be written.
             logical, intent(out) :: stop
+                !! A mechanism to force a stop to the iteration process.  If
+                !! set to true, the iteration process will terminate.  If set
+                !! to false, the iteration process will continue along as 
+                !! normal.
         end subroutine
 
         subroutine iteration_update(iter, funvals, resid, params, step)
+            !! Defines a routine for providing updates about an iteration
+            !! process.
             use iso_fortran_env, only : int32, real64
             integer(int32), intent(in) :: iter
-            real(real64), intent(in) :: funvals(:), resid(:), params(:), step(:)
+                !! The current iteration number.
+            real(real64), intent(in), dimension(:) :: funvals
+                !! The function values.
+            real(real64), intent(in), dimension(:) :: resid
+                !! The residuals.
+            real(real64), intent(in), dimension(:) :: params
+                !! The model parameters.
+            real(real64), intent(in), dimension(:) :: step
+                !! Step sizes for each parameter.
         end subroutine
     end interface
 
@@ -778,7 +800,7 @@ end subroutine
 ! ------------------------------------------------------------------------------
 subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     resid, weights, maxp, minp, stats, alpha, controls, settings, info, &
-    status, err)
+    status, cov, err)
     !! Performs a nonlinear regression to fit a model using a version
     !! of the Levenberg-Marquardt algorithm.
     procedure(regression_function), intent(in), pointer :: fun
@@ -828,18 +850,26 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     procedure(iteration_update), intent(in), pointer, optional :: status
         !! An optional pointer to a routine that can be used to extract
         !! iteration information.
+    real(real64), intent(out), optional, dimension(:,:) :: cov
+        !! An optional N-by-N matrix that, if supplied, will be used to return
+        !! the covariance matrix.
     class(errors), intent(inout), optional, target :: err
         !! A mechanism for communicating errors and warnings to the 
         !! caller.  Possible warning and error codes are as follows.
+        !!
         !! - FS_NO_ERROR: No errors encountered.
         !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
         !!      properly sized.
+        !!
         !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
         !!      error.
+        !!
         !! - FS_UNDERDEFINED_PROBLEM_ERROR: Occurs if the problem posed 
         !!      is underdetetermined (M < N).
+        !!
         !! - FS_TOLERANCE_TOO_SMALL_ERROR: Occurs if any supplied 
         !!      tolerances are too small to be practical.
+        !!
         !! - FS_TOO_FEW_ITERATION_ERROR: Occurs if too few iterations 
         !!      are allowed.
 
@@ -1007,6 +1037,12 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     call lm_solve(fun, x, y, params, w, pmax, pmin, tol, opt, ymod, &
         resid, JtWJ, inf, stop, errmgr, status)
 
+    ! Compute the covariance matrix
+    if (present(stats) .or. present(cov)) then
+        call mtx_inverse(JtWJ, err = errmgr)
+        if (errmgr%has_error_occurred()) return
+    end if
+
     ! Statistical Parameters
     if (present(stats)) then
         if (size(stats) /= n) then
@@ -1015,13 +1051,19 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
             return
         end if
 
-        ! Compute the covariance matrix
-        call mtx_inverse(JtWJ, err = errmgr)
-        if (errmgr%has_error_occurred()) return
-
         ! Compute the statistics
         stats = calculate_regression_statistics(resid, params, JtWJ, &
             alpha, errmgr)
+    end if
+
+    ! Return the covariance matrix
+    if (present(cov)) then
+        if (size(cov, 1) /= n .or. size(cov, 2) /= n) then
+            call report_matrix_size_error(errmgr, "nonlinear_least_squares", &
+                "cov", n, n, size(cov, 1), size(cov, 2))
+            return
+        end if
+        cov = JtWJ
     end if
 
     ! End
