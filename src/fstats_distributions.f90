@@ -906,7 +906,7 @@ pure function mvnd_get_covariance(this) result(rst)
     ! Process
     integer(int32) :: n
     if (allocated(this%m_cov)) then
-        n = size(this%m_cov)
+        n = size(this%m_cov, 1)
         allocate(rst(n, n), source = this%m_cov)
     else
         allocate(rst(0, 0))

@@ -82,8 +82,8 @@ program example
     solver%fcn => fit_fcn
 
     ! Define upper and lower limits for each parameter (optional)
-    solver%upper_limits = [1.0d1, 0.0d0, 1.0d2]
-    solver%lower_limits = [0.1d0, -1.0d0, 1.0d1]
+    solver%upper_limits = [1.0d1, 1.0d1, 1.0d2]
+    solver%lower_limits = [0.1d0, -1.0d1, 1.0d1]
 
     ! Define an initial guess
     xi = [1.0d0, -0.5d0, 2.0d1]
