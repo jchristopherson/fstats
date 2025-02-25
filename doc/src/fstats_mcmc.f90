@@ -34,6 +34,8 @@ module fstats_mcmc
         logical, private :: m_propDistInitialized = .false.
             !! Set to true if the proposal distribution object has been
             !! initialized; else, false.
+        integer(int32), private :: m_accepted = 0
+            !! The number of accepted steps.
     contains
         procedure, public :: get_state_variable_count => mh_get_nvars
         procedure, public :: get_chain_length => mh_get_chain_length
@@ -54,6 +56,8 @@ module fstats_mcmc
         procedure, public :: get_proposal_covariance => mh_get_prop_cov
         procedure, public :: set_proposal_covariance => mh_set_prop_cov
         procedure, public :: get_proposal_cholesky => mh_get_prop_chol_cov
+        procedure, public :: evaluate_proposal_pdf => mh_eval_proposal
+        procedure, public :: get_accepted_count => mh_get_num_accepted
 
         ! Private Routines
         procedure, private :: resize_buffer => mh_resize_buffer
@@ -263,6 +267,21 @@ function mh_proposal(this, xc) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+pure function mh_eval_proposal(this, xc) result(rst)
+    !! Evaluates the proposal distribution PDF at the specified set of 
+    !! variables.
+    class(metropolis_hastings), intent(in) :: this
+        !! The metropolis_hastings object.
+    real(real64), intent(in), dimension(:) :: xc
+        !! The array of variables to evaluate.
+    real(real64) :: rst
+        !! The value of the PDF at xc.
+
+    ! Process
+    rst = this%m_propDist%pdf(xc)
+end function
+
+! ------------------------------------------------------------------------------
 function mh_hastings_ratio(this, xc, xp) result(rst)
     !! Evaluates the Hasting's ratio.  If the proposal distribution is 
     !! symmetric, this ratio is unity; however, in the case of an asymmetric
@@ -363,6 +382,7 @@ subroutine mh_sample(this, xi, niter, err)
         npts = this%initial_iteration_estimate
     end if
     n = size(xi)
+    this%m_accepted = 0
 
     ! Initialize the proposal distribution.  Use an identity matrix for the
     ! covariance matrix and assume a zero mean.
@@ -374,6 +394,7 @@ subroutine mh_sample(this, xi, niter, err)
     ! Store the initial value
     call this%push_new_state(xi, err = errmgr)
     if (errmgr%has_error_occurred()) return
+    this%m_accepted = 1
 
     ! Iteration Process
     xc = xi
@@ -398,6 +419,9 @@ subroutine mh_sample(this, xi, niter, err)
             ! Update the values
             xc = xp
             pc = pp
+
+            ! Log the success
+            this%m_accepted = this%m_accepted + 1
 
             ! Take additional actions on success???
             call this%on_acceptance(i, alpha, xc, xp, err = errmgr)
@@ -647,6 +671,16 @@ pure function mh_get_prop_chol_cov(this) result(rst)
     else
         allocate(rst(0,0))
     end if
+end function
+
+! ------------------------------------------------------------------------------
+pure function mh_get_num_accepted(this) result(rst)
+    !! Gets the number of accepted steps.
+    class(metropolis_hastings), intent(in) :: this
+        !! The metropolis_hastings object.
+    integer(int32) :: rst
+        !! The number of accepted steps.
+    rst = this%m_accepted
 end function
 
 ! ------------------------------------------------------------------------------

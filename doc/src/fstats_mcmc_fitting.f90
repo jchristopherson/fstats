@@ -44,18 +44,24 @@ module fstats_mcmc_fitting
         real(real64), private, allocatable, dimension(:) :: m_f0
             !! An N-element array used for containing the current function 
             !! estimate (N = size(x)).
+        real(real64), private, allocatable, dimension(:) :: m_mean
+            !! A NP-element array used to contain a running mean of each
+            !! parameter.
 
         ! -----
         ! Private Member Variables
-        real(real64), private :: m_modelVariance = 1.0d0
-            !! The variance of the residual error of the current model.
+        real(real64), private :: m_dataVariance = 1.0d0
+            !! The variance within the data set itself.
     contains
         procedure, public :: generate_proposal => mr_proposal
+        procedure, public :: likelihood => mr_likelihood
         procedure, public :: target_distribution => mr_target
         procedure, public :: covariance_matrix => mr_covariance
         procedure, public :: compute_fit_statistics => mr_calc_regression_stats
-        procedure, public :: get_target_variance => mr_get_target_variance
-        procedure, public :: set_target_variance => mr_set_target_variance
+        procedure, public :: get_data_variance => mr_get_data_variance
+        procedure, public :: set_data_variance => mr_set_data_variance
+        procedure, public :: on_acceptance => mr_on_success
+        procedure, public :: push_new_state => mr_push
     end type
 
 contains
@@ -90,21 +96,19 @@ function mr_proposal(this, xc) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-! https://scalismo.org/docs/Tutorials/tutorial14
-function mr_target(this, x) result(rst)
-    !! Returns the probability value from the target distribution given the
-    !! current set of model parameters.
+function mr_likelihood(this, x) result(rst)
+    !! Estimates the likelihood of the model.
     !!
-    !! The probability value is determined as follows, assuming \(f(x)\)
-    !! is the function value.
-    !! $$ \prod_{i=1}^{n} p \left( y_{i} | \theta, x_{i} \right) = 
-    !! \prod_{i=1}^{n} N \left(y_{i} | f(x_{i}), \sigma^2 \right) $$.
+    !! The likelihood is computed as follows assuming \(\sigma^2\) is known
+    !! a priori.
+    !! $$ L \left( \theta \right) = \prod_{i=1}^{n} N \left(y_{i} | f(x_{i}), 
+    !! \sigma^2 \right) $$ 
     class(mcmc_regression), intent(inout) :: this
         !! The mcmc_regression object.
     real(real64), intent(in), dimension(:) :: x
         !! The current set of model parameters.
     real(real64) :: rst
-        !! The value of the probability density function being sampled.
+        !! The likelihood value.
 
     ! Local Variables
     type(normal_distribution) :: dist
@@ -124,7 +128,7 @@ function mr_target(this, x) result(rst)
     temp = 1.0d0
     ep = 0
     rst = 1.0d0
-    dist%standard_deviation = sqrt(this%get_target_variance())
+    dist%standard_deviation = sqrt(this%get_data_variance())
     do i = 1, npts
         dist%mean_value = this%m_f0(i)
         p = dist%pdf(this%y(i))
@@ -145,6 +149,28 @@ function mr_target(this, x) result(rst)
         end do
     end do
     rst = temp * (1.0d1)**ep
+end function
+
+! ------------------------------------------------------------------------------
+! https://scalismo.org/docs/Tutorials/tutorial14
+function mr_target(this, x) result(rst)
+    !! Returns the probability value from the target distribution given the
+    !! current set of model parameters.
+    !!
+    !! The probability value is determined as follows, assuming \(f(x)\)
+    !! is the function value.
+    !! $$ \prod_{i=1}^{n} p \left( y_{i} | \theta, x_{i} \right) = 
+    !! p \left( \theta, \sigma^2 \right) 
+    !! \prod_{i=1}^{n} N \left(y_{i} | f(x_{i}), \sigma^2 \right) $$.
+    class(mcmc_regression), intent(inout) :: this
+        !! The mcmc_regression object.
+    real(real64), intent(in), dimension(:) :: x
+        !! The current set of model parameters.
+    real(real64) :: rst
+        !! The value of the probability density function being sampled.
+
+    ! Process
+    rst = this%likelihood(x) * this%evaluate_proposal_pdf(x)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -261,25 +287,126 @@ function mr_calc_regression_stats(this, xc, alpha, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-pure function mr_get_target_variance(this) result(rst)
-    !! Gets the variance of the target distribution.
+pure function mr_get_data_variance(this) result(rst)
+    !! Gets the variance of the observed data.
     class(mcmc_regression), intent(in) :: this
         !! The mcmc_regression object.
     real(real64) :: rst
         !! The variance.
 
-    rst = this%m_modelVariance
+    rst = this%m_dataVariance
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mr_set_target_variance(this, x)
-    !! Sets the variance of the target distribution.
+subroutine mr_set_data_variance(this, x)
+    !! Sets the variance of the observed data.
     class(mcmc_regression), intent(inout) :: this
         !! The mcmc_regression object.
     real(real64), intent(in) :: x
         !! The variance.
 
-    this%m_modelVariance = x
+    this%m_dataVariance = x
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine mr_on_success(this, iter, alpha, xc, xp, err)
+    !! Updates the covariance matrix of the proposal distribution upon a 
+    !! successful step.  If overloaded, be sure to call the base method to
+    !! retain the functionallity required to keep the covariance matrix 
+    !! up-to-date.
+    class(mcmc_regression), intent(inout) :: this
+        !! The mcmc_regression object.
+    integer(int32), intent(in) :: iter
+        !! The current iteration number.
+    real(real64), intent(in) :: alpha
+        !! The proposal probability term used for acceptance criteria.
+    real(real64), intent(in), dimension(:) :: xc
+        !! The current model parameter estimates.
+    real(real64), intent(in), dimension(size(xc)) :: xp
+        !! The recently accepted model parameter estimates.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: i, j, n, np
+    real(real64) :: nm1, nm2, ratio
+    real(real64), allocatable, dimension(:) :: delta
+    real(real64), allocatable, dimension(:,:) :: sig
+
+    ! Updates the estimate of the covariance matrix by implementing Roberts &
+    ! Rosenthals adaptive approach.
+    !
+    ! Parameters:
+    ! - xp: NP-by-1 array of the newest sampled points
+    ! - xm: NP-by-1 array of the updated mean over all samples
+    ! - sig: NP-by-NP old covariance matrix
+    ! - n: # of samples drawn
+    !
+    ! C = (n - 2) / (n - 1) * sig + matmul(xp - xm, transpose(xp - xm)) / (n - 1)
+    np = size(xc)
+    n = this%get_chain_length()
+    if (n == 1 .or. .not.allocated(this%m_mean)) then
+        ! No action is necessary
+        return
+    end if
+    nm1 = n - 1.0d0
+    nm2 = n - 2.0d0
+    ratio = nm2 / nm1
+    delta = xp - this%m_mean
+    sig = this%get_proposal_covariance()
+
+    do j = 1, np
+        do i = 1, np
+            sig(i,j) = ratio * sig(i,j) + delta(i) * delta(j) / nm1
+        end do
+    end do
+
+    ! Update the covariance matrix
+    call this%set_proposal_covariance(sig, err = err)
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine mr_push(this, x, err)
+    !! Pushes a new set of parameters onto the end of the chain buffer.
+    class(mcmc_regression), intent(inout) :: this
+        !! The mcmc_regression object.
+    real(real64), intent(in), dimension(:) :: x
+        !! The new N-element state array.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: n, npts, flag
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Push the item onto the stack using the base method
+    call this%metropolis_hastings%push_new_state(x, err = errmgr)
+    if (errmgr%has_error_occurred()) return
+
+    ! Update the running average term
+    n = size(x)
+    npts = this%get_chain_length()
+    if (.not.allocated(this%m_mean)) then
+        allocate(this%m_mean(n), stat = flag, source = x)
+        if (flag /= 0) then
+            call report_memory_error(errmgr, "mr_push", flag)
+            return
+        end if
+        
+        ! No more action is necessary - end here
+        return
+    end if
+
+    ! Update the mean
+    this%m_mean = (npts * this%m_mean + x) / (npts + 1.0d0)
 end subroutine
 
 ! ------------------------------------------------------------------------------

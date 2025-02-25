@@ -896,7 +896,7 @@ pure function mvnd_get_means(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function mvnd_get_covariance(this) result(rst)
+pure function mvnd_get_covariance(this) result(rst)
     !! Gets the covariance matrix of the distribution.
     class(multivariate_normal_distribution), intent(in) :: this
         !! The multivariate_normal_distribution object.
@@ -907,8 +907,7 @@ function mvnd_get_covariance(this) result(rst)
     integer(int32) :: n
     if (allocated(this%m_cov)) then
         n = size(this%m_cov, 1)
-        print "N = ", n
-        rst = this%m_cov
+        allocate(rst(n, n), source = this%m_cov)
     else
         allocate(rst(0, 0))
     end if
