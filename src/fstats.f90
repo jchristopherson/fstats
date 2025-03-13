@@ -16,7 +16,7 @@ module fstats
     use fstats_sampling
     use fstats_smoothing
     use fstats_mcmc
-    use fstats_mcmc_fitting
+    ! use fstats_mcmc_fitting
     implicit none
     private
 
@@ -103,6 +103,6 @@ module fstats
     public :: metropolis_hastings
 
     ! FSTATS_MCMC_FITTING.F90
-    public :: mcmc_regression
+    ! public :: mcmc_regression
    
 end module

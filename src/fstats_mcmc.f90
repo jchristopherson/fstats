@@ -10,17 +10,116 @@ module fstats_mcmc
     use fstats_sampling
     implicit none
     private
+    public :: mcmc_target
+    public :: evaluate_model
+    public :: parameter_distributions
+
+    public :: sample_generator
+    public :: mcmc_proposal
     public :: metropolis_hastings
+
+
+    type, abstract :: mcmc_target
+        !! Defines a model of the target density.
+        real(real64), private, allocatable, dimension(:) :: m_y
+            !! An array containing the evaluated model results.
+        real(real64), private, allocatable, dimension(:,:) :: m_identity
+            !! An identity matrix of appropriate size to evaluate the target
+            !! likelihood.
+        real(real64), private, allocatable, dimension(:) :: m_priors
+            !! A workspace array for the values of the priors.
+        real(real64), public :: prior_sigma = 1.0d-2
+            !! The standard deviation of the distribution representing the
+            !! variance prior.
+    contains
+        procedure(parameter_distributions), deferred, public :: priors
+        procedure(evaluate_model), deferred, public :: model
+        procedure, public :: likelihood => mt_likelihood
+        procedure, public :: variance_prior => mt_var_prior
+        procedure, public :: prior_transition_probability => mt_transition
+    end type
+
+    interface
+        function parameter_distributions(this, xc) result(rst)
+            !! Returns an array containing a proposed distribution for each
+            !! model parameter.
+            use fstats_distributions, only : distribution
+            use iso_fortran_env, only : real64
+            import mcmc_target
+            class(mcmc_target), intent(in) :: this
+                !! The mcmc_target object.
+            real(real64), intent(in), dimension(:) :: xc
+                !! An N-element array containing the current model parameters.
+            class(distribution), allocatable, dimension(:) :: rst
+                !! The collection of distribution objects.  One for each
+                !! model parameter.
+        end function
+
+        subroutine evaluate_model(this, xdata, xc, y)
+            !! Evaluates the model at the supplied values.
+            use iso_fortran_env, only : real64
+            import mcmc_target
+            class(mcmc_target), intent(in) :: this
+                !! The mcmc_target object.
+            real(real64), intent(in), dimension(:) :: xdata
+                !! An M-element array containing the values at which to evaluate
+                !! the model.
+            real(real64), intent(in), dimension(:) :: xc
+                !! An N-element array containing the model parameters.
+            real(real64), intent(out), dimension(:) :: y
+                !! An M-element array where the resulting model values wil
+                !! be written.
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    type, abstract :: mcmc_proposal
+        !! Defines a type responsible for generating a proposal state for a
+        !! Monte-Carlo, Markov-Chain sampler.
+    contains
+        procedure(sample_generator), deferred, public :: generate_sample
+    end type
+
+    interface
+        subroutine sample_generator(this, tgt, xc, xp, vc, vp)
+            !! The signature of a subroutine meant to generate a new sample.
+            use iso_fortran_env, only : real64
+            import mcmc_proposal
+            import mcmc_target
+            class(mcmc_proposal), intent(inout) :: this
+                !! The mcmc_proposal object.
+            class(mcmc_target), intent(in) :: tgt
+                !! The mcmc_target object.
+            real(real64), intent(in), dimension(:) :: xc
+                !! The current state vector.
+            real(real64), intent(out), dimension(:) :: xp
+                !! The proposed state vector.
+            real(real64), intent(in) :: vc
+                !! The current value of the variance prior.
+            real(real64), intent(out) :: vp
+                !! The proposed value of the variance prior.
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    type, extends(mcmc_proposal) :: random_walk_proposal
+        !! Defines a random-walk type proposal generator.
+        real(real64), allocatable, dimension(:) :: setpoint
+            !! The initial setpoint for each of the parameters.
+    contains
+        procedure, public :: generate_sample => rwp_generate
+    end type
+
+
+
+
+
+
+
 
     type metropolis_hastings
         !! An implementation of the Metropolis-Hastings algorithm for the
-        !! generation of a Markov chain.  This is a default implementation
-        !! that allows sampling of normally distributed posterior distributions
-        !! centered on zero with unit standard deviations.  Proposals are
-        !! generated from a multivariate normal distribution with an identity
-        !! covariance matrix and centered on zero.  To alter these sampling
-        !! and target distributions simply create a new class inheriting from 
-        !! this class and override the appropriate routines.
+        !! generation of a Markov chain.
         integer(int32), private :: initial_iteration_estimate = 10000
             !! An initial estimate at the number of allowed iterations.
         integer(int32), private :: m_bufferSize = 0
@@ -41,32 +140,277 @@ module fstats_mcmc
         procedure, public :: get_chain_length => mh_get_chain_length
         procedure, public :: push_new_state => mh_push
         procedure, public :: get_chain => mh_get_chain
-        procedure, public :: generate_proposal => mh_proposal
-        procedure, public :: compute_hastings_ratio => mh_hastings_ratio
-        procedure, public :: target_distribution => mh_target
-        procedure, public :: sample => mh_sample
+        ! procedure, public :: sample => mh_sample
         procedure, public :: reset => mh_clear_chain
         procedure, public :: on_acceptance => mh_on_success
         procedure, public :: on_rejection => mh_on_rejection
-        generic, public :: initialize_proposal => mh_init_proposal_1, &
-            mh_init_proposal_2
-        procedure, public :: get_proposal_initialized => mh_get_is_prop_init
-        procedure, public :: get_proposal_means => mh_get_prop_mean
-        procedure, public :: set_proposal_means => mh_set_prop_mean
-        procedure, public :: get_proposal_covariance => mh_get_prop_cov
-        procedure, public :: set_proposal_covariance => mh_set_prop_cov
-        procedure, public :: get_proposal_cholesky => mh_get_prop_chol_cov
-        procedure, public :: evaluate_proposal_pdf => mh_eval_proposal
         procedure, public :: get_accepted_count => mh_get_num_accepted
 
         ! Private Routines
         procedure, private :: resize_buffer => mh_resize_buffer
         procedure, private :: get_buffer_length => mh_get_buffer_length
-        procedure, private :: mh_init_proposal_1
-        procedure, private :: mh_init_proposal_2
     end type
 
 contains
+! ******************************************************************************
+! MCMC_TARGET
+! ------------------------------------------------------------------------------
+function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
+    !! Computes the target likelihood based upon a multivariate normal 
+    !! distribution such that \( L = N(y | f(x), \sigma^{2} I) \).
+    class(mcmc_target), intent(inout) :: this
+        !! The mcmc_target object.
+    real(real64), intent(in), dimension(:) :: xdata
+        !! An M-element array containing the independent data points.
+    real(real64), intent(in), dimension(:) :: ydata
+        !! An M-element array containing the dependent data points.
+    real(real64), intent(in), dimension(:) :: xc
+        !! An N-element array containing the model parameters.
+    real(real64), intent(in) :: var
+        !! An estimate of the model variance.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+    real(real64) :: rst
+        !! The likelihood.
+
+    ! Local Variables
+    integer(int32) :: i, m, flag
+    type(multivariate_normal_distribution) :: dist
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    m = size(xdata)
+
+    ! Input Checking
+    if (size(ydata) /= m) then
+        call report_array_size_error(errmgr, "mt_likelihood", "ydata", m, &
+            size(ydata))
+        return
+    end if
+
+    ! Local Memory Allocations - if needed
+    if (.not.allocated(this%m_y)) then
+        allocate(this%m_y(m), stat = flag)
+        if (flag /= 0) then
+            call report_memory_error(errmgr, "mt_likelihood", flag)
+            return
+        end if
+    end if
+
+    ! Evaluate the model
+    call this%model(xdata, xc, this%m_y)
+
+    ! Evaluate the normal distribution
+    if (.not.allocated(this%m_identity)) then
+        allocate(this%m_identity(m, m), stat = flag, source = 0.0d0)
+        if (flag /= 0) then
+            call report_memory_error(errmgr, "mt_likelihood", flag)
+            return
+        end if
+    end if
+    do i = 1, m
+        this%m_identity(i, i) = var
+    end do
+    call dist%initialize(this%m_y, this%m_identity, errmgr)
+    if (errmgr%has_error_occurred()) return
+    rst = dist%pdf(ydata)
+end function
+
+! ------------------------------------------------------------------------------
+function mt_transition(this, xc, xp, vc, vp, err) result(rst)
+    !! Evaluates the probability of transitioning from the current set of 
+    !! parameters to the proposed set of parameters.  This is computed as
+    !! \( p(x_p | x_c) = \prod_{i=1}^{n} p(x_{p,i} | x_{c,i}) \).
+    class(mcmc_target), intent(inout) :: this
+        !! The mcmc_target object.
+    real(real64), intent(in), dimension(:) :: xc
+        !! An N-element array containing the current parameter values.
+    real(real64), intent(in), dimension(:) :: xp
+        !! An N-element array containing the proposed parameter values.
+    real(real64), intent(in) :: vc
+        !! The current value of the variance prior.
+    real(real64), intent(in) :: vp
+        !! The proposed value of the variance prior.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handler object.
+    real(real64) :: rst
+        !! The resulting probability term.
+
+    ! Local Variables
+    real(real64) :: vpdf
+    class(distribution), allocatable :: varprior
+    class(distribution), allocatable, dimension(:) :: priors
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    integer(int32) :: i, n, flag, ep
+    real(real64) :: p, temp
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(xc)
+
+    ! Input Checking
+    if (size(xp) /= n) then
+        call report_array_size_error(errmgr, "mt_transition", "xp", n, size(xp))
+        return
+    end if
+
+    ! Memory Allocation
+    if (.not.allocated(this%m_priors)) then
+        allocate(this%m_priors(n), stat = flag)
+        if (flag /= 0) then
+            call report_memory_error(errmgr, "mt_transition", flag)
+            return
+        end if
+    end if
+
+    ! Evaluate the variance prior
+    varprior = this%variance_prior(vc)
+    vpdf = varprior%pdf(vp)
+
+    ! Evaluate the model parameters
+    allocate(priors(n), source = this%priors(xc))
+
+    ! Compute the product
+    temp = 1.0d0
+    ep = 0
+    do i = 1, n
+        p = priors(i)%pdf(xp(i))
+        temp = p * temp
+        if (temp == 0) then
+            temp = 0.0d0
+            exit
+        end if
+
+        do while (abs(temp) < 1.0d0)
+            temp = 1.0d1 * temp
+            ep = ep - 1
+        end do
+
+        do while (abs(temp) > 1.0d1)
+            temp = 1.0d-1 * temp
+            ep = ep + 1
+        end do
+    end do
+    rst = vpdf * temp * (1.0d1)**ep
+end function
+
+! ------------------------------------------------------------------------------
+function mt_var_prior(this, vc) result(rst)
+    !! Evaluates the model variance prior.
+    class(mcmc_target), intent(in) :: this
+        !! The mcmc_target object.
+    real(real64), intent(in) :: vc
+        !! The current value of the model variance.
+    class(distribution), allocatable :: rst
+        !! The probability distribution of the model variance prior.
+
+    ! Local Variables
+    type(log_normal_distribution) :: dist
+
+    ! Initialization
+    dist%mean_value = vc
+    dist%standard_deviation = this%prior_sigma
+
+    ! Process
+    rst = dist
+end function
+
+! ******************************************************************************
+! RANDOM_WALK_PROPOSAL
+! ------------------------------------------------------------------------------
+subroutine rwp_generate(this, tgt, xc, xp, vc, vp)
+    !! Generates a new proposal.
+    class(random_walk_proposal), intent(inout) :: this
+        !! The random_walk_proposal object.
+    class(mcmc_target), intent(in) :: tgt
+        !! The mcmc_target object.
+    real(real64), intent(in), dimension(:) :: xc
+        !! The current state vector.
+    real(real64), intent(out), dimension(:) :: xp
+        !! The proposed state vector.
+    real(real64), intent(in) :: vc
+        !! The current value of the variance prior.
+    real(real64), intent(out) :: vp
+        !! The proposed value of the variance prior.
+    
+
+    ! Parameters
+    integer(int32), parameter :: nrand = 1
+
+    ! Local Variables
+    integer(int32) :: i, n
+    real(real64) :: sigma, x(nrand), rng(2), avg, mx, mn
+    class(distribution), allocatable, dimension(:) :: dist
+    class(distribution), allocatable :: vdist
+
+    ! Initialization
+    n = size(xc)
+    allocate(dist(n), source = tgt%priors(this%setpoint))
+
+    ! Cycle over each parameter
+    do i = 1, n
+        ! Sample from the proposed distribution
+        rng = dist(i)%defined_range()
+        sigma = sqrt(dist(i)%variance())
+        avg = dist(i)%mean()
+        mn = max(rng(1), avg - 3.0d0 * sigma)
+        mx = min(rng(2), avg + 3.0d0 * sigma)   ! limit the search range to a practical range
+        x = rejection_sample(dist(i), nrand, mn, mx)
+
+        ! Store the sampled value
+        xp(i) = xc(i) + x(1)
+    end do
+
+    ! Deal with the variance term
+    allocate(vdist, source = tgt%variance_prior(0.0d0))
+    sigma = sqrt(vdist%variance())
+    avg = vdist%mean()
+    rng = vdist%defined_range()
+    mn = max(rng(1), avg - 3.0d0 * sigma)
+    mx = min(rng(2), avg + 3.0d0 * sigma)
+    x = rejection_sample(vdist, nrand, mn, mx)
+    vp = vc + x(1)
+end subroutine
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ! ------------------------------------------------------------------------------
 pure function mh_get_nvars(this) result(rst)
     !! Gets the number of state variables.
@@ -251,192 +595,94 @@ function mh_get_chain(this, bin, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function mh_proposal(this, xc) result(rst)
-    !! Proposes a new sample set of variables.  The sample is generated by
-    !! sampling a multivariate normal distribution.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: xc
-        !! The current set of variables.
-    real(real64), allocatable, dimension(:) :: rst
-        !! The proposed set of variables.
+! subroutine mh_sample(this, xi, niter, err)
+!     !! Samples the distribution using the Metropolis-Hastings algorithm.
+!     class(metropolis_hastings), intent(inout) :: this
+!         !! The metropolis_hastings object.
+!     real(real64), intent(in), dimension(:) :: xi
+!         !! An N-element array containing initial starting values of the state 
+!         !! variables.
+!     integer(int32), intent(in), optional :: niter
+!         !! An optional input defining the number of iterations to take.  The
+!         !! default is 10,000.
+!     class(errors), intent(inout), optional, target :: err
+!         !! The error handling object.
 
-    ! Sample from the distribution
-    call this%m_propDist%set_means(xc) ! center the distribution at the current state
-    rst = sample_normal_multivariate(this%m_propDist)
-end function
-
-! ------------------------------------------------------------------------------
-pure function mh_eval_proposal(this, xc) result(rst)
-    !! Evaluates the proposal distribution PDF at the specified set of 
-    !! variables.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: xc
-        !! The array of variables to evaluate.
-    real(real64) :: rst
-        !! The value of the PDF at xc.
-
-    ! Process
-    rst = this%m_propDist%pdf(xc)
-end function
-
-! ------------------------------------------------------------------------------
-function mh_hastings_ratio(this, xc, xp) result(rst)
-    !! Evaluates the Hasting's ratio.  If the proposal distribution is 
-    !! symmetric, this ratio is unity; however, in the case of an asymmetric
-    !! distribution this ratio is not ensured to be unity.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: xc
-        !! The current state vector.
-    real(real64), intent(in), dimension(size(xc)) :: xp
-        !! The proposed state vector.
-    real(real64) :: rst
-        !! The ratio.
-
-    ! Local Variables
-    real(real64), allocatable, dimension(:) :: means
-    real(real64) :: q1, q2
-
-    ! Initialization
-    means = this%m_propDist%get_means()
-
-    ! Process
-    call this%m_propDist%set_means(xc)
-    q1 = this%m_propDist%pdf(xp)
-
-    call this%m_propDist%set_means(xp)
-    q2 = this%m_propDist%pdf(xc)
-
-    ! Restore the state of the object
-    call this%m_propDist%set_means(means)
-
-    ! Compute the ratio
-    rst = q2 / q1
-end function
-
-! ------------------------------------------------------------------------------
-function mh_target(this, x) result(rst)
-    !! Returns the probability value from the target distribution at the
-    !! specified state.  The user is expected to overload this routine to
-    !! define the desired distribution.  The default behavior of this
-    !! routine is to sample a multivariate normal distribution with a mean
-    !! of zero and a variance of one (identity covariance matrix).
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: x
-        !! The state vector.
-    real(real64) :: rst
-        !! The value of the probability density function of the distribution
-        !! being sampled.
-
-    ! Local Variables
-    integer(int32) :: i, n
-    real(real64), allocatable, dimension(:) :: mu
-    real(real64), allocatable, dimension(:,:) :: sigma
-    type(multivariate_normal_distribution) :: dist
-
-    ! The default will be a multivariate normal distribution with an identity
-    ! matrix for the covariance matrix
-    n = size(x)
-    allocate(mu(n), sigma(n, n), source = 0.0d0)
-    do i = 1, n
-        sigma(i,i) = 1.0d0
-    end do
-    call dist%initialize(mu, sigma)
-    rst = dist%pdf(x)
-end function
-
-! ------------------------------------------------------------------------------
-subroutine mh_sample(this, xi, niter, err)
-    !! Samples the distribution using the Metropolis-Hastings algorithm.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: xi
-        !! An N-element array containing initial starting values of the state 
-        !! variables.
-    integer(int32), intent(in), optional :: niter
-        !! An optional input defining the number of iterations to take.  The
-        !! default is 10,000.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handling object.
-
-    ! Local Variables
-    integer(int32) :: i, n, npts, flag
-    real(real64) :: r, pp, pc, a, a1, a2, alpha
-    real(real64), allocatable, dimension(:) :: xc, xp, means
-    real(real64), allocatable, dimension(:,:) :: sigma
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+!     ! Local Variables
+!     integer(int32) :: i, n, npts, flag
+!     real(real64) :: r, pp, pc, a, a1, a2, alpha
+!     real(real64), allocatable, dimension(:) :: xc, xp, means
+!     real(real64), allocatable, dimension(:,:) :: sigma
+!     class(errors), pointer :: errmgr
+!     type(errors), target :: deferr
     
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
-    if (present(niter)) then
-        npts = niter
-    else
-        npts = this%initial_iteration_estimate
-    end if
-    n = size(xi)
-    this%m_accepted = 0
+!     ! Initialization
+!     if (present(err)) then
+!         errmgr => err
+!     else
+!         errmgr => deferr
+!     end if
+!     if (present(niter)) then
+!         npts = niter
+!     else
+!         npts = this%initial_iteration_estimate
+!     end if
+!     n = size(xi)
+!     this%m_accepted = 0
 
-    ! Initialize the proposal distribution.  Use an identity matrix for the
-    ! covariance matrix and assume a zero mean.
-    if (.not.this%get_proposal_initialized()) then
-        call this%initialize_proposal(n, err = errmgr)
-        if (errmgr%has_error_occurred()) return
-    end if
+!     ! Initialize the proposal distribution.  Use an identity matrix for the
+!     ! covariance matrix and assume a zero mean.
+!     if (.not.this%get_proposal_initialized()) then
+!         call this%initialize_proposal(n, err = errmgr)
+!         if (errmgr%has_error_occurred()) return
+!     end if
 
-    ! Store the initial value
-    call this%push_new_state(xi, err = errmgr)
-    if (errmgr%has_error_occurred()) return
-    this%m_accepted = 1
+!     ! Store the initial value
+!     call this%push_new_state(xi, err = errmgr)
+!     if (errmgr%has_error_occurred()) return
+!     this%m_accepted = 1
 
-    ! Iteration Process
-    xc = xi
-    pc = this%target_distribution(xc)
-    do i = 2, npts
-        ! Create a proposal & evaluate it's PDF
-        xp = this%generate_proposal(xc)
-        pp = this%target_distribution(xp)
+!     ! Iteration Process
+!     xc = xi
+!     pc = this%target_distribution(xc)
+!     do i = 2, npts
+!         ! Create a proposal & evaluate it's PDF
+!         xp = this%generate_proposal(xc)
+!         pp = this%target_distribution(xp)
 
-        ! Evaluate the probabilities
-        a1 = this%compute_hastings_ratio(xc, xp)
-        a2 = pp / pc
-        alpha = min(1.0d0, a1 * a2)
+!         ! Evaluate the probabilities
+!         a1 = this%compute_hastings_ratio(xc, xp)
+!         a2 = pp / pc
+!         alpha = min(1.0d0, a1 * a2)
 
-        ! Do we keep our current state or move to the new state?
-        call random_number(r)
-        if (r <= alpha) then
-            ! Take the new value
-            call this%push_new_state(xp, err = errmgr)
-            if (errmgr%has_error_occurred()) return
+!         ! Do we keep our current state or move to the new state?
+!         call random_number(r)
+!         if (r <= alpha) then
+!             ! Take the new value
+!             call this%push_new_state(xp, err = errmgr)
+!             if (errmgr%has_error_occurred()) return
 
-            ! Update the values
-            xc = xp
-            pc = pp
+!             ! Update the values
+!             xc = xp
+!             pc = pp
 
-            ! Log the success
-            this%m_accepted = this%m_accepted + 1
+!             ! Log the success
+!             this%m_accepted = this%m_accepted + 1
 
-            ! Take additional actions on success???
-            call this%on_acceptance(i, alpha, xc, xp, err = errmgr)
-            if (errmgr%has_error_occurred()) return
-        else
-            ! Keep our current estimate
-            call this%push_new_state(xc, err = errmgr)
-            if (errmgr%has_error_occurred()) return
+!             ! Take additional actions on success???
+!             call this%on_acceptance(i, alpha, xc, xp, err = errmgr)
+!             if (errmgr%has_error_occurred()) return
+!         else
+!             ! Keep our current estimate
+!             call this%push_new_state(xc, err = errmgr)
+!             if (errmgr%has_error_occurred()) return
 
-            ! Take additional actions on failure???
-            call this%on_rejection(i, alpha, xc, xp, err = errmgr)
-            if (errmgr%has_error_occurred()) return
-        end if
-    end do
-end subroutine
+!             ! Take additional actions on failure???
+!             call this%on_rejection(i, alpha, xc, xp, err = errmgr)
+!             if (errmgr%has_error_occurred()) return
+!         end if
+!     end do
+! end subroutine
 
 ! ------------------------------------------------------------------------------
 subroutine mh_clear_chain(this)
@@ -490,190 +736,6 @@ subroutine mh_on_rejection(this, iter, alpha, xc, xp, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine mh_init_proposal_1(this, mu, sigma, err)
-    !! Initializes the multivariate normal distribution used to generate
-    !! proposals.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: mu
-        !! An N-element array containing the mean values for the distribution.
-    real(real64), intent(in), dimension(:,:) :: sigma
-        !! An N-by-N covariance matrix for the distribution.  This matrix must
-        !! be positive-definite.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
-
-    ! Local Variables
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
-
-    ! Initialize the proposal distribution
-    call this%m_propDist%initialize(mu, sigma, err = errmgr)
-    if (errmgr%has_error_occurred()) return
-    this%m_propDistInitialized = .true.
-end subroutine
-
-! ------------------------------------------------------------------------------
-subroutine mh_init_proposal_2(this, n, err)
-    !! Initializes the multivariate normal distribution to a mean of zero and
-    !! a variance of one.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    integer(int32), intent(in) :: n
-        !! The number of state variables.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
-
-    ! Local Variables
-    integer(int32) :: i, flag
-    real(real64), allocatable, dimension(:) :: mu
-    real(real64), allocatable, dimension(:,:) :: sigma
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
-
-    ! Process
-    allocate(mu(n), sigma(n, n), source = 0.0d0, stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "mh_init_proposal_2", flag)
-        return
-    end if
-    do i = 1, n
-        sigma(i,i) = 1.0d0
-    end do
-    call this%m_propDist%initialize(mu, sigma, err = errmgr)
-    if (errmgr%has_error_occurred()) return
-    this%m_propDistInitialized = .true.
-end subroutine
-
-! ------------------------------------------------------------------------------
-pure function mh_get_is_prop_init(this) result(rst)
-    !! Gets a value determining if the proposal distribution object has been
-    !! initialized.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
-    logical :: rst
-        !! Returns true if the object has been initialized; else, false.
-
-    rst = this%m_propDistInitialized
-end function
-
-! ------------------------------------------------------------------------------
-pure function mh_get_prop_mean(this) result(rst)
-    !! Gets the mean values of the proposal distribution.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
-    real(real64), allocatable, dimension(:) :: rst
-        !! An array containing the mean values.
-
-    if (this%get_proposal_initialized()) then
-        rst = this%m_propDist%get_means()
-    else
-        allocate(rst(0))
-    end if
-end function
-
-! ------------------------------------------------------------------------------
-subroutine mh_set_prop_mean(this, x, err)
-    !! Sets the mean values of the proposal distribution.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:) :: x
-        !! The updated mean values.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
-
-    if (this%get_proposal_initialized()) then
-        call this%m_propDist%set_means(x, err)
-    else
-        call this%initialize_proposal(size(x), err)
-        call this%m_propDist%set_means(x, err)
-    end if
-end subroutine
-
-! ------------------------------------------------------------------------------
-pure function mh_get_prop_cov(this) result(rst)
-    !! Gets the covariance matrix of the proposal distribution.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
-    real(real64), allocatable, dimension(:,:) :: rst
-        !! The covariance matrix.
-
-    if (this%get_proposal_initialized()) then
-        rst = this%m_propDist%get_covariance()
-    else
-        allocate(rst(0,0))
-    end if
-end function
-
-! ------------------------------------------------------------------------------
-subroutine mh_set_prop_cov(this, x, err)
-    !! Sets the covariance matrix of the proposal distribution.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
-    real(real64), intent(in), dimension(:,:) :: x
-        !! The covariance matrix.  This matrix must be positive-definite.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
-
-    ! Local Variables
-    integer(int32) :: n, flag
-    real(real64), allocatable, dimension(:) :: mu
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
-
-    ! Process
-    n = size(x, 1)
-    if (this%get_proposal_initialized()) then
-        mu = this%m_propDist%get_means()
-    else
-        allocate(mu(n), source = 0.0d0, stat = flag)
-        if (flag /= 0) then
-            call report_memory_error(errmgr, "mh_set_prop_cov", flag)
-            return
-        end if
-    end if
-    call this%m_propDist%initialize(mu, x, err = errmgr)
-end subroutine
-
-! ------------------------------------------------------------------------------
-pure function mh_get_prop_chol_cov(this) result(rst)
-    !! Gets the Cholesky-factored (lower-triangular) form of the proposal
-    !! covariance matrix.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
-    real(real64), allocatable, dimension(:,:) :: rst
-        !! The Cholesky-factored form of the proposal covariance matrix store
-        !! in lower-triangular form.
-
-    if (this%get_proposal_initialized()) then
-        rst = this%m_propDist%get_cholesky_factored_matrix()
-    else
-        allocate(rst(0,0))
-    end if
-end function
-
-! ------------------------------------------------------------------------------
 pure function mh_get_num_accepted(this) result(rst)
     !! Gets the number of accepted steps.
     class(metropolis_hastings), intent(in) :: this
@@ -682,6 +744,10 @@ pure function mh_get_num_accepted(this) result(rst)
         !! The number of accepted steps.
     rst = this%m_accepted
 end function
+
+! ------------------------------------------------------------------------------
+! subroutine mh_sample(this, prop, likelihood, niter, err)
+! end subroutine
 
 ! ------------------------------------------------------------------------------
 end module
