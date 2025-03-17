@@ -21,12 +21,15 @@ module fstats_mcmc
             !! The list of parameters.
         real(real64), private, allocatable, dimension(:) :: m_y
             !! A workspace array for containing the model values.
+        real(real64), public :: variance_prior = 1.0d-3
+            !! The target variance prior estimate.
     contains
         procedure(evaluate_model), deferred, public :: model
         procedure, public :: get_parameter_count => mt_get_param_count
         procedure, public :: add_parameter => mt_add_param
         procedure, public :: get_parameter => mt_get_param
         procedure, public :: likelihood => mt_likelihood
+        procedure, public :: evaluate_variance_prior => mt_eval_var_prior
     end type
 
     interface
@@ -46,6 +49,36 @@ module fstats_mcmc
                 !! be written.
         end subroutine
     end interface
+
+! ------------------------------------------------------------------------------
+    type, abstract :: mcmc_proposal
+        !! Defines a type responsible for generating a proposal state for a
+        !! Monte-Carlo, Markov-Chain sampler.
+    contains
+        procedure(sample_generator), deferred, public :: generate_sample
+    end type
+
+    interface
+        subroutine sample_generator(this, tgt, xc, xp, vc, vp)
+            !! The signature of a subroutine meant to generate a new sample.
+            use iso_fortran_env, only : real64
+            import mcmc_proposal
+            import mcmc_target
+            class(mcmc_proposal), intent(inout) :: this
+                !! The mcmc_proposal object.
+            class(mcmc_target), intent(in) :: tgt
+                !! The mcmc_target object.
+            real(real64), intent(in), dimension(:) :: xc
+                !! The current state vector.
+            real(real64), intent(out), dimension(:) :: xp
+                !! The proposed state vector.
+            real(real64), intent(in) :: vc
+                !! The current value of the variance prior.
+            real(real64), intent(out) :: vp
+                !! The proposed value of the variance prior.
+        end subroutine
+    end interface
+
 
 
 !     type, abstract :: mcmc_target
@@ -101,34 +134,7 @@ module fstats_mcmc
 !         end subroutine
 !     end interface
 
-! ! ------------------------------------------------------------------------------
-!     type, abstract :: mcmc_proposal
-!         !! Defines a type responsible for generating a proposal state for a
-!         !! Monte-Carlo, Markov-Chain sampler.
-!     contains
-!         procedure(sample_generator), deferred, public :: generate_sample
-!     end type
 
-!     interface
-!         subroutine sample_generator(this, tgt, xc, xp, vc, vp)
-!             !! The signature of a subroutine meant to generate a new sample.
-!             use iso_fortran_env, only : real64
-!             import mcmc_proposal
-!             import mcmc_target
-!             class(mcmc_proposal), intent(inout) :: this
-!                 !! The mcmc_proposal object.
-!             class(mcmc_target), intent(in) :: tgt
-!                 !! The mcmc_target object.
-!             real(real64), intent(in), dimension(:) :: xc
-!                 !! The current state vector.
-!             real(real64), intent(out), dimension(:) :: xp
-!                 !! The proposed state vector.
-!             real(real64), intent(in) :: vc
-!                 !! The current value of the variance prior.
-!             real(real64), intent(out) :: vp
-!                 !! The proposed value of the variance prior.
-!         end subroutine
-!     end interface
 
 ! ! ------------------------------------------------------------------------------
 !     type, extends(mcmc_proposal) :: random_walk_proposal
@@ -327,6 +333,27 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+pure function mt_eval_var_prior(this, vc, x) result(rst)
+    !! Evalautes the model variance prior PDF.
+    class(mcmc_target), intent(in) :: this
+        !! The mcmc_target object.
+    real(real64), intent(in) :: vc
+        !! The current value of the model variance.
+    real(real64), intent(in) :: x
+        !! The value at which to evaluate the variance prior distribution PDF.
+    real(real64) :: rst
+        !! The value of the variance prior distribution's PDF.
+
+    ! Local Variables
+    type(log_normal_distribution) :: dist
+
+    ! Initialization
+    dist%mean_value = vc
+    dist%standard_deviation = sqrt(this%variance_prior)
+
+    ! Process
+    rst = dist%pdf(x)
+end function
 
 ! ------------------------------------------------------------------------------
 
