@@ -8,32 +8,16 @@ module fstats_mcmc
     use fstats_types
     use fstats_regression
     use fstats_sampling
+    use collections
     implicit none
     private
-!     public :: mcmc_target
-!     public :: evaluate_model
-!     public :: parameter_distributions
-
-!     public :: sample_generator
-!     public :: mcmc_proposal
     public :: metropolis_hastings
-    public :: mcmc_model_parameter
+    public :: mcmc_target
     public :: evaluate_model
-
-    type :: mcmc_model_parameter
-        !! A parameter model.
-        class(distribution), allocatable :: parameter
-            !! The distribution modeling the parameter.
-    end type
-
-    type :: mcmc_parameter_container
-        !! A container type for an mcmc_model_parameter object.
-        class(mcmc_model_parameter), pointer :: item
-    end type
-
+    
     type, abstract :: mcmc_target
         !! Defines a model of the target distribution(s).
-        type(mcmc_parameter_container), private, allocatable, dimension(:) :: m_items
+        type(list), private :: m_items
             !! The list of parameters.
         real(real64), private, allocatable, dimension(:) :: m_y
             !! A workspace array for containing the model values.
@@ -207,11 +191,7 @@ pure function mt_get_param_count(this) result(rst)
     integer(int32) :: rst
         !! The parameter count.
 
-    if (allocated(this%m_items)) then
-        rst = size(this%m_items)
-    else
-        rst = 0
-    end if
+    rst = this%m_items%count()
 end function
 
 ! ------------------------------------------------------------------------------
@@ -219,50 +199,13 @@ subroutine mt_add_param(this, x, err)
     !! Adds a new model parameter.
     class(mcmc_target), intent(inout) :: this
         !! The mcmc_target object.
-    class(mcmc_model_parameter), intent(in) :: x
+    class(distribution), intent(in) :: x
         !! The parameter to add.
     class(errors), intent(inout), optional, target :: err
         !! The error handler object.
 
-    ! Local Variables
-    integer(int32) :: n, n1, flag
-    type(mcmc_parameter_container), allocatable, dimension(:) :: copy
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
-    n = this%get_parameter_count()
-    n1 = n + 1
-
     ! Process
-    if (.not.allocated(this%m_items)) then
-        ! First item
-        allocate(this%m_items(n1), stat = flag)
-        if (flag /= 0) go to 10
-    else
-        ! Append to the list
-        allocate(copy(n), source = this%m_items, stat = flag)
-        if (flag /= 0) go to 10
-        deallocate(this%m_items)
-        allocate(this%m_items(n1), stat = flag)
-        if (flag /= 0) go to 10
-        this%m_items(1:n) = copy
-    end if
-    allocate(this%m_items(n1)%item, source = x, stat = flag)
-    if (flag /= 0) go to 10
-
-    ! End
-    return
-
-    ! Memory Error
-10  continue
-    call report_memory_error(errmgr, "mt_add_param", flag)
-    return
+    call this%m_items%push(x, err = err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -273,23 +216,19 @@ function mt_get_param(this, i) result(rst)
     integer(int32), intent(in) :: i
         !! The index of the parameter to retrieve.  If outside the bounds of the
         !! collection of parameters a null pointer is returned.
-    class(mcmc_model_parameter), pointer :: rst
-        !! A pointer to the requested parameter.
+    class(distribution), pointer :: rst
+        !! A pointer to the requested parameter distribution.
 
     ! Local Variables
-    integer(int32) :: n
-
-    ! Initialization
-    n = this%get_parameter_count()
-
-    ! Input Check
-    if (i < 1 .or. i > n) then
-        rst => null()
-        return
-    end if
+    class(*), pointer :: ptr
 
     ! Process
-    rst => this%m_items(i)%item
+    ptr => this%m_items%get(i)
+    rst => null()
+    select type (ptr)
+    class is (distribution)
+        rst => ptr
+    end select
 end function
 
 ! ------------------------------------------------------------------------------

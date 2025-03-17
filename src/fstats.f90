@@ -101,6 +101,8 @@ module fstats
 
     ! FSTATS_MCMC.F90
     public :: metropolis_hastings
+    public :: mcmc_target
+    public :: evaluate_model
 
     ! FSTATS_MCMC_FITTING.F90
     ! public :: mcmc_regression
