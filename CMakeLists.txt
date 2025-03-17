@@ -29,10 +29,16 @@ add_fortran_library(
     ${PROJECT_VERSION_MAJOR}
     ${FSTATS_SOURCES}
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC ${ferror_LIBRARY} ${linalg_LIBRARY})
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+    ${ferror_LIBRARY} 
+    ${linalg_LIBRARY} 
+    ${collections_LIBRARY}
+)
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${ferror_INCLUDE_DIR}>
-    $<BUILD_INTERFACE:${linalg_INCLUDE_DIR}>)
+    $<BUILD_INTERFACE:${linalg_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${collections_INCLUDE_DIR}>
+)
 if (OpenMP_Fortran_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_Fortran)
     target_compile_definitions(${PROJECT_NAME} PRIVATE USEOPENMP=1)
