@@ -103,6 +103,7 @@ module fstats
     public :: metropolis_hastings
     public :: mcmc_target
     public :: evaluate_model
+    public :: mcmc_proposal
 
     ! FSTATS_MCMC_FITTING.F90
     ! public :: mcmc_regression
