@@ -22,8 +22,8 @@ module fstats_mcmc
             !! The list of parameters.
         real(real64), private, allocatable, dimension(:) :: m_y
             !! A workspace array for containing the model values.
-        type(log_normal_distribution), private :: m_variance_prior
-            !! The distribution representing the "noise" or variance.
+        real(real64), public :: data_noise = 1.0d0
+            !! A parameter representing the noise in the data.
     contains
         procedure(evaluate_model), deferred, public :: model
         procedure, public :: get_parameter_count => mt_get_param_count
@@ -84,7 +84,7 @@ module fstats_mcmc
         procedure, public :: get_chain_length => mh_get_chain_length
         procedure, public :: push_new_state => mh_push
         procedure, public :: get_chain => mh_get_chain
-        ! procedure, public :: sample => mh_sample
+        procedure, public :: sample => mh_sample
         procedure, public :: reset => mh_clear_chain
         procedure, public :: on_acceptance => mh_on_success
         procedure, public :: on_rejection => mh_on_rejection
@@ -164,12 +164,15 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
     real(real64) :: rst
         !! The likelihood value.
 
+    ! Parameters
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+
     ! Local Variables
-    integer(int32) :: i, m, n, flag, ep
-    real(real64) :: p, temp
+    integer(int32) :: i, m, n, flag
+    real(real64) :: p, temp, v
+    real(real64), allocatable, dimension(:) :: resid, nrm, lognrm
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
-    type(normal_distribution) :: dist
     
     ! Initialization
     if (present(err)) then
@@ -179,7 +182,6 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
     end if
     m = size(xdata)
     n = size(xc)
-    dist%standard_deviation = sqrt(var)
 
     ! Input Checking
     if (size(ydata) /= m) then
@@ -191,6 +193,15 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
         call report_array_size_error(errmgr, "mt_likelihood", "xc", &
             this%get_parameter_count(), n)
         return
+    end if
+
+    ! Ensure a non-zero variance
+    if (var == 0.0d0) then
+        ! Warn the user that a zero variance term has been encountered
+        ! call report_zero_variance_warning(errmgr, "mt_likelihood")
+        v = 1.0d0
+    else
+        v = var
     end if
 
     ! Memory Allocations
@@ -207,30 +218,11 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
     ! Evaluate the model at each data point
     call this%model(xdata, xc, this%m_y)
 
-    ! Evaluate the likelihood
-    ep = 0
-    temp = 1.0d0
-    do i = 1, m
-        ! Evaluate the distribution at y with a mean of the model result
-        dist%mean_value = this%m_y(i)
-        p = dist%pdf(ydata(i))
-        if (p == 0.0d0) then
-            temp = 0.0d0
-            exit
-        end if
-        temp = p * temp
-
-        do while (abs(temp) < 1.0d0)
-            temp = 1.0d1 * temp
-            ep = ep - 1
-        end do
-
-        do while (abs(temp) > 1.0d1)
-            temp = 1.0d-1 * temp
-            ep = ep + 1
-        end do
-    end do
-    rst = temp * (1.0d1)**ep
+    ! Compute the likelihood assuming the residual is normally distributed
+    resid = ydata - this%m_y
+    lognrm = (-resid**2 / (2.0d0 * v)) - log(sqrt(2.0d0 * pi * v))
+    rst = sum(lognrm)
+    rst = exp(rst)
 
     ! End
     return
@@ -251,8 +243,15 @@ pure function mt_eval_var_prior(this, x) result(rst)
     real(real64) :: rst
         !! The value of the variance prior distribution's PDF.
 
+    ! Local Variables
+    type(log_normal_distribution) :: dist
+
+    ! Initialization
+    dist%mean_value = 0.0d0
+    dist%standard_deviation = this%data_noise
+    
     ! Process
-    rst = this%m_variance_prior%pdf(x)
+    rst = dist%pdf(x)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -267,18 +266,22 @@ function mt_sample_var_prior(this, n) result(rst)
         !! The requested samples.
 
     ! Local Variables
-    real(real64) :: xmax, sigma
+    type(log_normal_distribution) :: dist
+    real(real64) :: xmin, xmax, sigma
 
     ! Establish an upper bounds on the sampling region
-    sigma = this%m_variance_prior%standard_deviation
+    dist%mean_value = 0.0d0
+    dist%standard_deviation = this%data_noise
+    sigma = dist%standard_deviation
     if (sigma == 0.0d0) then
         sigma = 1.0d0
-        this%m_variance_prior%standard_deviation = 1.0d0
+        dist%standard_deviation = 1.0d0
     end if
     xmax = 6.0d0 * sigma
+    xmin = 1.0d-6 * xmax
 
     ! Process
-    rst = rejection_sample(this%m_variance_prior, n, 0.0d0, xmax)
+    rst = rejection_sample(dist, n, xmin, xmax)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -295,7 +298,7 @@ function mt_eval_prior(this, x, err) result(rst)
         !! The resulting probability.
 
     ! Local Variables
-    integer(int32) :: i, n, ep
+    integer(int32) :: i, n
     real(real64) :: temp, p
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
@@ -315,30 +318,16 @@ function mt_eval_prior(this, x, err) result(rst)
         return
     end if
 
-    ! Process
-    ep = 0
-    temp = 1.0d0
+    ! Process - use log prorabilities to avoid overflow/underflow issues
+    temp = 0.0d0
     do i = 1, n
-        ! Evaluate the PDF for the distribution
+        ! Evaluate the distribution
         dist => this%get_parameter(i)
-        p = dist%pdf(x(i))
-        if (p == 0.0d0) then
-            temp = 0.0d0
-            exit
-        end if
-        temp = p * temp
+        p = log10(dist%pdf(x(i)))
 
-        do while (abs(temp) < 1.0d0)
-            temp = 1.0d1 * temp
-            ep = ep - 1
-        end do
-        
-        do while (abs(temp) > 1.0d1)
-            temp = 1.0d-1 * temp
-            ep = ep + 1
-        end do
+        temp = temp + p
     end do
-    rst = temp * (1.0d1)**ep
+    rst = (1.0d1)**temp
 end function
 
 ! ******************************************************************************
@@ -348,7 +337,7 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
     !! Creates a new sample proposal.
     class(mcmc_proposal), intent(inout) :: this
         !! The mcmc_proposal object.
-    class(mcmc_target), intent(in) :: tgt
+    class(mcmc_target), intent(inout) :: tgt
         !! The mcmc_target object.
     real(real64), intent(in), dimension(:) :: xc
         !! An N-element array containing the existing parameter estimates.
@@ -366,7 +355,7 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
 
     ! Local Variables
     integer(int32) :: i, n
-    real(real64) :: samples(nsamples), sigma, mu
+    real(real64) :: samples(nsamples), sigma, mu, xmax, xmin, mx, mn, rng(2)
     class(distribution), pointer :: dist
     class(errors), pointer :: errmgr
     type(errors), target :: deferr
@@ -389,12 +378,19 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
     do i = 1, n
         ! Get the parameter distribution
         dist => tgt%get_parameter(i)
+        if (.not.associated(dist)) then
+            call report_null_pointer_error(errmgr, "ms_gen", "dist")
+            return
+        end if
 
         ! Get limit values for the parameter
+        rng = dist%defined_range()
+        mx = maxval(rng)
+        mn = minval(rng)
         mu = dist%mean()
         sigma = sqrt(dist%variance())
-        xmax = mu + 6.0d0 * sigma
-        xmin = mu - 6.0d0 * sigma
+        xmax = min(mu + 6.0d0 * sigma, mx)
+        xmin = max(mu - 6.0d0 * sigma, mn)
 
         ! Sample the distribution
         samples = rejection_sample(dist, nsamples, xmin, xmax)
