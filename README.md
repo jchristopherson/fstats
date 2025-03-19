@@ -25,6 +25,7 @@ Documentation can be found [here](https://jchristopherson.github.io/fstats/).
 Here is a list of external code libraries utilized by this library.  The CMake build script will include these dependencies automatically; however, it is highly recommended that an optimized BLAS and LAPACK already reside on your system for best performance (used by LINALG for linear algebra calculations).
 - [FERROR](https://github.com/jchristopherson/ferror)
 - [LINALG](https://github.com/jchristopherson/linalg)
+- [COLLECTIONS](https://github.com/jchristopherson/collections)
 
 ## Capabilities
 - Descriptive Statistics
