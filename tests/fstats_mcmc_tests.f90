@@ -126,13 +126,15 @@ function test_mcmc_target_likelihood() result(rst)
     call target%model(xdata, params, ymod)
 
     ! Evaluate the distribution - this will be our answer term
+    ! Use a log approach to avoid underflow/overflow issues
     dist%standard_deviation = sqrt(var)
-    prd = 1.0d0
+    prd = 0.0d0
     do i = 1, ndata
         dist%mean_value = ymod(i)
-        v = dist%pdf(ydata(i))  ! evaluate the distribution at the measued y
-        prd = prd * v
+        v = log(dist%pdf(ydata(i)))  ! evaluate the distribution at the measued y
+        prd = prd + v
     end do
+    prd = exp(prd)
 
     ! Compute the likelihood via the target type
     l = target%likelihood(xdata, ydata, params, var)
