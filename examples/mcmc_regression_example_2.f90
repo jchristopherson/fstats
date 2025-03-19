@@ -172,7 +172,7 @@ program example
     real(real64), allocatable, dimension(:,:) :: chain
     type(custom_harmonic_target) :: tgt
     type(mcmc_proposal) :: prop
-    type(metropolis_hastings) :: sampler
+    type(mcmc_sampler) :: sampler
     type(normal_distribution) :: p1, p2, p3
 
     ! Define the data set

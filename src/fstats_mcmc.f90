@@ -11,7 +11,7 @@ module fstats_mcmc
     use collections
     implicit none
     private
-    public :: metropolis_hastings
+    public :: mcmc_sampler
     public :: mcmc_target
     public :: evaluate_model
     public :: mcmc_proposal
@@ -61,7 +61,7 @@ module fstats_mcmc
         procedure, public :: generate_sample => ms_gen
     end type
 
-    type metropolis_hastings
+    type mcmc_sampler
         !! An implementation of the Metropolis-Hastings algorithm for the
         !! generation of a Markov chain.
         integer(int32), private :: initial_iteration_estimate = 10000
@@ -404,12 +404,12 @@ end subroutine
 
 
 ! ******************************************************************************
-! METROPOLIS_HASTINGS
+! MCMC_SAMPLER
 ! ------------------------------------------------------------------------------
 pure function mh_get_nvars(this) result(rst)
     !! Gets the number of state variables.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(in) :: this
+        !! The mcmc_sampler object.
     integer(int32) :: rst
         !! The number of state variables.
 
@@ -419,8 +419,8 @@ end function
 ! ------------------------------------------------------------------------------
 pure function mh_get_chain_length(this) result(rst)
     !! Gets the length of the chain (number of stored state variables).
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(in) :: this
+        !! The mcmc_sampler object.
     integer(int32) :: rst
         !! The chain length.
 
@@ -430,8 +430,8 @@ end function
 ! ------------------------------------------------------------------------------
 subroutine mh_resize_buffer(this, err)
     !! Resizes the buffer to accept more states.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(inout) :: this
+        !! The mcmc_sampler object.
     class(errors), intent(inout), optional, target :: err
         !! The error handling object.
 
@@ -482,8 +482,8 @@ end subroutine
 pure function mh_get_buffer_length(this) result(rst)
     !! Gets the actual length of the buffer.  This value will likely exceed the
     !! actual number of items in the chain.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(in) :: this
+        !! The mcmc_sampler object.
     integer(int32) :: rst
         !! The actual buffer length.
 
@@ -497,8 +497,8 @@ end function
 ! ------------------------------------------------------------------------------
 subroutine mh_push(this, x, err)
     !! Pushes a new set of state variables onto the buffer.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(inout) :: this
+        !! The mcmc_sampler object.
     real(real64), intent(in), dimension(:) :: x
         !! The new N-element state array.
     class(errors), intent(inout), optional, target :: err
@@ -546,8 +546,8 @@ end subroutine
 ! ------------------------------------------------------------------------------
 function mh_get_chain(this, bin, err) result(rst)
     !! Gets a copy of the stored Markov chain.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(in) :: this
+        !! The mcmc_sampler object.
     real(real64), intent(in), optional :: bin
         !! An optional input allowing for a burn-in region.  The parameter
         !! represents the amount (percentage-based) of the overall chain to 
@@ -591,8 +591,8 @@ end function
 ! ------------------------------------------------------------------------------
 subroutine mh_clear_chain(this)
     !! Resets the object and clears out the buffer storing the chain values.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(inout) :: this
+        !! The mcmc_sampler object.
 
     ! Clear the buffer
     this%m_bufferSize = 0
@@ -604,8 +604,8 @@ subroutine mh_on_success(this, iter, alpha, xc, xp, err)
     !! Currently, this routine does nothing and is a placeholder for the user
     !! that inherits this class to provide functionallity upon acceptance of
     !! a proposed value.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(inout) :: this
+        !! The mcmc_sampler object.
     integer(int32), intent(in) :: iter
         !! The current iteration number.
     real(real64), intent(in) :: alpha
@@ -624,8 +624,8 @@ subroutine mh_on_rejection(this, iter, alpha, xc, xp, err)
     !! Currently, this routine does nothing and is a placeholder for the user
     !! that inherits this class to provide functionallity upon rejection of
     !! a proposed value.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(inout) :: this
+        !! The mcmc_sampler object.
     integer(int32), intent(in) :: iter
         !! The current iteration number.
     real(real64), intent(in) :: alpha
@@ -642,8 +642,8 @@ end subroutine
 ! ------------------------------------------------------------------------------
 pure function mh_get_num_accepted(this) result(rst)
     !! Gets the number of accepted steps.
-    class(metropolis_hastings), intent(in) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(in) :: this
+        !! The mcmc_sampler object.
     integer(int32) :: rst
         !! The number of accepted steps.
     rst = this%m_accepted
@@ -652,8 +652,8 @@ end function
 ! ------------------------------------------------------------------------------
 subroutine mh_sample(this, xdata, ydata, prop, tgt, niter, err)
     !! Samples the distribution using the Metropolis-Hastings approach.
-    class(metropolis_hastings), intent(inout) :: this
-        !! The metropolis_hastings object.
+    class(mcmc_sampler), intent(inout) :: this
+        !! The mcmc_sampler object.
     real(real64), intent(in), dimension(:) :: xdata
         !! An M-element array containing the independent coordinate data points.
     real(real64), intent(in), dimension(:) :: ydata
