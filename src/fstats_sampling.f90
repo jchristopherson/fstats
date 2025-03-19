@@ -106,7 +106,7 @@ function rejection_sample(tdist, n, xmin, xmax) result(rst)
     rng = xmax - xmin
     c = c_start
     allocate(rst(n), source = zero)
-    do while (i <= n)
+    do while (i < n)
         ! Update the acceptance threshold
         call random_number(u)
 
