@@ -17,7 +17,24 @@ module fstats_mcmc
     public :: mcmc_proposal
     
     type, abstract :: mcmc_target
-        !! Defines a model of the target distribution(s).
+        !! Defines a model of the target distribution(s).  This type is key
+        !! to the MCMC regression process.  The approach taken is to 
+        !! evaluate the model provided here and evaluating its likelihood.  The
+        !! likelihood is evaluated by computing the residual between the model
+        !! and data, and making the assumption that the residual should be
+        !! normally distributed.
+        !!
+        !! $$ L = \sum_{i=1}^{n} \ln{N(y_{i} | f(x_{i}, \theta), \sigma)} $$
+        !!
+        !! The logarithm of the results of the normal distribution are used as
+        !! the scale of values can be quite extreme, especially if the model
+        !! is far from the actual data; therefore, to avoid scaling induced
+        !! overflow or underflow errors the logarithmic likelihood is utilized.
+        !! The \(\sigma\) term results from the data_noise parameter and 
+        !! is a representation of just that, the noise in the data.  The square 
+        !! of this parameter can also be referred to as the variance prior.
+        !! The default utilized here within is to assume the variance prior is 
+        !! logarithmically distributed, and as such, is never negative-valued.
         type(list), private :: m_items
             !! The list of parameters.
         real(real64), private, allocatable, dimension(:) :: m_y
