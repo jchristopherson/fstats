@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 2.1% of total for modules and submodules.">81 statements</a>
+               title=" 2.5% of total for modules and submodules.">94 statements</a>
           </li>
 
             <li id="source-file">
@@ -138,9 +138,11 @@
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_matrix_size_error">FS_MATRIX_SIZE_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_memory_error">FS_MEMORY_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_no_error">FS_NO_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_null_pointer_error">FS_NULL_POINTER_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_tolerance_too_small_error">FS_TOLERANCE_TOO_SMALL_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_too_few_iteration_error">FS_TOO_FEW_ITERATION_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_underdefined_problem_error">FS_UNDERDEFINED_PROBLEM_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_zero_variance_error">FS_ZERO_VARIANCE_ERROR</a>
         </div>
       </div>
     </div>
@@ -168,7 +170,9 @@
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_iteration_count_error">report_iteration_count_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_matrix_size_error">report_matrix_size_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_memory_error">report_memory_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_null_pointer_error">report_null_pointer_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_underdefined_error">report_underdefined_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_zero_variance_warning">report_zero_variance_warning</a>
         </div>
       </div>
     </div>
@@ -221,9 +225,11 @@
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_matrix_size_error">FS_MATRIX_SIZE_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_memory_error">FS_MEMORY_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_no_error">FS_NO_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_null_pointer_error">FS_NULL_POINTER_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_tolerance_too_small_error">FS_TOLERANCE_TOO_SMALL_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_too_few_iteration_error">FS_TOO_FEW_ITERATION_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_underdefined_problem_error">FS_UNDERDEFINED_PROBLEM_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_zero_variance_error">FS_ZERO_VARIANCE_ERROR</a>
         </div>
       </div>
     </div>
@@ -251,7 +257,9 @@
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_iteration_count_error">report_iteration_count_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_matrix_size_error">report_matrix_size_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_memory_error">report_memory_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_null_pointer_error">report_null_pointer_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_underdefined_error">report_underdefined_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_zero_variance_warning">report_zero_variance_warning</a>
         </div>
       </div>
     </div>
@@ -384,6 +392,23 @@ parameter
         </tr>
         <tr>
             <td>
+              <span class="anchor" id="variable-fs_null_pointer_error"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_NULL_POINTER_ERROR</strong></td>
+<td> =</td>
+                <td>10009</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
               <span class="anchor" id="variable-fs_tolerance_too_small_error"></span>
               integer(kind=int32),
             </td>
@@ -429,6 +454,23 @@ parameter
             <td><strong>FS_UNDERDEFINED_PROBLEM_ERROR</strong></td>
 <td> =</td>
                 <td>10004</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fs_zero_variance_error"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_ZERO_VARIANCE_ERROR</strong></td>
+<td> =</td>
+                <td>10008</td>
             <td>
                 
             </td>
@@ -698,9 +740,9 @@ when they should be the same size.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              character(len=*)
+              character(len=*),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
@@ -713,9 +755,9 @@ when they should be the same size.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              character(len=*)
+              character(len=*),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
@@ -948,6 +990,76 @@ when they should be the same size.</p>
   </div>
 
               <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-report_null_pointer_error"></span><h3>public  subroutine <a href='../proc/report_null_pointer_error.html'>report_null_pointer_error</a>(err, fname, name)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Reports a null pointer error.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>The error handling object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fname</strong></td>
+            <td>
+<p>The name of the routine in which the error occurred.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>name</strong></td>
+            <td>
+<p>The parameter name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="proc-report_underdefined_error"></span><h3>public  subroutine <a href='../proc/report_underdefined_error.html'>report_underdefined_error</a>(err, fname, expect, actual)  
 </h3></div>
     <div class="panel-body">
@@ -1032,6 +1144,62 @@ when they should be the same size.</p>
     </div>
   </div>
 
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-report_zero_variance_warning"></span><h3>public  subroutine <a href='../proc/report_zero_variance_warning.html'>report_zero_variance_warning</a>(err, fname)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Issues a warning when a zero variance is encountered in an unexpected
+place.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>The error handling object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fname</strong></td>
+            <td>
+<p>The name of the routine in which the error occurred.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
         </section>
         <br>
 
@@ -1052,7 +1220,7 @@ when they should be the same size.</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:41              </p>
+ on 2025-03-19 13:24              </p>
           </div>
         </div>
         <br>

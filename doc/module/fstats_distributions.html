@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="14.5% of total for modules and submodules.">568 statements</a>
+               title="15.8% of total for modules and submodules.">598 statements</a>
           </li>
 
             <li id="source-file">
@@ -191,11 +191,11 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
-                <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
-                <li>ferror</li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
                 <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
+                <li>ferror</li>
+                <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
                 <li><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></li>
             </ul>
           </li>
@@ -538,7 +538,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-cdf~2'>cdf</a></strong>
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-cdf'>cdf</a></strong>
  =>
                     bd_cdf
 <small>Function</small>                </td>
@@ -548,7 +548,17 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-mean~2'>mean</a></strong>
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-defined_range'>defined_range</a></strong>
+ =>
+                    bd_range
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-mean'>mean</a></strong>
  =>
                     bd_mean
 <small>Function</small>                </td>
@@ -558,7 +568,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-median~2'>median</a></strong>
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-median'>median</a></strong>
  =>
                     bd_median
 <small>Function</small>                </td>
@@ -568,7 +578,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-mode~2'>mode</a></strong>
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-mode'>mode</a></strong>
  =>
                     bd_mode
 <small>Function</small>                </td>
@@ -578,7 +588,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-pdf~3'>pdf</a></strong>
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-pdf~2'>pdf</a></strong>
  =>
                     bd_pdf
 <small>Function</small>                </td>
@@ -592,13 +602,13 @@ exist on the set [0, 1].</p>
  =>
                     dist_std_var
 <small>Function</small>                </td>
-                <td><p>Computes the standardized variable for the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-variance~3'>variance</a></strong>
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-variance~2'>variance</a></strong>
  =>
                     bd_variance
 <small>Function</small>                </td>
@@ -662,7 +672,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-cdf~3'>cdf</a></strong>
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-cdf~2'>cdf</a></strong>
  =>
                     cs_cdf
 <small>Function</small>                </td>
@@ -672,7 +682,17 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-mean~3'>mean</a></strong>
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-defined_range~2'>defined_range</a></strong>
+ =>
+                    cs_range
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-mean~2'>mean</a></strong>
  =>
                     cs_mean
 <small>Function</small>                </td>
@@ -682,7 +702,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-median~3'>median</a></strong>
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-median~2'>median</a></strong>
  =>
                     cs_median
 <small>Function</small>                </td>
@@ -692,7 +712,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-mode~3'>mode</a></strong>
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-mode~2'>mode</a></strong>
  =>
                     cs_mode
 <small>Function</small>                </td>
@@ -702,7 +722,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-pdf~4'>pdf</a></strong>
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-pdf~3'>pdf</a></strong>
  =>
                     cs_pdf
 <small>Function</small>                </td>
@@ -716,13 +736,13 @@ exist on the set [0, 1].</p>
  =>
                     dist_std_var
 <small>Function</small>                </td>
-                <td><p>Computes the standardized variable for the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-variance~4'>variance</a></strong>
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-variance~3'>variance</a></strong>
  =>
                     cs_variance
 <small>Function</small>                </td>
@@ -755,41 +775,51 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
 (distribution_function)                    ,                  public
-, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-cdf'>cdf</a></strong>
+, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-cdf~3'>cdf</a></strong>
 <small></small>                </td>
-                <td><p>Computes the cumulative distribution function.</p></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/distribution.html#boundprocedure-defined_range~3'>defined_range</a></strong>
+ =>
+                    dist_defined_range
+<small>Function</small>                </td>
+                <td></td>
               </tr>
               <tr>
                 <td>
                     procedure
 (distribution_property)                    ,                  public
-, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-mean'>mean</a></strong>
+, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-mean~3'>mean</a></strong>
 <small></small>                </td>
-                <td><p>Computes the mean of the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
                     procedure
 (distribution_property)                    ,                  public
-, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-median'>median</a></strong>
+, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-median~3'>median</a></strong>
 <small></small>                </td>
-                <td><p>Computes the median of the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
                     procedure
 (distribution_property)                    ,                  public
-, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-mode'>mode</a></strong>
+, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-mode~3'>mode</a></strong>
 <small></small>                </td>
-                <td><p>Computes the mode of the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
                     procedure
 (distribution_function)                    ,                  public
-, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-pdf'>pdf</a></strong>
+, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-pdf~4'>pdf</a></strong>
 <small></small>                </td>
-                <td><p>Computes the probability density function.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
@@ -799,15 +829,15 @@ exist on the set [0, 1].</p>
  =>
                     dist_std_var
 <small>Function</small>                </td>
-                <td><p>Computes the standardized variable for the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
                     procedure
 (distribution_property)                    ,                  public
-, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-variance~2'>variance</a></strong>
+, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-variance~4'>variance</a></strong>
 <small></small>                </td>
-                <td><p>Computes the variance of the distribution.</p></td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -894,6 +924,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/f_distribution.html#boundprocedure-defined_range~4'>defined_range</a></strong>
+ =>
+                    fd_range
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/f_distribution.html#boundprocedure-mean~4'>mean</a></strong>
  =>
                     fd_mean
@@ -938,7 +978,7 @@ exist on the set [0, 1].</p>
  =>
                     dist_std_var
 <small>Function</small>                </td>
-                <td><p>Computes the standardized variable for the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
@@ -1035,6 +1075,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/log_normal_distribution.html#boundprocedure-defined_range~5'>defined_range</a></strong>
+ =>
+                    lnd_range
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/log_normal_distribution.html#boundprocedure-mean~5'>mean</a></strong>
  =>
                     lnd_mean
@@ -1079,7 +1129,7 @@ exist on the set [0, 1].</p>
  =>
                     dist_std_var
 <small>Function</small>                </td>
-                <td><p>Computes the standardized variable for the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
@@ -1118,7 +1168,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
 (multivariate_distribution_function)                    ,                  public
-, pass                  :: <strong><a href='../type/multivariate_distribution.html#boundprocedure-pdf~2'>pdf</a></strong>
+, pass                  :: <strong><a href='../type/multivariate_distribution.html#boundprocedure-pdf'>pdf</a></strong>
 <small></small>                </td>
                 <td><p>Computes the probability density function.</p></td>
               </tr>
@@ -1290,6 +1340,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/distribution.html#boundprocedure-defined_range~3'>defined_range</a></strong>
+ =>
+                    dist_defined_range
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/normal_distribution.html#boundprocedure-mean~6'>mean</a></strong>
  =>
                     nd_mean
@@ -1344,7 +1404,7 @@ exist on the set [0, 1].</p>
  =>
                     dist_std_var
 <small>Function</small>                </td>
-                <td><p>Computes the standardized variable for the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
@@ -1424,6 +1484,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/distribution.html#boundprocedure-defined_range~3'>defined_range</a></strong>
+ =>
+                    dist_defined_range
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/t_distribution.html#boundprocedure-mean~7'>mean</a></strong>
  =>
                     td_mean
@@ -1468,7 +1538,7 @@ exist on the set [0, 1].</p>
  =>
                     dist_std_var
 <small>Function</small>                </td>
-                <td><p>Computes the standardized variable for the distribution.</p></td>
+                <td></td>
               </tr>
               <tr>
                 <td>
@@ -1507,7 +1577,7 @@ exist on the set [0, 1].</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:41              </p>
+ on 2025-03-19 13:24              </p>
           </div>
         </div>
         <br>

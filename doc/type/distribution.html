@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 4.4% of total for derived types.</p>Including implementation: 29 statements,  1.9% of total for derived types.">10 statements</a>
+               title="<p> 5.1% of total for derived types.</p>Including implementation: 35 statements,  3.0% of total for derived types.">11 statements</a>
           </li>
 
             <li id="source-file">
@@ -149,13 +149,14 @@
       </div>
       <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-cdf">cdf</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mean">mean</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-median">median</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mode">mode</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-pdf">pdf</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-cdf~3">cdf</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-defined_range~3">defined_range</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mean~3">mean</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-median~3">median</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mode~3">mode</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-pdf~4">pdf</a>
             <a class="list-group-item" href="../type/distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-variance~2">variance</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-variance~4">variance</a>
         </div>
       </div>
     </div>
@@ -199,13 +200,14 @@
       </div>
       <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-cdf">cdf</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mean">mean</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-median">median</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mode">mode</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-pdf">pdf</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-cdf~3">cdf</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-defined_range~3">defined_range</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mean~3">mean</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-median~3">median</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-mode~3">mode</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-pdf~4">pdf</a>
             <a class="list-group-item" href="../type/distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/distribution.html#boundprocedure-variance~2">variance</a>
+            <a class="list-group-item" href="../type/distribution.html#boundprocedure-variance~4">variance</a>
         </div>
       </div>
     </div>
@@ -222,12 +224,8 @@
       <section>
         <h2>Type-Bound Procedures</h2>
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf"></span><h3>procedure(<a href='../interface/distribution_function.html'>distribution_function</a>), public, deferred, pass :: <strong>cdf</strong>          
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf~3"></span><h3>procedure(<a href='../interface/distribution_function.html'>distribution_function</a>), public, deferred, pass :: <strong>cdf</strong>          
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the cumulative distribution function.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -290,12 +288,60 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>mean</strong>          
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-defined_range~3"></span><h3>procedure, public :: <strong>defined_range</strong>  => dist_defined_range         
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the mean of the distribution.</p>
-      </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function dist_defined_range(this) result(rst)  
+</h3>
+  <p>Gets the defined range for the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/distribution.html'>distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), dimension(2)</small>
+    </h4>
+    <p>The defined range of the probability distributions [min, max].  In
+the event that either min or max are infinite, a value of huge(0.0d0)
+is returned as opposed to infinite to avoid possible issues with
+using these values directly.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean~3"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>mean</strong>          
+    </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -343,12 +389,8 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>median</strong>          
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median~3"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>median</strong>          
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the median of the distribution.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -396,12 +438,8 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>mode</strong>          
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode~3"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>mode</strong>          
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the mode of the distribution.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -449,12 +487,8 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf"></span><h3>procedure(<a href='../interface/distribution_function.html'>distribution_function</a>), public, deferred, pass :: <strong>pdf</strong>          
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~4"></span><h3>procedure(<a href='../interface/distribution_function.html'>distribution_function</a>), public, deferred, pass :: <strong>pdf</strong>          
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the probability density function.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -519,10 +553,6 @@
             <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-standardized_variable"></span><h3>procedure, public :: <strong>standardized_variable</strong>  => dist_std_var         
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the standardized variable for the distribution.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -585,12 +615,8 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~2"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>variance</strong>          
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~4"></span><h3>procedure(<a href='../interface/distribution_property.html'>distribution_property</a>), public, deferred, pass :: <strong>variance</strong>          
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the variance of the distribution.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -655,7 +681,7 @@
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:41              </p>
+ on 2025-03-19 13:24              </p>
           </div>
         </div>
         <br>

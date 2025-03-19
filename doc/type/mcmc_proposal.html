@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>adjusted_r_squared &ndash; FSTATS</title>
+    <title>mcmc_proposal &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>adjusted_r_squared
-      <small>Function</small>
+    <h1>mcmc_proposal
+      <small>Derived Type</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,18 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 1.3% of total for procedures.">21 statements</a>
+               title="<p> 1.8% of total for derived types.</p>Including implementation: 47 statements,  4.1% of total for derived types.">4 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_regression.f90"> Source File</a>
+              <a href="../src/fstats_mcmc.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_regression.f90.html'>fstats_regression.f90</a></li>
-              <li><a href='../module/fstats_regression.html'>fstats_regression</a></li>
-          <li class="active">adjusted_r_squared</li>
+              <li><a href='../sourcefile/fstats_mcmc.f90.html'>fstats_mcmc.f90</a></li>
+              <li><a href='../module/fstats_mcmc.html'>fstats_mcmc</a></li>
+          <li class="active">mcmc_proposal</li>
         </ol>
       </div>
     </div>
@@ -141,7 +141,19 @@
   
   
   
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#boundprocs-0">Type-Bound Procedures</a>
+        </h3>
+      </div>
+      <div id="boundprocs-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-generate_sample">generate_sample</a>
+        </div>
+      </div>
+    </div>
+
   
 
 
@@ -150,110 +162,9 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public  function adjusted_r_squared(p, x, xm, err) result(rst)  
-</h2>
-    
-
-    <p>Computes the adjusted R-squared value for a data set.</p>
-<p>The adjusted R-squared provides a mechanism for tempering the effects
-of extra explanatory variables on the traditional R-squared 
-calculation.  It is computed by noting the sample size <script type="math/tex"> n </script> and 
-the number of variables <script type="math/tex"> p </script>.
-<script type="math/tex; mode=display"> \bar{R}^2 = 1 - \left( 1 - R^2 \right) \frac{n - 1}{n - p} </script>.</p>
-<p>See Also:</p>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2">Wikipedia</a></li>
-</ul>
-
-
-    <h3>Arguments</h3>
-        <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-p~9"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>p</strong></td>
-            <td>
-                <p>The number of variables.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~52"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong>(:)</td>
-            <td>
-                <p>An N-element array containing the dependent variables from 
-the data set.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-xm~2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>xm</strong>(:)</td>
-            <td>
-                <p>An N-element array containing the corresponding modeled 
-values.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-err~30"></span>
-              class(errors),
-            </td>
-<td>intent(inout),</td>
-              <td>optional,</td>            <td>
-              target
-            </td>
-            <td>::</td>
-            <td><strong>err</strong></td>
-            <td>
-                <p>A mechanism for communicating errors and warnings
-to the caller.  Possible warning and error codes are as 
-follows.
-- FS_NO_ERROR: No errors encountered.
-- FS_ARRAY_SIZE_ERROR: Occurs if x and xm are not the 
-  same size.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-      <h3>Return Value
-        <small>
-          <span class="anchor" id="variable-rst~84"></span>
-          real(kind=real64)
-        </small>
-      </h3>
-      <p>The result.</p>
+      <h2>type, public :: mcmc_proposal</h2>
+    <p>Defines a type responsible for generating a proposal state for a
+Monte-Carlo, Markov-Chain sampler.</p>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
@@ -275,22 +186,166 @@ follows.
   
   
   
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#boundprocs-1">Type-Bound Procedures</a>
+        </h3>
+      </div>
+      <div id="boundprocs-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-generate_sample">generate_sample</a>
+        </div>
+      </div>
+    </div>
+
   
 
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
 
-
-    
-    
-
-    
     
 
 
-    
+      <section>
+        <h2>Type-Bound Procedures</h2>
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-generate_sample"></span><h3>procedure, public :: <strong>generate_sample</strong>  => ms_gen         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)  
+</h3>
+  <p>Creates a new sample proposal.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_proposal.html'>mcmc_proposal</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The mcmc_proposal object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tgt</strong></td>
+            <td>
+                <p>The mcmc_target object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>An N-element array containing the existing parameter estimates.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xp</strong></td>
+            <td>
+                <p>An N-element array where the proposed parameters will be output.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>vc</strong></td>
+            <td>
+                <p>The current variance (noise) term value.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>vp</strong></td>
+            <td>
+                <p>The proposed variance (noise) value.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>An error handling object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+      </section>
+
     
     </div>
   </div>

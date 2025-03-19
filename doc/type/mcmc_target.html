@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>t_distribution &ndash; FSTATS </title>
+    <title>mcmc_target &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,7 +84,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>t_distribution
+    <h1>mcmc_target
       <small>Derived Type</small>
       
     </h1>
@@ -96,18 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 4.6% of total for derived types.</p>Including implementation: 79 statements,  6.9% of total for derived types.">10 statements</a>
+               title="<p> 6.5% of total for derived types.</p>Including implementation: 144 statements, 12.5% of total for derived types.">14 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_distributions.f90"> Source File</a>
+              <a href="../src/fstats_mcmc.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
-              <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
-          <li class="active">t_distribution</li>
+              <li><a href='../sourcefile/fstats_mcmc.f90.html'>fstats_mcmc.f90</a></li>
+              <li><a href='../module/fstats_mcmc.html'>fstats_mcmc</a></li>
+          <li class="active">mcmc_target</li>
         </ol>
       </div>
     </div>
@@ -133,7 +133,7 @@
       </div>
       <div id="vars-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/t_distribution.html#variable-dof~2">dof</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#variable-data_noise">data_noise</a>
         </div>
       </div>
     </div>
@@ -161,14 +161,14 @@
       </div>
       <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-cdf~7">cdf</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-defined_range~3">defined_range</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-mean~7">mean</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-median~7">median</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-mode~7">mode</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-pdf~9">pdf</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-variance~8">variance</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-add_parameter">add_parameter</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-evaluate_prior">evaluate_prior</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-evaluate_variance_prior">evaluate_variance_prior</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-get_parameter">get_parameter</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-get_parameter_count">get_parameter_count</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-likelihood">likelihood</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-model">model</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-sample_variance_prior">sample_variance_prior</a>
         </div>
       </div>
     </div>
@@ -181,8 +181,25 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>type, public, extends(<a href='../type/distribution.html'>distribution</a>) :: t_distribution</h2>
-    <p>Defines Student's T-Distribution.</p>
+      <h2>type, public, abstract :: mcmc_target</h2>
+    <p>Defines a model of the target distribution(s).  This type is key
+to the MCMC regression process.  The approach taken is to 
+evaluate the model provided here and evaluating its likelihood.  The
+likelihood is evaluated by computing the residual between the model
+and data, and making the assumption that the residual should be
+normally distributed.</p>
+<p>
+<script type="math/tex; mode=display"> L = \sum_{i=1}^{n} \ln{N(y_{i} | f(x_{i}, \theta), \sigma)} </script>
+</p>
+<p>The logarithm of the results of the normal distribution are used as
+the scale of values can be quite extreme, especially if the model
+is far from the actual data; therefore, to avoid scaling induced
+overflow or underflow errors the logarithmic likelihood is utilized.
+The <script type="math/tex">\sigma</script> term results from the data_noise parameter and 
+is a representation of just that, the noise in the data.  The square 
+of this parameter can also be referred to as the variance prior.
+The default utilized here within is to assume the variance prior is 
+logarithmically distributed, and as such, is never negative-valued.</p>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
@@ -196,7 +213,7 @@
       </div>
       <div id="vars-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/t_distribution.html#variable-dof~2">dof</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#variable-data_noise">data_noise</a>
         </div>
       </div>
     </div>
@@ -224,14 +241,14 @@
       </div>
       <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-cdf~7">cdf</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-defined_range~3">defined_range</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-mean~7">mean</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-median~7">median</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-mode~7">mode</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-pdf~9">pdf</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/t_distribution.html#boundprocedure-variance~8">variance</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-add_parameter">add_parameter</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-evaluate_prior">evaluate_prior</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-evaluate_variance_prior">evaluate_variance_prior</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-get_parameter">get_parameter</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-get_parameter_count">get_parameter_count</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-likelihood">likelihood</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-model">model</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-sample_variance_prior">sample_variance_prior</a>
         </div>
       </div>
     </div>
@@ -256,7 +273,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof~2"></span>
+              <span class="anchor" id="variable-data_noise"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -264,11 +281,11 @@
               
             </td>
             <td>::</td>
-            <td><strong>dof</strong></td>
-                <td></td>
-                <td></td>
+            <td><strong>data_noise</strong></td>
+<td> =</td>
+                <td>1.0d0</td>
             <td>
-                <p>The number of degrees of freedom.</p>
+                <p>A parameter representing the noise in the data.</p>
             </td>
         </tr>
     </tbody>
@@ -282,18 +299,14 @@
       <section>
         <h2>Type-Bound Procedures</h2>
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf~7"></span><h3>procedure, public :: <strong>cdf</strong>  => td_cdf         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-add_parameter"></span><h3>procedure, public :: <strong>add_parameter</strong>  => mt_add_param         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure elemental function td_cdf(this, x) result(rst)  
+    private  subroutine mt_add_param(this, x, err)  
 </h3>
-  <p>Computes the cumulative distribution function.</p>
-<p>The CDF for Student's T-Distribution is given as
-<script type="math/tex; mode=display"> F(t) = \int_{-\infty}^{t} f(u) \,du = 1 - \frac{1}{2} I_{x(t)}
-\left( \frac{\nu}{2}, \frac{1}{2} \right) </script>
-where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </script>.</p>
+  <p>Adds a new model parameter.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -309,67 +322,18 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/t_distribution.html'>t_distribution</a>),
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
             </td>
-<td>intent(in)</td>
+<td>intent(inout)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The t_distribution object.</p>
+                <p>The mcmc_target object.</p>
             </td>
         </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-                <p>The value at which to evaluate the function.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The value of the function.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-defined_range~3"></span><h3>procedure, public :: <strong>defined_range</strong>  => dist_defined_range         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure function dist_defined_range(this) result(rst)  
-</h3>
-  <p>Gets the defined range for the distribution.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
@@ -380,36 +344,43 @@ where <script type="math/tex; mode=display"> x(t) = \frac{\nu}{\nu + t^2} </scri
               
             </td>
             <td>::</td>
-            <td><strong>this</strong></td>
+            <td><strong>x</strong></td>
             <td>
-                <p>The distribution object.</p>
+                <p>The parameter to add.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>The error handler object.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
-    <h4>
-    Return Value
-    <small>real(kind=real64), dimension(2)</small>
-    </h4>
-    <p>The defined range of the probability distributions [min, max].  In
-the event that either min or max are infinite, a value of huge(0.0d0)
-is returned as opposed to infinite to avoid possible issues with
-using these values directly.</p>
 
         </li>
     </ul>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean~7"></span><h3>procedure, public :: <strong>mean</strong>  => td_mean         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-evaluate_prior"></span><h3>procedure, public :: <strong>evaluate_prior</strong>  => mt_eval_prior         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function td_mean(this) result(rst)  
+    private  function mt_eval_prior(this, x, err) result(rst)  
 </h3>
-  <p>Computes the mean of the distribution.</p>
+  <p>Evaluates the PDF's for each parameter and computes a probability.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -425,7 +396,7 @@ using these values directly.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/t_distribution.html'>t_distribution</a>),
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -434,56 +405,38 @@ using these values directly.</p>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The t_distribution object.</p>
+                <p>The mcmc_target object.</p>
             </td>
         </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The mean.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median~7"></span><h3>procedure, public :: <strong>median</strong>  => td_median         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure function td_median(this) result(rst)  
-</h3>
-  <p>Computes the median of the distribution.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/t_distribution.html'>t_distribution</a>),
+              real(kind=real64),
             </td>
-<td>intent(in)</td>
+<td>intent(in),</td>
               <td></td>            <td>
-              
+              dimension(:)
             </td>
             <td>::</td>
-            <td><strong>this</strong></td>
+            <td><strong>x</strong></td>
             <td>
-                <p>The t_distribution object.</p>
+                <p>An N-element array containing the values at which to evaluate each of
+the N parameter PDF's.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>An error handling object.</p>
             </td>
         </tr>
     </tbody>
@@ -493,21 +446,21 @@ using these values directly.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    
+    <p>The resulting probability.</p>
 
         </li>
     </ul>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode~7"></span><h3>procedure, public :: <strong>mode</strong>  => td_mode         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-evaluate_variance_prior"></span><h3>procedure, public :: <strong>evaluate_variance_prior</strong>  => mt_eval_var_prior         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function td_mode(this) result(rst)  
+    private pure function mt_eval_var_prior(this, x) result(rst)  
 </h3>
-  <p>Computes the mode of the distribution.</p>
+  <p>Evalautes the model variance prior PDF.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -523,7 +476,7 @@ using these values directly.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/t_distribution.html'>t_distribution</a>),
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -532,60 +485,7 @@ using these values directly.</p>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The t_distribution object.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The mode.</p>
-
-        </li>
-    </ul>
-  </div>
-
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~9"></span><h3>procedure, public :: <strong>pdf</strong>  => td_pdf         
-    </h3></div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
-    private pure elemental function td_pdf(this, x) result(rst)  
-</h3>
-  <p>Computes the probability density function.</p>
-<p>The PDF for Student's T-Distribution is given as 
-<script type="math/tex; mode=display"> f(t) = \frac{ \Gamma \left( \frac{\nu + 1}{2} \right) }
-{ \sqrt{\nu \pi} \Gamma \left( \frac{\nu}{2} \right) } 
-\left( 1 + \frac{t^2}{\nu} \right)^{-(\nu + 1) / 2} </script>.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(<a href='../type/t_distribution.html'>t_distribution</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>this</strong></td>
-            <td>
-                <p>The t_distribution object.</p>
+                <p>The mcmc_target object.</p>
             </td>
         </tr>
         <tr>
@@ -600,7 +500,7 @@ using these values directly.</p>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                <p>The value at which to evaluate the function.</p>
+                <p>The value at which to evaluate the variance prior distribution PDF.</p>
             </td>
         </tr>
     </tbody>
@@ -610,21 +510,21 @@ using these values directly.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The value of the function.</p>
+    <p>The value of the variance prior distribution's PDF.</p>
 
         </li>
     </ul>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-standardized_variable"></span><h3>procedure, public :: <strong>standardized_variable</strong>  => dist_std_var         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_parameter"></span><h3>procedure, public :: <strong>get_parameter</strong>  => mt_get_param         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure elemental function dist_std_var(this, x) result(rst)  
+    private  function mt_get_param(this, i) result(rst)  
 </h3>
-  <p>Computes the standardized variable for the distribution.</p>
+  <p>Gets a pointer to the stored parameter.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -640,7 +540,7 @@ using these values directly.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/distribution.html'>distribution</a>),
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -649,7 +549,166 @@ using these values directly.</p>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The distribution object.</p>
+                <p>The mcmc_target object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i</strong></td>
+            <td>
+                <p>The index of the parameter to retrieve.  If outside the bounds of the
+collection of parameters a null pointer is returned.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>class(<a href='../type/distribution.html'>distribution</a>), pointer</small>
+    </h4>
+    <p>A pointer to the requested parameter distribution.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_parameter_count"></span><h3>procedure, public :: <strong>get_parameter_count</strong>  => mt_get_param_count         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function mt_get_param_count(this) result(rst)  
+</h3>
+  <p>Gets the number of model parameters.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The mcmc_target object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=int32)</small>
+    </h4>
+    <p>The parameter count.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-likelihood"></span><h3>procedure, public :: <strong>likelihood</strong>  => mt_likelihood         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)  
+</h3>
+  <p>Computes the target likelihood.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The mcmc_target object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xdata</strong></td>
+            <td>
+                <p>An M-element array containing the independent data points.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>ydata</strong></td>
+            <td>
+                <p>An M-element array containing the dependent data points.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>An N-element array containing the model parameters.</p>
             </td>
         </tr>
         <tr>
@@ -662,9 +721,24 @@ using these values directly.</p>
               
             </td>
             <td>::</td>
-            <td><strong>x</strong></td>
+            <td><strong>var</strong></td>
             <td>
-                <p>The value of interest.</p>
+                <p>An estimate of the model variance.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>An error handling object.</p>
             </td>
         </tr>
     </tbody>
@@ -674,21 +748,21 @@ using these values directly.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The result.</p>
+    <p>The likelihood value.</p>
 
         </li>
     </ul>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~8"></span><h3>procedure, public :: <strong>variance</strong>  => td_variance         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-model"></span><h3>procedure(<a href='../interface/evaluate_model.html'>evaluate_model</a>), public, deferred :: <strong>model</strong>          
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private pure function td_variance(this) result(rst)  
-</h3>
-  <p>Computes the variance of the distribution.</p>
+     subroutine evaluate_model(this, xdata, xc, y)  
+<small>Prototype</small></h3>
+  <p>Evaluates the model at the supplied values.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -704,7 +778,7 @@ using these values directly.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/t_distribution.html'>t_distribution</a>),
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -713,7 +787,114 @@ using these values directly.</p>
             <td>::</td>
             <td><strong>this</strong></td>
             <td>
-                <p>The t_distribution object.</p>
+                <p>The mcmc_target object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xdata</strong></td>
+            <td>
+                <p>An M-element array containing the values at which to evaluate
+the model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>An N-element array containing the model parameters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>An M-element array where the resulting model values wil
+be written.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-sample_variance_prior"></span><h3>procedure, public :: <strong>sample_variance_prior</strong>  => mt_sample_var_prior         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function mt_sample_var_prior(this, n) result(rst)  
+</h3>
+  <p>Samples the variance prior distribution for the requested number of 
+samples.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The mcmc_target object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>The number of samples.</p>
             </td>
         </tr>
     </tbody>
@@ -721,9 +902,9 @@ using these values directly.</p>
 
     <h4>
     Return Value
-    <small>real(kind=real64)</small>
+    <small>real(kind=real64), allocatable, dimension(:)</small>
     </h4>
-    <p>The variance.</p>
+    <p>The requested samples.</p>
 
         </li>
     </ul>

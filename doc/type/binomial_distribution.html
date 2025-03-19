@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 4.8% of total for derived types.</p>Including implementation: 66 statements,  4.2% of total for derived types.">11 statements</a>
+               title="<p> 5.5% of total for derived types.</p>Including implementation: 72 statements,  6.3% of total for derived types.">12 statements</a>
           </li>
 
             <li id="source-file">
@@ -162,13 +162,14 @@
       </div>
       <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-cdf~2">cdf</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mean~2">mean</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-median~2">median</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mode~2">mode</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-pdf~3">pdf</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-cdf">cdf</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-defined_range">defined_range</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mean">mean</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-median">median</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mode">mode</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-pdf~2">pdf</a>
             <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~3">variance</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~2">variance</a>
         </div>
       </div>
     </div>
@@ -226,13 +227,14 @@ the probability p of getting k successes in n independent trials.</p>
       </div>
       <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-cdf~2">cdf</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mean~2">mean</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-median~2">median</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mode~2">mode</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-pdf~3">pdf</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-cdf">cdf</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-defined_range">defined_range</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mean">mean</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-median">median</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-mode">mode</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-pdf~2">pdf</a>
             <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~3">variance</a>
+            <a class="list-group-item" href="../type/binomial_distribution.html#boundprocedure-variance~2">variance</a>
         </div>
       </div>
     </div>
@@ -301,7 +303,7 @@ exist on the set [0, 1].</p>
       <section>
         <h2>Type-Bound Procedures</h2>
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf~2"></span><h3>procedure, public :: <strong>cdf</strong>  => bd_cdf         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf"></span><h3>procedure, public :: <strong>cdf</strong>  => bd_cdf         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -370,7 +372,58 @@ such, this parameter must exist on the set [0, n].</p>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean~2"></span><h3>procedure, public :: <strong>mean</strong>  => bd_mean         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-defined_range"></span><h3>procedure, public :: <strong>defined_range</strong>  => bd_range         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function bd_range(this) result(rst)  
+</h3>
+  <p>Gets the defined range for the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/binomial_distribution.html'>binomial_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The binomial_distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), dimension(2)</small>
+    </h4>
+    <p>The defined range of the probability distributions [0, infinity).  As
+using a value of infinity may cause issue, this routine returns
+huge(0.0d0) instead.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean"></span><h3>procedure, public :: <strong>mean</strong>  => bd_mean         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -419,7 +472,7 @@ such, this parameter must exist on the set [0, n].</p>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median~2"></span><h3>procedure, public :: <strong>median</strong>  => bd_median         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median"></span><h3>procedure, public :: <strong>median</strong>  => bd_median         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -468,7 +521,7 @@ such, this parameter must exist on the set [0, n].</p>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode~2"></span><h3>procedure, public :: <strong>mode</strong>  => bd_mode         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode"></span><h3>procedure, public :: <strong>mode</strong>  => bd_mode         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -517,7 +570,7 @@ such, this parameter must exist on the set [0, n].</p>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~3"></span><h3>procedure, public :: <strong>pdf</strong>  => bd_pdf         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~2"></span><h3>procedure, public :: <strong>pdf</strong>  => bd_pdf         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -588,10 +641,6 @@ such, this parameter must exist on the set [0, n].</p>
             <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-standardized_variable"></span><h3>procedure, public :: <strong>standardized_variable</strong>  => dist_std_var         
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the standardized variable for the distribution.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -654,7 +703,7 @@ such, this parameter must exist on the set [0, n].</p>
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~3"></span><h3>procedure, public :: <strong>variance</strong>  => bd_variance         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~2"></span><h3>procedure, public :: <strong>variance</strong>  => bd_variance         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -720,7 +769,7 @@ such, this parameter must exist on the set [0, n].</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:41              </p>
+ on 2025-03-19 13:24              </p>
           </div>
         </div>
         <br>

@@ -26,19 +26,13 @@ module fstats_distributions
         !! Defines a probability distribution.
     contains
         procedure(distribution_function), deferred, pass :: pdf
-            !! Computes the probability density function.
         procedure(distribution_function), deferred, pass :: cdf
-            !! Computes the cumulative distribution function.
         procedure(distribution_property), deferred, pass :: mean
-            !! Computes the mean of the distribution.
         procedure(distribution_property), deferred, pass :: median
-            !! Computes the median of the distribution.
         procedure(distribution_property), deferred, pass :: mode
-            !! Computes the mode of the distribution.
         procedure(distribution_property), deferred, pass :: variance
-            !! Computes the variance of the distribution.
         procedure, public :: standardized_variable => dist_std_var
-            !! Computes the standardized variable for the distribution.
+        procedure, public :: defined_range => dist_defined_range
     end type
 
     interface
@@ -109,6 +103,7 @@ module fstats_distributions
         procedure, public :: median => fd_median
         procedure, public :: mode => fd_mode
         procedure, public :: variance => fd_variance
+        procedure, public :: defined_range => fd_range
     end type
 
 ! ------------------------------------------------------------------------------
@@ -123,6 +118,7 @@ module fstats_distributions
         procedure, public :: median => cs_median
         procedure, public :: mode => cs_mode
         procedure, public :: variance => cs_variance
+        procedure, public :: defined_range => cs_range
     end type
 
 ! ------------------------------------------------------------------------------
@@ -141,6 +137,7 @@ module fstats_distributions
         procedure, public :: median => bd_median
         procedure, public :: mode => bd_mode
         procedure, public :: variance => bd_variance
+        procedure, public :: defined_range => bd_range
     end type
 
 ! ------------------------------------------------------------------------------
@@ -157,6 +154,7 @@ module fstats_distributions
         procedure, public :: median => lnd_median
         procedure, public :: mode => lnd_mode
         procedure, public :: variance => lnd_variance
+        procedure, public :: defined_range => lnd_range
     end type
 
 ! ******************************************************************************
@@ -240,6 +238,20 @@ pure elemental function dist_std_var(this, x) result(rst)
         rst = rst - dy
         if (abs(dy) < tol) exit
     end do
+end function
+
+! ------------------------------------------------------------------------------
+pure function dist_defined_range(this) result(rst)
+    !! Gets the defined range for the distribution.
+    class(distribution), intent(in) :: this
+        !! The distribution object.
+    real(real64), dimension(2) :: rst
+        !! The defined range of the probability distributions [min, max].  In
+        !! the event that either min or max are infinite, a value of huge(0.0d0)
+        !! is returned as opposed to infinite to avoid possible issues with
+        !! using these values directly.
+
+    rst = [-huge(0.0d0), huge(0.0d0)]
 end function
 
 ! ******************************************************************************
@@ -541,6 +553,19 @@ pure function fd_variance(this) result(rst)
     end if
 end function
 
+! ------------------------------------------------------------------------------
+pure function fd_range(this) result(rst)
+    !! Gets the defined range for the distribution.
+    class(f_distribution), intent(in) :: this
+        !! The f_distribution object.
+    real(real64), dimension(2) :: rst
+        !! The defined range of the probability distributions [0, infinity).  As
+        !! using a value of infinity may cause issue, this routine returns
+        !! huge(0.0d0) instead.
+
+    rst = [0.0d0, huge(0.0d0)]
+end function
+
 ! ******************************************************************************
 ! CHI-SQUARED DISTRIBUTION
 ! ------------------------------------------------------------------------------
@@ -635,6 +660,19 @@ pure function cs_variance(this) result(rst)
     rst = 2.0d0 * this%dof
 end function
 
+! ------------------------------------------------------------------------------
+pure function cs_range(this) result(rst)
+    !! Gets the defined range for the distribution.
+    class(chi_squared_distribution), intent(in) :: this
+        !! The chi_squared_distribution object.
+    real(real64), dimension(2) :: rst
+        !! The defined range of the probability distributions [0, infinity).  As
+        !! using a value of infinity may cause issue, this routine returns
+        !! huge(0.0d0) instead.
+
+    rst = [0.0d0, huge(0.0d0)]
+end function
+
 ! ******************************************************************************
 ! BINOMIAL DISTRIBUTION
 ! ------------------------------------------------------------------------------
@@ -727,6 +765,19 @@ pure function bd_variance(this) result(rst)
         !! The variance.
 
     rst = this%n * this%p * (1.0d0 - this%p)
+end function
+
+! ------------------------------------------------------------------------------
+pure function bd_range(this) result(rst)
+    !! Gets the defined range for the distribution.
+    class(binomial_distribution), intent(in) :: this
+        !! The binomial_distribution object.
+    real(real64), dimension(2) :: rst
+        !! The defined range of the probability distributions [0, infinity).  As
+        !! using a value of infinity may cause issue, this routine returns
+        !! huge(0.0d0) instead.
+
+    rst = [0.0d0, huge(0.0d0)]
 end function
 
 ! ******************************************************************************
@@ -1010,6 +1061,19 @@ pure function lnd_variance(this) result(rst)
         !! The variance
     rst = (exp(this%standard_deviation**2) - 1.0d0) * &
         exp(2.0d0 * this%mean_value + this%standard_deviation**2)
+end function
+
+! ------------------------------------------------------------------------------
+pure function lnd_range(this) result(rst)
+    !! Gets the defined range for the distribution.
+    class(log_normal_distribution), intent(in) :: this
+        !! The log_normal_distribution object.
+    real(real64), dimension(2) :: rst
+        !! The defined range of the probability distributions [0, infinity).  As
+        !! using a value of infinity may cause issue, this routine returns
+        !! huge(0.0d0) instead.
+
+    rst = [0.0d0, huge(0.0d0)]
 end function
 
 ! ******************************************************************************
