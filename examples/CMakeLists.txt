@@ -60,8 +60,8 @@ target_link_libraries(mcmc_regression_example fstats)
 target_link_libraries(mcmc_regression_example ${fplot_LIBRARY})
 target_include_directories(mcmc_regression_example PUBLIC ${fplot_INCLUDE_DIR})
 
-# # MCMC Regression Example 2
-# add_executable(mcmc_regression_example_2 mcmc_regression_example_2.f90)
-# target_link_libraries(mcmc_regression_example_2 fstats)
-# target_link_libraries(mcmc_regression_example_2 ${fplot_LIBRARY})
-# target_include_directories(mcmc_regression_example_2 PUBLIC ${fplot_INCLUDE_DIR})
+# MCMC Regression Example 2
+add_executable(mcmc_regression_example_2 mcmc_regression_example_2.f90)
+target_link_libraries(mcmc_regression_example_2 fstats)
+target_link_libraries(mcmc_regression_example_2 ${fplot_LIBRARY})
+target_include_directories(mcmc_regression_example_2 PUBLIC ${fplot_INCLUDE_DIR})
