@@ -34,6 +34,7 @@ module fstats
     public :: multivariate_distribution_function
     public :: multivariate_normal_distribution
     public :: log_normal_distribution
+    public :: poisson_distribution
 
     ! FSTATS_DESCRIPTIVE_STATISTICS.F90
     public :: mean
