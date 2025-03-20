@@ -10,6 +10,7 @@ module fstats_distributions
     public :: distribution
     public :: distribution_function
     public :: distribution_property
+    public :: distribution_recenter
     public :: t_distribution
     public :: normal_distribution
     public :: f_distribution
@@ -25,12 +26,13 @@ module fstats_distributions
     type, abstract :: distribution
         !! Defines a probability distribution.
     contains
-        procedure(distribution_function), deferred, pass :: pdf
-        procedure(distribution_function), deferred, pass :: cdf
-        procedure(distribution_property), deferred, pass :: mean
-        procedure(distribution_property), deferred, pass :: median
-        procedure(distribution_property), deferred, pass :: mode
-        procedure(distribution_property), deferred, pass :: variance
+        procedure(distribution_function), public, deferred, pass :: pdf
+        procedure(distribution_function), public, deferred, pass :: cdf
+        procedure(distribution_property), public, deferred, pass :: mean
+        procedure(distribution_property), public, deferred, pass :: median
+        procedure(distribution_property), public, deferred, pass :: mode
+        procedure(distribution_property), public, deferred, pass :: variance
+        procedure(distribution_recenter), public, deferred, pass :: recenter
         procedure, public :: standardized_variable => dist_std_var
         procedure, public :: defined_range => dist_defined_range
     end type
@@ -57,6 +59,16 @@ module fstats_distributions
             real(real64) :: rst
                 !! The property value.
         end function
+
+        subroutine distribution_recenter(this, x)
+            !! Recenters the distribution about the supplied value.
+            use iso_fortran_env, only : real64
+            import distribution
+            class(distribution), intent(inout) :: this
+                !! The distribution object.
+            real(real64), intent(in) :: x
+                !! The value about which to recenter.
+        end subroutine
     end interface
 
 ! ------------------------------------------------------------------------------
@@ -71,6 +83,7 @@ module fstats_distributions
         procedure, public :: median => td_median
         procedure, public :: mode => td_mode
         procedure, public :: variance => td_variance
+        procedure, public :: recenter => td_recenter
     end type
 ! ------------------------------------------------------------------------------
     type, extends(distribution) :: normal_distribution
@@ -87,6 +100,7 @@ module fstats_distributions
         procedure, public :: mode => nd_mode
         procedure, public :: variance => nd_variance
         procedure, public :: standardize => nd_standardize
+        procedure, public :: recenter => nd_recenter
     end type
 
 ! ------------------------------------------------------------------------------
@@ -104,6 +118,7 @@ module fstats_distributions
         procedure, public :: mode => fd_mode
         procedure, public :: variance => fd_variance
         procedure, public :: defined_range => fd_range
+        procedure, public :: recenter => fd_recenter
     end type
 
 ! ------------------------------------------------------------------------------
@@ -119,6 +134,7 @@ module fstats_distributions
         procedure, public :: mode => cs_mode
         procedure, public :: variance => cs_variance
         procedure, public :: defined_range => cs_range
+        procedure, public :: recenter => cs_recenter
     end type
 
 ! ------------------------------------------------------------------------------
@@ -138,6 +154,7 @@ module fstats_distributions
         procedure, public :: mode => bd_mode
         procedure, public :: variance => bd_variance
         procedure, public :: defined_range => bd_range
+        procedure, public :: recenter => bd_recenter
     end type
 
 ! ------------------------------------------------------------------------------
@@ -155,6 +172,7 @@ module fstats_distributions
         procedure, public :: mode => lnd_mode
         procedure, public :: variance => lnd_variance
         procedure, public :: defined_range => lnd_range
+        procedure, public :: recenter => lnd_recenter
     end type
 
 ! ******************************************************************************
@@ -357,6 +375,16 @@ pure function td_variance(this) result(rst)
     end if
 end function
 
+! ------------------------------------------------------------------------------
+subroutine td_recenter(this, x)
+    !! Recenters the distribution about the supplied value.  This routine has
+    !! no effect for this distribution as it is always centered about 0.
+    class(t_distribution), intent(inout) :: this
+        !! The t_distribution object.
+    real(real64), intent(in) :: x
+        !! The value about which to recenter.
+end subroutine
+
 ! ******************************************************************************
 ! NORMAL DISTRIBUTION
 ! ------------------------------------------------------------------------------
@@ -443,6 +471,18 @@ subroutine nd_standardize(this)
         !! The normal_distribution object.
     this%mean_value = 0.0d0
     this%standard_deviation = 1.0d0
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine nd_recenter(this, x)
+    !! Recenters the distribution about the supplied value.
+    class(normal_distribution), intent(inout) :: this
+        !! The normal_distribution object.
+    real(real64), intent(in) :: x
+        !! The value about which to recenter.
+
+    ! Process
+    this%mean_value = x
 end subroutine
 
 ! ******************************************************************************
@@ -566,6 +606,18 @@ pure function fd_range(this) result(rst)
     rst = [0.0d0, huge(0.0d0)]
 end function
 
+! ------------------------------------------------------------------------------
+subroutine fd_recenter(this, x)
+    !! Recenters the distribution about the supplied value.
+    class(f_distribution), intent(inout) :: this
+        !! The f_distribution object.
+    real(real64), intent(in) :: x
+        !! The value about which to recenter.
+
+    ! Process
+    this%d2 = 2.0d0 * x / (x - 1.0d0)
+end subroutine
+
 ! ******************************************************************************
 ! CHI-SQUARED DISTRIBUTION
 ! ------------------------------------------------------------------------------
@@ -673,6 +725,18 @@ pure function cs_range(this) result(rst)
     rst = [0.0d0, huge(0.0d0)]
 end function
 
+! ------------------------------------------------------------------------------
+subroutine cs_recenter(this, x)
+    !! Recenters the distribution about the supplied value.
+    class(chi_squared_distribution), intent(inout) :: this
+        !! The chi_squared_distribution object.
+    real(real64), intent(in) :: x
+        !! The value about which to recenter.
+
+    ! Process
+    this%dof = floor(x)
+end subroutine
+
 ! ******************************************************************************
 ! BINOMIAL DISTRIBUTION
 ! ------------------------------------------------------------------------------
@@ -779,6 +843,18 @@ pure function bd_range(this) result(rst)
 
     rst = [0.0d0, huge(0.0d0)]
 end function
+
+! ------------------------------------------------------------------------------
+subroutine bd_recenter(this, x)
+    !! Recenters the distribution about the supplied value.
+    class(binomial_distribution), intent(inout) :: this
+        !! The binomial_distribution object.
+    real(real64), intent(in) :: x
+        !! The value about which to recenter.
+
+    ! Process
+    this%p = x / this%n
+end subroutine
 
 ! ******************************************************************************
 ! MULTIVARIATE NORMAL DISTRIBUTION
@@ -1075,6 +1151,17 @@ pure function lnd_range(this) result(rst)
 
     rst = [0.0d0, huge(0.0d0)]
 end function
+
+! ------------------------------------------------------------------------------
+subroutine lnd_recenter(this, x)
+    !! Recenters the distribution about the supplied value.
+    class(log_normal_distribution), intent(inout) :: this
+        !! The log_normal_distribution object.
+    real(real64), intent(in) :: x
+        !! The value about which to recenter.
+
+    this%mean_value = x
+end subroutine
 
 ! ******************************************************************************
 ! SUPPORTING ROUTINES
