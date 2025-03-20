@@ -208,6 +208,12 @@ program example
     ! the class that implements mcmc_target (e.g. custom_target in this case)
     tgt%data_noise = 1.0d1
 
+    ! Disable recentering.  Some problems can converge more quickly without
+    ! recentering if the supplied parameter distributions describe the posterior
+    ! distribution sufficiently well.  The default behavior is for the sampler
+    ! to allow for recentering.
+    call prop%set_recenter(.false.)
+
     ! Sample
     call sampler%sample(xdata, ydata, prop, tgt)
 

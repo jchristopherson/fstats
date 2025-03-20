@@ -74,8 +74,12 @@ module fstats_mcmc
     type :: mcmc_proposal
         !! Defines a type responsible for generating a proposal state for a
         !! Monte-Carlo, Markov-Chain sampler.
+        logical, private :: m_recenter = .true.
+            !! Allow recentering?
     contains
         procedure, public :: generate_sample => ms_gen
+        procedure, public :: get_recenter => ms_get_recenter
+        procedure, public :: set_recenter => ms_set_recenter
     end type
 
     type mcmc_sampler
@@ -272,11 +276,13 @@ pure function mt_eval_var_prior(this, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function mt_sample_var_prior(this, n) result(rst)
+function mt_sample_var_prior(this, vc, n) result(rst)
     !! Samples the variance prior distribution for the requested number of 
     !! samples.
     class(mcmc_target), intent(inout) :: this
         !! The mcmc_target object.
+    real(real64), intent(in) :: vc
+        !! The prior variance term.
     integer(int32), intent(in) :: n
         !! The number of samples.
     real(real64), allocatable, dimension(:) :: rst
@@ -287,7 +293,7 @@ function mt_sample_var_prior(this, n) result(rst)
     real(real64) :: xmin, xmax, sigma
 
     ! Establish an upper bounds on the sampling region
-    dist%mean_value = 0.0d0
+    dist%mean_value = vc
     dist%standard_deviation = this%data_noise
     sigma = dist%standard_deviation
     if (sigma == 0.0d0) then
@@ -400,6 +406,9 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
             return
         end if
 
+        ! Recenter the distribution
+        if (this%get_recenter()) call dist%recenter(xc(i))
+
         ! Get limit values for the parameter
         rng = dist%defined_range()
         mx = maxval(rng)
@@ -415,10 +424,33 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
     end do
 
     ! Handle the variance term
-    samples = tgt%sample_variance_prior(nsamples)
+    samples = tgt%sample_variance_prior(vc, nsamples)
     vp = samples(1)
 end subroutine
 
+! ------------------------------------------------------------------------------
+pure function ms_get_recenter(this) result(rst)
+    !! Gets a value determining if the parameter distributions should be
+    !! recentered about the last stored position upon sampling.
+    class(mcmc_proposal), intent(in) :: this
+        !! The mcmc_proposal object.
+    logical :: rst
+        !! True if recentering is to be allowed; else, false.
+
+    rst = this%m_recenter
+end function
+
+! ------------------------------------------------------------------------------
+subroutine ms_set_recenter(this, x)
+    !! Sets a value determining if the parameter distributions should be 
+    !! recentered about the last stored position upon sampling.
+    class(mcmc_proposal), intent(inout) :: this
+        !! The mcmc_proposal object.
+    logical, intent(in) :: x
+        !! True if recentering is to be allowed; else, false.
+
+    this%m_recenter = x
+end subroutine
 
 ! ******************************************************************************
 ! MCMC_SAMPLER

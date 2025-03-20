@@ -24,6 +24,7 @@ module fstats
     public :: distribution
     public :: distribution_function
     public :: distribution_property
+    public :: distribution_recenter
     public :: t_distribution
     public :: normal_distribution
     public :: f_distribution
