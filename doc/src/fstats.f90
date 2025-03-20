@@ -101,6 +101,7 @@ module fstats
     public :: sample_normal_multivariate
 
     ! FSTATS_MCMC.F90
+    public :: chain_builder
     public :: mcmc_sampler
     public :: mcmc_target
     public :: evaluate_model

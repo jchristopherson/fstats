@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>fstats_smoothing &ndash; FSTATS</title>
+    <title>chain_builder &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>fstats_smoothing
-      <small>Module</small>
+    <h1>chain_builder
+      <small>Derived Type</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,17 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 5.6% of total for modules and submodules.">215 statements</a>
+               title="<p> 6.1% of total for derived types.</p>Including implementation: 130 statements, 10.2% of total for derived types.">14 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_smoothing.f90"> Source File</a>
+              <a href="../src/fstats_mcmc.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_smoothing.f90.html'>fstats_smoothing.f90</a></li>
-          <li class="active">fstats_smoothing</li>
+              <li><a href='../sourcefile/fstats_mcmc.f90.html'>fstats_mcmc.f90</a></li>
+              <li><a href='../module/fstats_mcmc.html'>fstats_mcmc</a></li>
+          <li class="active">chain_builder</li>
         </ol>
       </div>
     </div>
@@ -118,10 +119,10 @@
   </script>
 
   </div>
-
+  
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-        <div id="sidebar">
+      <div id="sidebar">
       <h3>Contents</h3>
   
   
@@ -135,54 +136,47 @@
   
   
   
+  
+  
+  
+  
+  
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
-          <a data-toggle="collapse" href="#subs-0">Subroutines</a>
+          <a data-toggle="collapse" href="#boundprocs-0">Type-Bound Procedures</a>
         </h3>
       </div>
-      <div id="subs-0" class="panel-collapse collapse">
+      <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_smoothing.html#proc-lowess">lowess</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-get_chain">get_chain</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-get_chain_length">get_chain_length</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-get_state_variable_count">get_state_variable_count</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-push_new_state">push_new_state</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-reset">reset</a>
         </div>
       </div>
     </div>
 
-  
-  
-  
-  
-  
   
 
 
   </div>
 
     </div>
-
+    
     <div class="col-md-9" id='text'>
-      
-<br>          <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Uses</h3>
-      </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-            <ul class="list-inline">
-                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
-                <li>linalg</li>
-                <li>ferror</li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
-            </ul>
-          </li>
-      </ul>
-    </div>
+      <h2>type, public :: chain_builder</h2>
+    <p>A type allowing for the construction of chain of values.</p>
+    <br>
 
-      
-      <br>
-
-      <section class="visible-xs visible-sm hidden-md">
-          <h3>Contents</h3>
+    <section class="visible-xs visible-sm hidden-md">
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
   
   
   
@@ -198,44 +192,40 @@
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
-          <a data-toggle="collapse" href="#subs-1">Subroutines</a>
+          <a data-toggle="collapse" href="#boundprocs-1">Type-Bound Procedures</a>
         </h3>
       </div>
-      <div id="subs-1" class="panel-collapse collapse">
+      <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_smoothing.html#proc-lowess">lowess</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-get_chain">get_chain</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-get_chain_length">get_chain_length</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-get_state_variable_count">get_state_variable_count</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-push_new_state">push_new_state</a>
+            <a class="list-group-item" href="../type/chain_builder.html#boundprocedure-reset">reset</a>
         </div>
       </div>
     </div>
 
   
-  
-  
-  
-  
-  
 
 
-      </section>
-      <br class="visible-xs visible-sm hidden-md">
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
 
 
-
-
-
-
-
-
-        <section>
-          <h2>Subroutines</h2>
-              <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-lowess"></span><h3>public  subroutine <a href='../proc/lowess.html'>lowess</a>(x, y, ys, fsmooth, nstps, del, rweights, resid, err)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>Computes the smoothing of a data set using a robust locally weighted
-scatterplot smoothing (LOWESS) algorithm.  Fitted values are computed at
-each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+      <section>
+        <h2>Type-Bound Procedures</h2>
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_chain"></span><h3>procedure, public :: <strong>get_chain</strong>  => cb_get_chain         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function cb_get_chain(this, bin, err) result(rst)  
+</h3>
+  <p>Gets a copy of the stored Markov chain.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -251,47 +241,16 @@ each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-righ
         <tr>
             <td>
               <span class="anchor" ></span>
-              real(kind=real64),
+              class(<a href='../type/chain_builder.html'>chain_builder</a>),
             </td>
-<td>intent(in),</td>
+<td>intent(in)</td>
               <td></td>            <td>
-              dimension(:)
+              
             </td>
             <td>::</td>
-            <td><strong>x</strong></td>
+            <td><strong>this</strong></td>
             <td>
-<p>An N-element array containing the independent variable data.  This
-array must be monotonically increasing.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-<p>An N-element array containing the dependent variable data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(out),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>ys</strong></td>
-            <td>
-<p>An N-element array where the smoothed results will be written.</p>
+                <p>The chain_builder object.</p>
             </td>
         </tr>
         <tr>
@@ -304,76 +263,12 @@ array must be monotonically increasing.</p>
               
             </td>
             <td>::</td>
-            <td><strong>fsmooth</strong></td>
+            <td><strong>bin</strong></td>
             <td>
-<p>An optional input that specifies the amount of smoothing.<br>
-Specifically, this value is the fraction of points used to compute
-each value.  As this value increases, the output becomes smoother.
-Choosing a value in the range of 0.2 to 0.8 typically results in a
-good fit.  The default value is 0.2.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nstps</strong></td>
-            <td>
-<p>An optional input that specifies the numb of iterations.  If set to
-zero, a non-robust fit is returned.  The default value is set to 2.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>del</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(out),</td>
-              <td>optional,</td>            <td>
-              dimension(:), target
-            </td>
-            <td>::</td>
-            <td><strong>rweights</strong></td>
-            <td>
-<p>An optional N-element array, that if supplied, will be used to
-return the weights given to each data point.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(out),</td>
-              <td>optional,</td>            <td>
-              dimension(:), target
-            </td>
-            <td>::</td>
-            <td><strong>resid</strong></td>
-            <td>
-<p>An optional N-element array, that if supplied, will be used to 
-return the residual.</p>
+                <p>An optional input allowing for a burn-in region.  The parameter
+represents the amount (percentage-based) of the overall chain to 
+disregard as "burn-in" values.  The value shoud exist on [0, 1).
+The default value is 0 such that no values are disregarded.</p>
             </td>
         </tr>
         <tr>
@@ -388,26 +283,241 @@ return the residual.</p>
             <td>::</td>
             <td><strong>err</strong></td>
             <td>
-<p>A mechanism for communicating errors and warnings to the 
-caller.  Possible warning and error codes are as follows.
-- FS_NO_ERROR: No errors encountered.
-- FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
-     approriately sized.
-- FS_MEMORY_ERROR: Occurs if there is a memory allocation error.</p>
+                <p>The error handling object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), allocatable, dimension(:,:)</small>
+    </h4>
+    <p>The resulting chain with each parameter represented by a column.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_chain_length"></span><h3>procedure, public :: <strong>get_chain_length</strong>  => cb_get_chain_length         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function cb_get_chain_length(this) result(rst)  
+</h3>
+  <p>Gets the length of the chain (number of stored state variables).</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/chain_builder.html'>chain_builder</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The chain_builder object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=int32)</small>
+    </h4>
+    <p>The chain length.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_state_variable_count"></span><h3>procedure, public :: <strong>get_state_variable_count</strong>  => cb_get_nvars         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function cb_get_nvars(this) result(rst)  
+</h3>
+  <p>Gets the number of state variables.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/chain_builder.html'>chain_builder</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The chain_builder object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=int32)</small>
+    </h4>
+    <p>The number of state variables.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-push_new_state"></span><h3>procedure, public :: <strong>push_new_state</strong>  => cb_push         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine cb_push(this, x, err)  
+</h3>
+  <p>Pushes a new set of state variables onto the buffer.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/chain_builder.html'>chain_builder</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The chain_builder object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The new N-element state array.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>The error handling object.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
 
-    </div>
+        </li>
+    </ul>
   </div>
 
-        </section>
-        <br>
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-reset"></span><h3>procedure, public :: <strong>reset</strong>  => cb_clear_chain         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine cb_clear_chain(this)  
+</h3>
+  <p>Resets the object and clears out the buffer storing the chain values.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/chain_builder.html'>chain_builder</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The chain_builder object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
 
 
+        </li>
+    </ul>
+  </div>
 
+      </section>
+
+    
     </div>
   </div>
 
