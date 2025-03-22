@@ -9,7 +9,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>bootstrap_statistic_routine &ndash; FSTATS</title>
+    <title>distribution_recenter &ndash; FSTATS</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -85,7 +85,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>bootstrap_statistic_routine
+    <h1>distribution_recenter
       <small>Interface</small>
       
     </h1>
@@ -97,18 +97,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 0.7% of total for procedures.">12 statements</a>
+               title=" 1.2% of total for procedures.">21 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_bootstrap.f90"> Source File</a>
+              <a href="../src/fstats_distributions.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_bootstrap.f90.html'>fstats_bootstrap.f90</a></li>
-              <li><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></li>
-          <li class="active">bootstrap_statistic_routine</li>
+              <li><a href='../sourcefile/fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
+              <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+          <li class="active">distribution_recenter</li>
         </ol>
       </div>
     </div>
@@ -153,7 +153,7 @@
     
     <div class="col-md-9" id='text'>
       <h2>interface <br>
-      public  function bootstrap_statistic_routine(x) result(rst)  
+      public  subroutine distribution_recenter(this, x)  
 </h2>    
 
     
@@ -171,27 +171,39 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~5"></span>
+              <span class="anchor" id="variable-this~49"></span>
+              class(<a href='../type/distribution.html'>distribution</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~33"></span>
               real(kind=real64),
             </td>
-<td>intent(in),</td>
+<td>intent(in)</td>
               <td></td>            <td>
-              dimension(:)
+              
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                <p>The array of data to analyze.</p>
+                <p>The value about which to recenter.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
-      <h3>Return Value <span class="anchor" id="variable-rst~6"></span><small>real(kind=real64)</small></h3>
-    <p>The resulting statistic.</p>
     <h3>Description</h3>
-    <p>Defines the signature of a function for computing the desired
-bootstrap statistic.</p>
+    <p>Recenters the distribution about the supplied value.</p>
     <br>
 
  </div>

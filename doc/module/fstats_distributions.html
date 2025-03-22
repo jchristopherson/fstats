@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="15.8% of total for modules and submodules.">598 statements</a>
+               title="16.7% of total for modules and submodules.">641 statements</a>
           </li>
 
             <li id="source-file">
@@ -141,6 +141,7 @@
         <div class="list-group">
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_function">distribution_function</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_property">distribution_property</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_recenter">distribution_recenter</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-multivariate_distribution_function">multivariate_distribution_function</a>
         </div>
       </div>
@@ -191,12 +192,12 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
-                <li>ferror</li>
-                <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
                 <li><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li>ferror</li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
             </ul>
           </li>
       </ul>
@@ -225,6 +226,7 @@
         <div class="list-group">
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_function">distribution_function</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_property">distribution_property</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#interface-distribution_recenter">distribution_recenter</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#interface-multivariate_distribution_function">multivariate_distribution_function</a>
         </div>
       </div>
@@ -386,6 +388,69 @@
     <small>real(kind=real64)</small>
     </h4>
     <p>The property value.</p>
+
+        </li>
+    </ul>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="interface-distribution_recenter"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public  subroutine distribution_recenter(this, x)  
+
+    </h3>
+  <p>Recenters the distribution about the supplied value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/distribution.html'>distribution</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value about which to recenter.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
 
         </li>
     </ul>
@@ -598,6 +663,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/binomial_distribution.html#boundprocedure-recenter'>recenter</a></strong>
+ =>
+                    bd_recenter
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong>
  =>
                     dist_std_var
@@ -732,6 +807,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/chi_squared_distribution.html#boundprocedure-recenter~2'>recenter</a></strong>
+ =>
+                    cs_recenter
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong>
  =>
                     dist_std_var
@@ -818,6 +903,14 @@ exist on the set [0, 1].</p>
                     procedure
 (distribution_function)                    ,                  public
 , pass                  :: <strong><a href='../type/distribution.html#boundprocedure-pdf~4'>pdf</a></strong>
+<small></small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+(distribution_recenter)                    ,                  public
+, pass                  :: <strong><a href='../type/distribution.html#boundprocedure-recenter~3'>recenter</a></strong>
 <small></small>                </td>
                 <td></td>
               </tr>
@@ -974,6 +1067,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/f_distribution.html#boundprocedure-recenter~4'>recenter</a></strong>
+ =>
+                    fd_recenter
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong>
  =>
                     dist_std_var
@@ -1119,6 +1222,16 @@ exist on the set [0, 1].</p>
  =>
                     lnd_pdf
 <small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/log_normal_distribution.html#boundprocedure-recenter~5'>recenter</a></strong>
+ =>
+                    lnd_recenter
+<small>Subroutine</small>                </td>
                 <td></td>
               </tr>
               <tr>
@@ -1390,6 +1503,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/normal_distribution.html#boundprocedure-recenter~6'>recenter</a></strong>
+ =>
+                    nd_recenter
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/normal_distribution.html#boundprocedure-standardize'>standardize</a></strong>
  =>
                     nd_standardize
@@ -1534,6 +1657,16 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-recenter~7'>recenter</a></strong>
+ =>
+                    td_recenter
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
                   :: <strong><a href='../type/distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong>
  =>
                     dist_std_var
@@ -1577,7 +1710,7 @@ exist on the set [0, 1].</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-19 13:24              </p>
+ on 2025-03-20 11:50              </p>
           </div>
         </div>
         <br>

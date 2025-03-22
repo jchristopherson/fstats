@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 1.8% of total for derived types.</p>Including implementation: 47 statements,  4.1% of total for derived types.">4 statements</a>
+               title="<p> 3.1% of total for derived types.</p>Including implementation: 61 statements,  4.8% of total for derived types.">7 statements</a>
           </li>
 
             <li id="source-file">
@@ -150,6 +150,8 @@
       <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
             <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-generate_sample">generate_sample</a>
+            <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-get_recenter">get_recenter</a>
+            <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-set_recenter">set_recenter</a>
         </div>
       </div>
     </div>
@@ -195,6 +197,8 @@ Monte-Carlo, Markov-Chain sampler.</p>
       <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
             <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-generate_sample">generate_sample</a>
+            <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-get_recenter">get_recenter</a>
+            <a class="list-group-item" href="../type/mcmc_proposal.html#boundprocedure-set_recenter">set_recenter</a>
         </div>
       </div>
     </div>
@@ -211,12 +215,12 @@ Monte-Carlo, Markov-Chain sampler.</p>
       <section>
         <h2>Type-Bound Procedures</h2>
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-generate_sample"></span><h3>procedure, public :: <strong>generate_sample</strong>  => ms_gen         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-generate_sample"></span><h3>procedure, public :: <strong>generate_sample</strong>  => mp_gen         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)  
+    private  subroutine mp_gen(this, tgt, xc, xp, vc, vp, err)  
 </h3>
   <p>Creates a new sample proposal.</p>
 
@@ -344,6 +348,116 @@ Monte-Carlo, Markov-Chain sampler.</p>
     </ul>
   </div>
 
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-get_recenter"></span><h3>procedure, public :: <strong>get_recenter</strong>  => mp_get_recenter         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function mp_get_recenter(this) result(rst)  
+</h3>
+  <p>Gets a value determining if the parameter distributions should be
+recentered about the last stored position upon sampling.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_proposal.html'>mcmc_proposal</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The mcmc_proposal object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    <p>True if recentering is to be allowed; else, false.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-set_recenter"></span><h3>procedure, public :: <strong>set_recenter</strong>  => mp_set_recenter         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine mp_set_recenter(this, x)  
+</h3>
+  <p>Sets a value determining if the parameter distributions should be 
+recentered about the last stored position upon sampling.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_proposal.html'>mcmc_proposal</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The mcmc_proposal object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              logical,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>True if recentering is to be allowed; else, false.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
       </section>
 
     
@@ -362,7 +476,7 @@ Monte-Carlo, Markov-Chain sampler.</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-19 13:24              </p>
+ on 2025-03-20 11:50              </p>
           </div>
         </div>
         <br>

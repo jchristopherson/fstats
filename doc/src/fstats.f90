@@ -24,6 +24,7 @@ module fstats
     public :: distribution
     public :: distribution_function
     public :: distribution_property
+    public :: distribution_recenter
     public :: t_distribution
     public :: normal_distribution
     public :: f_distribution
@@ -100,6 +101,7 @@ module fstats
     public :: sample_normal_multivariate
 
     ! FSTATS_MCMC.F90
+    public :: chain_builder
     public :: mcmc_sampler
     public :: mcmc_target
     public :: evaluate_model

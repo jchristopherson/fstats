@@ -226,7 +226,7 @@ subroutine plot_chain_hist(chain)
     class(terminal), pointer :: term
 
     ! Plot
-    call plt%initialize(1, 4)
+    call plt%initialize(2, 2)
     call plt1%initialize()
     call plt2%initialize()
     call plt3%initialize()
@@ -235,7 +235,7 @@ subroutine plot_chain_hist(chain)
 
     call plt%set_font_size(11)
 
-    call term%set_window_height(400)
+    call term%set_window_height(800)
     call term%set_window_width(1700)
 
     call plt1%set_title("{/Symbol w}_n")
@@ -250,15 +250,15 @@ subroutine plot_chain_hist(chain)
 
     call pd%define_data(chain(:,2))
     call plt2%push(pd)
-    call plt%set(1, 2, plt2)
+    call plt%set(2, 1, plt2)
 
     call pd%define_data(chain(:,3))
     call plt3%push(pd)
-    call plt%set(1, 3, plt3)
+    call plt%set(1, 2, plt3)
 
     call pd%define_data(chain(:,4))
     call plt4%push(pd)
-    call plt%set(1, 4, plt4)
+    call plt%set(2, 2, plt4)
 
     call plt%draw()
 end subroutine
@@ -308,6 +308,12 @@ program example
     ! assumed to be logarithmic by default.  This can be overridden through
     ! the class that implements mcmc_target (e.g. custom_target in this case)
     tgt%data_noise = 1.0d1
+
+    ! Disable recentering.  Some problems can converge more quickly without
+    ! recentering if the supplied parameter distributions describe the posterior
+    ! distribution sufficiently well.  The default behavior is for the sampler
+    ! to allow for recentering.
+    call prop%set_recenter(.false.)
 
     ! Sample
     call sampler%sample(xdata, ydata, prop, tgt, niter = 100000)

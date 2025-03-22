@@ -24,6 +24,7 @@ module fstats
     public :: distribution
     public :: distribution_function
     public :: distribution_property
+    public :: distribution_recenter
     public :: t_distribution
     public :: normal_distribution
     public :: f_distribution
@@ -33,76 +34,96 @@ module fstats
     public :: multivariate_distribution_function
     public :: multivariate_normal_distribution
     public :: log_normal_distribution
+    public :: poisson_distribution
 
+    ! FSTATS_DESCRIPTIVE_STATISTICS.F90
     public :: mean
     public :: variance
     public :: standard_deviation
     public :: median
+    public :: quantile
+    public :: trimmed_mean
     public :: covariance
+    public :: pooled_variance
+
+    ! FSTATS_SPECIAL_FUNCTIONS
+    public :: beta
+    public :: regularized_beta
+    public :: incomplete_beta
+    public :: incomplete_gamma_lower
+    public :: incomplete_gamma_upper
+    public :: digamma
+
+    ! FSTATS_SMOOTHING.F90
+    public :: lowess
+
+    ! FSTATS_SAMPLING.F90
+    public :: box_muller_sample
+    public :: rejection_sample
+    public :: sample_normal_multivariate
+    
+    ! FSTATS_MCMC.F90
+    public :: chain_builder
+    public :: mcmc_sampler
+    public :: mcmc_target
+    public :: evaluate_model
+    public :: mcmc_proposal
+   
+    ! FSTATS_REGRESSION.F90
+    public :: iteration_controls
+    public :: convergence_info
+    public :: lm_solver_options
+    public :: regression_function
+    public :: iteration_update
+    public :: regression_statistics
     public :: r_squared
     public :: adjusted_r_squared
     public :: correlation
-    public :: quantile
+    public :: design_matrix
+    public :: covariance_matrix
+    public :: linear_least_squares
+    public :: calculate_regression_statistics
+    public :: jacobian
+    public :: nonlinear_least_squares
+    public :: FS_LEVENBERG_MARQUARDT_UPDATE
+    public :: FS_QUADRATIC_UPDATE
+    public :: FS_NIELSEN_UPDATE
+
+    ! FSTATS_HYPOTHESIS.F90
+    public :: confidence_interval
     public :: t_test_equal_variance
     public :: t_test_unequal_variance
     public :: t_test_paired
     public :: f_test
-    public :: anova
-    public :: anova_factor
-    public :: single_factor_anova_table
-    public :: two_factor_anova_table
-    public :: confidence_interval
-    public :: beta
-    public :: regularized_beta
-    public :: incomplete_beta
-    public :: digamma
-    public :: incomplete_gamma_upper
-    public :: incomplete_gamma_lower
-    public :: design_matrix
-    public :: covariance_matrix
-    public :: linear_least_squares
-    public :: regression_statistics
-    public :: get_full_factorial_matrix_size
-    public :: full_factorial
-    public :: iteration_controls
-    public :: lm_solver_options
-    public :: convergence_info
-    public :: regression_function
-    public :: iteration_update
-    public :: jacobian
-    public :: nonlinear_least_squares
-    public :: allan_variance
-    public :: trimmed_mean
+    public :: bartletts_test
+    public :: levenes_test
+    public :: sample_size
+
+    ! FSTATS_HELPER_ROUTINES.F90
     public :: difference
     public :: factorial
+
+    ! FSTATS_EXPERIMENTAL_DESIGN.F90
+    public :: get_full_factorial_matrix_size
+    public :: full_factorial
+    public :: doe_fit_model
+    public :: doe_evaluate_model
+    public :: doe_model
+
+    ! FSTATS_BOOTSTRAP.F90
     public :: bootstrap_resampling_routine
     public :: bootstrap_statistic_routine
     public :: random_resample
     public :: scaled_random_resample
     public :: bootstrap_statistics
     public :: bootstrap
-    
-    public :: lowess
-    public :: pooled_variance
-    public :: bartletts_test
-    public :: levenes_test
-    public :: sample_size
-    public :: FS_LEVENBERG_MARQUARDT_UPDATE
-    public :: FS_QUADRATIC_UPDATE
-    public :: FS_NIELSEN_UPDATE
-    public :: doe_fit_model
-    public :: doe_evaluate_model
-    public :: doe_model
 
-    ! FSTATS_SAMPLING.F90
-    public :: box_muller_sample
-    public :: rejection_sample
-    public :: sample_normal_multivariate
+    ! FSTATS_ANOVA.F90
+    public :: anova_factor
+    public :: single_factor_anova_table
+    public :: two_factor_anova_table
+    public :: anova
 
-    ! FSTATS_MCMC.F90
-    public :: mcmc_sampler
-    public :: mcmc_target
-    public :: evaluate_model
-    public :: mcmc_proposal
-   
+    ! FSTATS_ALLAN.F90
+    public :: allan_variance
 end module

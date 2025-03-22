@@ -11,6 +11,7 @@ module fstats_mcmc
     use collections
     implicit none
     private
+    public :: chain_builder
     public :: mcmc_sampler
     public :: mcmc_target
     public :: evaluate_model
@@ -74,13 +75,17 @@ module fstats_mcmc
     type :: mcmc_proposal
         !! Defines a type responsible for generating a proposal state for a
         !! Monte-Carlo, Markov-Chain sampler.
+        logical, private :: m_recenter = .true.
+            !! Allow recentering?
     contains
-        procedure, public :: generate_sample => ms_gen
+        procedure, public :: generate_sample => mp_gen
+        procedure, public :: get_recenter => mp_get_recenter
+        procedure, public :: set_recenter => mp_set_recenter
     end type
 
-    type mcmc_sampler
-        !! An implementation of the Metropolis-Hastings algorithm for the
-        !! generation of a Markov chain.
+! ------------------------------------------------------------------------------
+    type chain_builder
+        !! A type allowing for the construction of chain of values.
         integer(int32), private :: initial_iteration_estimate = 10000
             !! An initial estimate at the number of allowed iterations.
         integer(int32), private :: m_bufferSize = 0
@@ -89,27 +94,29 @@ module fstats_mcmc
             !! The buffer where each new state is stored as a row in the matrix.
         integer(int32), private :: m_numVars = 0
             !! The number of state variables.
-        type(multivariate_normal_distribution), private :: m_propDist
-            !! The proposal distribution from which to draw samples.
-        logical, private :: m_propDistInitialized = .false.
-            !! Set to true if the proposal distribution object has been
-            !! initialized; else, false.
+    contains
+        procedure, public :: get_state_variable_count => cb_get_nvars
+        procedure, public :: get_chain_length => cb_get_chain_length
+        procedure, public :: push_new_state => cb_push
+        procedure, public :: get_chain => cb_get_chain
+        procedure, public :: reset => cb_clear_chain
+
+        ! Private Routines
+        procedure, private :: resize_buffer => cb_resize_buffer
+        procedure, private :: get_buffer_length => cb_get_buffer_length
+    end type
+
+! ------------------------------------------------------------------------------
+    type, extends(chain_builder) :: mcmc_sampler
+        !! An implementation of the Metropolis-Hastings algorithm for the
+        !! generation of a Markov chain.
         integer(int32), private :: m_accepted = 0
             !! The number of accepted steps.
     contains
-        procedure, public :: get_state_variable_count => mh_get_nvars
-        procedure, public :: get_chain_length => mh_get_chain_length
-        procedure, public :: push_new_state => mh_push
-        procedure, public :: get_chain => mh_get_chain
-        procedure, public :: sample => mh_sample
-        procedure, public :: reset => mh_clear_chain
-        procedure, public :: on_acceptance => mh_on_success
-        procedure, public :: on_rejection => mh_on_rejection
-        procedure, public :: get_accepted_count => mh_get_num_accepted
-
-        ! Private Routines
-        procedure, private :: resize_buffer => mh_resize_buffer
-        procedure, private :: get_buffer_length => mh_get_buffer_length
+        procedure, public :: sample => ms_sample 
+        procedure, public :: on_acceptance => ms_on_success
+        procedure, public :: on_rejection => ms_on_rejection
+        procedure, public :: get_accepted_count => ms_get_num_accepted
     end type
 
 contains
@@ -272,11 +279,13 @@ pure function mt_eval_var_prior(this, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function mt_sample_var_prior(this, n) result(rst)
+function mt_sample_var_prior(this, vc, n) result(rst)
     !! Samples the variance prior distribution for the requested number of 
     !! samples.
     class(mcmc_target), intent(inout) :: this
         !! The mcmc_target object.
+    real(real64), intent(in) :: vc
+        !! The prior variance term.
     integer(int32), intent(in) :: n
         !! The number of samples.
     real(real64), allocatable, dimension(:) :: rst
@@ -287,7 +296,7 @@ function mt_sample_var_prior(this, n) result(rst)
     real(real64) :: xmin, xmax, sigma
 
     ! Establish an upper bounds on the sampling region
-    dist%mean_value = 0.0d0
+    dist%mean_value = vc
     dist%standard_deviation = this%data_noise
     sigma = dist%standard_deviation
     if (sigma == 0.0d0) then
@@ -348,9 +357,9 @@ function mt_eval_prior(this, x, err) result(rst)
 end function
 
 ! ******************************************************************************
-! MCMC_SAMPLER
+! MCMC_PROPOSAL
 ! ------------------------------------------------------------------------------
-subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
+subroutine mp_gen(this, tgt, xc, xp, vc, vp, err)
     !! Creates a new sample proposal.
     class(mcmc_proposal), intent(inout) :: this
         !! The mcmc_proposal object.
@@ -387,7 +396,7 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
 
     ! Input Checking
     if (size(xp) /= n) then
-        call report_array_size_error(errmgr, "ms_gen", "xp", n, size(xp))
+        call report_array_size_error(errmgr, "mp_gen", "xp", n, size(xp))
         return
     end if
 
@@ -396,9 +405,12 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
         ! Get the parameter distribution
         dist => tgt%get_parameter(i)
         if (.not.associated(dist)) then
-            call report_null_pointer_error(errmgr, "ms_gen", "dist")
+            call report_null_pointer_error(errmgr, "mp_gen", "dist")
             return
         end if
+
+        ! Recenter the distribution
+        if (this%get_recenter()) call dist%recenter(xc(i))
 
         ! Get limit values for the parameter
         rng = dist%defined_range()
@@ -415,18 +427,41 @@ subroutine ms_gen(this, tgt, xc, xp, vc, vp, err)
     end do
 
     ! Handle the variance term
-    samples = tgt%sample_variance_prior(nsamples)
+    samples = tgt%sample_variance_prior(vc, nsamples)
     vp = samples(1)
 end subroutine
 
+! ------------------------------------------------------------------------------
+pure function mp_get_recenter(this) result(rst)
+    !! Gets a value determining if the parameter distributions should be
+    !! recentered about the last stored position upon sampling.
+    class(mcmc_proposal), intent(in) :: this
+        !! The mcmc_proposal object.
+    logical :: rst
+        !! True if recentering is to be allowed; else, false.
+
+    rst = this%m_recenter
+end function
+
+! ------------------------------------------------------------------------------
+subroutine mp_set_recenter(this, x)
+    !! Sets a value determining if the parameter distributions should be 
+    !! recentered about the last stored position upon sampling.
+    class(mcmc_proposal), intent(inout) :: this
+        !! The mcmc_proposal object.
+    logical, intent(in) :: x
+        !! True if recentering is to be allowed; else, false.
+
+    this%m_recenter = x
+end subroutine
 
 ! ******************************************************************************
-! MCMC_SAMPLER
+! CHAIN_BUILDER
 ! ------------------------------------------------------------------------------
-pure function mh_get_nvars(this) result(rst)
+pure function cb_get_nvars(this) result(rst)
     !! Gets the number of state variables.
-    class(mcmc_sampler), intent(in) :: this
-        !! The mcmc_sampler object.
+    class(chain_builder), intent(in) :: this
+        !! The chain_builder object.
     integer(int32) :: rst
         !! The number of state variables.
 
@@ -434,10 +469,10 @@ pure function mh_get_nvars(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-pure function mh_get_chain_length(this) result(rst)
+pure function cb_get_chain_length(this) result(rst)
     !! Gets the length of the chain (number of stored state variables).
-    class(mcmc_sampler), intent(in) :: this
-        !! The mcmc_sampler object.
+    class(chain_builder), intent(in) :: this
+        !! The chain_builder object.
     integer(int32) :: rst
         !! The chain length.
 
@@ -445,10 +480,10 @@ pure function mh_get_chain_length(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mh_resize_buffer(this, err)
+subroutine cb_resize_buffer(this, err)
     !! Resizes the buffer to accept more states.
-    class(mcmc_sampler), intent(inout) :: this
-        !! The mcmc_sampler object.
+    class(chain_builder), intent(inout) :: this
+        !! The chain_builder object.
     class(errors), intent(inout), optional, target :: err
         !! The error handling object.
 
@@ -491,16 +526,16 @@ subroutine mh_resize_buffer(this, err)
 
     ! Memory Error Handling
 10  continue
-    call report_memory_error(errmgr, "mh_resize_buffer", flag)
+    call report_memory_error(errmgr, "cb_resize_buffer", flag)
     return
 end subroutine
 
 ! ------------------------------------------------------------------------------
-pure function mh_get_buffer_length(this) result(rst)
+pure function cb_get_buffer_length(this) result(rst)
     !! Gets the actual length of the buffer.  This value will likely exceed the
     !! actual number of items in the chain.
-    class(mcmc_sampler), intent(in) :: this
-        !! The mcmc_sampler object.
+    class(chain_builder), intent(in) :: this
+        !! The chain_builder object.
     integer(int32) :: rst
         !! The actual buffer length.
 
@@ -512,10 +547,10 @@ pure function mh_get_buffer_length(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mh_push(this, x, err)
+subroutine cb_push(this, x, err)
     !! Pushes a new set of state variables onto the buffer.
-    class(mcmc_sampler), intent(inout) :: this
-        !! The mcmc_sampler object.
+    class(chain_builder), intent(inout) :: this
+        !! The chain_builder object.
     real(real64), intent(in), dimension(:) :: x
         !! The new N-element state array.
     class(errors), intent(inout), optional, target :: err
@@ -544,7 +579,7 @@ subroutine mh_push(this, x, err)
 
     ! Input Checking
     if (nvars /= this%get_state_variable_count()) then
-        call report_array_size_error(errmgr, "mh_push", "x", &
+        call report_array_size_error(errmgr, "cb_push", "x", &
             this%get_state_variable_count(), nvars)
         return
     end if
@@ -561,10 +596,10 @@ subroutine mh_push(this, x, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-function mh_get_chain(this, bin, err) result(rst)
+function cb_get_chain(this, bin, err) result(rst)
     !! Gets a copy of the stored Markov chain.
-    class(mcmc_sampler), intent(in) :: this
-        !! The mcmc_sampler object.
+    class(chain_builder), intent(in) :: this
+        !! The chain_builder object.
     real(real64), intent(in), optional :: bin
         !! An optional input allowing for a burn-in region.  The parameter
         !! represents the amount (percentage-based) of the overall chain to 
@@ -600,24 +635,26 @@ function mh_get_chain(this, bin, err) result(rst)
     allocate(rst(npts, nvar), stat = flag, &
         source = this%m_buffer(nstart:n,1:nvar))
     if (flag /= 0) then
-        call report_memory_error(errmgr, "mh_get_chain", flag)
+        call report_memory_error(errmgr, "cb_get_chain", flag)
         return
     end if
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mh_clear_chain(this)
+subroutine cb_clear_chain(this)
     !! Resets the object and clears out the buffer storing the chain values.
-    class(mcmc_sampler), intent(inout) :: this
-        !! The mcmc_sampler object.
+    class(chain_builder), intent(inout) :: this
+        !! The chain_builder object.
 
     ! Clear the buffer
     this%m_bufferSize = 0
     this%m_numVars = 0
 end subroutine
 
+! ******************************************************************************
+! MCMC_SAMPLER
 ! ------------------------------------------------------------------------------
-subroutine mh_on_success(this, iter, alpha, xc, xp, err)
+subroutine ms_on_success(this, iter, alpha, xc, xp, err)
     !! Currently, this routine does nothing and is a placeholder for the user
     !! that inherits this class to provide functionallity upon acceptance of
     !! a proposed value.
@@ -637,7 +674,7 @@ subroutine mh_on_success(this, iter, alpha, xc, xp, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine mh_on_rejection(this, iter, alpha, xc, xp, err)
+subroutine ms_on_rejection(this, iter, alpha, xc, xp, err)
     !! Currently, this routine does nothing and is a placeholder for the user
     !! that inherits this class to provide functionallity upon rejection of
     !! a proposed value.
@@ -657,7 +694,7 @@ subroutine mh_on_rejection(this, iter, alpha, xc, xp, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-pure function mh_get_num_accepted(this) result(rst)
+pure function ms_get_num_accepted(this) result(rst)
     !! Gets the number of accepted steps.
     class(mcmc_sampler), intent(in) :: this
         !! The mcmc_sampler object.
@@ -667,7 +704,7 @@ pure function mh_get_num_accepted(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mh_sample(this, xdata, ydata, prop, tgt, niter, err)
+subroutine ms_sample(this, xdata, ydata, prop, tgt, niter, err)
     !! Samples the distribution using the Metropolis-Hastings approach.
     class(mcmc_sampler), intent(inout) :: this
         !! The mcmc_sampler object.
@@ -713,7 +750,7 @@ subroutine mh_sample(this, xdata, ydata, prop, tgt, niter, err)
 
     ! Input Checking
     if (size(ydata) /= m) then
-        call report_array_size_error(errmgr, "mh_sample", "ydata", m, size(ydata))
+        call report_array_size_error(errmgr, "ms_sample", "ydata", m, size(ydata))
         return
     end if
 
@@ -783,7 +820,7 @@ subroutine mh_sample(this, xdata, ydata, prop, tgt, niter, err)
 
     ! Memory Error Handling
 10  continue
-    call report_memory_error(errmgr, "mh_sample", flag)
+    call report_memory_error(errmgr, "ms_sample", flag)
     return
 end subroutine
 

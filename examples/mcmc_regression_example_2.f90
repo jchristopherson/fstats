@@ -37,6 +37,7 @@ subroutine plot_fit(xdata, ydata, x, f)
 
     ! Set up and draw the plot
     call plt%initialize()
+    call plt%set_font_size(11)
 
     call p1%define_data(x, f)
     call p1%set_line_width(2.0)
@@ -69,6 +70,7 @@ subroutine plot_chain(chain)
     call plt3%initialize()
     call plt4%initialize()
     term => plt%get_terminal()
+    call plt%set_font_size(11)
 
     call term%set_window_height(800)
     call term%set_window_width(1200)
@@ -114,6 +116,7 @@ subroutine plot_chain_hist(chain)
     call plt3%initialize()
     call plt4%initialize()
     term => plt%get_terminal()
+    call plt%set_font_size(11)
 
     call term%set_window_height(400)
     call term%set_window_width(1700)
@@ -207,6 +210,12 @@ program example
     ! assumed to be logarithmic by default.  This can be overridden through
     ! the class that implements mcmc_target (e.g. custom_target in this case)
     tgt%data_noise = 1.0d1
+
+    ! Disable recentering.  Some problems can converge more quickly without
+    ! recentering if the supplied parameter distributions describe the posterior
+    ! distribution sufficiently well.  The default behavior is for the sampler
+    ! to allow for recentering.
+    call prop%set_recenter(.false.)
 
     ! Sample
     call sampler%sample(xdata, ydata, prop, tgt)

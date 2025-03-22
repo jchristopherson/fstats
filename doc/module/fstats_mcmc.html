@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="11.9% of total for modules and submodules.">451 statements</a>
+               title="12.2% of total for modules and submodules.">468 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,6 +153,7 @@
       </div>
       <div id="types-0" class="panel-collapse collapse">
         <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-chain_builder">chain_builder</a>
             <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_proposal">mcmc_proposal</a>
             <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_sampler">mcmc_sampler</a>
             <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_target">mcmc_target</a>
@@ -183,15 +184,15 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
-                <li><a href='../module/fstats_regression.html'>fstats_regression</a></li>
-                <li>ferror</li>
-                <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
-                <li><a href='../module/fstats_sampling.html'>fstats_sampling</a></li>
-                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
                 <li><a href='../module/fstats_types.html'>fstats_types</a></li>
                 <li>collections</li>
+                <li><a href='../module/fstats_sampling.html'>fstats_sampling</a></li>
+                <li>ferror</li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li><a href='../module/fstats_regression.html'>fstats_regression</a></li>
+                <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
             </ul>
           </li>
       </ul>
@@ -232,6 +233,7 @@
       </div>
       <div id="types-1" class="panel-collapse collapse">
         <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-chain_builder">chain_builder</a>
             <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_proposal">mcmc_proposal</a>
             <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_sampler">mcmc_sampler</a>
             <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_target">mcmc_target</a>
@@ -360,6 +362,79 @@ be written.</p>
           <h2>Derived Types</h2>
               <div class="panel panel-default">
     <div class="panel-heading codesum">
+      <span class="anchor" id="type-chain_builder"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='../type/chain_builder.html'>chain_builder</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>A type allowing for the construction of chain of values.</p>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain'>get_chain</a></strong>
+ =>
+                    cb_get_chain
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
+ =>
+                    cb_get_chain_length
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_state_variable_count'>get_state_variable_count</a></strong>
+ =>
+                    cb_get_nvars
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-push_new_state'>push_new_state</a></strong>
+ =>
+                    cb_push
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-reset'>reset</a></strong>
+ =>
+                    cb_clear_chain
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
       <span class="anchor" id="type-mcmc_proposal"></span>
       <h3>
         type, public&nbsp;::&nbsp;
@@ -383,7 +458,27 @@ Monte-Carlo, Markov-Chain sampler.</p>
                     ,                  public
                   :: <strong><a href='../type/mcmc_proposal.html#boundprocedure-generate_sample'>generate_sample</a></strong>
  =>
-                    ms_gen
+                    mp_gen
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_proposal.html#boundprocedure-get_recenter'>get_recenter</a></strong>
+ =>
+                    mp_get_recenter
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_proposal.html#boundprocedure-set_recenter'>set_recenter</a></strong>
+ =>
+                    mp_set_recenter
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -396,7 +491,7 @@ Monte-Carlo, Markov-Chain sampler.</p>
     <div class="panel-heading codesum">
       <span class="anchor" id="type-mcmc_sampler"></span>
       <h3>
-        type, public&nbsp;::&nbsp;
+        type, public, extends(<a href='../type/chain_builder.html'>chain_builder</a>)&nbsp;::&nbsp;
         <a href='../type/mcmc_sampler.html'>mcmc_sampler</a>
         
       </h3>
@@ -417,7 +512,7 @@ generation of a Markov chain.</p>
                     ,                  public
                   :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-get_accepted_count'>get_accepted_count</a></strong>
  =>
-                    mh_get_num_accepted
+                    ms_get_num_accepted
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -425,9 +520,9 @@ generation of a Markov chain.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-get_chain'>get_chain</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain'>get_chain</a></strong>
  =>
-                    mh_get_chain
+                    cb_get_chain
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -435,9 +530,9 @@ generation of a Markov chain.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
  =>
-                    mh_get_chain_length
+                    cb_get_chain_length
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -445,9 +540,9 @@ generation of a Markov chain.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-get_state_variable_count'>get_state_variable_count</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_state_variable_count'>get_state_variable_count</a></strong>
  =>
-                    mh_get_nvars
+                    cb_get_nvars
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -457,7 +552,7 @@ generation of a Markov chain.</p>
                     ,                  public
                   :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-on_acceptance'>on_acceptance</a></strong>
  =>
-                    mh_on_success
+                    ms_on_success
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -467,7 +562,7 @@ generation of a Markov chain.</p>
                     ,                  public
                   :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-on_rejection'>on_rejection</a></strong>
  =>
-                    mh_on_rejection
+                    ms_on_rejection
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -475,9 +570,9 @@ generation of a Markov chain.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-push_new_state'>push_new_state</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-push_new_state'>push_new_state</a></strong>
  =>
-                    mh_push
+                    cb_push
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -485,9 +580,9 @@ generation of a Markov chain.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-reset'>reset</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-reset'>reset</a></strong>
  =>
-                    mh_clear_chain
+                    cb_clear_chain
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -497,7 +592,7 @@ generation of a Markov chain.</p>
                     ,                  public
                   :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-sample'>sample</a></strong>
  =>
-                    mh_sample
+                    ms_sample
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -665,7 +760,7 @@ normally distributed.</p><a href="../type/mcmc_target.html" class="pull-right"><
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-19 13:24              </p>
+ on 2025-03-20 11:50              </p>
           </div>
         </div>
         <br>

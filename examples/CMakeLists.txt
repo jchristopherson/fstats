@@ -71,3 +71,9 @@ add_executable(mcmc_regression_example_3 mcmc_regression_example_3.f90)
 target_link_libraries(mcmc_regression_example_3 fstats)
 target_link_libraries(mcmc_regression_example_3 ${fplot_LIBRARY})
 target_include_directories(mcmc_regression_example_3 PUBLIC ${fplot_INCLUDE_DIR})
+
+# Distribution Example
+add_executable(distribution_example distribution_example.f90)
+target_link_libraries(distribution_example fstats)
+target_link_libraries(distribution_example ${fplot_LIBRARY})
+target_include_directories(distribution_example PUBLIC ${fplot_INCLUDE_DIR})
