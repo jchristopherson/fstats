@@ -10,62 +10,77 @@ module fstats_sampling
 
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
     real(real64), parameter :: twopi = 2.0d0 * pi
-    real(real64), parameter :: pi_f = 2.0 * acos(0.0)
-    real(real64), parameter :: twopi_f = 2.0 * pi_f
 
-    interface box_muller_sample
-        !! Generates random, normally distributed values via the Box-Muller 
-        !! transform.
-        module procedure :: box_muller_sample_scalar
-        module procedure :: box_muller_array
-    end interface
+    ! interface box_muller_sample
+    !     !! Generates random, normally distributed values via the Box-Muller 
+    !     !! transform.
+    !     module procedure :: box_muller_sample_scalar
+    !     module procedure :: box_muller_array
+    ! end interface
 contains
 ! ------------------------------------------------------------------------------
-function box_muller_sample_scalar(mu, sigma) result(rst)
-    !! Generates a pair of independent, standard, normally distributed
-    !! random values using the Box-Muller transform.
+function box_muller_sample_driver(mu, sigma, prev) result(rst)
+    !! Driver routine for computing a single Box-Muller sample pair.
     real(real64), intent(in) :: mu
-        !! The mean of the distribution.
+    !! The mean of the distribution.    
     real(real64), intent(in) :: sigma
         !! The standard deviation of the distribution.
-    real(real64) :: rst(2)
-        !! The pair of random values.
+    real(real64), intent(inout) :: prev
+        !! The extra value from the previous set of samples.  On output, this
+        !! value is updated.
+    real(real64) :: rst
+        !! The resulting sample.
 
     ! Local Variables
-    real(real64) :: u1, u2
-    complex(real64) :: z
+    real(real64) :: u1, u2, v1, v2, rsq, fac
 
     ! Process
-    call random_number(u1)
-    call random_number(u2)
-    z = sqrt(-2.0d0 * log(u1)) * sigma
-    rst = [z * cos(twopi * u2) + mu, z * sin(twopi * u2) + mu]
+    if (prev == 0.0d0) then
+        rsq = 1.0d0
+        do while (rsq >= 1.0d0 .or.rsq == 0.0d0)
+            call random_number(u1)
+            call random_number(u2)
+            v1 = 2.0d0 * u1 - 1.0d0
+            v2 = 2.0d0 * u2 - 1.020
+            rsq = v1**2 + v2**2
+        end do
+        fac = sqrt(-2.0d0 * log(rsq) / rsq)
+        prev = v1 * fac
+        rst = mu + sigma * v2 * fac
+    else
+        fac = prev
+        rst = mu + sigma * fac
+        prev = 0.0d0
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
-function box_muller_array(mu, sigma, n) result(rst)
-    !! Generates an array of normally distributed random values sampled
-    !! by the Box-Muller transform.
+function box_muller_sample(mu, sigma, n) result(rst)
+    !! Utilizes the Box-Muller transformation approach to generate the requested
+    !! number of random samples from a normal distribution of the specified mean
+    !! and standard deviation.
     real(real64), intent(in) :: mu
         !! The mean of the distribution.
     real(real64), intent(in) :: sigma
         !! The standard deviation of the distribution.
     integer(int32), intent(in) :: n
-        !! The number of Box-Muller pairs to generate.
+        !! The number of random samples to generate.
     real(real64), allocatable, dimension(:) :: rst
-        !! A 2N-element array containing the N Box-Muller pairs.
+        !! An N-element array containing the values.
 
     ! Local Variables
     integer(int32) :: i
+    real(real64) :: prev
 
     ! Process
     if (n < 1) then
         allocate(rst(0))
         return
     end if
-    allocate(rst(2 * n))
+    allocate(rst(n))
+    prev = 0.0d0
     do i = 1, n
-        rst(2*i-1:2*i) = box_muller_sample(mu, sigma)
+        rst(i) = box_muller_sample_driver(mu, sigma, prev)
     end do
 end function
 
