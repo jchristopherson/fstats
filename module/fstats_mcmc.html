@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="10.1% of total for modules and submodules.">395 statements</a>
+               title="12.2% of total for modules and submodules.">468 statements</a>
           </li>
 
             <li id="source-file">
@@ -131,7 +131,19 @@
   
   
   
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#inters-0">Interfaces</a>
+        </h3>
+      </div>
+      <div id="inters-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_mcmc.html#interface-evaluate_model">evaluate_model</a>
+        </div>
+      </div>
+    </div>
+
   
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
@@ -141,7 +153,10 @@
       </div>
       <div id="types-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_mcmc.html#type-metropolis_hastings">metropolis_hastings</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-chain_builder">chain_builder</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_proposal">mcmc_proposal</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_sampler">mcmc_sampler</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_target">mcmc_target</a>
         </div>
       </div>
     </div>
@@ -169,13 +184,14 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
+                <li><a href='../module/fstats_types.html'>fstats_types</a></li>
+                <li>collections</li>
+                <li><a href='../module/fstats_sampling.html'>fstats_sampling</a></li>
                 <li>ferror</li>
                 <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
-                <li><a href='../module/fstats_regression.html'>fstats_regression</a></li>
-                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
-                <li><a href='../module/fstats_sampling.html'>fstats_sampling</a></li>
-                <li><a href='../module/fstats_types.html'>fstats_types</a></li>
                 <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li><a href='../module/fstats_regression.html'>fstats_regression</a></li>
                 <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
             </ul>
           </li>
@@ -195,7 +211,19 @@
   
   
   
-  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#inters-1">Interfaces</a>
+        </h3>
+      </div>
+      <div id="inters-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/fstats_mcmc.html#interface-evaluate_model">evaluate_model</a>
+        </div>
+      </div>
+    </div>
+
   
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
@@ -205,7 +233,10 @@
       </div>
       <div id="types-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../module/fstats_mcmc.html#type-metropolis_hastings">metropolis_hastings</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-chain_builder">chain_builder</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_proposal">mcmc_proposal</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_sampler">mcmc_sampler</a>
+            <a class="list-group-item" href="../module/fstats_mcmc.html#type-mcmc_target">mcmc_target</a>
         </div>
       </div>
     </div>
@@ -226,28 +257,120 @@
 
 
 
+        <section>
+          <h2>Interfaces</h2>
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="interface-evaluate_model"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public  subroutine evaluate_model(this, xdata, xc, y)  
+
+    </h3>
+  <p>Evaluates the model at the supplied values.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The mcmc_target object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xdata</strong></td>
+            <td>
+                <p>An M-element array containing the values at which to evaluate
+the model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>An N-element array containing the model parameters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>An M-element array where the resulting model values wil
+be written.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
 
 
         <section>
           <h2>Derived Types</h2>
               <div class="panel panel-default">
     <div class="panel-heading codesum">
-      <span class="anchor" id="type-metropolis_hastings"></span>
+      <span class="anchor" id="type-chain_builder"></span>
       <h3>
         type, public&nbsp;::&nbsp;
-        <a href='../type/metropolis_hastings.html'>metropolis_hastings</a>
+        <a href='../type/chain_builder.html'>chain_builder</a>
         
       </h3>
     </div>
     <div class="panel-body">
-      <p>An implementation of the Metropolis-Hastings algorithm for the
-generation of a Markov chain.  This is a default implementation
-that allows sampling of normally distributed posterior distributions
-centered on zero with unit standard deviations.  Proposals are
-generated from a multivariate normal distribution with an identity
-covariance matrix and centered on zero.  To alter these sampling
-and target distributions simply create a new class inheriting from 
-this class and override the appropriate routines.</p>
+      <p>A type allowing for the construction of chain of values.</p>
 
 
 
@@ -259,9 +382,9 @@ this class and override the appropriate routines.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-compute_hastings_ratio'>compute_hastings_ratio</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain'>get_chain</a></strong>
  =>
-                    mh_hastings_ratio
+                    cb_get_chain
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -269,9 +392,9 @@ this class and override the appropriate routines.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-evaluate_proposal_pdf'>evaluate_proposal_pdf</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
  =>
-                    mh_eval_proposal
+                    cb_get_chain_length
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -279,9 +402,9 @@ this class and override the appropriate routines.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-generate_proposal'>generate_proposal</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_state_variable_count'>get_state_variable_count</a></strong>
  =>
-                    mh_proposal
+                    cb_get_nvars
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -289,99 +412,9 @@ this class and override the appropriate routines.</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_accepted_count'>get_accepted_count</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-push_new_state'>push_new_state</a></strong>
  =>
-                    mh_get_num_accepted
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_chain'>get_chain</a></strong>
- =>
-                    mh_get_chain
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
- =>
-                    mh_get_chain_length
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_proposal_cholesky'>get_proposal_cholesky</a></strong>
- =>
-                    mh_get_prop_chol_cov
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_proposal_covariance'>get_proposal_covariance</a></strong>
- =>
-                    mh_get_prop_cov
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_proposal_initialized'>get_proposal_initialized</a></strong>
- =>
-                    mh_get_is_prop_init
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_proposal_means'>get_proposal_means</a></strong>
- =>
-                    mh_get_prop_mean
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-get_state_variable_count'>get_state_variable_count</a></strong>
- =>
-                    mh_get_nvars
-<small>Function</small>                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-generic,
-                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-initialize_proposal'>initialize_proposal</a></strong>
- =>
-                    mh_init_proposal_1, mh_init_proposal_2
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                    procedure
-                    ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-on_acceptance'>on_acceptance</a></strong>
- =>
-                    mh_on_success
+                    cb_push
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -389,9 +422,43 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-on_rejection'>on_rejection</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-reset'>reset</a></strong>
  =>
-                    mh_on_rejection
+                    cb_clear_chain
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="type-mcmc_proposal"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='../type/mcmc_proposal.html'>mcmc_proposal</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>Defines a type responsible for generating a proposal state for a
+Monte-Carlo, Markov-Chain sampler.</p>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_proposal.html#boundprocedure-generate_sample'>generate_sample</a></strong>
+ =>
+                    mp_gen
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -399,9 +466,93 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-push_new_state'>push_new_state</a></strong>
+                  :: <strong><a href='../type/mcmc_proposal.html#boundprocedure-get_recenter'>get_recenter</a></strong>
  =>
-                    mh_push
+                    mp_get_recenter
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_proposal.html#boundprocedure-set_recenter'>set_recenter</a></strong>
+ =>
+                    mp_set_recenter
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="type-mcmc_sampler"></span>
+      <h3>
+        type, public, extends(<a href='../type/chain_builder.html'>chain_builder</a>)&nbsp;::&nbsp;
+        <a href='../type/mcmc_sampler.html'>mcmc_sampler</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>An implementation of the Metropolis-Hastings algorithm for the
+generation of a Markov chain.</p>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-get_accepted_count'>get_accepted_count</a></strong>
+ =>
+                    ms_get_num_accepted
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain'>get_chain</a></strong>
+ =>
+                    cb_get_chain
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_chain_length'>get_chain_length</a></strong>
+ =>
+                    cb_get_chain_length
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-get_state_variable_count'>get_state_variable_count</a></strong>
+ =>
+                    cb_get_nvars
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-on_acceptance'>on_acceptance</a></strong>
+ =>
+                    ms_on_success
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -409,9 +560,9 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-reset'>reset</a></strong>
+                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-on_rejection'>on_rejection</a></strong>
  =>
-                    mh_clear_chain
+                    ms_on_rejection
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -419,9 +570,9 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-sample'>sample</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-push_new_state'>push_new_state</a></strong>
  =>
-                    mh_sample
+                    cb_push
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -429,9 +580,9 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-set_proposal_covariance'>set_proposal_covariance</a></strong>
+                  :: <strong><a href='../type/chain_builder.html#boundprocedure-reset'>reset</a></strong>
  =>
-                    mh_set_prop_cov
+                    cb_clear_chain
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -439,9 +590,78 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-set_proposal_means'>set_proposal_means</a></strong>
+                  :: <strong><a href='../type/mcmc_sampler.html#boundprocedure-sample'>sample</a></strong>
  =>
-                    mh_set_prop_mean
+                    ms_sample
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="type-mcmc_target"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='../type/mcmc_target.html'>mcmc_target</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>Defines a model of the target distribution(s).  This type is key
+to the MCMC regression process.  The approach taken is to 
+evaluate the model provided here and evaluating its likelihood.  The
+likelihood is evaluated by computing the residual between the model
+and data, and making the assumption that the residual should be
+normally distributed.</p><a href="../type/mcmc_target.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Visibility</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+<th></th><th>Initial</th>        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-data_noise"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>data_noise</strong></td>
+<td> =</td>
+                <td>1.0d0</td>
+            <td>
+<p>A parameter representing the noise in the data.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-add_parameter'>add_parameter</a></strong>
+ =>
+                    mt_add_param
 <small>Subroutine</small>                </td>
                 <td></td>
               </tr>
@@ -449,9 +669,67 @@ generic,
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/metropolis_hastings.html#boundprocedure-target_distribution'>target_distribution</a></strong>
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-evaluate_prior'>evaluate_prior</a></strong>
  =>
-                    mh_target
+                    mt_eval_prior
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-evaluate_variance_prior'>evaluate_variance_prior</a></strong>
+ =>
+                    mt_eval_var_prior
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-get_parameter'>get_parameter</a></strong>
+ =>
+                    mt_get_param
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-get_parameter_count'>get_parameter_count</a></strong>
+ =>
+                    mt_get_param_count
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-likelihood'>likelihood</a></strong>
+ =>
+                    mt_likelihood
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+(evaluate_model)                    ,                  public
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-model'>model</a></strong>
+<small></small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/mcmc_target.html#boundprocedure-sample_variance_prior'>sample_variance_prior</a></strong>
+ =>
+                    mt_sample_var_prior
 <small>Function</small>                </td>
                 <td></td>
               </tr>
@@ -482,7 +760,7 @@ generic,
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:41              </p>
+ on 2025-03-20 11:50              </p>
           </div>
         </div>
         <br>
