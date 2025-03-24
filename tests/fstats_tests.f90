@@ -148,6 +148,12 @@ program tests
     local = test_mh_push()
     if (.not.local) overall = .false.
 
+    local = test_mcmc_target_distributions()
+    if (.not.local) overall = .false.
+
+    local = test_mcmc_target_likelihood()
+    if (.not.local) overall = .false.
+
     ! local = test_mh_proposal()
     ! if (.not.local) overall = .false.
 

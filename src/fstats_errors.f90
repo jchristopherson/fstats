@@ -16,6 +16,8 @@ module fstats_errors
     integer(int32), parameter :: FS_TOLERANCE_TOO_SMALL_ERROR = 10005
     integer(int32), parameter :: FS_TOO_FEW_ITERATION_ERROR = 10006
     integer(int32), parameter :: FS_INVALID_ARGUMENT_ERROR = 10007
+    integer(int32), parameter :: FS_ZERO_VARIANCE_ERROR = 10008
+    integer(int32), parameter :: FS_NULL_POINTER_ERROR = 10009
 
 ! ------------------------------------------------------------------------------
     integer(int32), private, parameter :: MESSAGE_SIZE = 1024
@@ -163,9 +165,9 @@ contains
         !! Reports an iteration count error.
         class(errors), intent(inout) :: err
             !! The error handling object.
-        character(len = *) :: fname
+        character(len = *), intent(in) :: fname
             !! The name of the routine in which the error occurred.
-        character(len = *) :: msg
+        character(len = *), intent(in) :: msg
             !! The error message.
         integer(int32), intent(in) :: mincount
             !! The minimum iteration count expected.
@@ -179,6 +181,37 @@ contains
 
         ! Formatting
 100     format(A, I0, A)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine report_zero_variance_warning(err, fname)
+        !! Issues a warning when a zero variance is encountered in an unexpected
+        !! place.
+        class(errors), intent(inout) :: err
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+
+        ! Process
+        call err%report_warning(fname, &
+            "A zero-valued variance was encountered when not expected.", &
+            FS_ZERO_VARIANCE_ERROR)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine report_null_pointer_error(err, fname, name)
+        !! Reports a null pointer error.
+        class(errors), intent(inout) :: err
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *), intent(in) :: name
+            !! The parameter name.
+
+        ! Process
+        call err%report_error(fname, &
+            "The parameter " // name // " was found to be null.", &
+            FS_NULL_POINTER_ERROR)
     end subroutine
 
 ! ------------------------------------------------------------------------------

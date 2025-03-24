@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 4.4% of total for derived types.</p>Including implementation: 65 statements,  4.2% of total for derived types.">10 statements</a>
+               title="<p> 5.3% of total for derived types.</p>Including implementation: 77 statements,  6.0% of total for derived types.">12 statements</a>
           </li>
 
             <li id="source-file">
@@ -161,13 +161,15 @@
       </div>
       <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-cdf~3">cdf</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mean~3">mean</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-median~3">median</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mode~3">mode</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-pdf~4">pdf</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-cdf~2">cdf</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-defined_range~2">defined_range</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mean~2">mean</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-median~2">median</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mode~2">mode</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-pdf~3">pdf</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-recenter~2">recenter</a>
             <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-variance~4">variance</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-variance~3">variance</a>
         </div>
       </div>
     </div>
@@ -223,13 +225,15 @@
       </div>
       <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-cdf~3">cdf</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mean~3">mean</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-median~3">median</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mode~3">mode</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-pdf~4">pdf</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-cdf~2">cdf</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-defined_range~2">defined_range</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mean~2">mean</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-median~2">median</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-mode~2">mode</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-pdf~3">pdf</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-recenter~2">recenter</a>
             <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-variance~4">variance</a>
+            <a class="list-group-item" href="../type/chi_squared_distribution.html#boundprocedure-variance~3">variance</a>
         </div>
       </div>
     </div>
@@ -280,7 +284,7 @@
       <section>
         <h2>Type-Bound Procedures</h2>
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf~3"></span><h3>procedure, public :: <strong>cdf</strong>  => cs_cdf         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-cdf~2"></span><h3>procedure, public :: <strong>cdf</strong>  => cs_cdf         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -347,7 +351,58 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean~3"></span><h3>procedure, public :: <strong>mean</strong>  => cs_mean         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-defined_range~2"></span><h3>procedure, public :: <strong>defined_range</strong>  => cs_range         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function cs_range(this) result(rst)  
+</h3>
+  <p>Gets the defined range for the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/chi_squared_distribution.html'>chi_squared_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The chi_squared_distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), dimension(2)</small>
+    </h4>
+    <p>The defined range of the probability distributions [0, infinity).  As
+using a value of infinity may cause issue, this routine returns
+huge(0.0d0) instead.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mean~2"></span><h3>procedure, public :: <strong>mean</strong>  => cs_mean         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -396,7 +451,7 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median~3"></span><h3>procedure, public :: <strong>median</strong>  => cs_median         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-median~2"></span><h3>procedure, public :: <strong>median</strong>  => cs_median         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -445,7 +500,7 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode~3"></span><h3>procedure, public :: <strong>mode</strong>  => cs_mode         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-mode~2"></span><h3>procedure, public :: <strong>mode</strong>  => cs_mode         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -494,7 +549,7 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~4"></span><h3>procedure, public :: <strong>pdf</strong>  => cs_pdf         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-pdf~3"></span><h3>procedure, public :: <strong>pdf</strong>  => cs_pdf         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -561,12 +616,67 @@
   </div>
 
             <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-recenter~2"></span><h3>procedure, public :: <strong>recenter</strong>  => cs_recenter         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine cs_recenter(this, x)  
+</h3>
+  <p>Recenters the distribution about the supplied value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/chi_squared_distribution.html'>chi_squared_distribution</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The chi_squared_distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value about which to recenter.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-standardized_variable"></span><h3>procedure, public :: <strong>standardized_variable</strong>  => dist_std_var         
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the standardized variable for the distribution.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -629,7 +739,7 @@
   </div>
 
             <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~4"></span><h3>procedure, public :: <strong>variance</strong>  => cs_variance         
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-variance~3"></span><h3>procedure, public :: <strong>variance</strong>  => cs_variance         
     </h3></div>
     <ul class="list-group">
         <li class="list-group-item">
@@ -695,7 +805,7 @@
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:41              </p>
+ on 2025-03-20 11:50              </p>
           </div>
         </div>
         <br>

@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 4.8% of total for derived types.</p>Including implementation: 62 statements,  4.0% of total for derived types.">11 statements</a>
+               title="<p> 5.7% of total for derived types.</p>Including implementation: 74 statements,  5.8% of total for derived types.">13 statements</a>
           </li>
 
             <li id="source-file">
@@ -163,10 +163,12 @@
       <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-cdf~5">cdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-defined_range~5">defined_range</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mean~5">mean</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-median~5">median</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mode~5">mode</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-pdf~6">pdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-recenter~5">recenter</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-variance~6">variance</a>
         </div>
@@ -226,10 +228,12 @@
       <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-cdf~5">cdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-defined_range~5">defined_range</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mean~5">mean</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-median~5">median</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mode~5">mode</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-pdf~6">pdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-recenter~5">recenter</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-variance~6">variance</a>
         </div>
@@ -361,6 +365,57 @@
     <small>real(kind=real64)</small>
     </h4>
     <p>The value of the function.</p>
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-defined_range~5"></span><h3>procedure, public :: <strong>defined_range</strong>  => lnd_range         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function lnd_range(this) result(rst)  
+</h3>
+  <p>Gets the defined range for the distribution.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal_distribution object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64), dimension(2)</small>
+    </h4>
+    <p>The defined range of the probability distributions [0, infinity).  As
+using a value of infinity may cause issue, this routine returns
+huge(0.0d0) instead.</p>
 
         </li>
     </ul>
@@ -582,12 +637,67 @@
   </div>
 
             <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-recenter~5"></span><h3>procedure, public :: <strong>recenter</strong>  => lnd_recenter         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine lnd_recenter(this, x)  
+</h3>
+  <p>Recenters the distribution about the supplied value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The log_normal_distribution object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value about which to recenter.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-standardized_variable"></span><h3>procedure, public :: <strong>standardized_variable</strong>  => dist_std_var         
     </h3></div>
-      <div class="panel-body">
-        
-        <p>Computes the standardized variable for the distribution.</p>
-      </div>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
@@ -716,7 +826,7 @@
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-02-25 14:41              </p>
+ on 2025-03-20 11:50              </p>
           </div>
         </div>
         <br>
