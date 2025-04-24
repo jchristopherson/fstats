@@ -28,7 +28,6 @@ program example
     ! Plot the resulting distribution
     call plt%initialize()
     call pd%define_data(x)
-    call pd%set_transparency(0.5)
     call plt%push(pd)
     call plt%draw()
 end program
