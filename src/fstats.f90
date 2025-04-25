@@ -132,4 +132,9 @@ module fstats
     public :: base_interpolator
     public :: linear_interpolator
     public :: polynomial_interpolator
+    public :: spline_interpolator
+    public :: SPLINE_QUADRATIC_OVER_INTERVAL
+    public :: SPLINE_KNOWN_FIRST_DERIVATIVE
+    public :: SPLINE_KNOWN_SECOND_DERIVATIVE
+    public :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE
 end module

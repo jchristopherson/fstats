@@ -77,3 +77,9 @@ add_executable(distribution_example distribution_example.f90)
 target_link_libraries(distribution_example fstats)
 target_link_libraries(distribution_example ${fplot_LIBRARY})
 target_include_directories(distribution_example PUBLIC ${fplot_INCLUDE_DIR})
+
+# Interpolation Example
+add_executable(interpolation_example interpolation_example.f90)
+target_link_libraries(interpolation_example fstats)
+target_link_libraries(interpolation_example ${fplot_LIBRARY})
+target_include_directories(interpolation_example PUBLIC ${fplot_INCLUDE_DIR})

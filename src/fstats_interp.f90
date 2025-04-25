@@ -8,7 +8,27 @@ module fstats_interp
     public :: base_interpolator
     public :: linear_interpolator
     public :: polynomial_interpolator
+    public :: spline_interpolator
+    public :: SPLINE_QUADRATIC_OVER_INTERVAL
+    public :: SPLINE_KNOWN_FIRST_DERIVATIVE
+    public :: SPLINE_KNOWN_SECOND_DERIVATIVE
+    public :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE
 
+        
+    integer(int32), parameter :: SPLINE_QUADRATIC_OVER_INTERVAL = 1000
+        !! Indicates that the spline is quadratic over the interval under
+        !! consideration (beginning or ending interval).
+    integer(int32), parameter :: SPLINE_KNOWN_FIRST_DERIVATIVE = 1001
+        !! Indicates a known first derivative at either the beginning or ending
+        !! point.
+    integer(int32), parameter :: SPLINE_KNOWN_SECOND_DERIVATIVE = 1002
+        !! Indicates a known second derivative at either the beginning or ending
+        !! point.
+    integer(int32), parameter :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE = 1003
+        !! Indicates a continuous third derivative at either the beginning or 
+        !! ending point.
+
+! ------------------------------------------------------------------------------
     type interpolation_manager
         !! A base object containing the functionallity to support 1D
         !! interpolation operations, regardless of the type of 1D interpolation.
@@ -59,6 +79,7 @@ module fstats_interp
 
 ! ------------------------------------------------------------------------------
     type, extends(base_interpolator) :: linear_interpolator
+        !! Defines a type meant for performing piecewise linear interpolation.
         type(interpolation_manager), private :: m_manager
             !! An object to manage the interpolation process.
     contains
@@ -68,6 +89,8 @@ module fstats_interp
 
 ! ------------------------------------------------------------------------------
     type, extends(base_interpolator) :: polynomial_interpolator
+        !! Defines a type meant for performing piecewise polynomial
+        !! interpolation.
         type(interpolation_manager), private :: m_manager
             !! An object to manage the interpolation process.
         real(real64), private, allocatable, dimension(:) :: m_c
@@ -77,6 +100,19 @@ module fstats_interp
     contains
         procedure, public :: initialize => pi_init
         procedure, public :: interpolate_value => pi_raw_interp
+    end type
+
+! ------------------------------------------------------------------------------
+    type, extends(base_interpolator) :: spline_interpolator
+        !! Defines a type meant for performing cubic spline interpolation.
+        type(interpolation_manager), private :: m_manager
+            !! An object to manage the interpolation process.
+        real(real64), private, allocatable, dimension(:) :: m_ypp
+            !! A workspace array.
+    contains
+        procedure, public :: initialize => si_init
+        procedure, public :: interpolate_value => si_raw_interp
+        procedure, private :: compute_second_derivatives => si_second_diff
     end type
 
 contains
@@ -561,6 +597,347 @@ subroutine pi_init(this, order, x, y, err)
         return
     end if
 end subroutine
+
+! ******************************************************************************
+! SPLINE_INTERPOLATOR
+! ------------------------------------------------------------------------------
+function si_raw_interp(this, x) result(rst)
+    !! Interpolates a single value.
+    class(spline_interpolator), intent(inout) :: this
+        !! The spline_interpolator object.
+    real(real64), intent(in) :: x
+        !! The value at which to compute the interpolation.
+    real(real64) :: rst
+        !! The interpolated value.
+
+    ! Local Variables
+    integer(int32) :: jlo, right
+    real(real64) :: dt, h, yr, yl
+
+    ! Initialization
+    if (this%m_manager%method() == 1) then
+        jlo = this%m_manager%hunt(x)
+    else
+        jlo = this%m_manager%locate(x)
+    end if
+    right = jlo + 1
+    dt = x - this%m_manager%x(jlo)
+    h = this%m_manager%x(right) - this%m_manager%x(jlo)
+
+    ! Process
+    yr = this%m_manager%y(right)
+    yl = this%m_manager%y(jlo)
+    rst = yl + dt * ((yr - yl) / h - (this%m_ypp(right) / 6.0d0 + &
+        this%m_ypp(jlo) / 3.0d0) * h + dt * (0.5d0 * this%m_ypp(jlo) + &
+        dt * ((this%m_ypp(right) - this%m_ypp(jlo)) / (6.0d0 * h))))
+end function
+
+! ------------------------------------------------------------------------------
+! [Spline Library](http://people.sc.fsu.edu/~jburkardt/f77_src/spline/spline.html)
+subroutine penta_solve(a1, a2, a3, a4, a5, b, x)
+    !! Solves a pentadiagonal system of linear equations.  A
+    !! pentadiagonal matrix is all zeros with the exception of the diagonal,
+    !! and the two immediate sub and super-diagonals.  The entries of row I
+    !! are stored as follows:
+    !!      A(I,I-2) -> A1(I)
+    !!      A(I,I-1) -> A2(I)
+    !!      A(I,I) -> A3(I)
+    !!      A(I,I+1) -> A4(I)
+    !!      A(I,I+2) -> A5(I)
+    real(real64), intent(in), dimension(:) :: a1
+        !! An N-element array as defined above.
+    real(real64), intent(inout), dimension(:) :: a2
+        !! An N-element array as defined above.  This array is
+        !! overwritten by this routine during the solution process.
+    real(real64), intent(inout), dimension(:) :: a3
+        !! An N-element array as defined above.  This array is
+        !! overwritten by this routine during the solution process.
+    real(real64), intent(inout), dimension(:) :: a4
+        !! An N-element array as defined above.  This array is
+        !! overwritten by this routine during the solution process.
+    real(real64), intent(in), dimension(:) :: a5
+        !! An N-element array as defined above.
+    real(real64), intent(inout), dimension(:) :: b
+        !! An N-element array containing the right-hand-side.  This array is 
+        !! overwritten by this routine during the solution process.
+    real(real64), intent(out), dimension(:) :: x
+        !! An N-element array that, on output, contains the solution to the 
+        !! linear system.
+
+    ! Local Variables
+    integer(int32) :: i, n
+    real(real64) :: xmult
+
+    ! Initialization
+    n = size(a1)
+
+    ! Process
+    do i = 2, n - 1
+        xmult = a2(i) / a3(i - 1)
+        a3(i) = a3(i) - xmult * a4(i - 1)
+        a4(i) = a4(i) - xmult * a5(i - 1)
+        b(i) = b(i) - xmult * b(i - 1)
+        xmult = a1(i + 1) - xmult * a4(i - 1)
+        a2(i + 1) = a2(i + 1) - xmult * a4(i - 1)
+        a3(i + 1) = a3(i + 1) - xmult * a5(i - 1)
+        b(i + 1) = b(i + 1) - xmult * b(i - 1)
+    end do
+
+    xmult = a2(n) / a3(n - 1)
+    a3(n) = a3(n) - xmult * a4(n - 1)
+    x(n) = (b(n) - xmult * b(n - 1)) / a3(n)
+    x(n - 1) = (b(n - 1) - a4(n - 1) * x(n)) / a3(n - 1)
+    do i = n - 2, 1, -1
+        x(i) = (b(i) - a4(i) * x(i + 1) - a5(i) * x(i + 2)) / a3(i)
+    end do
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
+    !! Initializes the interpolation object.
+    class(spline_interpolator), intent(inout) :: this
+        !! The spline_interpolator object.
+    real(real64), intent(in), dimension(:) :: x
+        !! An N-element array containing the x-coordinate data in either
+        !! monotonically increasing or decreasing order.
+    real(real64), intent(in), dimension(:) :: y
+        !! An N-element array containing the y-coordinate data.
+    integer(int32), intent(in), optional :: ibcbeg
+        !! An optional input that defines the nature of the boundary condition 
+        !! at the beginning of the spline.  If no parameter, or an invalid 
+        !! parameter, is specified, the default condition
+        !!  (SPLINE_QUADRATIC_OVER_INTERVAL) is used.
+        !!
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      initial interval.  No value is required for ybcbeg.
+        !!
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its initial point is provided in ybcbeg.
+        !!
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its initial point is provided in ybcbeg.
+        !!
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(2).  No value is required for ybcbeg.
+    real(real64), intent(in), optional :: ybcbeg
+        !! If needed, the value of the initial point boundary condition.  If 
+        !! needed, but not supplied, a default value of zero will be used.
+    integer(int32), intent(in), optional :: ibcend
+        !! An optional input that defines the nature of the boundary condition 
+        !! at the end of the spline.  If no parameter, or an invalid 
+        !! parameter, is specified, the default condition
+        !!  (SPLINE_QUADRATIC_OVER_INTERVAL) is used.
+        !!
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      final interval.  No value is required for ybcend.
+        !!
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its final point is provided in ybcend.
+        !!
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its final point is provided in ybcend.
+        !!
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(n-1).  No value is required for ybcend.
+    real(real64), intent(in), optional :: ybcend
+        !! If needed, the value of the final point boundary condition.  If 
+        !! needed, but not supplied, a default value of zero will be used.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: ibeg, iend, n
+    real(real64) :: ybeg, yend
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(x)
+    ibeg = SPLINE_QUADRATIC_OVER_INTERVAL
+    iend = SPLINE_QUADRATIC_OVER_INTERVAL
+    ybeg = 0.0d0
+    yend = 0.0d0
+    if (present(ibcbeg)) ibeg = ibcbeg
+    if (present(ibcend)) iend = ibcend
+    if (present(ybcbeg)) ybeg = ybcbeg
+    if (present(ybcend)) yend = ybcend
+
+    ! Input Checking
+    if (size(y) /= n) then
+        call report_array_size_error(errmgr, "si_init", "y", n, size(y))
+        return
+    end if
+    if (ibeg /= SPLINE_CONTINUOUS_THIRD_DERIVATIVE .and. &
+        ibeg /= SPLINE_KNOWN_SECOND_DERIVATIVE .and. &
+        ibeg /= SPLINE_KNOWN_FIRST_DERIVATIVE .and. &
+        ibeg /= SPLINE_QUADRATIC_OVER_INTERVAL) &
+    then
+        ibeg = SPLINE_QUADRATIC_OVER_INTERVAL
+    end if
+    if (iend /= SPLINE_CONTINUOUS_THIRD_DERIVATIVE .and. &
+        iend /= SPLINE_KNOWN_SECOND_DERIVATIVE .and. &
+        iend /= SPLINE_KNOWN_FIRST_DERIVATIVE .and. &
+        iend /= SPLINE_QUADRATIC_OVER_INTERVAL) &
+    then
+        iend = SPLINE_QUADRATIC_OVER_INTERVAL
+    end if
+    call this%m_manager%initialize(x, y, 3, errmgr)
+    if (errmgr%has_error_occurred()) return
+
+    ! Evaluate the 2nd derivatives
+    call this%compute_second_derivatives(ibeg, ybeg, iend, yend, err = errmgr)
+    if (errmgr%has_error_occurred()) return
+end subroutine
+
+! ------------------------------------------------------------------------------
+! http://people.sc.fsu.edu/~jburkardt/f77_src/spline/spline.html
+! ROUTINE: SPLINE_CUBIC_SET
+subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend, err)
+    !! Computes the second derivative terms for the cubic-spline model.
+    class(spline_interpolator), intent(inout) :: this
+        !! The spline_interpolator object.
+    integer(int32), intent(in) :: ibcbeg
+        !! An input that defines the nature of the boundary condition 
+        !! at the beginning of the spline.
+        !!
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      initial interval.
+        !!
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its initial point is provided in ybcbeg.
+        !!
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its initial point is provided in ybcbeg.
+        !!
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(2).
+    real(real64), intent(in) :: ybcbeg
+        !! The value of the initial point boundary condition.
+    integer(int32), intent(in) :: ibcend
+        !! An input that defines the nature of the boundary condition 
+        !! at the end of the spline.
+        !!
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      final interval.
+        !!
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its final point is provided in ybcbeg.
+        !!
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its final point is provided in ybcbeg.
+        !!
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(n-1).
+    real(real64), intent(in) :: ybcend
+        !! The value of the final point boundary condition.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: i, n, flag
+    real(real64), allocatable ,dimension(:) :: a1, a2, a3, a4, a5, b
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = this%m_manager%size()
+
+    ! Local Memory Allocations
+    if (allocated(this%m_ypp)) deallocate(this%m_ypp)
+    allocate(this%m_ypp(n), a1(n), a2(n), a3(n), a4(n), a5(n), b(n), &
+        stat = flag, source = 0.0d0)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "si_second_diff", flag)
+        return
+    end if
+
+    ! Set up the first equation
+    select case (ibcbeg)
+    case (SPLINE_QUADRATIC_OVER_INTERVAL)
+        b(1) = 0.0d0
+        a3(1) = 1.0d0
+        a4(1) = -1.0d0
+    case (SPLINE_KNOWN_FIRST_DERIVATIVE)
+        b(1) = (this%m_manager%y(2) - this%m_manager%y(1)) / &
+            (this%m_manager%x(2) - this%m_manager%x(1)) - ybcbeg
+        a3(1) = (this%m_manager%x(2) - this%m_manager%x(1)) / 3.0d0
+        a4(1) = (this%m_manager%x(2) - this%m_manager%x(1)) / 6.0d0
+    case (SPLINE_KNOWN_SECOND_DERIVATIVE)
+        b(1) = ybcbeg
+        a3(1) = 1.0d0
+        a4(1) = 0.0d0
+    case default
+        b(1) = 0.0d0
+        a3(1) = this%m_manager%x(2) - this%m_manager%x(3)
+        a4(1) = this%m_manager%x(3) - this%m_manager%x(1)
+        a5(1) = this%m_manager%x(1) - this%m_manager%x(2)
+    end select
+
+    ! Set up the intermediate equations
+    do i = 2, n - 1
+        b(i) = (this%m_manager%y(i+1) - this%m_manager%y(i)) / &
+            (this%m_manager%x(i+1) - this%m_manager%x(i)) - &
+            (this%m_manager%y(i) - this%m_manager%y(i-1)) / &
+            (this%m_manager%x(i) - this%m_manager%x(i-1))
+        a2(i) = (this%m_manager%x(i+1) - this%m_manager%x(i)) / 6.0d0
+        a3(i) = (this%m_manager%x(i+1) - this%m_manager%x(i-1)) / 3.0d0
+        a4(i) = (this%m_manager%x(i) - this%m_manager%x(i-1)) / 6.0d0
+    end do
+
+    ! Set up the last equation
+    select case (ibcend)
+    case (SPLINE_QUADRATIC_OVER_INTERVAL)
+        b(n) = 0.0d0
+        a2(n) = -1.0d0
+        a3(n) = 1.0d0
+    case (SPLINE_KNOWN_FIRST_DERIVATIVE)
+        b(n) = ybcend - (this%m_manager%y(n) - this%m_manager%y(n-1)) / &
+            (this%m_manager%x(n) - this%m_manager%x(n-1))
+        a2(n) = (this%m_manager%x(n) - this%m_manager%x(n-1)) / 6.0d0
+        a3(n) = (this%m_manager%x(n) - this%m_manager%x(n-1)) / 3.0d0
+    case (SPLINE_KNOWN_SECOND_DERIVATIVE)
+        b(n) = ybcend
+        a2(n) = 0.0d0
+        a3(n) = 1.0d0
+    case (SPLINE_CONTINUOUS_THIRD_DERIVATIVE)
+        b(n) = 0.0d0
+        a1(n) = this%m_manager%x(n-1) - this%m_manager%x(n)
+        a2(n) = this%m_manager%x(n) - this%m_manager%x(n-2)
+        a3(n) = this%m_manager%x(n-2) - this%m_manager%x(n-1)
+    case default
+        b(n) = 0.0d0
+        a2(n) = -1.0d0
+        a3(n) = 1.0d0
+    end select
+
+    ! Define the 2nd derivative
+    if (n == 2 .and. ibcbeg == SPLINE_QUADRATIC_OVER_INTERVAL .and. &
+        ibcend == SPLINE_QUADRATIC_OVER_INTERVAL) &
+    then
+        this%m_ypp(1) = 0.0d0
+        this%m_ypp(2) = 0.0d0
+    else
+        call penta_solve(a1, a2, a3, a4, a5, b, this%m_ypp)
+    end if
+end subroutine
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end module
