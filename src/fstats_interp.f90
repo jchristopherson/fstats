@@ -4,9 +4,11 @@ module fstats_interp
     use ferror
     implicit none
     private
+    public :: interp
+    public :: base_interpolator
     public :: linear_interpolator
 
-    type base_interpolator
+    type interpolation_manager
         !! A base object containing the functionallity to support 1D
         !! interpolation operations, regardless of the type of 1D interpolation.
         real(real64), public, allocatable, dimension(:) :: x
@@ -24,30 +26,51 @@ module fstats_interp
         integer(int32), private :: m_indexDelta
             !! The bracket index difference.
     contains
-        procedure, public :: initialize => bi_init
-        procedure, public :: locate => bi_locate
-        procedure, public :: hunt => bi_hunt
-        procedure, public :: size => bi_size
+        procedure, public :: initialize => im_init
+        procedure, public :: locate => im_locate
+        procedure, public :: hunt => im_hunt
+        procedure, public :: size => im_size
     end type
 
 ! ------------------------------------------------------------------------------
-    type :: linear_interpolator
-        type(base_interpolator), private :: m_manager
+    type, abstract :: base_interpolator
+        !! A base object for interpolation.
+    contains
+        procedure(interp), public, deferred, pass :: interpolate_value
+        procedure, public :: interpolate
+    end type
+
+    interface
+        function interp(this, x) result(rst)
+            !! Performs a single interpolation.
+            use iso_fortran_env, only : real64
+            import base_interpolator
+            class(base_interpolator), intent(inout) :: this
+                !! The base_interpolator object.
+            real(real64), intent(in) :: x
+                !! The value at which to compute the interpolation.
+            real(real64) :: rst
+                !! The interpolated result.
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    type linear_interpolator
+        type(interpolation_manager), private :: m_manager
             !! An object to manage the interpolation process.
     contains
         procedure, public :: initialize => li_init
-        procedure, public :: interpolate => li_interp
-        procedure, private :: raw_interp => li_raw_interp
+        procedure, private :: interpolate_value => li_raw_interp
     end type
 
 contains
 ! ******************************************************************************
-! BASE_INTERPOLATOR
+! INTERPOLATION_MANAGER
 ! ------------------------------------------------------------------------------
-subroutine bi_init(this, x, y, order, err)
+subroutine im_init(this, x, y, order, err)
     !! Initializes the interpolation object.
-    class(base_interpolator), intent(inout) :: this
-        !! The base_interpolator object.
+    class(interpolation_manager), intent(inout) :: this
+        !! The interpolation_manager object.
     real(real64), intent(in), dimension(:) :: x
         !! An N-element array containing the x-coordinate data in either 
         !! monotonically increasing or decreasing order.
@@ -73,7 +96,7 @@ subroutine bi_init(this, x, y, order, err)
 
     ! Input Checking
     if (size(y) /= n) then
-        call report_array_size_error(errmgr, "bi_init", "y", n, size(y))
+        call report_array_size_error(errmgr, "im_init", "y", n, size(y))
         return
     end if
 
@@ -104,15 +127,15 @@ subroutine bi_init(this, x, y, order, err)
 
     ! Memory Error Handling
 10  continue
-    call report_memory_error(errmgr, "bi_init", flag)
+    call report_memory_error(errmgr, "im_init", flag)
     return
 end subroutine
 
 ! ------------------------------------------------------------------------------
-function bi_locate(this, x) result(rst)
+function im_locate(this, x) result(rst)
     !! Locates the index below the nearest entry to x.
-    class(base_interpolator), intent(inout) :: this
-        !! The base_interpolator object.
+    class(interpolation_manager), intent(inout) :: this
+        !! The interpolation_manager object.
     real(real64), intent(in) :: x
         !! The x-coordinate of interest.
     integer(int32) :: rst
@@ -157,13 +180,13 @@ function bi_locate(this, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function bi_hunt(this, x) result(rst)
+function im_hunt(this, x) result(rst)
     !! A search routine, similar to locate, but tailored towards searching
     !! when the initial location estimate is very near the desired point.  If
     !! not near, this method is rather inefficient; however, when near, this
     !! method is quite efficient when compared with locate.
-    class(base_interpolator), intent(inout) :: this
-        !! The base_interpolator object.
+    class(interpolation_manager), intent(inout) :: this
+        !! The interpolation_manager object.
     real(real64), intent(in) :: x
         !! The x-coordinate of interest.
     integer(int32) :: rst
@@ -245,10 +268,10 @@ function bi_hunt(this, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-pure function bi_size(this) result(rst)
+pure function im_size(this) result(rst)
     !! Gets the size of the stored raw data array.
-    class(base_interpolator), intent(in) :: this
-        !! The base_interpolator object.
+    class(interpolation_manager), intent(in) :: this
+        !! The interpolation_manager object.
     integer(int32) :: rst
         !! The size of the stored data.
 
@@ -258,6 +281,46 @@ pure function bi_size(this) result(rst)
         rst = 0
     end if
 end function
+
+! ******************************************************************************
+! BASE_INTERPOLATOR
+! ------------------------------------------------------------------------------
+subroutine bi_interp(this, x, yi, err)
+    !! Performs the interpolation.
+    class(base_interpolator), intent(inout) :: this
+        !! The base_interpolator object.
+    real(real64), intent(in), dimension(:) :: x
+        !! An N-element array containing the x values at which to compute the
+        !! interpolation.
+    real(real64), intent(out), dimension(:) :: yi
+        !! An N-element array  containing the interpolated data.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: i, n
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(x)
+
+    ! Input Checking
+    if (size(yi) /= n) then
+        call report_array_size_error(errmgr, "bi_interp", "yi", n, size(yi))
+        return
+    end if
+
+    ! Perform the interpolation
+    do i = 1, n
+        yi(i) = this%interpolate_value(x(i))
+    end do
+end subroutine
 
 ! ******************************************************************************
 ! LINEAR_INTERPOLATOR
@@ -291,61 +354,26 @@ subroutine li_init(this, x, y, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine li_interp(this, x, yi, err)
-    !! Performs the interpolation.
-    class(linear_interpolator), intent(inout) :: this
-        !! The linear_interpolator object.
-    real(real64), intent(in), dimension(:) :: x
-        !! An N-element array containing the x values at which to compute the
-        !! interpolation.
-    real(real64), intent(out), dimension(:) :: yi
-        !! An N-element array  containing the interpolated data.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
-
-    ! Local Variables
-    integer(int32) :: i, j, n
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
-    n = size(x)
-
-    ! Input Checking
-    if (size(yi) /= n) then
-        call report_array_size_error(errmgr, "li_interp", "yi", n, size(yi))
-        return
-    end if
-
-    ! Perform the interpolation
-    do i = 1, n
-        if (this%m_manager%m_method == 1) then
-            j = this%m_manager%hunt(x(i))
-        else
-            j = this%m_manager%locate(x(i))
-        end if
-        yi(j) = this%raw_interp(j, x(i))
-    end do
-end subroutine
-
-! ------------------------------------------------------------------------------
-function li_raw_interp(this, j, x) result(rst)
+function li_raw_interp(this, x) result(rst)
     !! Raw, single-value interpolation routine.
     class(linear_interpolator), intent(inout) :: this
         !! The linear_interpolator object.
-    integer(int32), intent(in) :: j
-        !! The array index immediately below the x array location needed.
     real(real64), intent(in) :: x
         !! The value at which to compute the interpolation.
     real(real64) :: rst
         !! The interpolated value.
 
-    ! Process
+    ! Local Variables
+    integer(int32) :: j
+
+    ! Locate the proper index
+    if (this%m_manager%method == 1) then
+        j = this%m_manager%hunt(x)
+    else
+        j = this%m_manager%locate(x)
+    end if
+
+    ! Perform the interpolation
     if (this%m_manager%x(j) == this%m_manager%x(j+1)) then
         rst = this%m_manager%y(j)
     else
