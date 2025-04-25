@@ -71,8 +71,9 @@ module fstats_interp
         type(interpolation_manager), private :: m_manager
             !! An object to manage the interpolation process.
         real(real64), private, allocatable, dimension(:) :: m_c
+            !! Workspace array.
         real(real64), private, allocatable, dimension(:) :: m_d
-        real(real64), private :: m_dy
+            !! Workspace array.
     contains
         procedure, public :: initialize => pi_init
         procedure, public :: interpolate_value => pi_raw_interp
@@ -468,7 +469,7 @@ function pi_raw_interp(this, x) result(rst)
 
     ! Local Variables
     integer(int32) :: i, ind, m, ns, mm, jl, jlo
-    real(real64) :: den, dif, dift, ho, hp, w
+    real(real64) :: den, dif, dift, ho, hp, w, dy
 
     ! Initialization
     if (this%m_manager%method() == 1) then
@@ -512,12 +513,12 @@ function pi_raw_interp(this, x) result(rst)
             this%m_c(i) = ho * den
         end do
         if (2 * ns < mm - m) then
-            this%m_dy = this%m_c(ns + 1)
+            dy = this%m_c(ns + 1)
         else
-            this%m_dy = this%m_d(ns)
+            dy = this%m_d(ns)
             ns = ns - 1
         end if
-        rst = rst + this%m_dy
+        rst = rst + dy
     end do
 end function
 
