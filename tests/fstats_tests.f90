@@ -7,6 +7,7 @@ program tests
     use fstats_nonlinear_regression_tests
     use fstats_allan_tests
     use fstats_mcmc_tests
+    use fstats_interp_tests
     implicit none
 
     ! Variables
@@ -154,8 +155,8 @@ program tests
     local = test_mcmc_target_likelihood()
     if (.not.local) overall = .false.
 
-    ! local = test_mh_proposal()
-    ! if (.not.local) overall = .false.
+    local = test_linear_interp()
+    if (.not.local) overall = .false.
 
     ! End
     if (.not.overall) then
