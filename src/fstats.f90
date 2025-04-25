@@ -131,4 +131,5 @@ module fstats
     public :: interp_routine
     public :: base_interpolator
     public :: linear_interpolator
+    public :: polynomial_interpolator
 end module

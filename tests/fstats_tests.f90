@@ -158,6 +158,9 @@ program tests
     local = test_linear_interp()
     if (.not.local) overall = .false.
 
+    local = test_polynomial_interp()
+    if (.not.local) overall = .false.
+
     ! End
     if (.not.overall) then
         stop 1

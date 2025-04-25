@@ -7,6 +7,7 @@ module fstats_interp
     public :: interp_routine
     public :: base_interpolator
     public :: linear_interpolator
+    public :: polynomial_interpolator
 
     type interpolation_manager
         !! A base object containing the functionallity to support 1D
@@ -63,6 +64,18 @@ module fstats_interp
     contains
         procedure, public :: initialize => li_init
         procedure, public :: interpolate_value => li_raw_interp
+    end type
+
+! ------------------------------------------------------------------------------
+    type, extends(base_interpolator) :: polynomial_interpolator
+        type(interpolation_manager), private :: m_manager
+            !! An object to manage the interpolation process.
+        real(real64), private, allocatable, dimension(:) :: m_c
+        real(real64), private, allocatable, dimension(:) :: m_d
+        real(real64), private :: m_dy
+    contains
+        procedure, public :: initialize => pi_init
+        procedure, public :: interpolate_value => pi_raw_interp
     end type
 
 contains
@@ -413,7 +426,7 @@ end subroutine
 
 ! ------------------------------------------------------------------------------
 function li_raw_interp(this, x) result(rst)
-    !! Raw, single-value interpolation routine.
+    !! Interpolates a single value.
     class(linear_interpolator), intent(inout) :: this
         !! The linear_interpolator object.
     real(real64), intent(in) :: x
@@ -440,6 +453,113 @@ function li_raw_interp(this, x) result(rst)
             (this%m_manager%y(j+1) - this%m_manager%y(j))
     end if
 end function
+
+! ******************************************************************************
+! POLYNOMIAL_INTERPOLATOR
+! ------------------------------------------------------------------------------
+function pi_raw_interp(this, x) result(rst)
+    !! Interpolates a single value.
+    class(polynomial_interpolator), intent(inout) :: this
+        !! The polynomial_interpolator object.
+    real(real64), intent(in) :: x
+        !! The value at which to compute the interpolation.
+    real(real64) :: rst
+        !! The interpolated value.
+
+    ! Local Variables
+    integer(int32) :: i, ind, m, ns, mm, jl, jlo
+    real(real64) :: den, dif, dift, ho, hp, w
+
+    ! Initialization
+    if (this%m_manager%method() == 1) then
+        jlo = this%m_manager%hunt(x)
+    else
+        jlo = this%m_manager%locate(x)
+    end if
+    mm = this%m_manager%order() + 1
+    ns = 1
+    if (jlo == 1) then
+        jl = 1
+    else
+        jl = jlo - 1
+    end if
+    dif = abs(x - this%m_manager%x(jl))
+
+    ! Process
+    do i = 1, mm
+        ind = jl + i - 1
+        dift = abs(x - this%m_manager%x(ind))
+        if (dift < dif) then
+            ns = i
+            dif = dift
+        end if
+        this%m_c(i) = this%m_manager%y(ind)
+        this%m_d(i) = this%m_manager%y(ind)
+    end do
+
+    rst = this%m_manager%y(jl + ns - 1)
+    ns = ns - 1
+
+    do m = 1, mm - 1
+        do i = 1, mm - m
+            ind = jl + i - 1
+            ho = this%m_manager%x(ind) - x
+            hp = this%m_manager%x(ind + m) - x
+            w = this%m_c(i + 1) - this%m_d(i)
+            den = ho - hp
+            den = w / den
+            this%m_d(i) = hp * den
+            this%m_c(i) = ho * den
+        end do
+        if (2 * ns < mm - m) then
+            this%m_dy = this%m_c(ns + 1)
+        else
+            this%m_dy = this%m_d(ns)
+            ns = ns - 1
+        end if
+        rst = rst + this%m_dy
+    end do
+end function
+
+! ------------------------------------------------------------------------------
+subroutine pi_init(this, order, x, y, err)
+    !! Initializes the interpolation object.
+    class(polynomial_interpolator), intent(inout) :: this
+        !! The polynomial_interpolator object.
+    integer(int32), intent(in) :: order
+        !! The polynomial order.  This value must be at least 1.
+    real(real64), intent(in), dimension(:) :: x
+        !! An N-element array containing the x-coordinate data in either
+        !! monotonically increasing or decreasing order.
+    real(real64), intent(in), dimension(:) :: y
+        !! An N-element array containing the y-coordinate data.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handler object.
+
+    ! Local Variables
+    integer(int32) :: m, flag
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    call this%m_manager%initialize(x, y, order, err = errmgr)
+    if (errmgr%has_error_occurred()) return
+
+    ! Allocate necessary workspace memory
+    if (allocated(this%m_c)) deallocate(this%m_c)
+    if (allocated(this%m_d)) deallocate(this%m_d)
+    m = order + 1
+    allocate(this%m_c(m), this%m_d(m), stat = flag)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "pi_init", flag)
+        return
+    end if
+end subroutine
 
 ! ------------------------------------------------------------------------------
 end module
