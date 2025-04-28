@@ -1184,14 +1184,22 @@ subroutine hi_interp_all(this, x, yi, ypi, err)
     ndp = nd - 1
     nv = size(x)
 
+    ! Ensure everything is initialized
+    if (.not.allocated(this%M_x)) then
+        call report_uninitialized_object_error(errmgr, "hi_interp_all", &
+            "hermite_interpolator")
+        return
+    end if
+
     ! Input Check
     if (size(yi) /= nv) then
-        call report_array_size_error(errmgr, "hi_interp", "yi", nv, size(yi))
+        call report_array_size_error(errmgr, "hi_interp_all", "yi", nv, &
+            size(yi))
         return
     end if
     if (present(ypi)) then
         if (size(ypi) /= nv) then
-            call report_array_size_error(errmgr, "hi_interp", "ypi", nv, &
+            call report_array_size_error(errmgr, "hi_interp_all", "ypi", nv, &
                 size(ypi))
             return
         end if
