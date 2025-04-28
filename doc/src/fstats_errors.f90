@@ -20,6 +20,7 @@ module fstats_errors
     integer(int32), parameter :: FS_NULL_POINTER_ERROR = 10009
     integer(int32), parameter :: FS_POLYNOMIAL_ORDER_ERROR = 10010
     integer(int32), parameter :: FS_NONMONOTONIC_ARRAY_ERROR = 10011
+    integer(int32), parameter :: FS_UNINITIALIZED_OBJECT_ERROR = 10012
 
 ! ------------------------------------------------------------------------------
     integer(int32), private, parameter :: MESSAGE_SIZE = 1024
@@ -258,6 +259,27 @@ contains
         write(msg, 100) "Array ", name, &
             " was expected to be monotonic, but was found to be nonmonotonic."
         call err%report_error(fname, trim(msg), FS_NONMONOTONIC_ARRAY_ERROR)
+
+        ! Formatting
+100     format(A, A, A)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine report_uninitialized_object_error(err, fname, obj)
+        !! Reports an uninitialized object error.
+        class(errors), intent(inout) :: err
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *), intent(in) :: obj
+            !! The name of the object or type.
+
+        ! Local Variables
+        character(len = 256) :: msg
+
+        ! Process
+        write(msg, 100) "Object ", obj, " is uninitialized."
+        call err%report_error(fname, trim(msg), FS_UNINITIALIZED_OBJECT_ERROR)
 
         ! Formatting
 100     format(A, A, A)

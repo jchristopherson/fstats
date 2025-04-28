@@ -74,7 +74,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 2.4% of total for modules and submodules.">115 statements</a>
+                 title=" 2.7% of total for modules and submodules.">125 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -125,6 +125,7 @@
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_tolerance_too_small_error">FS_TOLERANCE_TOO_SMALL_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_too_few_iteration_error">FS_TOO_FEW_ITERATION_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_underdefined_problem_error">FS_UNDERDEFINED_PROBLEM_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_uninitialized_object_error">FS_UNINITIALIZED_OBJECT_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_zero_variance_error">FS_ZERO_VARIANCE_ERROR</a>
         </div>
       </div>
@@ -156,6 +157,7 @@
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_null_pointer_error">report_null_pointer_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_polynomial_order_error">report_polynomial_order_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_underdefined_error">report_underdefined_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_uninitialized_object_error">report_uninitialized_object_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_zero_variance_warning">report_zero_variance_warning</a>
         </div>
       </div>
@@ -412,6 +414,23 @@ parameter
         </tr>
         <tr>
             <td>
+              <span class="anchor" id="variable-fs_uninitialized_object_error"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_UNINITIALIZED_OBJECT_ERROR</strong></td>
+<td> =</td>
+                <td>10012</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
               <span class="anchor" id="variable-fs_zero_variance_error"></span>
               integer(kind=int32),
             </td>
@@ -460,7 +479,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~5"></span>
+              <span class="anchor" id="variable-err~28"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -520,7 +539,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-actual"></span>
+              <span class="anchor" id="variable-actual~3"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -561,7 +580,7 @@ when they should be the same size.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~7"></span>
+              <span class="anchor" id="variable-err~30"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -676,7 +695,7 @@ when they should be the same size.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~9"></span>
+              <span class="anchor" id="variable-err~32"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -761,7 +780,7 @@ when they should be the same size.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~6"></span>
+              <span class="anchor" id="variable-err~29"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -891,7 +910,7 @@ when they should be the same size.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~4"></span>
+              <span class="anchor" id="variable-err~27"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -962,7 +981,7 @@ array was expected.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~13"></span>
+              <span class="anchor" id="variable-err~36"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -1032,7 +1051,7 @@ array was expected.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~11"></span>
+              <span class="anchor" id="variable-err~34"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -1102,7 +1121,7 @@ array was expected.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~12"></span>
+              <span class="anchor" id="variable-err~35"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -1132,7 +1151,7 @@ array was expected.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-order"></span>
+              <span class="anchor" id="variable-order~6"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -1187,7 +1206,7 @@ array was expected.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~8"></span>
+              <span class="anchor" id="variable-err~31"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -1232,7 +1251,7 @@ array was expected.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-actual~2"></span>
+              <span class="anchor" id="variable-actual~4"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -1243,6 +1262,76 @@ array was expected.</p>
             <td><strong>actual</strong></td>
             <td>
 <p>The actual number of equations.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-report_uninitialized_object_error"></span> <h3>public  subroutine <a href='..\proc\report_uninitialized_object_error.html'>report_uninitialized_object_error</a>(err, fname, obj)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Reports an uninitialized object error.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-err~37"></span>
+              class(errors),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>The error handling object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fname~11"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fname</strong></td>
+            <td>
+<p>The name of the routine in which the error occurred.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-obj"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>obj</strong></td>
+            <td>
+<p>The name of the object or type.</p>
             </td>
         </tr>
     </tbody>
@@ -1273,7 +1362,7 @@ place.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-err~10"></span>
+              <span class="anchor" id="variable-err~33"></span>
               class(errors),
             </td>
 <td>intent(inout)</td>
@@ -1328,7 +1417,7 @@ place.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-04-28 11:43              </p>
+ on 2025-04-28 11:55              </p>
           </div>
         </div>
         <br>
