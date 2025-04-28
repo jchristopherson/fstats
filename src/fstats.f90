@@ -16,7 +16,7 @@ module fstats
     use fstats_sampling
     use fstats_smoothing
     use fstats_mcmc
-    ! use fstats_mcmc_fitting
+    use fstats_interp
     implicit none
     private
 
@@ -126,4 +126,16 @@ module fstats
 
     ! FSTATS_ALLAN.F90
     public :: allan_variance
+
+    ! FSTATS_INTERP.F90
+    public :: interp_routine
+    public :: base_interpolator
+    public :: linear_interpolator
+    public :: polynomial_interpolator
+    public :: spline_interpolator
+    public :: SPLINE_QUADRATIC_OVER_INTERVAL
+    public :: SPLINE_KNOWN_FIRST_DERIVATIVE
+    public :: SPLINE_KNOWN_SECOND_DERIVATIVE
+    public :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE
+    public :: hermite_interpolator
 end module

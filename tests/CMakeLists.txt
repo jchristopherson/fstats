@@ -15,6 +15,7 @@ set(fstats_test_sources
     fstats_nonlinear_regression_tests.f90
     fstats_allan_tests.f90
     fstats_mcmc_tests.f90
+    fstats_interp_tests.f90
 )
 
 # Build the tests

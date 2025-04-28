@@ -1127,10 +1127,10 @@ subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
     stop, step, work)
     ! Arguments
     procedure(regression_function), intent(in), pointer :: fun
-    real(real64), intent(in) :: xdata(:), params(:)
-    real(real64), intent(in) :: f0(:)
-    real(real64), intent(out) :: jac(:,:)
-    real(real64), intent(out) :: f1(:), work(:)
+    real(real64), intent(in), dimension(:) :: xdata, params
+    real(real64), intent(in), dimension(:) :: f0
+    real(real64), intent(out), dimension(:,:) :: jac
+    real(real64), intent(out), dimension(:) :: f1, work
     logical, intent(out) :: stop
     real(real64), intent(in) :: step
 
@@ -1221,20 +1221,23 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     neval, update, step, JtWJ, JtWdy, X2, yNew, stop, work, mwork)
     ! Arguments
     procedure(regression_function), pointer :: fun
-    real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), &
-        p(:), weights(:)
+    real(real64), intent(in), dimension(:) :: xdata, ydata, pOld, yOld, &
+        p, weights
     real(real64), intent(in) :: dX2, step
-    real(real64), intent(inout) :: jac(:,:)
+    real(real64), intent(inout), dimension(:,:) :: jac
     integer(int32), intent(inout) :: neval
     logical, intent(inout) :: update
-    real(real64), intent(out) :: JtWJ(:,:), JtWdy(:)
-    real(real64), intent(out) :: X2, mwork(:,:), yNew(:)
+    real(real64), intent(out), dimension(:,:) :: JtWJ
+    real(real64), intent(out), dimension(:) :: JtWdy
+    real(real64), intent(out) :: X2
+    real(real64), intent(out), dimension(:,:) :: mwork
+    real(real64), intent(out), dimension(:) :: yNew
     logical, intent(out) :: stop
-    real(real64), intent(out), target :: work(:)
+    real(real64), intent(out), target, dimension(:) :: work
 
     ! Local Variables
     integer(int32) :: m, n
-    real(real64), pointer :: w1(:), w2(:)
+    real(real64), pointer, dimension(:) :: w1, w2
 
     ! Initialization
     m = size(xdata)

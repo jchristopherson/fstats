@@ -24,7 +24,6 @@ program example
     ! Plot the distribution of the data set
     call plt%initialize()
     call pd%define_data(x)
-    call pd%set_transparency(0.5)
     call plt%push(pd)
     call plt%set_title("Initial Distribution")
     call plt%draw()

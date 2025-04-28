@@ -127,7 +127,6 @@ subroutine plot_chain_hist(chain)
     call plt4%set_title("{/Symbol s}^{2}")
 
     call pd%define_data(chain(:,1))
-    call pd%set_transparency(0.5)
     call plt1%push(pd)
     call plt%set(1, 1, plt1)
 

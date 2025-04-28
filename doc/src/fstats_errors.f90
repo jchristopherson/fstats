@@ -18,6 +18,9 @@ module fstats_errors
     integer(int32), parameter :: FS_INVALID_ARGUMENT_ERROR = 10007
     integer(int32), parameter :: FS_ZERO_VARIANCE_ERROR = 10008
     integer(int32), parameter :: FS_NULL_POINTER_ERROR = 10009
+    integer(int32), parameter :: FS_POLYNOMIAL_ORDER_ERROR = 10010
+    integer(int32), parameter :: FS_NONMONOTONIC_ARRAY_ERROR = 10011
+    integer(int32), parameter :: FS_UNINITIALIZED_OBJECT_ERROR = 10012
 
 ! ------------------------------------------------------------------------------
     integer(int32), private, parameter :: MESSAGE_SIZE = 1024
@@ -212,6 +215,74 @@ contains
         call err%report_error(fname, &
             "The parameter " // name // " was found to be null.", &
             FS_NULL_POINTER_ERROR)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine report_polynomial_order_error(err, fname, order, minorder)
+        !! Reports an error related to the order of the polynomial.
+        class(errors), intent(inout) :: err
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        integer(int32), intent(in) :: order
+            !! The supplied order.
+        integer(int32), intent(in) :: minorder
+            !! The minimum required polynomial order.
+
+        ! Local Variables
+        character(len = 256) :: msg
+
+        ! Process
+        write(msg, 100) "The supplied polynomial order of ", order, &
+            " is below the minimum required order of ", minorder, "."
+        call err%report_error(fname, trim(msg), FS_POLYNOMIAL_ORDER_ERROR)
+
+        ! Formatting
+100     format(A, I0, A, I0, A)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine report_nonmonotonic_array_error(err, fname, name)
+        !! Reports an error related to a nonmonotonic array when a monotonic
+        !! array was expected.
+        class(errors), intent(inout) :: err
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *), intent(in) :: name
+            !! The parameter name.
+
+        ! Local Variables
+        character(len = 256) :: msg
+
+        ! Process
+        write(msg, 100) "Array ", name, &
+            " was expected to be monotonic, but was found to be nonmonotonic."
+        call err%report_error(fname, trim(msg), FS_NONMONOTONIC_ARRAY_ERROR)
+
+        ! Formatting
+100     format(A, A, A)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine report_uninitialized_object_error(err, fname, obj)
+        !! Reports an uninitialized object error.
+        class(errors), intent(inout) :: err
+            !! The error handling object.
+        character(len = *), intent(in) :: fname
+            !! The name of the routine in which the error occurred.
+        character(len = *), intent(in) :: obj
+            !! The name of the object or type.
+
+        ! Local Variables
+        character(len = 256) :: msg
+
+        ! Process
+        write(msg, 100) "Object ", obj, " is uninitialized."
+        call err%report_error(fname, trim(msg), FS_UNINITIALIZED_OBJECT_ERROR)
+
+        ! Formatting
+100     format(A, A, A)
     end subroutine
 
 ! ------------------------------------------------------------------------------
