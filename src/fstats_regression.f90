@@ -1237,7 +1237,7 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
 
     ! Local Variables
     integer(int32) :: m, n
-    real(real64), pointer :: w1(:), w2(:)
+    real(real64), pointer, dimension(:) :: w1, w2
 
     ! Initialization
     m = size(xdata)
