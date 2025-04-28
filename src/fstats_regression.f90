@@ -1221,16 +1221,19 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     neval, update, step, JtWJ, JtWdy, X2, yNew, stop, work, mwork)
     ! Arguments
     procedure(regression_function), pointer :: fun
-    real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), &
-        p(:), weights(:)
+    real(real64), intent(in), dimension(:) :: xdata, ydata, pOld, yOld, &
+        p, weights
     real(real64), intent(in) :: dX2, step
-    real(real64), intent(inout) :: jac(:,:)
+    real(real64), intent(inout), dimension(:,:) :: jac
     integer(int32), intent(inout) :: neval
     logical, intent(inout) :: update
-    real(real64), intent(out) :: JtWJ(:,:), JtWdy(:)
-    real(real64), intent(out) :: X2, mwork(:,:), yNew(:)
+    real(real64), intent(out), dimension(:,:) :: JtWJ
+    real(real64), intent(out), dimension(:) :: JtWdy
+    real(real64), intent(out) :: X2
+    real(real64), intent(out), dimension(:,:) :: mwork
+    real(real64), intent(out), dimension(:) :: yNew
     logical, intent(out) :: stop
-    real(real64), intent(out), target :: work(:)
+    real(real64), intent(out), target, dimension(:) :: work
 
     ! Local Variables
     integer(int32) :: m, n
