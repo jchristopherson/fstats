@@ -39,3 +39,4 @@ Here is a list of external code libraries utilized by this library.  The CMake b
 - Smoothing
 - Experimental Design
 - Markov Chain Monte Carlo
+- Interpolation
