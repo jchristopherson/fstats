@@ -38,7 +38,7 @@ jobs:
     - name: Install fpm
       uses: fortran-lang/setup-fpm@v5
       with:
-        fpm-version: 'v0.11.0'
+        fpm-version: 'latest'
 
     - name: Build LINALG
       run: |
