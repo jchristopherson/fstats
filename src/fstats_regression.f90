@@ -1127,10 +1127,10 @@ subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
     stop, step, work)
     ! Arguments
     procedure(regression_function), intent(in), pointer :: fun
-    real(real64), intent(in) :: xdata(:), params(:)
-    real(real64), intent(in) :: f0(:)
-    real(real64), intent(out) :: jac(:,:)
-    real(real64), intent(out) :: f1(:), work(:)
+    real(real64), intent(in), dimension(:) :: xdata, params
+    real(real64), intent(in), dimension(:) :: f0
+    real(real64), intent(out), dimension(:,:) :: jac
+    real(real64), intent(out), dimension(:) :: f1, work
     logical, intent(out) :: stop
     real(real64), intent(in) :: step
 
