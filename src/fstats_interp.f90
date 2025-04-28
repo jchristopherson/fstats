@@ -13,6 +13,7 @@ module fstats_interp
     public :: SPLINE_KNOWN_FIRST_DERIVATIVE
     public :: SPLINE_KNOWN_SECOND_DERIVATIVE
     public :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE
+    public :: hermite_interpolator
 
         
     integer(int32), parameter :: SPLINE_QUADRATIC_OVER_INTERVAL = 1000
@@ -113,6 +114,50 @@ module fstats_interp
         procedure, public :: initialize => si_init
         procedure, public :: interpolate_value => si_raw_interp
         procedure, private :: compute_second_derivatives => si_second_diff
+    end type
+
+! ------------------------------------------------------------------------------
+    type, extends(base_interpolator) :: hermite_interpolator
+        !! Defines a type meant for performing Hermite-type interpolation.
+        !! The interpolating polynomial constructed by this object is a global
+        !! polynomial, not a piecewise polynomial.  Given N data points, the
+        !! polynoial will be of degree 2 * N - 1.  As N increases, the
+        !! interpolating polynomial may be liable to oscillations that do
+        !! not properly represent the data.  For large data sets, a piecewise
+        !! polynomial approach is recommended.  See either the
+        !! polynomial_interpolator or spline_interpolator types.
+        !!
+        !! This implementation is a modification of the HERMITE library
+        !! which can be found 
+        !! [here](https://people.math.sc.edu/Burkardt/f_src/hermite/hermite.html).
+        real(real64), private, allocatable, dimension(:) :: m_x
+            !! The x-coordinate raw data.
+        real(real64), private, allocatable, dimension(:) :: m_y
+            !! The y-coordinate raw data.
+        real(real64), private, allocatable, dimension(:) :: m_yp
+            !! An N-element array containing the first derivatives.
+        real(real64), private, allocatable, dimension(:) :: m_xd
+            !! A 2*N-element array containing the abscissas for the divided 
+            !! difference table.
+        real(real64), private, allocatable, dimension(:) :: m_yd
+            !! A 2*N-element array containing the divided difference table.
+        real(real64), private, allocatable, dimension(:) :: m_xdp
+            !! A 2*N-1-element array containing the derivatives for the
+            !! abscissas for the divided difference table.
+        real(real64), private, allocatable, dimension(:) :: m_ydp
+            !! A 2*N-1-element array containing the derivatives for the
+            !! divided difference table.
+        real(real64), private, allocatable, dimension(:) :: m_xwork
+            !! A workspace array.
+        real(real64), private, allocatable, dimension(:) :: m_ywork
+            !! A workspace array.
+    contains
+        procedure, private :: compute_ddf_derivatives => hi_dif_deriv
+        procedure, private :: set_up_hermite_interpolant => hi_set_up_table
+        procedure, public :: initialize => hi_init
+        procedure, public :: interpolate_value => hi_raw_interp
+        procedure, public :: interpolate => hi_interp
+        procedure, public :: interpolate_with_derivative => hi_interp_all
     end type
 
 contains
@@ -931,13 +976,315 @@ subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend, err)
     end if
 end subroutine
 
+! ******************************************************************************
+! HERMITE_INTERPOLATOR
 ! ------------------------------------------------------------------------------
+! REF: https://people.math.sc.edu/Burkardt/f_src/hermite/hermite.html
+subroutine hi_dif_deriv(this, err)
+    !! Computes the derivatives of a polynomial in divided difference form.
+    class(hermite_interpolator), intent(inout) :: this
+        !! The hermite_interpolator object.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: i, nd, ndp, flag
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    nd = size(this%m_xd)
+    ndp = nd - 1
+
+    ! Memory Allocations
+    if (allocated(this%m_xwork)) deallocate(this%m_xwork)
+    if (allocated(this%m_ywork)) deallocate(this%m_ywork)
+    if (allocated(this%m_xdp)) deallocate(this%m_xdp)
+    if (allocated(this%m_ydp)) deallocate(this%m_ydp)
+    allocate(this%m_xwork(nd), this%m_ywork(nd), this%m_xdp(ndp), &
+        this%m_ydp(ndp), source = 0.0d0, stat = flag)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "hi_dif_deriv", flag)
+        return
+    end if
+
+    ! Create a copy of the difference table and shift the abscissas to zero
+    this%m_xwork = this%m_xd
+    this%m_ywork = this%m_yd
+    call dif_shift_zero(this%m_xwork, this%m_ywork)
+
+    ! Construct the derivative
+    this%m_ydp = (/ (i * this%m_ywork(i), i = 1, ndp) /)
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine hi_set_up_table(this, err)
+    !! Sets up the divided difference table from the raw data.
+    class(hermite_interpolator), intent(inout) :: this
+        !! The hermite_interpolator object.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: i, j, n, nd, ndp, flag
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(this%m_x)
+    nd = 2 * n
+    ndp = nd - 1
+
+    ! Memory Allocations
+    allocate(this%m_xd(nd), this%m_yd(nd), stat = flag)
+    if (flag /= 0) then
+        call report_memory_error(errmgr, "hi_set_up_table", flag)
+        return
+    end if
+
+    ! Copy data
+    this%m_xd(1:nd-1:2) = this%m_x(1:n)
+    this%m_xd(2:nd:2) = this%m_x(1:n)
+
+    ! Start differencing
+    this%m_yd(1) = this%m_y(1)
+    this%m_yd(3:nd-1:2) = (this%m_y(2:n) - this%m_y(1:n-1)) / &
+        (this%m_x(2:n) - this%m_x(1:n-1))
+    this%m_yd(2:nd:2) = this%m_yp(1:n)
+
+    ! Carry out the remaining steps in the usual way
+    do i = 3, nd
+        do j = nd, i, -1
+            this%m_yd(j) = (this%m_yd(j) - this%m_yd(j-1)) / &
+                (this%m_xd(j) - this%m_xd(j+1-i))
+        end do
+    end do
+
+    ! Compute the difference table for the derivative
+    call this%compute_ddf_derivatives(err = errmgr)
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine hi_init(this, x, y, yp, err)
+    !! Initializes the interpolation object.
+    class(hermite_interpolator), intent(inout) :: this
+        !! The hermite_interpolator object.
+    real(real64), intent(in), dimension(:) :: x
+        !! An N-element array containing the x-coordinate data in either
+        !! monotonically increasing or decreasing order.
+    real(real64), intent(in), dimension(:) :: y
+        !! An N-element array containing the y-coordinate data.
+    real(real64), intent(in), dimension(:) :: yp
+        !! An N-element array containing the first derivative of the data.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: n, flag
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(x)
+
+    ! Input Checking
+    if (size(y) /= n) then
+        call report_array_size_error(errmgr, "hi_init", "y", n, size(y))
+        return
+    end if
+    if (size(yp) /= n) then
+        call report_array_size_error(errmgr, "hi_init", "yp", n, size(y))
+        return
+    end if
+
+    ! Allocate memory
+    if (allocated(this%m_x)) deallocate(this%m_x)
+    if (allocated(this%m_y)) deallocate(this%m_y)
+    if (allocated(this%m_yp)) deallocate(this%m_yp)
+    allocate(this%m_x(n), source = x, stat = flag)
+    if (flag /= 0) go to 10
+    allocate(this%m_y(n), source = y, stat = flag)
+    if (flag /= 0) go to 10
+    allocate(this%m_yp(n), source = yp, stat = flag)
+    if (flag /= 0) go to 10
+
+    ! Set up the table
+    call this%set_up_hermite_interpolant(err = errmgr)
+    if (errmgr%has_error_occurred()) return
+
+    ! End
+    return
+
+    ! Memory Error Handling
+10  continue
+    call report_memory_error(errmgr, "hi_init", flag)
+end subroutine
+
+! ------------------------------------------------------------------------------
+function hi_raw_interp(this, x) result(rst)
+    !! Interpolates a single value.
+    class(hermite_interpolator), intent(inout) :: this
+        !! The hermite_interpolator object.
+    real(real64), intent(in) :: x
+        !! The value at which to compute the interpolation.
+    real(real64) :: rst
+        !! The interpolated value.
+
+    ! Local Variables
+    real(real64) :: yi(1)
+
+    ! Process
+    call hi_interp(this, [x], yi)
+    rst = yi(1)
+end function
+
+! ------------------------------------------------------------------------------
+subroutine hi_interp_all(this, x, yi, ypi, err)
+    !! Performs the interpolation.
+    class(hermite_interpolator), intent(inout) :: this
+        !! The hermite_interpolator object.
+    real(real64), intent(in), dimension(:) :: x
+        !! An N-element array containing the x values at which to compute the
+        !! interpolation.
+    real(real64), intent(out), dimension(:) :: yi
+        !! An N-element array  containing the interpolated data.
+    real(real64), intent(out), optional, dimension(:) :: ypi
+        !! An N-element array containing the interpolated first derivative
+        !! data, if supplied.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Local Variables
+    integer(int32) :: i, nd, nv, ndp
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    nd = size(this%m_xd)
+    ndp = nd - 1
+    nv = size(x)
+
+    ! Input Check
+    if (size(yi) /= nv) then
+        call report_array_size_error(errmgr, "hi_interp", "yi", nv, size(yi))
+        return
+    end if
+    if (present(ypi)) then
+        if (size(ypi) /= nv) then
+            call report_array_size_error(errmgr, "hi_interp", "ypi", nv, &
+                size(ypi))
+            return
+        end if
+    end if
+
+    ! Process
+    yi(1:nv) = this%m_yd(nd)
+    do i = nd - 1, 1, -1
+        yi(1:nv) = this%m_yd(i) + (x(1:nv) - this%m_xd(i)) * yi(1:nv)
+    end do
+
+    ! Derivative?
+    if (present(ypi)) then
+        ypi(1:nv) = this%m_ydp(ndp)
+        do i = ndp - 1, 1, -1
+            ypi(1:nv) = this%m_ydp(i) + (x(1:nv) - this%m_xdp(i)) * ypi(1:nv)
+        end do
+    end if
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine hi_interp(this, x, yi, err)
+    !! Performs the interpolation.
+    class(hermite_interpolator), intent(inout) :: this
+        !! The hermite_interpolator object.
+    real(real64), intent(in), dimension(:) :: x
+        !! An N-element array containing the x values at which to compute the
+        !! interpolation.
+    real(real64), intent(out), dimension(:) :: yi
+        !! An N-element array  containing the interpolated data.
+    class(errors), intent(inout), optional, target :: err
+        !! An error handling object.
+
+    ! Process
+    call hi_interp_all(this, x, yi, err = err)
+end subroutine
 
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+subroutine dif_shift_x(xd, yd, xv)
+    !! Replaces one abcissa of a divided difference table.
+    real(real64), intent(inout), dimension(:) :: xd
+        !! The x-values used in the representation of the divided difference
+        !! polynomial.  On output, the last entry of this array has been dropped
+        !! and the other entries have shifted up one index.  The value xv has 
+        !! been inserted at the beginning of the array.
+    real(real64), intent(inout), dimension(:) :: yd
+        !! The divided difference coefficients corresponding to xd.  On output,
+        !! this array has beed adjusted accordingly.
+    real(real64), intent(in) :: xv
+        !! A new x-value which is to be used in the representation of the
+        !! polynomial.
+
+    ! Local Variables
+    integer(int32) :: i, nd
+
+    ! Recompute the divided difference coefficients
+    nd = size(xd)
+    do i = nd - 1, 1, -1
+        yd(i) = yd(i) + (xv - xd(i)) * yd(i + 1)
+    end do
+
+    ! Shift XD
+    xd(2:nd) = xd(1:nd-1)
+    xd(1) = xv
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine dif_shift_zero(xd, yd)
+    !! Shifts a divided difference table so all abscissas are zero.
+    real(real64), intent(inout), dimension(:) :: xd
+        !! The x-values that correspond to the divided difference table.  On
+        !! output, this array contains only zeros.
+    real(real64), intent(inout), dimension(:) :: yd
+        !! The divided difference table.  On putput, this array is also the 
+        !! coefficient array for the standard representation of the polynomial.
+
+    ! Local Variables
+    integer(int32) :: i, nd
+    real(real64) :: xv
+
+    ! Process
+    nd = size(xd)
+    xv = 0.0d0
+    do i = 1, nd
+        call dif_shift_x(xd, yd, xv)
+    end do
+end subroutine
 
 ! ------------------------------------------------------------------------------
 end module

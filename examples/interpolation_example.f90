@@ -10,17 +10,18 @@ program example
 
     ! Local Variables
     type(spline_interpolator) :: interp
-    real(real64) :: x(n), y(n), xi(m), yi1(m), yi2(m)
+    type(hermite_interpolator) :: hermite
+    real(real64) :: x(n), y(n), xi(m), yi1(m), yi2(m), yh(m), dydx(n)
 
     ! Plot Variables
     type(plot_2d) :: plt
-    type(plot_data_2d) :: pd1, pd2, pd3
+    type(plot_data_2d) :: pd1, pd2, pd3, pd4
     class(legend), pointer :: lgnd
 
     ! Initialization
     x = [-4.0d0, -3.0d0, -2.0d0, -1.0d0, 0.0d0, 1.0d0, 2.0d0, 3.0d0, 4.0d0]
-    y = [0.0d0, 0.15d0, 1.12d0, 2.36d0, 2.36d0, 1.46d0, 0.49d0, 0.06d0, &
-        0.0d0]
+    y = tanh(x)
+    dydx = (1.0d0 / cosh(x))**2     ! sech(x)**2
     xi = linspace(minval(x), maxval(x), m)
 
     ! Interpolation - Default
@@ -33,10 +34,15 @@ program example
         ibcend = SPLINE_KNOWN_FIRST_DERIVATIVE, ybcend = 0.0d0)
     call interp%interpolate(xi, yi2)
 
+    ! Hermite Interpolation
+    call hermite%initialize(x, y, dydx)
+    call hermite%interpolate(xi, yh)
+
     ! Plot the results
     call plt%initialize()
     lgnd => plt%get_legend()
     call lgnd%set_is_visible(.true.)
+    call lgnd%set_vertical_position(LEGEND_BOTTOM)
 
     call pd1%define_data(x, y)
     call pd1%set_name("Data")
@@ -60,6 +66,13 @@ program example
     call pd3%set_line_width(2.0)
     call pd3%set_line_color(CLR_BLUE)
     call plt%push(pd3)
+
+    call pd4%define_data(xi, yh)
+    call pd4%set_name("Hermite - Global")
+    call pd4%set_line_style(LINE_DASH_DOTTED)
+    call pd4%set_line_width(2.0)
+    call pd4%set_line_color(CLR_GREEN)
+    call plt%push(pd4)
 
     call plt%draw()
 end program

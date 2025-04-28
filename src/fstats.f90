@@ -137,4 +137,5 @@ module fstats
     public :: SPLINE_KNOWN_FIRST_DERIVATIVE
     public :: SPLINE_KNOWN_SECOND_DERIVATIVE
     public :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE
+    public :: hermite_interpolator
 end module
