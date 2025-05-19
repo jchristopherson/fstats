@@ -40,7 +40,7 @@ jobs:
       with:
         fpm-version: 'v0.10.1'
 
-    - name: Build LINALG
+    - name: Build FSTATS
       run: |
         gfortran --version
         fpm build

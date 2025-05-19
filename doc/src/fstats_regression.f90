@@ -137,7 +137,7 @@ module fstats_regression
     end type
 
     interface
-        subroutine regression_function(xdata, params, f, stop)
+        subroutine regression_function(xdata, params, f, stop, args)
             !! Defines the interface of a subroutine computing the function
             !! values at each of the N data points as part of a regression
             !! analysis.
@@ -154,6 +154,8 @@ module fstats_regression
                 !! set to true, the iteration process will terminate.  If set
                 !! to false, the iteration process will continue along as 
                 !! normal.
+            class(*), intent(inout), optional :: args
+                !! An optional argument allowing the passing in/out of data.
         end subroutine
 
         subroutine iteration_update(iter, funvals, resid, params, step)
@@ -686,7 +688,7 @@ end function
 
 ! ------------------------------------------------------------------------------
 subroutine jacobian(fun, xdata, params, &
-    jac, stop, f0, f1, step, err)
+    jac, stop, f0, f1, step, args, err)
     !! Computes the Jacobian matrix for a nonlinear regression problem.
     procedure(regression_function), intent(in), pointer :: fun
         !! A pointer to the regression_function to evaluate.
@@ -711,6 +713,8 @@ subroutine jacobian(fun, xdata, params, &
     real(real64), intent(in), optional :: step
         !! The differentiation step size.  The default is the square 
         !! root of machine precision.
+    class(*), intent(inout), optional :: args
+        !! An optional argument allowing the passing in/out of data.
     class(errors), intent(inout), optional, target :: err
         !! A mechanism for communicating errors and warnings to the 
         !! caller.  Possible warning and error codes are as follows.
@@ -762,7 +766,7 @@ subroutine jacobian(fun, xdata, params, &
         allocate(f0a(m), stat = flag)
         if (flag /= 0) go to 20
         f0p(1:m) => f0a
-        call fun(xdata, params, f0p, stop)
+        call fun(xdata, params, f0p, stop, args = args)
         if (stop) return
     end if
     if (present(f1)) then
@@ -786,7 +790,7 @@ subroutine jacobian(fun, xdata, params, &
 
     ! Compute the Jacobian
     call jacobian_finite_diff(fun, xdata, params, f0p, jac, f1p, &
-        stop, h, work)
+        stop, h, work, args = args)
 
     ! End
     return
@@ -800,7 +804,7 @@ end subroutine
 ! ------------------------------------------------------------------------------
 subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     resid, weights, maxp, minp, stats, alpha, controls, settings, info, &
-    status, cov, err)
+    status, cov, args, err)
     !! Performs a nonlinear regression to fit a model using a version
     !! of the Levenberg-Marquardt algorithm.
     procedure(regression_function), intent(in), pointer :: fun
@@ -853,6 +857,9 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     real(real64), intent(out), optional, dimension(:,:) :: cov
         !! An optional N-by-N matrix that, if supplied, will be used to return
         !! the covariance matrix.
+    class(*), intent(inout), optional :: args
+        !! An optional argument allowing the passing in/out of data for the
+        !! [[fun]] routine.
     class(errors), intent(inout), optional, target :: err
         !! A mechanism for communicating errors and warnings to the 
         !! caller.  Possible warning and error codes are as follows.
@@ -1035,7 +1042,7 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
 
     ! Process
     call lm_solve(fun, x, y, params, w, pmax, pmin, tol, opt, ymod, &
-        resid, JtWJ, inf, stop, errmgr, status)
+        resid, JtWJ, inf, stop, errmgr, status, args = args)
 
     ! Compute the covariance matrix
     if (present(stats) .or. present(cov)) then
@@ -1124,15 +1131,16 @@ end subroutine
 ! - stop: A flag allowing the user to terminate model execution
 ! - work: A workspace array for the model parameters (N-by-1)
 subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
-    stop, step, work)
+    stop, step, work, args)
     ! Arguments
     procedure(regression_function), intent(in), pointer :: fun
-    real(real64), intent(in) :: xdata(:), params(:)
-    real(real64), intent(in) :: f0(:)
-    real(real64), intent(out) :: jac(:,:)
-    real(real64), intent(out) :: f1(:), work(:)
+    real(real64), intent(in), dimension(:) :: xdata, params
+    real(real64), intent(in), dimension(:) :: f0
+    real(real64), intent(out), dimension(:,:) :: jac
+    real(real64), intent(out), dimension(:) :: f1, work
     logical, intent(out) :: stop
     real(real64), intent(in) :: step
+    class(*), intent(inout), optional :: args
 
     ! Local Variables
     integer(int32) :: i, n
@@ -1147,7 +1155,7 @@ subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
     work = params
     do i = 1, n
         work(i) = work(i) + step
-        call fun(xdata, work, f1, stop)
+        call fun(xdata, work, f1, stop, args = args)
         if (stop) return
 
         jac(:,i) = (f1 - f0) / step
@@ -1218,23 +1226,27 @@ end subroutine
 ! - mwork: A workspace matrix (N-by-M)
 ! - update: Reset to false if a Jacobian evaluation was performed.
 subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
-    neval, update, step, JtWJ, JtWdy, X2, yNew, stop, work, mwork)
+    neval, update, step, JtWJ, JtWdy, X2, yNew, stop, work, mwork, args)
     ! Arguments
     procedure(regression_function), pointer :: fun
-    real(real64), intent(in) :: xdata(:), ydata(:), pOld(:), yOld(:), &
-        p(:), weights(:)
+    real(real64), intent(in), dimension(:) :: xdata, ydata, pOld, yOld, &
+        p, weights
     real(real64), intent(in) :: dX2, step
-    real(real64), intent(inout) :: jac(:,:)
+    real(real64), intent(inout), dimension(:,:) :: jac
     integer(int32), intent(inout) :: neval
     logical, intent(inout) :: update
-    real(real64), intent(out) :: JtWJ(:,:), JtWdy(:)
-    real(real64), intent(out) :: X2, mwork(:,:), yNew(:)
+    real(real64), intent(out), dimension(:,:) :: JtWJ
+    real(real64), intent(out), dimension(:) :: JtWdy
+    real(real64), intent(out) :: X2
+    real(real64), intent(out), dimension(:,:) :: mwork
+    real(real64), intent(out), dimension(:) :: yNew
     logical, intent(out) :: stop
-    real(real64), intent(out), target :: work(:)
+    real(real64), intent(out), target, dimension(:) :: work
+    class(*), intent(inout), optional :: args
 
     ! Local Variables
     integer(int32) :: m, n
-    real(real64), pointer :: w1(:), w2(:)
+    real(real64), pointer, dimension(:) :: w1, w2
 
     ! Initialization
     m = size(xdata)
@@ -1243,7 +1255,7 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     w2(1:n) => work(m+1:n+m)
 
     ! Perform the next function evaluation
-    call fun(xdata, p, yNew, stop)
+    call fun(xdata, p, yNew, stop, args = args)
     neval = neval + 1
     if (stop) return
 
@@ -1251,7 +1263,7 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     if (dX2 > 0 .or. update) then
         ! Recompute the Jacobian
         call jacobian_finite_diff(fun, xdata, p, yNew, jac, w1, &
-            stop, step, w2)
+            stop, step, w2, args = args)
         neval = neval + n
         if (stop) return
         update = .false.
@@ -1308,7 +1320,7 @@ end subroutine
 ! - err: An error handling mechanism
 subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     maxP, minP, weights, JtWJ, JtWdy, h, pNew, deltaY, yNew, X2, X2Old, &
-    alpha, stop, iwork, err, status)
+    alpha, stop, iwork, err, status, args)
     ! Arguments
     procedure(regression_function), pointer :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), p(:), maxP(:), &
@@ -1323,6 +1335,7 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     integer(int32), intent(out) :: iwork(:)
     class(errors), intent(inout) :: err
     procedure(iteration_update), intent(in), pointer, optional :: status
+    class(*), intent(inout), optional :: args
 
     ! Local Variables
     integer(int32) :: i, n
@@ -1364,7 +1377,7 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     end do
 
     ! Update the residual error
-    call fun(xdata, pNew, yNew, stop)
+    call fun(xdata, pNew, yNew, stop, args = args)
     neval = neval + 1
     deltaY = ydata - yNew
     if (stop) return
@@ -1382,7 +1395,7 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
             pNew(i) = min(max(minP(i), p(i) + h(i)), maxP(i))
         end do
 
-        call fun(xdata, pNew, yNew, stop)
+        call fun(xdata, pNew, yNew, stop, args = args)
         if (stop) return
         neval = neval + 1
         deltaY = ydata - yNew
@@ -1418,7 +1431,7 @@ end subroutine
 ! - stop: A flag allowing the user to terminate model execution
 ! - err: An error handling object
 subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
-    opt, y, resid, JtWJ, info, stop, err, status)
+    opt, y, resid, JtWJ, info, stop, err, status, args)
     ! Arguments
     procedure(regression_function), intent(in), pointer :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), weights(:), maxP(:), &
@@ -1431,6 +1444,7 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     logical, intent(out) :: stop
     class(errors), intent(inout) :: err
     procedure(iteration_update), intent(in), pointer, optional :: status
+    class(*), intent(inout), optional :: args
 
     ! Local Variables
     logical :: update
@@ -1467,12 +1481,12 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     if (flag /= 0) go to 10
 
     ! Perform an initial function evaluation
-    call fun(xdata, p, y, stop)
+    call fun(xdata, p, y, stop, args = args)
     neval = 1
 
     ! Evaluate the problem matrices
     call lm_matrix(fun, xdata, ydata, pOld, yOld, 1.0d0, J, p, weights, &
-        neval, update, step, JtWJ, JtWdy, X2, y, stop, work, mwork)
+        neval, update, step, JtWJ, JtWdy, X2, y, stop, work, mwork, args = args)
     if (stop) go to 5
     X2Old = X2
     JtWJc = JtWJ
@@ -1492,7 +1506,7 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
         ! update the new parameter estimates
         call lm_iter(fun, xdata, ydata, p, neval, niter, opt%method, &
             lambda, maxP, minP, weights, JtWJc, JtWdy, h, pTry, resid, &
-            yTemp, X2Try, X2Old, alpha, stop, iwork, err, status)
+            yTemp, X2Try, X2Old, alpha, stop, iwork, err, status, args = args)
         if (stop) go to 5
         if (err%has_error_occurred()) return
 
@@ -1500,7 +1514,8 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
         ! lambda, and, if necessary, update the matrices
         call lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
             X2Old, X2, X2Try, lambda, alpha, nu, JtWdy, JtWJ, J, weights, &
-            niter, neval, update, step, work, mwork, controls, opt, stop)
+            niter, neval, update, step, work, mwork, controls, opt, stop, &
+            args = args)
         if (stop) go to 5
         JtWJc = JtWJ
 
@@ -1545,7 +1560,7 @@ end subroutine
 !
 subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
     X2old, X2, X2try, lambda, alpha, nu, JtWdy, JtWJ, J, weights, niter, &
-    neval, update, step, work, mwork, controls, opt, stop)
+    neval, update, step, work, mwork, controls, opt, stop, args)
     ! Arguments
     procedure(regression_function), intent(in), pointer :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), X2try, h(:), step, &
@@ -1559,6 +1574,7 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
     class(iteration_controls), intent(in) :: controls
     class(lm_solver_options), intent(in) :: opt
     logical, intent(out) :: stop
+    class(*), intent(inout), optional :: args
 
     ! Local Variables
     integer(int32) :: n
@@ -1585,7 +1601,8 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
 
         ! Recompute the matrices
         call lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, J, p, weights, &
-            neval, update, step, JtWJ, JtWdy, X2, y, stop, work, mwork)
+            neval, update, step, JtWJ, JtWdy, X2, y, stop, work, mwork, &
+            args = args)
         if (stop) return
 
         ! Decrease lambda
@@ -1605,7 +1622,7 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
         if (mod(niter, 2 * n) /= 0) then
             call lm_matrix(fun, xdata, ydata, pOld, yOld, -1.0d0, J, p, &
                 weights, neval, update, step, JtWJ, JtWdy, dX2, y, stop, &
-                work, mwork)
+                work, mwork, args = args)
             if (stop) return
         end if
 
