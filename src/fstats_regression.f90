@@ -1262,7 +1262,7 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     if (dX2 > 0 .or. update) then
         ! Recompute the Jacobian
         call jacobian_finite_diff(fun, xdata, p, yNew, jac, w1, &
-            stop, step, w2, args)
+            stop, step, w2, args = args)
         neval = neval + n
         if (stop) return
         update = .false.
