@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 2.4% of total for modules and submodules.">94 statements</a>
+               title=" 2.5% of total for modules and submodules.">115 statements</a>
           </li>
 
             <li id="source-file">
@@ -137,8 +137,10 @@
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_invalid_input_error">FS_INVALID_INPUT_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_matrix_size_error">FS_MATRIX_SIZE_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_memory_error">FS_MEMORY_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_nonmonotonic_array_error">FS_NONMONOTONIC_ARRAY_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_no_error">FS_NO_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_null_pointer_error">FS_NULL_POINTER_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_polynomial_order_error">FS_POLYNOMIAL_ORDER_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_tolerance_too_small_error">FS_TOLERANCE_TOO_SMALL_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_too_few_iteration_error">FS_TOO_FEW_ITERATION_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_underdefined_problem_error">FS_UNDERDEFINED_PROBLEM_ERROR</a>
@@ -170,7 +172,9 @@
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_iteration_count_error">report_iteration_count_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_matrix_size_error">report_matrix_size_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_memory_error">report_memory_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_nonmonotonic_array_error">report_nonmonotonic_array_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_null_pointer_error">report_null_pointer_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_polynomial_order_error">report_polynomial_order_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_underdefined_error">report_underdefined_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_zero_variance_warning">report_zero_variance_warning</a>
         </div>
@@ -198,8 +202,8 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li>ferror</li>
                 <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li>ferror</li>
             </ul>
           </li>
       </ul>
@@ -224,8 +228,10 @@
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_invalid_input_error">FS_INVALID_INPUT_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_matrix_size_error">FS_MATRIX_SIZE_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_memory_error">FS_MEMORY_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_nonmonotonic_array_error">FS_NONMONOTONIC_ARRAY_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_no_error">FS_NO_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_null_pointer_error">FS_NULL_POINTER_ERROR</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_polynomial_order_error">FS_POLYNOMIAL_ORDER_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_tolerance_too_small_error">FS_TOLERANCE_TOO_SMALL_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_too_few_iteration_error">FS_TOO_FEW_ITERATION_ERROR</a>
             <a class="list-group-item" href="../module/fstats_errors.html#variable-fs_underdefined_problem_error">FS_UNDERDEFINED_PROBLEM_ERROR</a>
@@ -257,7 +263,9 @@
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_iteration_count_error">report_iteration_count_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_matrix_size_error">report_matrix_size_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_memory_error">report_memory_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_nonmonotonic_array_error">report_nonmonotonic_array_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_null_pointer_error">report_null_pointer_error</a>
+            <a class="list-group-item" href="../module/fstats_errors.html#proc-report_polynomial_order_error">report_polynomial_order_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_underdefined_error">report_underdefined_error</a>
             <a class="list-group-item" href="../module/fstats_errors.html#proc-report_zero_variance_warning">report_zero_variance_warning</a>
         </div>
@@ -375,6 +383,23 @@ parameter
         </tr>
         <tr>
             <td>
+              <span class="anchor" id="variable-fs_nonmonotonic_array_error"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_NONMONOTONIC_ARRAY_ERROR</strong></td>
+<td> =</td>
+                <td>10011</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
               <span class="anchor" id="variable-fs_no_error"></span>
               integer(kind=int32),
             </td>
@@ -403,6 +428,23 @@ parameter
             <td><strong>FS_NULL_POINTER_ERROR</strong></td>
 <td> =</td>
                 <td>10009</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fs_polynomial_order_error"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_POLYNOMIAL_ORDER_ERROR</strong></td>
+<td> =</td>
+                <td>10010</td>
             <td>
                 
             </td>
@@ -990,6 +1032,77 @@ when they should be the same size.</p>
   </div>
 
               <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-report_nonmonotonic_array_error"></span><h3>public  subroutine <a href='../proc/report_nonmonotonic_array_error.html'>report_nonmonotonic_array_error</a>(err, fname, name)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Reports an error related to a nonmonotonic array when a monotonic
+array was expected.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>The error handling object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fname</strong></td>
+            <td>
+<p>The name of the routine in which the error occurred.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>name</strong></td>
+            <td>
+<p>The parameter name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="proc-report_null_pointer_error"></span><h3>public  subroutine <a href='../proc/report_null_pointer_error.html'>report_null_pointer_error</a>(err, fname, name)  
 </h3></div>
     <div class="panel-body">
@@ -1050,6 +1163,91 @@ when they should be the same size.</p>
             <td><strong>name</strong></td>
             <td>
 <p>The parameter name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-report_polynomial_order_error"></span><h3>public  subroutine <a href='../proc/report_polynomial_order_error.html'>report_polynomial_order_error</a>(err, fname, order, minorder)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>Reports an error related to the order of the polynomial.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+<p>The error handling object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fname</strong></td>
+            <td>
+<p>The name of the routine in which the error occurred.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>order</strong></td>
+            <td>
+<p>The supplied order.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>minorder</strong></td>
+            <td>
+<p>The minimum required polynomial order.</p>
             </td>
         </tr>
     </tbody>
@@ -1220,7 +1418,7 @@ place.</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-20 11:50              </p>
+ on 2025-05-19 12:35              </p>
           </div>
         </div>
         <br>

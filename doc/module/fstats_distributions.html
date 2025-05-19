@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="16.7% of total for modules and submodules.">641 statements</a>
+               title="15.6% of total for modules and submodules.">702 statements</a>
           </li>
 
             <li id="source-file">
@@ -164,6 +164,7 @@
             <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_distribution">multivariate_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_normal_distribution">multivariate_normal_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-normal_distribution">normal_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-poisson_distribution">poisson_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-t_distribution">t_distribution</a>
         </div>
       </div>
@@ -192,11 +193,11 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></li>
-                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
                 <li>ferror</li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
                 <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
+                <li><a href='../module/fstats_helper_routines.html'>fstats_helper_routines</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
                 <li><a href='<a href="http://fortranwiki.org/fortran/show/ieee_arithmetic">ieee_arithmetic</a>'>ieee_arithmetic</a></li>
             </ul>
           </li>
@@ -249,6 +250,7 @@
             <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_distribution">multivariate_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-multivariate_normal_distribution">multivariate_normal_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-normal_distribution">normal_distribution</a>
+            <a class="list-group-item" href="../module/fstats_distributions.html#type-poisson_distribution">poisson_distribution</a>
             <a class="list-group-item" href="../module/fstats_distributions.html#type-t_distribution">t_distribution</a>
         </div>
       </div>
@@ -1546,6 +1548,150 @@ exist on the set [0, 1].</p>
 
               <div class="panel panel-default">
     <div class="panel-heading codesum">
+      <span class="anchor" id="type-poisson_distribution"></span>
+      <h3>
+        type, public, extends(<a href='../type/distribution.html'>distribution</a>)&nbsp;::&nbsp;
+        <a href='../type/poisson_distribution.html'>poisson_distribution</a>
+        
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>Defines a Poisson distribution.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Visibility</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+<th></th><th>Initial</th>        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-occrence_rate"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>occrence_rate</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>The rate of occurrences.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-cdf~7'>cdf</a></strong>
+ =>
+                    pd_cdf
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-defined_range~6'>defined_range</a></strong>
+ =>
+                    pd_range
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-mean~7'>mean</a></strong>
+ =>
+                    pd_mean
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-median~7'>median</a></strong>
+ =>
+                    pd_median
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-mode~7'>mode</a></strong>
+ =>
+                    pd_mode
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-pdf~9'>pdf</a></strong>
+ =>
+                    pd_pdf
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-recenter~7'>recenter</a></strong>
+ =>
+                    pd_recenter
+<small>Subroutine</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong>
+ =>
+                    dist_std_var
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                    procedure
+                    ,                  public
+                  :: <strong><a href='../type/poisson_distribution.html#boundprocedure-variance~8'>variance</a></strong>
+ =>
+                    pd_variance
+<small>Function</small>                </td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="panel panel-default">
+    <div class="panel-heading codesum">
       <span class="anchor" id="type-t_distribution"></span>
       <h3>
         type, public, extends(<a href='../type/distribution.html'>distribution</a>)&nbsp;::&nbsp;
@@ -1597,7 +1743,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-cdf~7'>cdf</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-cdf~8'>cdf</a></strong>
  =>
                     td_cdf
 <small>Function</small>                </td>
@@ -1617,7 +1763,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-mean~7'>mean</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-mean~8'>mean</a></strong>
  =>
                     td_mean
 <small>Function</small>                </td>
@@ -1627,7 +1773,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-median~7'>median</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-median~8'>median</a></strong>
  =>
                     td_median
 <small>Function</small>                </td>
@@ -1637,7 +1783,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-mode~7'>mode</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-mode~8'>mode</a></strong>
  =>
                     td_mode
 <small>Function</small>                </td>
@@ -1647,7 +1793,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-pdf~9'>pdf</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-pdf~10'>pdf</a></strong>
  =>
                     td_pdf
 <small>Function</small>                </td>
@@ -1657,7 +1803,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-recenter~7'>recenter</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-recenter~8'>recenter</a></strong>
  =>
                     td_recenter
 <small>Subroutine</small>                </td>
@@ -1677,7 +1823,7 @@ exist on the set [0, 1].</p>
                 <td>
                     procedure
                     ,                  public
-                  :: <strong><a href='../type/t_distribution.html#boundprocedure-variance~8'>variance</a></strong>
+                  :: <strong><a href='../type/t_distribution.html#boundprocedure-variance~9'>variance</a></strong>
  =>
                     td_variance
 <small>Function</small>                </td>
@@ -1710,7 +1856,7 @@ exist on the set [0, 1].</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-20 11:50              </p>
+ on 2025-05-19 12:35              </p>
           </div>
         </div>
         <br>

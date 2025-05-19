@@ -96,7 +96,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="22.7% of total for modules and submodules.">875 statements</a>
+               title="19.6% of total for modules and submodules.">883 statements</a>
           </li>
 
             <li id="source-file">
@@ -230,15 +230,15 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
-                <li>blas</li>
-                <li><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></li>
-                <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
                 <li>ferror</li>
-                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
-                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
-                <li>linalg</li>
-                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
                 <li><a href='../module/fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                <li><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></li>
+                <li><a href='../module/fstats_distributions.html'>fstats_distributions</a></li>
+                <li><a href='<a href="http://fortranwiki.org/fortran/show/iso_fortran_env">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li>linalg</li>
+                <li>blas</li>
+                <li><a href='../module/fstats_errors.html'>fstats_errors</a></li>
+                <li><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></li>
             </ul>
           </li>
       </ul>
@@ -537,7 +537,7 @@ process.</p>
     <ul class="list-group">
         <li class="list-group-item">
               <h3>
-    public  subroutine regression_function(xdata, params, f, stop)  
+    public  subroutine regression_function(xdata, params, f, stop, args)  
 
     </h3>
   <p>Defines the interface of a subroutine computing the function
@@ -617,6 +617,22 @@ evaluations will be written.</p>
 set to true, the iteration process will terminate.  If set
 to false, the iteration process will continue along as 
 normal.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(*),
+            </td>
+<td>intent(inout),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>args</strong></td>
+            <td>
+                <p>An optional parameter that can be used to pass data 
+in and out of the routine.</p>
             </td>
         </tr>
     </tbody>
@@ -1807,7 +1823,7 @@ caller.  Possible warning and error codes are as follows.
   </div>
 
               <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-jacobian"></span><h3>public  subroutine <a href='../proc/jacobian.html'>jacobian</a>(fun, xdata, params, jac, stop, f0, f1, step, err)  
+    <div class="panel-heading codesum"><span class="anchor" id="proc-jacobian"></span><h3>public  subroutine <a href='../proc/jacobian.html'>jacobian</a>(fun, xdata, params, jac, stop, f0, f1, step, args, err)  
 </h3></div>
     <div class="panel-body">
           
@@ -1949,6 +1965,22 @@ evaluations.</p>
             <td>
 <p>The differentiation step size.  The default is the square 
 root of machine precision.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(*),
+            </td>
+<td>intent(inout),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>args</strong></td>
+            <td>
+<p>An optional parameter that can be used to pass data 
+in and out of the routine.</p>
             </td>
         </tr>
         <tr>
@@ -2172,7 +2204,7 @@ caller.  Possible warning and error codes are as follows.
   </div>
 
               <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-nonlinear_least_squares"></span><h3>public  subroutine <a href='../proc/nonlinear_least_squares.html'>nonlinear_least_squares</a>(fun, x, y, params, ymod, resid, weights, maxp, minp, stats, alpha, controls, settings, info, status, cov, err)  
+    <div class="panel-heading codesum"><span class="anchor" id="proc-nonlinear_least_squares"></span><h3>public  subroutine <a href='../proc/nonlinear_least_squares.html'>nonlinear_least_squares</a>(fun, x, y, params, ymod, resid, weights, maxp, minp, stats, alpha, controls, settings, info, status, cov, args, err)  
 </h3></div>
     <div class="panel-body">
           
@@ -2451,6 +2483,22 @@ the covariance matrix.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
+              class(*),
+            </td>
+<td>intent(inout),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>args</strong></td>
+            <td>
+<p>An optional parameter that can be used to pass data 
+in and out of the <a>fun</a> routine.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
               class(errors),
             </td>
 <td>intent(inout),</td>
@@ -2461,7 +2509,7 @@ the covariance matrix.</p>
             <td><strong>err</strong></td>
             <td>
 <p>A mechanism for communicating errors and warnings to the 
-caller.  Possible warning and error codes are as follows.</p><a href="../proc/nonlinear_least_squares.html#variable-err~36" class="pull-right"><emph>Read more&hellip;</emph></a>
+caller.  Possible warning and error codes are as follows.</p><a href="../proc/nonlinear_least_squares.html#variable-err~44" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
     </tbody>
@@ -2491,7 +2539,7 @@ caller.  Possible warning and error codes are as follows.</p><a href="../proc/no
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-20 11:50              </p>
+ on 2025-05-19 12:35              </p>
           </div>
         </div>
         <br>

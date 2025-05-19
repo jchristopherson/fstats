@@ -102,8 +102,9 @@ replacement.  Other resampling methods may be defined by specifying an
 appropriate routine by means of the method input.</p></td></tr>
 			   <tr><td><a href='../interface/bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Interface</td><td></td></tr>
 			   <tr><td><a href='../interface/bootstrap_statistic_routine.html'>bootstrap_statistic_routine</a></td><td><a href='../module/fstats_bootstrap.html'>fstats_bootstrap</a></td><td>Interface</td><td></td></tr>
-			   <tr><td><a href='../interface/box_muller_sample.html'>box_muller_sample</a></td><td><a href='../module/fstats_sampling.html'>fstats_sampling</a></td><td>Interface</td><td><p>Generates random, normally distributed values via the Box-Muller 
-transform.</p></td></tr>
+			   <tr><td><a href='../proc/box_muller_sample.html'>box_muller_sample</a></td><td><a href='../module/fstats_sampling.html'>fstats_sampling</a></td><td>Function</td><td><p>Utilizes the Box-Muller transformation approach to generate the requested
+number of random samples from a normal distribution of the specified mean
+and standard deviation.</p></td></tr>
 			   <tr><td><a href='../proc/calculate_regression_statistics.html'>calculate_regression_statistics</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Function</td><td><p>Computes statistics for the quality of fit for a regression 
 model.</p></td></tr>
 			   <tr><td><a href='../interface/confidence_interval.html'>confidence_interval</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Interface</td><td><p>Computes the confidence interval for the specified distribution.</p><a href="../interface/confidence_interval.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
@@ -135,6 +136,7 @@ full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-righ
 			   <tr><td><a href='../proc/incomplete_beta.html'>incomplete_beta</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the incomplete beta function.</p><a href="../proc/incomplete_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			   <tr><td><a href='../proc/incomplete_gamma_lower.html'>incomplete_gamma_lower</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the lower incomplete gamma function.</p><a href="../proc/incomplete_gamma_lower.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			   <tr><td><a href='../proc/incomplete_gamma_upper.html'>incomplete_gamma_upper</a></td><td><a href='../module/fstats_special_functions.html'>fstats_special_functions</a></td><td>Function</td><td><p>Computes the upper incomplete gamma function.</p><a href="../proc/incomplete_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../interface/interp_routine.html'>interp_routine</a></td><td><a href='../module/fstats_interp.html'>fstats_interp</a></td><td>Interface</td><td></td></tr>
 			   <tr><td><a href='../interface/iteration_update.html'>iteration_update</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Interface</td><td></td></tr>
 			   <tr><td><a href='../proc/jacobian.html'>jacobian</a></td><td><a href='../module/fstats_regression.html'>fstats_regression</a></td><td>Subroutine</td><td><p>Computes the Jacobian matrix for a nonlinear regression problem.</p></td></tr>
 			   <tr><td><a href='../proc/levenes_test.html'>levenes_test</a></td><td><a href='../module/fstats_hypothesis.html'>fstats_hypothesis</a></td><td>Subroutine</td><td><p>Computes Levene's test statistic and associated probability.</p><a href="../proc/levenes_test.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
@@ -161,7 +163,10 @@ when they should be the same size.</p></td></tr>
 			   <tr><td><a href='../proc/report_iteration_count_error.html'>report_iteration_count_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an iteration count error.</p></td></tr>
 			   <tr><td><a href='../proc/report_matrix_size_error.html'>report_matrix_size_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports a matrix size error.</p></td></tr>
 			   <tr><td><a href='../proc/report_memory_error.html'>report_memory_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports a memory allocation related error.</p></td></tr>
+			   <tr><td><a href='../proc/report_nonmonotonic_array_error.html'>report_nonmonotonic_array_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an error related to a nonmonotonic array when a monotonic
+array was expected.</p></td></tr>
 			   <tr><td><a href='../proc/report_null_pointer_error.html'>report_null_pointer_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports a null pointer error.</p></td></tr>
+			   <tr><td><a href='../proc/report_polynomial_order_error.html'>report_polynomial_order_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an error related to the order of the polynomial.</p></td></tr>
 			   <tr><td><a href='../proc/report_underdefined_error.html'>report_underdefined_error</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Reports an underdefined problem error.</p></td></tr>
 			   <tr><td><a href='../proc/report_zero_variance_warning.html'>report_zero_variance_warning</a></td><td><a href='../module/fstats_errors.html'>fstats_errors</a></td><td>Subroutine</td><td><p>Issues a warning when a zero variance is encountered in an unexpected
 place.</p></td></tr>
@@ -199,7 +204,7 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-20 11:50              </p>
+ on 2025-05-19 12:35              </p>
           </div>
         </div>
         <br>

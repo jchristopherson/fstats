@@ -8,7 +8,7 @@
     <meta name="author" content="Jason Christopherson" >
     <link rel="icon" href="../favicon.png">
 
-    <title>box_muller_sample &ndash; FSTATS</title>
+    <title>base_interpolator &ndash; FSTATS </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -84,8 +84,8 @@
 
     <div class="container">
   <div class="row">
-    <h1>box_muller_sample
-      <small>Interface</small>
+    <h1>base_interpolator
+      <small>Derived Type</small>
       
     </h1>
       <div class="row" id="info-bar">
@@ -96,18 +96,18 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="<p> 0.2% of total for procedures.</p>Including implementation: 30 statements,  1.8% of total for procedures.">4 statements</a>
+               title="<p> 1.9% of total for derived types.</p>Including implementation: 27 statements,  1.6% of total for derived types.">5 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_sampling.f90"> Source File</a>
+              <a href="../src/fstats_interp.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/fstats_sampling.f90.html'>fstats_sampling.f90</a></li>
-              <li><a href='../module/fstats_sampling.html'>fstats_sampling</a></li>
-          <li class="active">box_muller_sample</li>
+              <li><a href='../sourcefile/fstats_interp.f90.html'>fstats_interp.f90</a></li>
+              <li><a href='../module/fstats_interp.html'>fstats_interp</a></li>
+          <li class="active">base_interpolator</li>
         </ol>
       </div>
     </div>
@@ -119,10 +119,10 @@
   </script>
 
   </div>
-
+  
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-        <div id="sidebar">
+      <div id="sidebar">
       <h3>Contents</h3>
   
   
@@ -141,35 +141,34 @@
   
   
   
-  
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
-          <a data-toggle="collapse" href="#modprocs-0">Module Procedures</a>
+          <a data-toggle="collapse" href="#boundprocs-0">Type-Bound Procedures</a>
         </h3>
       </div>
-      <div id="modprocs-0" class="panel-collapse collapse">
+      <div id="boundprocs-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../interface/box_muller_sample.html#moduleprocedure-box_muller_sample_scalar">box_muller_sample_scalar</a>
-            <a class="list-group-item" href="../interface/box_muller_sample.html#moduleprocedure-box_muller_array">box_muller_array</a>
+            <a class="list-group-item" href="../type/base_interpolator.html#boundprocedure-interpolate">interpolate</a>
+            <a class="list-group-item" href="../type/base_interpolator.html#boundprocedure-interpolate_value">interpolate_value</a>
         </div>
       </div>
     </div>
 
+  
 
 
   </div>
 
     </div>
-
+    
     <div class="col-md-9" id='text'>
-      <h2>public interface box_muller_sample</h2>
-      <p>Generates random, normally distributed values via the Box-Muller 
-transform.</p>
-<br>
-      <section class="visible-xs visible-sm hidden-md">
-          <h3>Contents</h3>
-  
+      <h2>type, public, abstract :: base_interpolator</h2>
+    <p>A base object for interpolation.</p>
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+        <h3>Contents</h3>
   
   
   
@@ -190,162 +189,188 @@ transform.</p>
       <div class="panel panel-primary">
       <div class="panel-heading text-left">
         <h3 class="panel-title">
-          <a data-toggle="collapse" href="#modprocs-1">Module Procedures</a>
+          <a data-toggle="collapse" href="#boundprocs-1">Type-Bound Procedures</a>
         </h3>
       </div>
-      <div id="modprocs-1" class="panel-collapse collapse">
+      <div id="boundprocs-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../interface/box_muller_sample.html#moduleprocedure-box_muller_sample_scalar">box_muller_sample_scalar</a>
-            <a class="list-group-item" href="../interface/box_muller_sample.html#moduleprocedure-box_muller_array">box_muller_array</a>
+            <a class="list-group-item" href="../type/base_interpolator.html#boundprocedure-interpolate">interpolate</a>
+            <a class="list-group-item" href="../type/base_interpolator.html#boundprocedure-interpolate_value">interpolate_value</a>
         </div>
       </div>
     </div>
 
+  
 
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+
+      <section>
+        <h2>Type-Bound Procedures</h2>
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-interpolate"></span><h3>procedure, public :: <strong>interpolate</strong>  => bi_interp         
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  subroutine bi_interp(this, x, yi, err)  
+</h3>
+  <p>Performs the interpolation.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/base_interpolator.html'>base_interpolator</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The base_interpolator object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>An N-element array containing the x values at which to compute the
+interpolation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>yi</strong></td>
+            <td>
+                <p>An N-element array  containing the interpolated data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(errors),
+            </td>
+<td>intent(inout),</td>
+              <td>optional,</td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>err</strong></td>
+            <td>
+                <p>An error handling object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+            <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-interpolate_value"></span><h3>procedure(<a href='../interface/interp_routine.html'>interp_routine</a>), public, deferred, pass :: <strong>interpolate_value</strong>          
+    </h3></div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+     function interp_routine(this, x) result(rst)  
+<small>Prototype</small></h3>
+  <p>Performs a single interpolation.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='../type/base_interpolator.html'>base_interpolator</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>The base_interpolator object.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The value at which to compute the interpolation.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The interpolated result.</p>
+
+        </li>
+    </ul>
+  </div>
 
       </section>
-      <br class="visible-xs visible-sm hidden-md">
 
-
-
-        <h2>Module Procedures</h2>
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-box_muller_sample_scalar"></span><h3>private  function box_muller_sample_scalar(mu, sigma) result(rst)  
-</h3></div>
-    <div class="panel-body">
-        <p>Generates a pair of independent, standard, normally distributed
-random values using the Box-Muller transform.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mu</strong></td>
-            <td>
-                <p>The mean of the distribution.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>sigma</strong></td>
-            <td>
-                <p>The standard deviation of the distribution.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64), (2)</small>
-    </h4>
-    <p>The pair of random values.</p>
-
+    
     </div>
   </div>
 
-            <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-box_muller_array"></span><h3>private  function box_muller_array(mu, sigma, n) result(rst)  
-</h3></div>
-    <div class="panel-body">
-        <p>Generates an array of normally distributed random values sampled
-by the Box-Muller transform.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mu</strong></td>
-            <td>
-                <p>The mean of the distribution.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>sigma</strong></td>
-            <td>
-                <p>The standard deviation of the distribution.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>n</strong></td>
-            <td>
-                <p>The number of Box-Muller pairs to generate.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64), allocatable, dimension(:)</small>
-    </h4>
-    <p>A 2N-element array containing the N Box-Muller pairs.</p>
-
-    </div>
-  </div>
-
-</div>
-  </div>
       <hr>
     </div> <!-- /container -->
     <footer>
@@ -358,7 +383,7 @@ by the Box-Muller transform.</p>
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-20 11:50              </p>
+ on 2025-05-19 12:35              </p>
           </div>
         </div>
         <br>
