@@ -13,26 +13,6 @@ function(include_headers lib dir install_dir)
     )
 endfunction()
 
-# Use instead of add_library.
-function(add_fortran_library lib_name mod_dir include_install_dir version major)
-    add_library(${lib_name} ${ARGN})
-    set_target_properties(
-        ${lib_name}
-        PROPERTIES
-            POSITION_INDEPENDENT_CODE TRUE
-            OUTPUT_NAME ${lib_name}
-            VERSION ${version}
-            SOVERSION ${major}
-            Fortran_MODULE_DIRECTORY ${include_install_dir}
-    )
-    target_include_directories(
-        ${lib_name}
-        PUBLIC
-        $<BUILD_INTERFACE:${mod_dir}>
-        $<INSTALL_INTERFACE:${include_install_dir}>
-    )
-endfunction()
-
 # Installs the library
 function(install_library lib_name lib_install_dir bin_install_dir mod_dir install_dir)
     install(

@@ -51,3 +51,6 @@ CTestTestfile.cmake
 # VS Code Stuff
 launch.json
 settings.json
+
+# CLion stuff
+.idea/*
