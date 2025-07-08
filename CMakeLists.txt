@@ -86,6 +86,7 @@ target_compile_options(fstats PRIVATE
     -Wno-error=unused-dummy-argument
     -Wno-error=unused-label
     -Wno-error=surprising
+    -Wno-error=uninitialized
     -fimplicit-none
 )
 
