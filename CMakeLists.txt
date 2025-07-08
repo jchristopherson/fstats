@@ -52,7 +52,6 @@ set_target_properties(
     PROPERTIES
         OUTPUT_NAME fstats
         POSITION_INDEPENDENT_CODE TRUE
-#        Fortran_MODULE_DIRECTORY ${include_install_dir}
 )
 target_include_directories(
     fstats
