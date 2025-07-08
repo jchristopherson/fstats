@@ -31,7 +31,6 @@ subroutine ComputeLowessFit(x, y, ys, n, fsmooth, nstps) bind(C, name="ComputeLo
     integer(c_int), intent(in) :: nstps
 
     real(real64), allocatable :: scopedX(:), scopedY(:), scopedYs(:)
-    integer(int32) :: i
 
     ! prepare data for lowess
     allocate(scopedX(n), scopedY(n), scopedYs(n))
