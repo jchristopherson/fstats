@@ -2,7 +2,7 @@ module MT
 
 implicit none
 
-integer, parameter :: MAX_TRAIL_LENGTH = 10000
+integer, parameter :: MAX_TRAIL_LENGTH = 100000
 
 contains
 
