@@ -6,7 +6,7 @@ enable_language(Fortran)
 set(CMAKE_Fortran_STANDARD 2018)
 set(CMAKE_Fortran_STANDARD_REQUIRED ON)
 
-option(COPY_LIB_TO_MT "Copy library to MT directory" ON)
+set(MT_LIBS_DIR "${CMAKE_BINARY_DIR}/../../../libs")
 
 add_subdirectory(configure)
 add_subdirectory(dependencies)
@@ -35,7 +35,7 @@ set(FSTATS_SOURCES
 set_source_files_properties(
     ${FSTATS_SOURCES}
     PROPERTIES
-        Fortran_PREPROCESS ON
+    Fortran_PREPROCESS ON
 )
 
 set(MT_SOURCES
@@ -50,8 +50,9 @@ add_library(fstats SHARED
 set_target_properties(
     fstats
     PROPERTIES
-        OUTPUT_NAME fstats
-        POSITION_INDEPENDENT_CODE TRUE
+    OUTPUT_NAME fstats
+    POSITION_INDEPENDENT_CODE TRUE
+    LIBRARY_OUTPUT_DIRECTORY ${MT_LIBS_DIR}
 )
 target_include_directories(
     fstats
@@ -63,12 +64,15 @@ target_include_directories(
     $<INSTALL_INTERFACE:${include_install_dir}>
 )
 
+target_link_directories(fstats PUBLIC
+    ${MT_LIBS_DIR}
+)
+
 target_link_libraries(fstats PUBLIC
     ${ferror_LIBRARY} 
     ${linalg_LIBRARY} 
     ${collections_LIBRARY}
 )
-
 
 if (OpenMP_Fortran_FOUND)
     target_link_libraries(fstats PUBLIC OpenMP::OpenMP_Fortran)
@@ -89,9 +93,16 @@ target_compile_options(fstats PRIVATE
     -fimplicit-none
 )
 
-if(COPY_LIB_TO_MT)
-    set(MT_DIR "${CMAKE_BINARY_DIR}/../../..")
+add_custom_command(TARGET fstats POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    $<TARGET_FILE:fstats>
+    ${MT_LIBS_DIR}
+)
+if (WIN32)
     add_custom_command(TARGET fstats POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:fstats> ${MT_DIR}/$<TARGET_FILE_NAME:fstats>
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_BINARY_DIR}/_deps/lapack-build/bin/libblas.dll
+        ${CMAKE_BINARY_DIR}/_deps/lapack-build/bin/liblapack.dll
+        ${MT_LIBS_DIR}
     )
 endif()

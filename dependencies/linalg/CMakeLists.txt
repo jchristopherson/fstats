@@ -9,6 +9,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(linalg)
 
+set_target_properties(linalg PROPERTIES
+    OUTPUT_NAME "linalg"
+    NO_SONAME ON
+    LIBRARY_OUTPUT_DIRECTORY ${MT_LIBS_DIR}
+)
+
 set(linalg_INCLUDE_DIR ${linalg_BINARY_DIR}/include)
 set(linalg_INCLUDE_DIR ${linalg_INCLUDE_DIR} PARENT_SCOPE)
 configure_file(

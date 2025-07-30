@@ -9,6 +9,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(ferror)
 
+set_target_properties(ferror PROPERTIES
+    OUTPUT_NAME "ferror"
+    NO_SONAME ON
+    LIBRARY_OUTPUT_DIRECTORY ${MT_LIBS_DIR}
+)
+
 set(ferror_INCLUDE_DIR ${ferror_BINARY_DIR}/include)
 set(ferror_INCLUDE_DIR ${ferror_INCLUDE_DIR} PARENT_SCOPE)
 configure_file(

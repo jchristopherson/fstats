@@ -9,6 +9,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(collections)
 
+set_target_properties(collections PROPERTIES
+    OUTPUT_NAME "collections"
+    NO_SONAME ON
+    LIBRARY_OUTPUT_DIRECTORY ${MT_LIBS_DIR}
+)
+
 set(collections_INCLUDE_DIR ${collections_BINARY_DIR}/include)
 set(collections_INCLUDE_DIR ${collections_INCLUDE_DIR} PARENT_SCOPE)
 
