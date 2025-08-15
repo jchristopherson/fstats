@@ -1,6 +1,3 @@
-# Get helper macros and functions
-include("${PROJECT_SOURCE_DIR}/cmake/helper.cmake")
-
 # Include Dependencies
 add_subdirectory(fplot)
 add_subdirectory(fortran_csv_module)
