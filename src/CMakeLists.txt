@@ -62,6 +62,7 @@ if (NOT collections_FOUND)
     FetchContent_Declare(
         collections
         GIT_REPOSITORY "https://github.com/jchristopherson/collections"
+        GIT_TAG main
     )
     FetchContent_MakeAvailable(collections)
     set(COLLECTIONS_LIBRARIES collections)
