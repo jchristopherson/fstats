@@ -24,6 +24,7 @@ set(FSTATS_SOURCES
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 
 # Dependencies
+include(FetchContent)
 find_package(OpenMP REQUIRED COMPONENTS Fortran)
 find_package(ferror QUIET)
 find_package(linalg QUIET)
