@@ -1,7 +1,7 @@
 module distribution_plotting_module
     use iso_fortran_env
-    use fplot_core
     use fstats
+    use fplot_core
     implicit none
 
 contains
