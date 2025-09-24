@@ -23,6 +23,12 @@ set(FSTATS_SOURCES
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 
+# Enable preprocessor directives
+set_source_files_properties(
+    ${FSTATS_SOURCES}
+    PROPERTIES Fortran_PREPROCESS ON
+)
+
 # Dependencies
 include(FetchContent)
 find_package(OpenMP REQUIRED COMPONENTS Fortran)
