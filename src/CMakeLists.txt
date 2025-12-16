@@ -84,11 +84,15 @@ target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
     ${FERROR_LIBRARIES}
-    ${LINALG_LIBRARIES}
     ${COLLECTIONS_LIBRARIES}
 )
+target_link_libraries(
+    ${PROJECT_NAME}
+    PRIVATE
+    ${LINALG_LIBRARIES}
+)
 if (OpenMP_Fortran_FOUND)
-    target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_Fortran)
+    target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_Fortran)
     target_compile_definitions(${PROJECT_NAME} PRIVATE USEOPENMP=1)
 endif()
 
