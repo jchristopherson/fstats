@@ -484,7 +484,7 @@ pure function sample_size(dist, var, delta, bet, alpha) result(rst)
     if (present(bet)) then
         b = bet
     else
-        b = 0.8d0
+        b = 0.2d0
     end if
     if (present(alpha)) then
         a = alpha
