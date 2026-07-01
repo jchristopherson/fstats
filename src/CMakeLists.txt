@@ -85,15 +85,13 @@ target_link_libraries(
     PUBLIC
     ${FERROR_LIBRARIES}
     ${COLLECTIONS_LIBRARIES}
-)
-target_link_libraries(
-    ${PROJECT_NAME}
-    PRIVATE
     ${LINALG_LIBRARIES}
 )
 if (OpenMP_Fortran_FOUND)
-    target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_Fortran)
+    target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_Fortran)
     target_compile_definitions(${PROJECT_NAME} PRIVATE USEOPENMP=1)
+    target_compile_options(${PROJECT_NAME} PUBLIC $<$<COMPILE_LANGUAGE:Fortran>:-fopenmp>)
+    target_link_options(${PROJECT_NAME} INTERFACE $<$<LINK_LANGUAGE:Fortran>:-fopenmp>)
 endif()
 
 set_target_properties(
