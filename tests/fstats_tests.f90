@@ -8,6 +8,7 @@ program tests
     use fstats_allan_tests
     use fstats_mcmc_tests
     use fstats_interp_tests
+    use fstats_bootstrap_tests
     implicit none
 
     ! Variables
@@ -159,6 +160,16 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_polynomial_interp()
+    if (.not.local) overall = .false.
+
+    ! Bootstrap Tests
+    local = test_bootstrap_1()
+    if (.not.local) overall = .false.
+
+    local = test_random_resample_with_replacement()
+    if (.not.local) overall = .false.
+
+    local = test_bootstrap_2()
     if (.not.local) overall = .false.
 
     ! End
