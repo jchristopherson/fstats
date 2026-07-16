@@ -1,7 +1,6 @@
 # Include Dependencies
 add_subdirectory(fortran_csv_module)
 include(FetchContent)
-find_package(OpenMP REQUIRED COMPONENTS Fortran)
 
 FetchContent_Declare(
     fplot
@@ -13,19 +12,19 @@ set(fplot_LIBRARY fplot forcolormap)
 
 # Full Factorial Example
 add_executable(full_factorial_example full_factorial_example.f90)
-target_link_libraries(full_factorial_example PRIVATE fstats OpenMP::OpenMP_Fortran)
+target_link_libraries(full_factorial_example PRIVATE fstats)
 
 # ANOVA Example
 add_executable(anova_example_1 anova_example_1.f90)
-target_link_libraries(anova_example_1 PRIVATE fstats OpenMP::OpenMP_Fortran)
+target_link_libraries(anova_example_1 PRIVATE fstats)
 
 # Regression Example
 add_executable(regression_example regression_example.f90)
-target_link_libraries(regression_example PRIVATE fstats OpenMP::OpenMP_Fortran)
+target_link_libraries(regression_example PRIVATE fstats)
 
 # Nonlinear Regression Example
 add_executable(nl_regression_example nl_regression_example.f90)
-target_link_libraries(nl_regression_example PRIVATE fstats OpenMP::OpenMP_Fortran)
+target_link_libraries(nl_regression_example PRIVATE fstats)
 
 # Allan Variance Example
 configure_file(
@@ -34,44 +33,44 @@ configure_file(
     COPYONLY
 )
 add_executable(allan_example allan_example.f90)
-target_link_libraries(allan_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY} ${fortran-csv-module_LIBRARY})
+target_link_libraries(allan_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY} ${fortran-csv-module_LIBRARY})
 target_include_directories(allan_example PUBLIC ${fortran-csv-module_INCLUDE_DIR})
 
 # Box-Muller Example
 add_executable(box_muller_example box_muller_example.f90)
-target_link_libraries(box_muller_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(box_muller_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # Rejection Sampling Example
 add_executable(rejection_sample_example rejection_sample_example.f90)
-target_link_libraries(rejection_sample_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(rejection_sample_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # LOWESS Example
 add_executable(lowess_example lowess_example.f90)
-target_link_libraries(lowess_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(lowess_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # Bootstrap Example
 add_executable(bootstrap_example bootstrap_example.f90)
-target_link_libraries(bootstrap_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(bootstrap_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # MCMC Regression Example
 add_executable(mcmc_regression_example mcmc_regression_example.f90)
-target_link_libraries(mcmc_regression_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(mcmc_regression_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # MCMC Regression Example 2
 add_executable(mcmc_regression_example_2 mcmc_regression_example_2.f90)
-target_link_libraries(mcmc_regression_example_2 PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(mcmc_regression_example_2 PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # MCMC Regression Example 3
 add_executable(mcmc_regression_example_3 mcmc_regression_example_3.f90)
-target_link_libraries(mcmc_regression_example_3 PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(mcmc_regression_example_3 PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # Distribution Example
 add_executable(distribution_example distribution_example.f90)
-target_link_libraries(distribution_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(distribution_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 # Interpolation Example
 add_executable(interpolation_example interpolation_example.f90)
-target_link_libraries(interpolation_example PRIVATE fstats OpenMP::OpenMP_Fortran ${fplot_LIBRARY} ${ferror_LIBRARY})
+target_link_libraries(interpolation_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
 if (${BUILD_SHARED_LIBS} AND WIN32)
     add_custom_command(
