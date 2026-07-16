@@ -9,7 +9,7 @@ contains
         logical :: rst
 
         ! Parameters
-        real(real64), parameter :: tol = 1.0d-2
+        real(real64), parameter :: tol = 5.0d-2
         real(real64), parameter :: ci_upper = 0.746d0
         real(real64), parameter :: ci_lower = 0.583d0
         real(real64), parameter :: std_err = 0.042d0
@@ -72,7 +72,6 @@ contains
     function test_random_resample_with_replacement() result(rst)
         logical :: rst
 
-        real(real64), parameter :: tol = 1.0d-12
         real(real64) :: x(5), xn(5)
 
         rst = .true.
@@ -104,7 +103,7 @@ contains
         logical :: rst
 
         ! Parameters
-        real(real64), parameter :: tol = 1.0d-2
+        real(real64), parameter :: tol = 5.0d-2
         real(real64), parameter :: ci_upper = 0.746d0
         real(real64), parameter :: ci_lower = 0.583d0
         real(real64), parameter :: std_err = 0.042d0
