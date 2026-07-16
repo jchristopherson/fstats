@@ -82,7 +82,7 @@ program example
     call linear_least_squares(3, .true., x, y, coeffs, ymodeled, residuals, stats)
 
     ! Display the results
-    print '(AF8.5AF8.5AF8.5AF8.5A)', "Model: y = ", &
+    print '(A, F8.5, A, F8.5, A, F8.5, A, F8.5, A)', "Model: y = ", &
         coeffs(1), " + ", &
         coeffs(2), " x + ", &
         coeffs(3), " x**2 + ", &
@@ -90,7 +90,7 @@ program example
     
     ! Illustrate the statistics for each coefficient
     do i = 1, size(stats)
-        print '(AI0AF6.3AF6.3AF6.3AF6.3)', &
+        print '(A, I0, A, F6.3, A, F6.3, A, F6.3, A, F6.3)', &
             "Coefficient ", i, ":" // nl // &
             tab // "Standard Error: ", stats(i)%standard_error, nl // &
             tab // "Confidence Interval: +/-", stats(i)%confidence_interval, nl // &

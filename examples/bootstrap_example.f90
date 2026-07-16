@@ -14,9 +14,7 @@ program example
     type(plot_2d) :: plt
     type(plot_data_histogram) :: pd
 
-    ! Create a sample data set based upon a normal distribution.  The choice of
-    ! distribution is arbitrary in this instance.  This distribution is chosen
-    ! for demonstration purposes.
+    ! Create a sample data set.
     call random_number(avg)
     call random_number(x)
     x = x + avg
@@ -33,11 +31,11 @@ program example
     rst = bootstrap(fun, x)
 
     ! Display the results
-    print "(AF6.3)", "Mean: ", rst%statistic_value
-    print "(AF6.3)", "Upper CI Limit: ", rst%upper_confidence_interval
-    print "(AF6.3)", "Lower CI Limit: ", rst%lower_confidence_interval
-    print "(AF6.3)", "Std. Error: ", rst%standard_error
-    print "(AF6.3)", "Bias: ", rst%bias
+    print "(A, F6.3)", "Mean: ", rst%statistic_value
+    print "(A, F6.3)", "Upper CI Limit: ", rst%upper_confidence_interval
+    print "(A, F6.3)", "Lower CI Limit: ", rst%lower_confidence_interval
+    print "(A, F6.3)", "Std. Error: ", rst%standard_error
+    print "(A, F6.3)", "Bias: ", rst%bias
 
     ! Plot the distribution of parameters
     call plt%clear_all()

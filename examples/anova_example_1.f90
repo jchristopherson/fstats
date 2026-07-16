@@ -24,22 +24,22 @@ program example
     ! Print out the table
     print '(A)', "Description" // tab // "DOF" // tab // "Sum of Sq." // &
         tab // "Variance" // tab // "F-Stat" // tab // "P-Value"
-    print '(AF2.0AF5.1AF5.1AF5.3AF5.3)', "Main Factor: " // tab, &
+    print '(A, F2.0, A, F5.1, A, F5.1, A, F5.3, A, F5.3)', "Main Factor: " // tab, &
         tbl%main_factor%dof, tab, &
         tbl%main_factor%sum_of_squares, tab // tab, &
         tbl%main_factor%variance, tab // tab, &
         tbl%main_factor%f_statistic, tab, &
         tbl%main_factor%probability
 
-    print '(AF3.0AF6.1AF5.1)', "Within: " // tab, &
+    print '(A, F3.0, A, F6.1, A, F5.1)', "Within: " // tab, &
         tbl%within_factor%dof, tab, &
         tbl%within_factor%sum_of_squares, tab // tab, &
         tbl%within_factor%variance
 
-    print '(AF3.0AF6.1AF5.1)', "Total: " // tab // tab, &
+    print '(A, F3.0, A, F6.1, A, F5.1)', "Total: " // tab // tab, &
         tbl%total_dof, tab, &
         tbl%total_sum_of_squares, tab // tab, &
         tbl%total_variance
 
-    print '(AF6.1)', "Overall Mean: ", tbl%overall_mean
+    print '(A, F6.1)', "Overall Mean: ", tbl%overall_mean
 end program
