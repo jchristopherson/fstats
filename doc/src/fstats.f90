@@ -114,7 +114,7 @@ module fstats
     public :: bootstrap_resampling_routine
     public :: bootstrap_statistic_routine
     public :: random_resample
-    public :: scaled_random_resample
+    public :: random_resample_with_replacement
     public :: bootstrap_statistics
     public :: bootstrap
 
