@@ -331,11 +331,11 @@ program example
     y = mean(chain(:,3))
     sigma = mean(chain(:,4))
 
-    print "(AF9.3)", "wn = ", wn
-    print "(AF9.3)", "fn = ", wn / (2.0d0 * pi)
-    print "(AF9.3)", "zeta = ", zeta
-    print "(AF9.3)", "y = ", y
-    print "(AF9.3)", "sigma**2 = ", sigma
+    print "(A, F9.3)", "wn = ", wn
+    print "(A, F9.3)", "fn = ", wn / (2.0d0 * pi)
+    print "(A, F9.3)", "zeta = ", zeta
+    print "(A, F9.3)", "y = ", y
+    print "(A, F9.3)", "sigma**2 = ", sigma
 
     ! Evaluate the model
     call tgt%model(xdata, [wn, zeta, y], f)

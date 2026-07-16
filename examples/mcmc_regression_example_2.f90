@@ -233,10 +233,10 @@ program example
     s3 = mean(chain(:,3))
     sigma = mean(chain(:,4))
 
-    print "(AF7.3)", "s1 = ", s1
-    print "(AF7.3)", "s2 = ", s2
-    print "(AF7.3)", "s3 = ", s3
-    print "(AF7.3)", "sigma**2 = ", sigma
+    print "(A, F7.3)", "s1 = ", s1
+    print "(A, F7.3)", "s2 = ", s2
+    print "(A, F7.3)", "s3 = ", s3
+    print "(A, F7.3)", "sigma**2 = ", sigma
 
     ! Evaluate the model
     call tgt%model(xdata, [s1, s2, s3], f)
