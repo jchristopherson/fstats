@@ -33,8 +33,8 @@ set_source_files_properties(
 include(FetchContent)
 find_package(OpenMP REQUIRED COMPONENTS Fortran)
 find_package(ferror QUIET)
-find_package(linalg 1.8.9 QUIET)
-find_package(collections 1.0.8 QUIET)
+find_package(linalg 1.8.10 QUIET)
+find_package(collections 1.0.9 QUIET)
 if (NOT ferror_FOUND)
     message(STATUS "FERROR could not be found.  A reference version will be employed.")
     FetchContent_Declare(
