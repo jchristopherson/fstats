@@ -1,14 +1,20 @@
 # Include Dependencies
 add_subdirectory(fortran_csv_module)
-include(FetchContent)
 
-FetchContent_Declare(
-    fplot
-    GIT_TAG "origin/master"
-    GIT_REPOSITORY https://github.com/jchristopherson/fplot
-)
-FetchContent_MakeAvailable(fplot)
-set(fplot_LIBRARY fplot forcolormap)
+find_package(fplot)
+if (NOT fplot_FOUND)
+    include(FetchContent)
+
+    FetchContent_Declare(
+        fplot
+        GIT_TAG "origin/master"
+        GIT_REPOSITORY https://github.com/jchristopherson/fplot
+    )
+    FetchContent_MakeAvailable(fplot)
+    set(fplot_LIBRARY fplot forcolormap)
+else()
+    set(fplot_LIBRARY fplot::fplot)
+endif()
 
 # Full Factorial Example
 add_executable(full_factorial_example full_factorial_example.f90)
