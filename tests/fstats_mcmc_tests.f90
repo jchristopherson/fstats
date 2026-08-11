@@ -13,7 +13,7 @@ contains
 ! ******************************************************************************
 ! TEST_MCMC_TARGET
 ! ------------------------------------------------------------------------------
-subroutine tmt_eval(this, xdata, xc, y)
+pure subroutine tmt_eval(this, xdata, xc, y)
     class(test_mcmc_target), intent(in) :: this
     real(real64), intent(in), dimension(:) :: xdata
     real(real64), intent(in), dimension(:) :: xc

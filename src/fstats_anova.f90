@@ -3,7 +3,6 @@ module fstats_anova
     use ieee_arithmetic
     use fstats_special_functions
     use fstats_descriptive_statistics
-    use ferror
     use fstats_errors
     use fstats_distributions
     implicit none
@@ -336,7 +335,7 @@ end function
 
 ! ------------------------------------------------------------------------------
 ! REF: https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1
-function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
+function anova_model_fit(nmodelparams, ymeas, ymod) result(rst)
     !! Performs an analysis of variance (ANOVA) on the supplied data set.
     integer(int32), intent(in) :: nmodelparams
         !! The number of model parameters.
@@ -344,46 +343,24 @@ function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
         !! An N-element array containing the measured dependent variable data.
     real(real64), intent(in) :: ymod(:)
         !! An N-element array containing the modeled dependent variable data.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if ymeas and ymod are not the 
-        !!   same length.
-        !! - FS_MEMORY_ERROR: Occurs if a memory error is encountered.
     type(single_factor_anova_table) :: rst
         !! A single_factor_anova_table instance containing the ANOVA results.
 
     ! Local Variables
-    integer(int32) :: n, flag
+    integer(int32) :: n
     real(real64), allocatable :: ypack(:)
     real(real64) :: sum_all
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
     n = size(ymeas)
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     rst%within_factor%f_statistic = ieee_value(sum_all, IEEE_QUIET_NAN)
     rst%within_factor%probability = ieee_value(sum_all, IEEE_QUIET_NAN)
 
     ! Input Checking
-    if (size(ymod) /= n) then
-        call report_arrays_not_same_size_error(errmgr, "anova_model_fit", &
-            "YMEAS", "YMOD", n, size(ymod))
-        return
-    end if
+    if (size(ymod) /= n) error stop 3
 
     ! Memory Allocation
-    allocate(ypack(2 * n), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "anova_model_fit", flag)
-        return
-    end if
+    allocate(ypack(2 * n))
 
     ! Determine the number of DOF
     rst%main_factor%dof = nmodelparams - 1
@@ -405,18 +382,14 @@ function anova_model_fit(nmodelparams, ymeas, ymod, err) result(rst)
         rst%within_factor%dof
 
     ! Compute the F-statistic and probability term
-        call anova_probability( &
+    call anova_probability( &
         rst%main_factor%variance, &
         rst%within_factor%variance, &
         rst%main_factor%dof, &
         rst%within_factor%dof, &
         rst%main_factor%f_statistic, &
         rst%main_factor%probability &
-    )    
-
-    ! Formatting
-100 format(A, I0, A, I0, A)
-101 format(A, I0, A)
+    )
 end function
 
 ! ******************************************************************************

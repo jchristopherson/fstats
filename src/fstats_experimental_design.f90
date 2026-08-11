@@ -35,7 +35,7 @@ module fstats_experimental_design
     end interface
 contains
 ! ------------------------------------------------------------------------------
-subroutine get_full_factorial_matrix_size(vars, m, n, err)
+subroutine get_full_factorial_matrix_size(vars, m, n)
     !! Computes the appropriate size for a full-factorial design table.
     integer(int32), intent(in) :: vars(:)
         !! An M-element array containing the M factors to study.  Each 
@@ -46,50 +46,28 @@ subroutine get_full_factorial_matrix_size(vars, m, n, err)
         !! The number of rows for the table.
     integer(int32), intent(out) :: n
         !! The number of columns for the table.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_INVALID_INPUT_ERROR: Occurs if any items in vars are 
-        !!      less than 1.
 
     ! Local Variables
     integer(int32) :: i
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    character(len = 256) :: errmsg
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     m = 0
     n = 0
 
     ! Ensure every value is greater than 1
     do i = 1, size(vars)
         if (vars(i) < 1) then
-            write(errmsg, 100) "A value less than 1 was found at index ", &
-                i, " of the input array.  All values must be greater " // &
-                "than or equal to 1."
-            call errmgr%report_error("get_full_factorial_matrix_size", &
-                trim(errmsg), FS_INVALID_INPUT_ERROR)
-            return
+            error stop FS_INVALID_INPUT_ERROR
         end if
     end do
 
     ! Process
     m = product(vars)
     n = size(vars)
-
-    ! Formatting
-100 format(A, I0, A)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine full_factorial(vars, tbl, err)
+subroutine full_factorial(vars, tbl)
     !! Computes a table with values scaled from 1 to N describing a 
     !! full-factorial design.
     !!
@@ -150,34 +128,13 @@ subroutine full_factorial(vars, tbl, err)
         !! A table where the design will be written.  Use 
         !! get_full_factorial_matrix_size to determine the appropriate 
         !! table size.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_INVALID_INPUT_ERROR: Occurs if any items in vars are 
-        !!      less than 1.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if tbl is not properly sized.
 
     ! Local Variables
     integer(int32) :: i, col, stride, last, val, m, n
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
 
     ! Verify the size of the input table
-    call get_full_factorial_matrix_size(vars, m, n, errmgr)
-    if (errmgr%has_error_occurred()) return
-    if (size(tbl, 1) /= m .or. size(tbl, 2) /= n) then
-        call report_matrix_size_error(errmgr, "full_factorial", &
-            "tbl", m, n, size(tbl, 1), size(tbl, 2))
-        return
-    end if
+    call get_full_factorial_matrix_size(vars, m, n)
+    if (size(tbl, 1) /= m .or. size(tbl, 2) /= n) error stop 2
 
     ! Process
     do col = 1, n
@@ -194,7 +151,7 @@ subroutine full_factorial(vars, tbl, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
+function doe_fit_model(nway, x, y, map, alpha) result(rst)
     use blas, only : DGEMM
     use ieee_arithmetic
     !! Fits a Taylor series model to the provided data.
@@ -220,36 +177,19 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
         !! The significance level at which to evaluate the confidence 
         !! intervals.  The default value is 0.05 such that a 95% 
         !! confidence interval is calculated.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if x and y are not properly sized
-        !!      relative to one another.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
-        !! - FS_INVALID_ARGUMENT_ERROR: Occurs if nway is out of range, or if
-        !!      map is used to "turn off" all model parameters.
     type(doe_model) :: rst
         !! The resulting model.
 
     ! Local Variables
-    integer(int32) :: i, j, m, n, nparam, nfactors, flag
+    integer(int32) :: i, j, m, n, nparam, nfactors
     logical, allocatable, target, dimension(:) :: nmap
     logical, pointer, dimension(:) :: mapptr
     real(real64) :: alph, nan
     real(real64), allocatable, dimension(:) :: coeffs, ymod, resid
     real(real64), allocatable, dimension(:,:) :: xc, c, cxt
     type(regression_statistics), allocatable, dimension(:) :: stats
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     if (present(alpha)) then
         alph = alpha
     else
@@ -260,12 +200,7 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
     nan = ieee_value(nan, IEEE_QUIET_NAN)
 
     ! Input Checking
-    if (nway < 1 .or. nway > 3) then
-        call errmgr%report_error("doe_fit_model", &
-            "The number of interaction levels must be between one and three.", &
-            FS_INVALID_ARGUMENT_ERROR)
-        return
-    end if
+    if (nway < 1 .or. nway > 3) error stop 1
 
     ! Determine the parameter count
     nparam = 1
@@ -275,18 +210,10 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
     
     ! Set up the map parameters
     if (present(map)) then
-        if (size(map) /= nparam) then
-            call report_array_size_error(errmgr, "doe_fit_model", "map", &
-                nparam, size(map))
-            return
-        end if
+        error stop 4
         mapptr => map
     else
-        allocate(nmap(nparam), stat = flag, source = .true.)
-        if (flag /= 0) then
-            call report_memory_error(errmgr, "doe_fit_model", flag)
-            return
-        end if
+        allocate(nmap(nparam), source = .true.)
         mapptr => nmap
     end if
 
@@ -296,25 +223,17 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
         if (.not.mapptr(i)) n = n - 1
     end do
     if (n < 1) then
-        call errmgr%report_error("doe_fit_model", &
-            "There must be at least one active model parameter.", &
-            FS_INVALID_ARGUMENT_ERROR)
-        return
+        error stop FS_INVALID_INPUT_ERROR
     end if
 
     ! Local memory allocations
-    allocate(xc(m, n), c(n, n), cxt(n, m), coeffs(n), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "doe_fit_model", flag)
-        return
-    end if
+    allocate(xc(m, n), c(n, n), cxt(n, m), coeffs(n))
 
     ! Create the design matrix
     call doe_design_matrix(nway, x, mapptr, xc)
 
     ! Compute the covariance matrix
-    call covariance_matrix(xc, c, errmgr)
-    if (errmgr%has_error_occurred()) return
+    c = covariance_matrix(xc)
 
     ! Solve the least-squares problem (N-by-1 result)
     call DGEMM("N", "T", n, m, n, 1.0d0, c, n, xc, m, 0.0d0, cxt, n) ! C * X**T
@@ -325,18 +244,13 @@ function doe_fit_model(nway, x, y, map, alpha, err) result(rst)
     resid = ymod - y
 
     ! Estimate parameter statistics
-    stats = calculate_regression_statistics(resid, coeffs, c, alph, errmgr)
-    if (errmgr%has_error_occurred()) return
+    stats = calculate_regression_statistics(resid, coeffs, c, alph)
 
     ! Update output
     rst%nway = nway
-    allocate(rst%coefficients(nparam), stat = flag)
-    if (flag == 0) allocate(rst%stats(nparam), stat = flag)
-    if (flag == 0) allocate(rst%map(nparam), stat = flag, source = mapptr)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "doe_fit_model", flag)
-        return
-    end if
+    allocate(rst%coefficients(nparam))
+    allocate(rst%stats(nparam))
+    allocate(rst%map(nparam), source = mapptr)
     j = 0
     do i = 1, nparam
         if (mapptr(i)) then
@@ -434,7 +348,7 @@ subroutine doe_design_matrix(nway, x, map, c)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-function doe_evaluate_model_1(nway, beta, x, map, err) result(rst)
+function doe_evaluate_model_1(nway, beta, x, map) result(rst)
     !! Evaluates the model of the following form.
     !!
     !! $$ Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
@@ -455,74 +369,36 @@ function doe_evaluate_model_1(nway, beta, x, map, err) result(rst)
         !! in the model (true).  If not supplied, all parameters will be assumed
         !! to be part of the model as if the array were filled with all true
         !! values.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if beta and map are not properly sized
-        !!      relative to one another.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
-        !! - FS_INVALID_INPUT_ERROR: Occurs if nway is less than 1 or greater
-        !!      than 3.
     real(real64), allocatable, dimension(:) :: rst
         !! The resulting M-element array.
 
     ! Local Variables
-    integer(int32) :: m, n, nparam, flag
+    integer(int32) :: m, n, nparam
     logical, pointer, dimension(:) :: mapptr
     logical, allocatable, target, dimension(:) :: nmap
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     m = size(x, 1)
     n = size(x, 2)
 
     ! Input Checking
-    if (nway < 1 .or. nway > 3) then
-        call errmgr%report_error("doe_evaluate_model_1", &
-            "The number of interaction levels must be between one and three.", &
-            FS_INVALID_ARGUMENT_ERROR)
-        return
-    end if
+    if (nway < 1 .or. nway > 3) error stop 1
 
     nparam = 1
     if (nway >= 1) nparam = nparam + n
     if (nway >= 2) nparam = nparam + n * (n - 1)
     if (nway >= 3) nparam = nparam + n * (n**2 - 1)
-    if (size(beta) /= nparam) then
-        call report_array_size_error(errmgr, "doe_evaluate_model_1", "beta", &
-            nparam, size(beta))
-        return
-    end if
+    if (size(beta) /= nparam) error stop 2
 
     ! Memory Allocations
-    allocate(rst(m), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "doe_evaluate_model_1", flag)
-        return
-    end if
+    allocate(rst(m))
 
     ! Set up the map parameters
     if (present(map)) then
-        if (size(map) /= nparam) then
-            call report_array_size_error(errmgr, "doe_evaluate_model_1", &
-                "map", nparam, size(map))
-            return
-        end if
+        error stop 4
         mapptr => map
     else
-        allocate(nmap(nparam), stat = flag, source = .true.)
-        if (flag /= 0) then
-            call report_memory_error(errmgr, "doe_evaluate_model_1", flag)
-            return
-        end if
+        allocate(nmap(nparam), source = .true.)
         mapptr => nmap
     end if
 
@@ -531,7 +407,7 @@ function doe_evaluate_model_1(nway, beta, x, map, err) result(rst)
 end function
 
 ! ----------
-function doe_evaluate_model_2(mdl, x, err) result(rst)
+function doe_evaluate_model_2(mdl, x) result(rst)
     !! Evaluates the model of the following form.
     !!
     !! $$ Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
@@ -543,17 +419,11 @@ function doe_evaluate_model_2(mdl, x, err) result(rst)
     real(real64), intent(in), dimension(:,:) :: x
         !! The M-by-N matrix containing the M values of each of the N factors
         !! at which to evaluate the model.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
     real(real64), allocatable, dimension(:) :: rst
         !! The resulting M-element array.
 
     ! Process
-    rst = doe_evaluate_model_1(mdl%nway, mdl%coefficients, x, mdl%map, err)
+    rst = doe_evaluate_model_1(mdl%nway, mdl%coefficients, x, mdl%map)
 end function
 
 ! ----------

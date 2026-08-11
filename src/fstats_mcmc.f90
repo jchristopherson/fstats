@@ -2,7 +2,6 @@ module fstats_mcmc
     use iso_fortran_env
     use fstats_distributions
     use fstats_sampling
-    use ferror
     use fstats_errors
     use fstats_descriptive_statistics
     use fstats_types
@@ -54,7 +53,7 @@ module fstats_mcmc
     end type
 
     interface
-        subroutine evaluate_model(this, xdata, xc, y)
+        pure subroutine evaluate_model(this, xdata, xc, y)
             !! Evaluates the model at the supplied values.
             use iso_fortran_env, only : real64
             import mcmc_target
@@ -134,17 +133,15 @@ pure function mt_get_param_count(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mt_add_param(this, x, err)
+subroutine mt_add_param(this, x)
     !! Adds a new model parameter.
     class(mcmc_target), intent(inout) :: this
         !! The mcmc_target object.
     class(distribution), intent(in) :: x
         !! The parameter to add.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handler object.
 
     ! Process
-    call this%m_items%push(x, err = err)
+    call this%m_items%push(x)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -171,7 +168,7 @@ function mt_get_param(this, i) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
+function mt_likelihood(this, xdata, ydata, xc, var) result(rst)
     !! Computes the target likelihood.
     class(mcmc_target), intent(inout) :: this
         !! The mcmc_target object.
@@ -183,8 +180,6 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
         !! An N-element array containing the model parameters.
     real(real64), intent(in) :: var
         !! An estimate of the model variance.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
     real(real64) :: rst
         !! The likelihood value.
 
@@ -192,32 +187,17 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 
     ! Local Variables
-    integer(int32) :: i, m, n, flag
+    integer(int32) :: i, m, n
     real(real64) :: p, temp, v
     real(real64), allocatable, dimension(:) :: resid, nrm, lognrm
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     m = size(xdata)
     n = size(xc)
 
     ! Input Checking
-    if (size(ydata) /= m) then
-        call report_array_size_error(errmgr, "mt_likelihood", "ydata", m, &
-            size(ydata))
-        return
-    end if
-    if (this%get_parameter_count() /= n) then
-        call report_array_size_error(errmgr, "mt_likelihood", "xc", &
-            this%get_parameter_count(), n)
-        return
-    end if
+    if (size(ydata) /= m) error stop 3
+    if (this%get_parameter_count() /= n) error stop 4
 
     ! Ensure a non-zero variance
     if (var == 0.0d0) then
@@ -230,13 +210,11 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
 
     ! Memory Allocations
     if (.not.allocated(this%m_y)) then
-        allocate(this%m_y(m), stat = flag)
-        if (flag /= 0) go to 10
+        allocate(this%m_y(m))
     end if
     if (size(this%m_y) /= m) then
         deallocate(this%m_y)
-        allocate(this%m_y(m), stat = flag)
-        if (flag /= 0) go to 10
+        allocate(this%m_y(m))
     end if
 
     ! Evaluate the model at each data point
@@ -247,14 +225,6 @@ function mt_likelihood(this, xdata, ydata, xc, var, err) result(rst)
     lognrm = (-resid**2 / (2.0d0 * v)) - log(sqrt(2.0d0 * pi * v))
     rst = sum(lognrm)
     rst = exp(rst)
-
-    ! End
-    return
-
-    ! Memory Error Handling
-10  continue
-    call report_memory_error(errmgr, "mt_likelihood", flag)
-    return
 end function
 
 ! ------------------------------------------------------------------------------
@@ -311,38 +281,26 @@ function mt_sample_var_prior(this, vc, n) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function mt_eval_prior(this, x, err) result(rst)
+function mt_eval_prior(this, x) result(rst)
     !! Evaluates the PDF's for each parameter and computes a probability.
     class(mcmc_target), intent(in) :: this
         !! The mcmc_target object.
     real(real64), intent(in), dimension(:) :: x
         !! An N-element array containing the values at which to evaluate each of
         !! the N parameter PDF's.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
     real(real64) :: rst
         !! The resulting probability.
 
     ! Local Variables
     integer(int32) :: i, n
     real(real64) :: temp, p
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     class(distribution), pointer :: dist
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = this%get_parameter_count()
 
     ! Input Check
-    if (size(x) /= n) then
-        call report_array_size_error(errmgr, "mt_eval_prior", "x", n, size(x))
-        return
-    end if
+    if (size(x) /= n) error stop FS_ARRAY_SIZE_ERROR
 
     ! Process - use log prorabilities to avoid overflow/underflow issues
     temp = 0.0d0
@@ -359,7 +317,7 @@ end function
 ! ******************************************************************************
 ! MCMC_PROPOSAL
 ! ------------------------------------------------------------------------------
-subroutine mp_gen(this, tgt, xc, xp, vc, vp, err)
+subroutine mp_gen(this, tgt, xc, xp, vc, vp)
     !! Creates a new sample proposal.
     class(mcmc_proposal), intent(inout) :: this
         !! The mcmc_proposal object.
@@ -373,8 +331,6 @@ subroutine mp_gen(this, tgt, xc, xp, vc, vp, err)
         !! The current variance (noise) term value.
     real(real64), intent(out) :: vp
         !! The proposed variance (noise) value.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Parameters
     integer(int32), parameter :: nsamples = 1
@@ -383,30 +339,19 @@ subroutine mp_gen(this, tgt, xc, xp, vc, vp, err)
     integer(int32) :: i, n
     real(real64) :: samples(nsamples), sigma, mu, xmax, xmin, mx, mn, rng(2)
     class(distribution), pointer :: dist
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = tgt%get_parameter_count()
 
     ! Input Checking
-    if (size(xp) /= n) then
-        call report_array_size_error(errmgr, "mp_gen", "xp", n, size(xp))
-        return
-    end if
+    if (size(xp) /= n) error stop FS_ARRAY_SIZE_ERROR
 
     ! Handle each parameter
     do i = 1, n
         ! Get the parameter distribution
         dist => tgt%get_parameter(i)
         if (.not.associated(dist)) then
-            call report_null_pointer_error(errmgr, "mp_gen", "dist")
-            return
+            error stop FS_NULL_POINTER_ERROR
         end if
 
         ! Recenter the distribution
@@ -480,54 +425,33 @@ pure function cb_get_chain_length(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine cb_resize_buffer(this, err)
+subroutine cb_resize_buffer(this)
     !! Resizes the buffer to accept more states.
     class(chain_builder), intent(inout) :: this
         !! The chain_builder object.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handling object.
 
     ! Local Variables
-    integer(int32) :: m, n, flag, mOld
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: m, n, mOld
     real(real64), allocatable, dimension(:,:) :: copy
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     m = this%initial_iteration_estimate
     n = this%get_state_variable_count()
 
     ! Is this the first time?
     if (.not.allocated(this%m_buffer)) then
-        allocate(this%m_buffer(m, n), stat = flag)
-        if (flag /= 0) go to 10
-        return
+        allocate(this%m_buffer(m, n))
     end if
 
     ! If we're here, then we need to create a copy and go from there
     m = size(this%m_buffer, 1)
     mOld = m
-    allocate(copy(m, n), stat = flag, source = this%m_buffer)
-    if (flag /= 0) go to 10
+    allocate(copy(m, n), source = this%m_buffer)
     deallocate(this%m_buffer)
     m = m + this%initial_iteration_estimate
-    allocate(this%m_buffer(m, n), stat = flag)
-    if (flag /= 0) go to 10
+    allocate(this%m_buffer(m, n))
     this%m_buffer(1:mOld,:) = copy
     deallocate(copy)
-
-    ! End
-    return
-
-    ! Memory Error Handling
-10  continue
-    call report_memory_error(errmgr, "cb_resize_buffer", flag)
-    return
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -547,26 +471,17 @@ pure function cb_get_buffer_length(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine cb_push(this, x, err)
+subroutine cb_push(this, x)
     !! Pushes a new set of state variables onto the buffer.
     class(chain_builder), intent(inout) :: this
         !! The chain_builder object.
     real(real64), intent(in), dimension(:) :: x
         !! The new N-element state array.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handling object.
 
     ! Local Variables
     integer(int32) :: n, n1, nbuffer, nvars
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = this%get_chain_length()
     n1 = n + 1
     nbuffer = this%get_buffer_length()
@@ -578,16 +493,11 @@ subroutine cb_push(this, x, err)
     end if
 
     ! Input Checking
-    if (nvars /= this%get_state_variable_count()) then
-        call report_array_size_error(errmgr, "cb_push", "x", &
-            this%get_state_variable_count(), nvars)
-        return
-    end if
+    if (nvars /= this%get_state_variable_count()) error stop FS_ARRAY_SIZE_ERROR
 
     ! Resize the buffer, if necessary
     if (n == 0 .or. n == nbuffer) then
-        call this%resize_buffer(errmgr)
-        if (errmgr%has_error_occurred()) return
+        call this%resize_buffer()
     end if
 
     ! Store the new state
@@ -596,7 +506,7 @@ subroutine cb_push(this, x, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-function cb_get_chain(this, bin, err) result(rst)
+pure function cb_get_chain(this, bin) result(rst)
     !! Gets a copy of the stored Markov chain.
     class(chain_builder), intent(in) :: this
         !! The chain_builder object.
@@ -605,22 +515,13 @@ function cb_get_chain(this, bin, err) result(rst)
         !! represents the amount (percentage-based) of the overall chain to 
         !! disregard as "burn-in" values.  The value shoud exist on [0, 1).
         !! The default value is 0 such that no values are disregarded.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handling object.
     real(real64), allocatable, dimension(:,:) :: rst
         !! The resulting chain with each parameter represented by a column.
 
     ! Local Variables
-    integer(int32) :: npts, nvar, flag, nstart, n
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: npts, nvar, nstart, n
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     npts = this%get_chain_length()
     n = npts
     nvar = this%get_state_variable_count()
@@ -632,12 +533,7 @@ function cb_get_chain(this, bin, err) result(rst)
     end if
 
     ! Process
-    allocate(rst(npts, nvar), stat = flag, &
-        source = this%m_buffer(nstart:n,1:nvar))
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "cb_get_chain", flag)
-        return
-    end if
+    allocate(rst(npts, nvar), source = this%m_buffer(nstart:n,1:nvar))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -654,7 +550,7 @@ end subroutine
 ! ******************************************************************************
 ! MCMC_SAMPLER
 ! ------------------------------------------------------------------------------
-subroutine ms_on_success(this, iter, alpha, xc, xp, err)
+subroutine ms_on_success(this, iter, alpha, xc, xp)
     !! Currently, this routine does nothing and is a placeholder for the user
     !! that inherits this class to provide functionallity upon acceptance of
     !! a proposed value.
@@ -669,12 +565,10 @@ subroutine ms_on_success(this, iter, alpha, xc, xp, err)
     real(real64), intent(in), dimension(size(xc)) :: xp
         !! An N-element array containing the proposed state variables that
         !! were just accepted.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine ms_on_rejection(this, iter, alpha, xc, xp, err)
+subroutine ms_on_rejection(this, iter, alpha, xc, xp)
     !! Currently, this routine does nothing and is a placeholder for the user
     !! that inherits this class to provide functionallity upon rejection of
     !! a proposed value.
@@ -689,8 +583,6 @@ subroutine ms_on_rejection(this, iter, alpha, xc, xp, err)
     real(real64), intent(in), dimension(size(xc)) :: xp
         !! An N-element array containing the proposed state variables that
         !! were just rejected.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -704,7 +596,7 @@ pure function ms_get_num_accepted(this) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine ms_sample(this, xdata, ydata, prop, tgt, niter, err)
+subroutine ms_sample(this, xdata, ydata, prop, tgt, niter)
     !! Samples the distribution using the Metropolis-Hastings approach.
     class(mcmc_sampler), intent(inout) :: this
         !! The mcmc_sampler object.
@@ -720,23 +612,14 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter, err)
     integer(int32), intent(in), optional :: niter
         !! An optional input defining the number of iterations to take.  The
         !! default is 10,000.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handling object.
 
     ! Local Variables
-    integer(int32) :: i, n, n1, npts, m, flag
+    integer(int32) :: i, n, n1, npts, m
     real(real64) :: pp, pc, alpha, r, qprior, qvar
     real(real64), allocatable, dimension(:) :: buffer, xc
     class(distribution), pointer :: dist
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     if (present(niter)) then
         npts = niter
     else
@@ -749,14 +632,10 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter, err)
     pc = 1.0d0
 
     ! Input Checking
-    if (size(ydata) /= m) then
-        call report_array_size_error(errmgr, "ms_sample", "ydata", m, size(ydata))
-        return
-    end if
+    if (size(ydata) /= m) error stop FS_ARRAY_SIZE_ERROR
 
     ! Memory Allocations
-    allocate(buffer(n1), xc(n1), source = 0.0d0, stat = flag)
-    if (flag /= 0) go to 10
+    allocate(buffer(n1), xc(n1), source = 0.0d0)
 
     ! Get an initial starting point based upon the prior means
     do i = 1, n
@@ -765,22 +644,18 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter, err)
     end do
 
     ! Store the starting location
-    call this%push_new_state(xc, err = errmgr)
-    if (errmgr%has_error_occurred()) return
+    call this%push_new_state(xc)
 
     ! Process
     do i = 2, npts
         ! Create a proposal
         call prop%generate_sample(tgt, xc(1:n), buffer(1:n), &
-            xc(n1), buffer(n1), err = errmgr)
-        if (errmgr%has_error_occurred()) return
+            xc(n1), buffer(n1))
 
         ! Evaluate the likelihood
-        pp = tgt%likelihood(xdata, ydata, buffer(1:n), buffer(n1), err = errmgr)
-        if (errmgr%has_error_occurred()) return
+        pp = tgt%likelihood(xdata, ydata, buffer(1:n), buffer(n1))
 
-        qprior = tgt%evaluate_prior(buffer(1:n), err = errmgr)
-        if (errmgr%has_error_occurred()) return
+        qprior = tgt%evaluate_prior(buffer(1:n))
 
         qvar = tgt%evaluate_variance_prior(buffer(n1))
 
@@ -791,8 +666,7 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter, err)
         call random_number(r)
         if (r <= alpha) then
             ! Keep the proposed value
-            call this%push_new_state(buffer, err = errmgr)
-            if (errmgr%has_error_occurred()) return
+            call this%push_new_state(buffer)
 
             ! Update the values
             xc = buffer
@@ -802,26 +676,15 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter, err)
             this%m_accepted = this%m_accepted + 1
 
             ! Anything else?
-            call this%on_acceptance(i, alpha, xc, buffer, err = errmgr)
-            if (errmgr%has_error_occurred()) return
+            call this%on_acceptance(i, alpha, xc, buffer)
         else
             ! Keep the existing and move on
-            call this%push_new_state(xc, err = errmgr)
-            if (errmgr%has_error_occurred()) return
+            call this%push_new_state(xc)
 
             ! Anything else?
-            call this%on_rejection(i, alpha, xc, buffer, err = errmgr)
-            if (errmgr%has_error_occurred()) return
+            call this%on_rejection(i, alpha, xc, buffer)
         end if
     end do
-
-    ! End
-    return
-
-    ! Memory Error Handling
-10  continue
-    call report_memory_error(errmgr, "ms_sample", flag)
-    return
 end subroutine
 
 ! ------------------------------------------------------------------------------

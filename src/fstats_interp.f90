@@ -1,7 +1,6 @@
 module fstats_interp
     use iso_fortran_env
     use fstats_errors
-    use ferror
     implicit none
     private
     public :: interp_routine
@@ -197,7 +196,7 @@ end function
 ! ******************************************************************************
 ! INTERPOLATION_MANAGER
 ! ------------------------------------------------------------------------------
-subroutine im_init(this, x, y, order, err)
+subroutine im_init(this, x, y, order)
     !! Initializes the interpolation object.
     class(interpolation_manager), intent(inout) :: this
         !! The interpolation_manager object.
@@ -208,37 +207,19 @@ subroutine im_init(this, x, y, order, err)
         !! An N-element array containing the y-coordinate data.
     integer(int32), intent(in) :: order
         !! The order of the interpolating polynomial.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
-    integer(int32) :: i, n, flag
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: i, n
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(x)
 
     ! Input Checking
-    if (size(y) /= n) then
-        call report_array_size_error(errmgr, "im_init", "y", n, size(y))
-        return
-    end if
+    if (size(y) /= n) error stop FS_ARRAY_SIZE_ERROR
 
-    if (order < 1) then
-        call report_polynomial_order_error(errmgr, "im_init", order, 1)
-        return
-    end if
+    if (order < 1) error stop 4
 
-    if (.not.is_monotonic(x)) then
-        call report_nonmonotonic_array_error(errmgr, "im_init", "x")
-        return
-    end if
+    if (.not.is_monotonic(x)) error stop FS_NONMONOTONIC_ARRAY_ERROR
 
     ! Process
     this%m_order = order
@@ -248,20 +229,11 @@ subroutine im_init(this, x, y, order, err)
 
     if (allocated(this%x)) deallocate(this%x)
     if (allocated(this%y)) deallocate(this%y)
-    allocate(this%x(n), this%y(n), stat = flag)
-    if (flag /= 0) go to 10
+    allocate(this%x(n), this%y(n))
     do i = 1, n
         this%x(i) = x(i)
         this%y(i) = y(i)
     end do
-    
-    ! End
-    return
-
-    ! Memory Error Handling
-10  continue
-    call report_memory_error(errmgr, "im_init", flag)
-    return
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -438,7 +410,7 @@ end function
 ! ******************************************************************************
 ! BASE_INTERPOLATOR
 ! ------------------------------------------------------------------------------
-subroutine bi_interp(this, x, yi, err)
+subroutine bi_interp(this, x, yi)
     !! Performs the interpolation.
     class(base_interpolator), intent(inout) :: this
         !! The base_interpolator object.
@@ -447,27 +419,15 @@ subroutine bi_interp(this, x, yi, err)
         !! interpolation.
     real(real64), intent(out), dimension(:) :: yi
         !! An N-element array  containing the interpolated data.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
     integer(int32) :: i, n
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(x)
 
     ! Input Checking
-    if (size(yi) /= n) then
-        call report_array_size_error(errmgr, "bi_interp", "yi", n, size(yi))
-        return
-    end if
+    if (size(yi) /= n) error stop FS_ARRAY_SIZE_ERROR
 
     ! Perform the interpolation
     do i = 1, n
@@ -478,7 +438,7 @@ end subroutine
 ! ******************************************************************************
 ! LINEAR_INTERPOLATOR
 ! ------------------------------------------------------------------------------
-subroutine li_init(this, x, y, err)
+subroutine li_init(this, x, y)
     !! Initializes the interpolation object.
     class(linear_interpolator), intent(inout) :: this
         !! The linear_interpolator object.
@@ -487,23 +447,9 @@ subroutine li_init(this, x, y, err)
         !! monotonically increasing or decreasing order.
     real(real64), intent(in), dimension(:) :: y
         !! An N-element array containing the y-coordinate data.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
-
-    ! Local Variables
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
 
     ! Initialize the managing object
-    call this%m_manager%initialize(x, y, 1, err = errmgr)
-    if (errmgr%has_error_occurred()) return
+    call this%m_manager%initialize(x, y, 1)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -604,7 +550,7 @@ function pi_raw_interp(this, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine pi_init(this, order, x, y, err)
+subroutine pi_init(this, order, x, y)
     !! Initializes the interpolation object.
     class(polynomial_interpolator), intent(inout) :: this
         !! The polynomial_interpolator object.
@@ -615,32 +561,18 @@ subroutine pi_init(this, order, x, y, err)
         !! monotonically increasing or decreasing order.
     real(real64), intent(in), dimension(:) :: y
         !! An N-element array containing the y-coordinate data.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handler object.
 
     ! Local Variables
-    integer(int32) :: m, flag
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: m
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
-    call this%m_manager%initialize(x, y, order, err = errmgr)
-    if (errmgr%has_error_occurred()) return
+    call this%m_manager%initialize(x, y, order)
 
     ! Allocate necessary workspace memory
     if (allocated(this%m_c)) deallocate(this%m_c)
     if (allocated(this%m_d)) deallocate(this%m_d)
     m = order + 1
-    allocate(this%m_c(m), this%m_d(m), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "pi_init", flag)
-        return
-    end if
+    allocate(this%m_c(m), this%m_d(m))
 end subroutine
 
 ! ******************************************************************************
@@ -738,7 +670,7 @@ subroutine penta_solve(a1, a2, a3, a4, a5, b, x)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
+subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend)
     !! Initializes the interpolation object.
     class(spline_interpolator), intent(inout) :: this
         !! The spline_interpolator object.
@@ -787,21 +719,12 @@ subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
     real(real64), intent(in), optional :: ybcend
         !! If needed, the value of the final point boundary condition.  If 
         !! needed, but not supplied, a default value of zero will be used.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
     integer(int32) :: ibeg, iend, n
     real(real64) :: ybeg, yend
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(x)
     ibeg = SPLINE_QUADRATIC_OVER_INTERVAL
     iend = SPLINE_QUADRATIC_OVER_INTERVAL
@@ -813,10 +736,7 @@ subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
     if (present(ybcend)) yend = ybcend
 
     ! Input Checking
-    if (size(y) /= n) then
-        call report_array_size_error(errmgr, "si_init", "y", n, size(y))
-        return
-    end if
+    if (size(y) /= n) error stop FS_ARRAY_SIZE_ERROR
     if (ibeg /= SPLINE_CONTINUOUS_THIRD_DERIVATIVE .and. &
         ibeg /= SPLINE_KNOWN_SECOND_DERIVATIVE .and. &
         ibeg /= SPLINE_KNOWN_FIRST_DERIVATIVE .and. &
@@ -831,18 +751,16 @@ subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
     then
         iend = SPLINE_QUADRATIC_OVER_INTERVAL
     end if
-    call this%m_manager%initialize(x, y, 3, errmgr)
-    if (errmgr%has_error_occurred()) return
+    call this%m_manager%initialize(x, y, 3)
 
     ! Evaluate the 2nd derivatives
-    call this%compute_second_derivatives(ibeg, ybeg, iend, yend, err = errmgr)
-    if (errmgr%has_error_occurred()) return
+    call this%compute_second_derivatives(ibeg, ybeg, iend, yend)
 end subroutine
 
 ! ------------------------------------------------------------------------------
 ! http://people.sc.fsu.edu/~jburkardt/f77_src/spline/spline.html
 ! ROUTINE: SPLINE_CUBIC_SET
-subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend, err)
+subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend)
     !! Computes the second derivative terms for the cubic-spline model.
     class(spline_interpolator), intent(inout) :: this
         !! The spline_interpolator object.
@@ -880,31 +798,17 @@ subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend, err)
         !!      continuous at x(n-1).
     real(real64), intent(in) :: ybcend
         !! The value of the final point boundary condition.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
-    integer(int32) :: i, n, flag
+    integer(int32) :: i, n
     real(real64), allocatable ,dimension(:) :: a1, a2, a3, a4, a5, b
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = this%m_manager%size()
 
     ! Local Memory Allocations
     if (allocated(this%m_ypp)) deallocate(this%m_ypp)
-    allocate(this%m_ypp(n), a1(n), a2(n), a3(n), a4(n), a5(n), b(n), &
-        stat = flag, source = 0.0d0)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "si_second_diff", flag)
-        return
-    end if
+    allocate(this%m_ypp(n), a1(n), a2(n), a3(n), a4(n), a5(n), b(n), source = 0.0d0)
 
     ! Set up the first equation
     select case (ibcbeg)
@@ -980,24 +884,15 @@ end subroutine
 ! HERMITE_INTERPOLATOR
 ! ------------------------------------------------------------------------------
 ! REF: https://people.math.sc.edu/Burkardt/f_src/hermite/hermite.html
-subroutine hi_dif_deriv(this, err)
+subroutine hi_dif_deriv(this)
     !! Computes the derivatives of a polynomial in divided difference form.
     class(hermite_interpolator), intent(inout) :: this
         !! The hermite_interpolator object.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
-    integer(int32) :: i, nd, ndp, flag
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: i, nd, ndp
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     nd = size(this%m_xd)
     ndp = nd - 1
 
@@ -1007,11 +902,7 @@ subroutine hi_dif_deriv(this, err)
     if (allocated(this%m_xdp)) deallocate(this%m_xdp)
     if (allocated(this%m_ydp)) deallocate(this%m_ydp)
     allocate(this%m_xwork(nd), this%m_ywork(nd), this%m_xdp(ndp), &
-        this%m_ydp(ndp), source = 0.0d0, stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "hi_dif_deriv", flag)
-        return
-    end if
+        this%m_ydp(ndp), source = 0.0d0)
 
     ! Create a copy of the difference table and shift the abscissas to zero
     this%m_xwork = this%m_xd
@@ -1023,34 +914,21 @@ subroutine hi_dif_deriv(this, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine hi_set_up_table(this, err)
+subroutine hi_set_up_table(this)
     !! Sets up the divided difference table from the raw data.
     class(hermite_interpolator), intent(inout) :: this
         !! The hermite_interpolator object.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
-    integer(int32) :: i, j, n, nd, ndp, flag
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: i, j, n, nd, ndp
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(this%m_x)
     nd = 2 * n
     ndp = nd - 1
 
     ! Memory Allocations
-    allocate(this%m_xd(nd), this%m_yd(nd), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "hi_set_up_table", flag)
-        return
-    end if
+    allocate(this%m_xd(nd), this%m_yd(nd))
 
     ! Copy data
     this%m_xd(1:nd-1:2) = this%m_x(1:n)
@@ -1071,11 +949,11 @@ subroutine hi_set_up_table(this, err)
     end do
 
     ! Compute the difference table for the derivative
-    call this%compute_ddf_derivatives(err = errmgr)
+    call this%compute_ddf_derivatives()
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine hi_init(this, x, y, yp, err)
+subroutine hi_init(this, x, y, yp)
     !! Initializes the interpolation object.
     class(hermite_interpolator), intent(inout) :: this
         !! The hermite_interpolator object.
@@ -1086,53 +964,27 @@ subroutine hi_init(this, x, y, yp, err)
         !! An N-element array containing the y-coordinate data.
     real(real64), intent(in), dimension(:) :: yp
         !! An N-element array containing the first derivative of the data.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
-    integer(int32) :: n, flag
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: n
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(x)
 
     ! Input Checking
-    if (size(y) /= n) then
-        call report_array_size_error(errmgr, "hi_init", "y", n, size(y))
-        return
-    end if
-    if (size(yp) /= n) then
-        call report_array_size_error(errmgr, "hi_init", "yp", n, size(y))
-        return
-    end if
+    if (size(y) /= n) error stop 3
+    if (size(yp) /= n) error stop 4
 
     ! Allocate memory
     if (allocated(this%m_x)) deallocate(this%m_x)
     if (allocated(this%m_y)) deallocate(this%m_y)
     if (allocated(this%m_yp)) deallocate(this%m_yp)
-    allocate(this%m_x(n), source = x, stat = flag)
-    if (flag /= 0) go to 10
-    allocate(this%m_y(n), source = y, stat = flag)
-    if (flag /= 0) go to 10
-    allocate(this%m_yp(n), source = yp, stat = flag)
-    if (flag /= 0) go to 10
+    allocate(this%m_x(n), source = x)
+    allocate(this%m_y(n), source = y)
+    allocate(this%m_yp(n), source = yp)
 
     ! Set up the table
-    call this%set_up_hermite_interpolant(err = errmgr)
-    if (errmgr%has_error_occurred()) return
-
-    ! End
-    return
-
-    ! Memory Error Handling
-10  continue
-    call report_memory_error(errmgr, "hi_init", flag)
+    call this%set_up_hermite_interpolant()
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -1154,7 +1006,7 @@ function hi_raw_interp(this, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine hi_interp_all(this, x, yi, ypi, err)
+subroutine hi_interp_all(this, x, yi, ypi)
     !! Performs the interpolation.
     class(hermite_interpolator), intent(inout) :: this
         !! The hermite_interpolator object.
@@ -1166,43 +1018,22 @@ subroutine hi_interp_all(this, x, yi, ypi, err)
     real(real64), intent(out), optional, dimension(:) :: ypi
         !! An N-element array containing the interpolated first derivative
         !! data, if supplied.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Local Variables
     integer(int32) :: i, nd, nv, ndp
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     nd = size(this%m_xd)
     ndp = nd - 1
     nv = size(x)
 
     ! Ensure everything is initialized
-    if (.not.allocated(this%M_x)) then
-        call report_uninitialized_object_error(errmgr, "hi_interp_all", &
-            "hermite_interpolator")
-        return
-    end if
+    if (.not.allocated(this%M_x)) error stop FS_UNINITIALIZED_OBJECT_ERROR
 
     ! Input Check
-    if (size(yi) /= nv) then
-        call report_array_size_error(errmgr, "hi_interp_all", "yi", nv, &
-            size(yi))
-        return
-    end if
+    if (size(yi) /= nv) error stop 3
     if (present(ypi)) then
-        if (size(ypi) /= nv) then
-            call report_array_size_error(errmgr, "hi_interp_all", "ypi", nv, &
-                size(ypi))
-            return
-        end if
+        if (size(ypi) /= nv) error stop 4
     end if
 
     ! Process
@@ -1221,7 +1052,7 @@ subroutine hi_interp_all(this, x, yi, ypi, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine hi_interp(this, x, yi, err)
+subroutine hi_interp(this, x, yi)
     !! Performs the interpolation.
     class(hermite_interpolator), intent(inout) :: this
         !! The hermite_interpolator object.
@@ -1230,18 +1061,10 @@ subroutine hi_interp(this, x, yi, err)
         !! interpolation.
     real(real64), intent(out), dimension(:) :: yi
         !! An N-element array  containing the interpolated data.
-    class(errors), intent(inout), optional, target :: err
-        !! An error handling object.
 
     ! Process
-    call hi_interp_all(this, x, yi, err = err)
+    call hi_interp_all(this, x, yi)
 end subroutine
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 subroutine dif_shift_x(xd, yd, xv)

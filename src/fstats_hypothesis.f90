@@ -71,7 +71,7 @@ pure function confidence_interval_array(dist, alpha, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine t_test_equal_variance(x1, x2, stat, p, dof)
+pure subroutine t_test_equal_variance(x1, x2, stat, p, dof)
     !! Computes the 2-tailed Student's T-Test for two data sets of 
     !! assumed equivalent variances.
     !!
@@ -119,7 +119,7 @@ subroutine t_test_equal_variance(x1, x2, stat, p, dof)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
+pure subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
     !! Computes the 2-tailed Student's T-Test for two data sets of 
     !! assumed non-equivalent variances.
     !!
@@ -167,7 +167,7 @@ subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine t_test_paired(x1, x2, stat, p, dof, err)
+pure subroutine t_test_paired(x1, x2, stat, p, dof)
     !! Computes the 2-tailed Student's T-Test for two paired data sets.
     !!
     !! See Also
@@ -185,12 +185,6 @@ subroutine t_test_paired(x1, x2, stat, p, dof, err)
         !! have the same mean.
     real(real64), intent(out) :: dof
         !! The degrees of freedom.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if x1 and x2 are not the same 
-        !!   length.
 
     ! Parameters
     real(real64), parameter :: zero = 0.0d0
@@ -199,27 +193,16 @@ subroutine t_test_paired(x1, x2, stat, p, dof, err)
     real(real64), parameter :: two = 2.0d0
 
     ! Local Variables
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     real(real64) :: v1, v2, m1, m2, sd, cov, a, b, x
     integer(int32) :: i, n1, n2, n
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n1 = size(x1)
     n2 = size(x2)
     n = min(n1, n2)
 
     ! Input Checking
-    if (n1 /= n2) then
-        call report_arrays_not_same_size_error(errmgr, "t_test_paired_real64", &
-            "X1", "X2", n1, n2)
-        return
-    end if
+    if (n1 /= n2) error stop FS_ARRAY_SIZE_ERROR
 
     ! Compute the T-statistic
     m1 = mean(x1)
@@ -243,7 +226,7 @@ subroutine t_test_paired(x1, x2, stat, p, dof, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine f_test(x1, x2, stat, p, dof1, dof2)
+pure subroutine f_test(x1, x2, stat, p, dof1, dof2)
     !! Computes the F-test and returns the probability (two-tailed) that
     !! the variances of two data sets are not significantly different.
     !!
@@ -298,7 +281,7 @@ subroutine f_test(x1, x2, stat, p, dof1, dof2)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine bartletts_test(x, stat, p)
+pure subroutine bartletts_test(x, stat, p)
     !! Computes Bartlett's test statistic and associated probability.
     !!
     !! The statistic is calculated as follows.
@@ -366,7 +349,7 @@ subroutine bartletts_test(x, stat, p)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-subroutine levenes_test(x, stat, p, err)
+pure subroutine levenes_test(x, stat, p)
     !! Computes Levene's test statistic and associated probability.
     !!
     !! The statistic is calculated as follows.
@@ -393,30 +376,18 @@ subroutine levenes_test(x, stat, p, err)
         !! The probability value that the variances of each data set are
         !! equivalent.  A low p-value, less than some significance level,
         !! indicates a non-equivalance of variances.
-    class(errors), intent(inout), optional, target :: err
 
     ! Local Variables
-    integer(int32) :: i, j, k, n, ni, flag
+    integer(int32) :: i, j, k, n, ni
     real(real64) :: numer, denom, inner, yi, z, zij
     real(real64), allocatable, dimension(:) :: y, zt, zi
     type(f_distribution) :: dist
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     k = size(x)
 
     ! Local Memory Allocations
-    allocate(y(k), zi(k), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "levenes_test", flag)
-        return
-    end if
+    allocate(y(k), zi(k))
 
     ! Compute the total mean
     z = 0.0d0
