@@ -110,15 +110,16 @@ module fstats_experimental_design
     type doe_efficiency_metrics
         !! Design efficiency metrics for evaluating design quality.
         real(real64) :: d_efficiency
-            !! D-efficiency: (|X'X|^(1/p))^(1/n) where p=params, n=runs.
+            !! D-efficiency: \((|X'X|^(1/p))^(1/n)\) where p=params, n=runs.
             !! Range [0,1]. Higher is better (max=1 for orthogonal designs).
         real(real64) :: a_efficiency
-            !! A-efficiency: p / trace((X'X)^-1). Range [0,1]. 
+            !! A-efficiency: \(p / trace((X'X)^-1)\). Range [0,1]. 
             !! Higher is better.
         real(real64) :: g_efficiency
             !! G-efficiency: 1 - (max_prediction_variance / avg_prediction_variance)
         real(real64) :: orthogonality
-            !! Orthogonality measure: 1.0 if perfectly orthogonal, <1.0 otherwise.
+            !! Orthogonality measure: \(1.0\) if perfectly orthogonal, \(<1.0\) 
+            !! otherwise.
         logical :: is_orthogonal
             !! True if design is perfectly orthogonal.
         integer(int32) :: n_runs
@@ -1039,7 +1040,7 @@ end subroutine
 ! ==============================================================================
 ! VARIABLE CODING/DECODING
 ! ==============================================================================
-subroutine encode_variables(x_natural, x_low, x_high, x_coded)
+pure subroutine encode_variables(x_natural, x_low, x_high, x_coded)
     !! Converts natural variable values to coded (-1, +1) scale.
     real(real64), intent(in), dimension(:,:) :: x_natural
         !! M-by-N matrix of natural (physical) variable values.
@@ -1065,7 +1066,7 @@ subroutine encode_variables(x_natural, x_low, x_high, x_coded)
 
 end subroutine
 
-subroutine decode_variables(x_coded, x_low, x_high, x_natural)
+pure subroutine decode_variables(x_coded, x_low, x_high, x_natural)
     !! Converts coded variable values (-1, +1) to natural scale.
     real(real64), intent(in), dimension(:,:) :: x_coded
         !! M-by-N matrix of coded values in range [-1, +1].
@@ -1094,7 +1095,7 @@ end subroutine
 ! ==============================================================================
 ! CENTRAL COMPOSITE DESIGN
 ! ==============================================================================
-subroutine central_composite_design_size(nfactors, alpha_type, m, n)
+pure subroutine central_composite_design_size(nfactors, alpha_type, m, n)
     !! Computes the size of a central composite design.
     !!
     !! A CCD consists of:
@@ -1284,7 +1285,7 @@ function doe_predict_enhanced(mdl, x, alpha, residual_mse) result(pred)
 end function
 
 ! Design efficiency metrics
-function doe_design_efficiency(x) result(metrics)
+pure function doe_design_efficiency(x) result(metrics)
     real(real64), intent(in), dimension(:,:) :: x
     type(doe_efficiency_metrics) :: metrics
     integer(int32) :: m, n
@@ -1303,7 +1304,7 @@ function doe_design_efficiency(x) result(metrics)
 end function
 
 ! RSM optimization
-function doe_optimize_rsm(mdl, x_low, x_high, method, tol) result(opt)
+pure function doe_optimize_rsm(mdl, x_low, x_high, method, tol) result(opt)
     class(doe_model), intent(in) :: mdl
     real(real64), intent(in), dimension(:) :: x_low, x_high
     character(len=*), intent(in), optional :: method

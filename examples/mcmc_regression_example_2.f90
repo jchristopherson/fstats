@@ -196,7 +196,7 @@ program example
     p2%mean_value = 0.0d0
     p2%standard_deviation = 1.0d0
 
-    p3%mean_value = 5.0d1
+    p3%mean_value = 4.5d1
     p3%standard_deviation = 1.0d0
 
     ! Assign each parameter to the target - this is the order in which each
