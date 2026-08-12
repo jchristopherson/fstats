@@ -134,7 +134,7 @@ subroutine full_factorial(vars, tbl)
 
     ! Verify the size of the input table
     call get_full_factorial_matrix_size(vars, m, n)
-    if (size(tbl, 1) /= m .or. size(tbl, 2) /= n) error stop 2
+    if (size(tbl, 1) /= m .or. size(tbl, 2) /= n) error stop FS_MATRIX_SIZE_ERROR
 
     ! Process
     do col = 1, n
@@ -200,7 +200,8 @@ function doe_fit_model(nway, x, y, map, alpha) result(rst)
     nan = ieee_value(nan, IEEE_QUIET_NAN)
 
     ! Input Checking
-    if (nway < 1 .or. nway > 3) error stop 1
+    if (nway < 1 .or. nway > 3) error stop FS_INVALID_INPUT_ERROR
+    if (size(y) /= m) error stop FS_ARRAY_SIZE_ERROR
 
     ! Determine the parameter count
     nparam = 1
@@ -210,7 +211,7 @@ function doe_fit_model(nway, x, y, map, alpha) result(rst)
     
     ! Set up the map parameters
     if (present(map)) then
-        error stop 4
+        if (size(map) /= nparam) error stop FS_ARRAY_SIZE_ERROR
         mapptr => map
     else
         allocate(nmap(nparam), source = .true.)
@@ -382,20 +383,20 @@ function doe_evaluate_model_1(nway, beta, x, map) result(rst)
     n = size(x, 2)
 
     ! Input Checking
-    if (nway < 1 .or. nway > 3) error stop 1
+    if (nway < 1 .or. nway > 3) error stop FS_INVALID_INPUT_ERROR
 
     nparam = 1
     if (nway >= 1) nparam = nparam + n
     if (nway >= 2) nparam = nparam + n * (n - 1)
     if (nway >= 3) nparam = nparam + n * (n**2 - 1)
-    if (size(beta) /= nparam) error stop 2
+    if (size(beta) /= nparam) error stop FS_ARRAY_SIZE_ERROR
 
     ! Memory Allocations
     allocate(rst(m))
 
     ! Set up the map parameters
     if (present(map)) then
-        error stop 4
+        if (size(map) /= nparam) error stop FS_ARRAY_SIZE_ERROR
         mapptr => map
     else
         allocate(nmap(nparam), source = .true.)
@@ -537,8 +538,8 @@ end subroutine
 subroutine doe_eval_3(beta, x, map, y)
     !! Evaluates the three-way interaction term.
     !!
-    !! $$ Y = Y + /sum_{i=1}^{n} /sum_{j=1 // i /neq j}^{n} \beta_{i} X_{i} 
-    !! X_{j} $$
+    !! $$ Y = Y + /sum_{i=1}^{n} /sum_{j=1 // i /neq j}^{n} /sum_{k=1 // i /neq j /neq k}^{n} \beta_{i} X_{i} 
+    !! X_{j} X_{k} $$
     real(real64), intent(in), dimension(:) :: beta
         !! The model coefficients for just this portion of the model.
     real(real64), intent(in), dimension(:,:) :: x
