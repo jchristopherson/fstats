@@ -3,6 +3,7 @@ program doe_prediction_example
     !! confidence and prediction intervals for design of experiments models.
     use iso_fortran_env
     use fstats
+    use fplot_core
     implicit none
 
     ! Parameters
@@ -12,13 +13,16 @@ program doe_prediction_example
     
     ! Local Variables
     integer(int32) :: i
-    real(real64) :: x(npts, 1), y(npts), b(nparams), res(npts)
+    real(real64) :: x(npts, 1), y(npts), b(nparams), res(npts), ym(npts)
     real(real64) :: mse, alpha, xpred(npred, 1)
     type(doe_model) :: model
     type(doe_prediction) :: pred_result
     type(doe_diagnostics) :: diag
     
     ! Plot variables
+    type(plot_2d) :: plt
+    type(plot_data_2d) :: pd1, pd2
+    class(legend), pointer :: lgnd
     
     ! Generate sample data: y = 1 + 2*x
     do i = 1, npts
@@ -34,7 +38,8 @@ program doe_prediction_example
     model%nway = 1
     
     ! Calculate residuals for MSE estimation
-    res = y - doe_evaluate_model(model, x)
+    ym = doe_evaluate_model(model, x)
+    res = y - ym
     mse = sum(res**2) / real(max(1, npts - nparams), real64)
     
     ! Display model info
@@ -72,6 +77,25 @@ program doe_prediction_example
     print '(A)', ""
     
     ! Create the plot
-    ! The plotting code has been removed to simplify the output to console only.
-    
+    call plt%initialize()
+    lgnd => plt%get_legend()
+    call lgnd%set_is_visible(.true.)
+    call lgnd%set_vertical_position(LEGEND_BOTTOM)
+
+    ! Data
+    call pd1%define_data(x(:,1), y)
+    call pd1%set_name("Data")
+    call pd1%set_draw_line(.false.)
+    call pd1%set_draw_markers(.true.)
+    call pd1%set_marker_scaling(1.5)
+    call plt%push(pd1)
+
+    ! Fit
+    call pd2%define_data(xpred(:,1), pred_result%predicted_values)
+    call pd2%set_name("Fit")
+    call pd2%set_line_width(2.0)
+    call plt%push(pd2)
+
+    ! Plot
+    call plt%draw()
 end program doe_prediction_example

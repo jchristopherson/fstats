@@ -81,7 +81,7 @@ target_link_libraries(interpolation_example PRIVATE fstats ${fplot_LIBRARY} ${fe
 # DOE Phase 2 Examples
 # Enhanced Prediction Example
 add_executable(doe_prediction_example doe_prediction_example.f90)
-target_link_libraries(doe_prediction_example PRIVATE fstats)
+target_link_libraries(doe_prediction_example PRIVATE fstats ${fplot_LIBRARY})
 
 # Design Efficiency Example
 add_executable(doe_design_efficiency_example doe_design_efficiency_example.f90)
