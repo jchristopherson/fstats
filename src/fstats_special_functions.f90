@@ -21,7 +21,7 @@ pure elemental function beta(a, b) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Beta_function)
+    !! - <a href="https://en.wikipedia.org/wiki/Beta_function" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: a
         !! The first argument of the function.
     real(real64), intent(in) :: b
@@ -45,7 +45,7 @@ pure elemental function regularized_beta(a, b, x) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Beta_function)
+    !! - <a href="https://en.wikipedia.org/wiki/Beta_function" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: a
         !! The first argument of the function.
     real(real64), intent(in) :: b
@@ -109,7 +109,7 @@ pure elemental function incomplete_beta(a, b, x) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Beta_function#Incomplete_beta_function)
+    !! - <a href="https://en.wikipedia.org/wiki/Beta_function#Incomplete_beta_function" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: a
         !! The first argument of the function.
     real(real64), intent(in) :: b
@@ -133,7 +133,7 @@ pure elemental function incomplete_gamma_upper(a, x) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Incomplete_gamma_function)
+    !! - <a href="https://en.wikipedia.org/wiki/Incomplete_gamma_function" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: a
         !! The coefficient value.
     real(real64), intent(in) :: x
@@ -193,7 +193,7 @@ pure elemental function incomplete_gamma_lower(a, x) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Incomplete_gamma_function)
+    !! - <a href="https://en.wikipedia.org/wiki/Incomplete_gamma_function" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: a
         !! The coefficient value.
     real(real64), intent(in) :: x
@@ -254,7 +254,7 @@ pure elemental function digamma(x) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Digamma_function)
+    !! - <a href="https://en.wikipedia.org/wiki/Digamma_function" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x
         !! The value at which to evaluate the function.
     real(real64) :: rst

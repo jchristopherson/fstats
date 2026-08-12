@@ -138,7 +138,7 @@ pure function quantile(x, q) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Quantile)
+    !! - <a href="https://en.wikipedia.org/wiki/Quantile" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x(:)
         !! An N-element array containing the data.
     real(real64), intent(in) :: q

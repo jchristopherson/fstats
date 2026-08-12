@@ -190,7 +190,7 @@ pure function r_squared(x, xm) result(rst)
     !!
     !! See Also:
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination)
+    !! - <a href="https://en.wikipedia.org/wiki/Coefficient_of_determination" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x(:)
         !! An N-element array containing the dependent variables from 
         !! the data set.
@@ -235,7 +235,7 @@ pure function adjusted_r_squared(p, x, xm) result(rst)
     !!
     !! See Also:
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2)
+    !! - <a href="https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2" target="_blank">Wikipedia</a>
     integer(int32), intent(in) :: p
         !! The number of variables.
     real(real64), intent(in) :: x(:)
@@ -292,9 +292,9 @@ pure function design_matrix(order, intercept, x) result(c)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Vandermonde_matrix)
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Design_matrix)
+    !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
+    !! - <a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" target="_blank">Wikipedia - Vandermonde Matrix</a>
+    !! - <a href="https://en.wikipedia.org/wiki/Design_matrix" target="_blank">Wikipedia - Design Matrix</a>
     integer(int32), intent(in) :: order
         !! The order of the equation to fit.  This value must be
         !! at least one (linear equation), but can be higher as desired.
@@ -347,8 +347,8 @@ pure function covariance_matrix(x) result(c)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Covariance_matrix)
-    !! - [Wikipedia - Regression](https://en.wikipedia.org/wiki/Linear_regression)
+    !! - <a href="https://en.wikipedia.org/wiki/Covariance_matrix" target="_blank">Wikipedia - Covariance Matrix</a>
+    !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
     real(real64), intent(in) :: x(:,:)
         !! An M-by-N matrix containing the formatted independent data
         !!  matrix \( X \) as computed by design_matrix.
@@ -385,8 +385,9 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
-    !! - [SPC Excel Understanding Regression Statistics](https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1)
+    !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
+    !! - <a href="https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1" 
+    !! target="_blank">SPC Excel Understanding Regression Statistics</a>
     integer(int32), intent(in) :: order
         !! The order of the equation to fit.  This value must be at 
         !! least one (linear equation), but can be higher as desired, 

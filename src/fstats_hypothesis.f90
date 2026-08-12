@@ -21,7 +21,7 @@ module fstats_hypothesis
         !!
         !! See Also
         !!
-        !! - [Wikipedia](https://en.wikipedia.org/wiki/Confidence_interval)
+        !! - <a href="https://en.wikipedia.org/wiki/Confidence_interval" target="_blank">Wikipedia</a>
         module procedure :: confidence_interval_scalar
         module procedure :: confidence_interval_array
     end interface
@@ -77,7 +77,7 @@ pure subroutine t_test_equal_variance(x1, x2, stat, p, dof)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-test)
+    !! - <a href="https://en.wikipedia.org/wiki/Student%27s_t-test" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x1(:)
         !! An N-element array containing the first data set.
     real(real64), intent(in) :: x2(:)
@@ -125,7 +125,7 @@ pure subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-test)
+    !! - <a href="https://en.wikipedia.org/wiki/Student%27s_t-test" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x1(:)
         !! An N-element array containing the first data set.
     real(real64), intent(in) :: x2(:)
@@ -172,7 +172,7 @@ pure subroutine t_test_paired(x1, x2, stat, p, dof)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-test)
+    !! - <a href="https://en.wikipedia.org/wiki/Student%27s_t-test" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x1(:)
         !! An N-element array containing the first data set.
     real(real64), intent(in) :: x2(:)
@@ -232,7 +232,7 @@ pure subroutine f_test(x1, x2, stat, p, dof1, dof2)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/F-test)
+    !! - <a href="https://en.wikipedia.org/wiki/F-test" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x1(:)
         !! An N-element array containing the first data set.
     real(real64), intent(in) :: x2(:)
@@ -303,7 +303,7 @@ pure subroutine bartletts_test(x, stat, p)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Bartlett%27s_test)
+    !! - <a href="https://en.wikipedia.org/wiki/Bartlett%27s_test" target="_blank">Wikipedia</a>.
     type(array_container), intent(in), dimension(:) :: x
         !! The arrays of data to analyze.
     real(real64), intent(out) :: stat
@@ -367,7 +367,7 @@ pure subroutine levenes_test(x, stat, p)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Levene%27s_test)
+    !! - <a href="https://en.wikipedia.org/wiki/Levene%27s_test" target="_blank">Wikipedia</a>.
     type(array_container), intent(in), dimension(:) :: x
         !! The arrays of data to analyze.
     real(real64), intent(out) :: stat
@@ -431,7 +431,7 @@ pure function sample_size(dist, var, delta, bet, alpha) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Power_of_a_test)
+    !! - <a href="https://en.wikipedia.org/wiki/Power_of_a_test" target="_blank">Wikipedia</a>.
     class(distribution), intent(in) :: dist
         !! The distribution to utilize as a measure.
     real(real64), intent(in) :: var

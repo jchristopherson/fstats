@@ -126,11 +126,13 @@ module fstats_anova
         !!
         !! See Also
         !! 
-        !! - [Wikipedia](https://en.wikipedia.org/wiki/Analysis_of_variance)
-        !! - [SPC Excel Single Factor ANOVA](https://www.spcforexcel.com/knowledge/root-cause-analysis/single-factor-anova)
-        !! - [SPC Excel Gage R&R](https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1)
-        !! - [SPC Excel Understanding Regression Statistics](https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1)
-        !! - [NIST - Two Way ANOVA](https://www.itl.nist.gov/div898/handbook/prc/section4/prc427.htm)
+        !! - <a href="https://en.wikipedia.org/wiki/Analysis_of_variance" target="_blank">Wikipedia</a>
+        !! - <a href="ttps://www.spcforexcel.com/knowledge/root-cause-analysis/single-factor-anova" target="_blank">SPC Excel Single Factor ANOVA</a>
+        !! - <a href="https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1" target="_blank">SPC Excel Gage R&R</a>
+        !! - <a href="https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1" 
+        !! target="_blank">SPC Excel Understanding Regression Statistics</a>
+        !! - <a href="https://www.itl.nist.gov/div898/handbook/prc/section4/prc427.htm" target="_blank">NIST - Two Way ANOVA</a>
+
         module procedure :: anova_1_factor
         module procedure :: anova_2_factor
         module procedure :: anova_model_fit

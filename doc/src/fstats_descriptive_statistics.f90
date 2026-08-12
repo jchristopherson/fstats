@@ -1,7 +1,6 @@
 module fstats_descriptive_statistics
     use iso_fortran_env
     use linalg, only : sort
-    use ferror
     use fstats_errors
     use fstats_types
     implicit none
@@ -97,11 +96,10 @@ pure function standard_deviation(x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function median(x) result(rst)
+pure function median(x) result(rst)
     !! Computes the median of the values in an array.
-    real(real64), intent(inout) :: x(:)
-        !! The array of values to analyze.  On output, this array is sorted into
-        !! ascending order.
+    real(real64), intent(in) :: x(:)
+        !! The array of values to analyze.
     real(real64) :: rst
         !! The result.
 
@@ -110,21 +108,23 @@ function median(x) result(rst)
 
     ! Local Variables
     integer(int32) :: n, nmid, nmidp1, flag, iflag
+    real(real64), allocatable, dimension(:) :: xc
 
     ! Initialization
     n = size(x)
     nmid = n / 2
     nmidp1 = nmid + 1
     iflag = n - 2 * nmid
+    allocate(xc(n), source = x)
     
     ! Sort the array in ascending order
-    call sort(x, .true.)
+    call sort(xc, .true.)
 
     ! Find the median
     if (iflag == 0) then
-        rst = half * (x(nmid) + x(nmidp1))
+        rst = half * (xc(nmid) + xc(nmidp1))
     else
-        rst = x(nmidp1)
+        rst = xc(nmidp1)
     end if
 end function
 
@@ -138,7 +138,7 @@ pure function quantile(x, q) result(rst)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Quantile)
+    !! - <a href="https://en.wikipedia.org/wiki/Quantile" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x(:)
         !! An N-element array containing the data.
     real(real64), intent(in) :: q

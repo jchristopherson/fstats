@@ -128,7 +128,7 @@ module fstats_interp
         !!
         !! This implementation is a modification of the HERMITE library
         !! which can be found 
-        !! [here](https://people.math.sc.edu/Burkardt/f_src/hermite/hermite.html).
+        !! <a href="https://people.math.sc.edu/Burkardt/f_src/hermite/hermite.html" target="_blank">here</a>.
         real(real64), private, allocatable, dimension(:) :: m_x
             !! The x-coordinate raw data.
         real(real64), private, allocatable, dimension(:) :: m_y
