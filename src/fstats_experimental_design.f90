@@ -1,4 +1,4 @@
-﻿module fstats_experimental_design
+module fstats_experimental_design
     use iso_fortran_env
     use fstats_errors
     use fstats_regression
