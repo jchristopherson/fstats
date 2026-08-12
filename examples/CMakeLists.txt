@@ -78,6 +78,23 @@ target_link_libraries(distribution_example PRIVATE fstats ${fplot_LIBRARY} ${fer
 add_executable(interpolation_example interpolation_example.f90)
 target_link_libraries(interpolation_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY})
 
+# DOE Phase 2 Examples
+# Enhanced Prediction Example
+add_executable(doe_prediction_example doe_prediction_example.f90)
+target_link_libraries(doe_prediction_example PRIVATE fstats)
+
+# Design Efficiency Example
+add_executable(doe_design_efficiency_example doe_design_efficiency_example.f90)
+target_link_libraries(doe_design_efficiency_example PRIVATE fstats)
+
+# Model Comparison Example
+add_executable(doe_model_comparison_example doe_model_comparison_example.f90)
+target_link_libraries(doe_model_comparison_example PRIVATE fstats)
+
+# RSM Optimization Example
+add_executable(doe_rsm_optimization_example doe_rsm_optimization_example.f90)
+target_link_libraries(doe_rsm_optimization_example PRIVATE fstats)
+
 if (${BUILD_SHARED_LIBS} AND WIN32)
     add_custom_command(
         TARGET full_factorial_example

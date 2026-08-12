@@ -5,7 +5,6 @@
     implicit none
     private
     
-    ! Public procedures
     public :: get_full_factorial_matrix_size
     public :: full_factorial
     public :: doe_fit_model
@@ -20,19 +19,15 @@
     public :: central_composite_design
     public :: central_composite_design_size
     public :: latin_hypercube_design
-    ! New features
     public :: doe_predict_enhanced
     public :: doe_design_efficiency
     public :: doe_optimize_rsm
     public :: doe_compare_models
     public :: doe_model_anova
-    
-    ! Public types
     public :: doe_model
     public :: doe_diagnostics
     public :: doe_prediction
     public :: doe_residuals
-    ! New types
     public :: doe_efficiency_metrics
     public :: doe_rsm_model
     public :: doe_optimization_result
