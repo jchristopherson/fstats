@@ -3,7 +3,6 @@ module fstats_regression
     use linalg
     use fstats_errors
     use blas
-    use ferror
     use fstats_descriptive_statistics
     use fstats_distributions
     use fstats_special_functions
@@ -178,7 +177,7 @@ module fstats_regression
 contains
 
 ! ------------------------------------------------------------------------------
-function r_squared(x, xm, err) result(rst)
+pure function r_squared(x, xm) result(rst)
     !! Computes the R-squared value for a data set.
     !!
     !! The R-squared value is computed by determining the sum of the squares
@@ -191,20 +190,13 @@ function r_squared(x, xm, err) result(rst)
     !!
     !! See Also:
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination)
+    !! - <a href="https://en.wikipedia.org/wiki/Coefficient_of_determination" target="_blank">Wikipedia</a>
     real(real64), intent(in) :: x(:)
         !! An N-element array containing the dependent variables from 
         !! the data set.
     real(real64), intent(in) :: xm(:)
         !! An N-element array containing the corresponding modeled 
         !! values.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings
-        !! to the caller.  Possible warning and error codes are as 
-        !! follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if x and xm are not the 
-        !!   same size.
     real(real64) :: rst
         !! The result.
 
@@ -215,23 +207,12 @@ function r_squared(x, xm, err) result(rst)
     ! Local Variables
     integer(int32) :: i, n
     real(real64) :: esum, vt
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
 
     ! Input Check
     n = size(x)
-    if (size(xm) /= n) then
-        call report_array_size_error(errmgr, "r_squared_real64", "XM", n, &
-            size(xm))
-        return
-    end if
+    if (size(xm) /= n) error stop FS_ARRAY_SIZE_ERROR
 
     ! Process
     esum = zero
@@ -243,7 +224,7 @@ function r_squared(x, xm, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-function adjusted_r_squared(p, x, xm, err) result(rst)
+pure function adjusted_r_squared(p, x, xm) result(rst)
     !! Computes the adjusted R-squared value for a data set.
     !!
     !! The adjusted R-squared provides a mechanism for tempering the effects
@@ -254,7 +235,7 @@ function adjusted_r_squared(p, x, xm, err) result(rst)
     !!
     !! See Also:
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2)
+    !! - <a href="https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2" target="_blank">Wikipedia</a>
     integer(int32), intent(in) :: p
         !! The number of variables.
     real(real64), intent(in) :: x(:)
@@ -263,36 +244,21 @@ function adjusted_r_squared(p, x, xm, err) result(rst)
     real(real64), intent(in) :: xm(:)
         !! An N-element array containing the corresponding modeled 
         !! values.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings
-        !! to the caller.  Possible warning and error codes are as 
-        !! follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if x and xm are not the 
-        !!   same size.
     real(real64) :: rst
         !! The result.
 
     ! Local Variables
     integer(int32) :: n
     real(real64) :: r2
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
 
     ! Parameters
     real(real64), parameter :: one = 1.0d0
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(x)
 
     ! Process
-    r2 = r_squared(x, xm, errmgr)
-    if (errmgr%has_error_occurred()) return
+    r2 = r_squared(x, xm)
     rst = one - (one - r2) * (n - one) / (n - p - one)
 end function
 
@@ -317,7 +283,7 @@ pure function correlation(x, y) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine design_matrix(order, intercept, x, c, err)
+pure function design_matrix(order, intercept, x) result(c)
     !! Computes the design matrix \( X \) for the linear 
     !! least-squares regression problem of \( X \beta = y \), where 
     !! \( X \) is the matrix computed here, \( \beta \) is 
@@ -326,9 +292,9 @@ subroutine design_matrix(order, intercept, x, c, err)
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Vandermonde_matrix)
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Design_matrix)
+    !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
+    !! - <a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" target="_blank">Wikipedia - Vandermonde Matrix</a>
+    !! - <a href="https://en.wikipedia.org/wiki/Design_matrix" target="_blank">Wikipedia - Design Matrix</a>
     integer(int32), intent(in) :: order
         !! The order of the equation to fit.  This value must be
         !! at least one (linear equation), but can be higher as desired.
@@ -338,46 +304,25 @@ subroutine design_matrix(order, intercept, x, c, err)
     real(real64), intent(in) :: x(:)
         !! An N-element array containing the independent variable
         !! measurement points.
-    real(real64), intent(out) :: c(:,:)
+    real(real64), allocatable :: c(:,:)
         !! An N-by-K matrix where the results will be written.  K
         !! must equal order + 1 in the event intercept is true; 
         !! however, if intercept is false, K must equal order.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if c is not properly sized.
-        !! - FS_INVALID_INPUT_ERROR: Occurs if order is less than 1.
 
     ! Parameters
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
     integer(int32) :: i, start, npts, ncols
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     npts = size(x)
     ncols = order
     if (intercept) ncols = ncols + 1
+    allocate(c(npts, ncols))
 
     ! Input Check
-    if (order < 1) then
-        call errmgr%report_error("design_matrix", &
-            "The model order must be at least one.", FS_INVALID_INPUT_ERROR)
-        return
-    end if
-    if (size(c, 1) /= npts .or. size(c, 2) /= ncols) then
-        call report_matrix_size_error(errmgr, "design_matrix", &
-            "c", npts, ncols, size(c, 1), size(c, 2))
-        return
-    end if
+    if (order < 1) error stop FS_INVALID_INPUT_ERROR
 
     ! Process
     if (intercept) then
@@ -392,83 +337,57 @@ subroutine design_matrix(order, intercept, x, c, err)
     do i = start, ncols
         c(:,i) = c(:,i-1) * x
     end do
-end subroutine
+end function
 
 ! ------------------------------------------------------------------------------
-subroutine covariance_matrix(x, c, err)
+pure function covariance_matrix(x) result(c)
     !! Computes the covariance matrix \( C \) where 
     !! \( C = \left( X^{T} X \right)^{-1} \) and \( X \) is computed
     !! by design_matrix.
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Covariance_matrix)
-    !! - [Wikipedia - Regression](https://en.wikipedia.org/wiki/Linear_regression)
+    !! - <a href="https://en.wikipedia.org/wiki/Covariance_matrix" target="_blank">Wikipedia - Covariance Matrix</a>
+    !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
     real(real64), intent(in) :: x(:,:)
         !! An M-by-N matrix containing the formatted independent data
         !!  matrix \( X \) as computed by design_matrix.
-    real(real64), intent(out) :: c(:,:)
+    real(real64), allocatable :: c(:,:)
         !! The N-by-N covariance matrix.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the matrices are not 
-        !!      sized correctly.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
 
     ! Parameters
     real(real64), parameter :: zero = 0.0d0
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    integer(int32) :: npts, ncoeffs, flag
+    integer(int32) :: npts, ncoeffs
     real(real64), allocatable :: xtx(:,:)
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     npts = size(x, 1)
     ncoeffs = size(x, 2)
 
-    ! Input Checking
-    if (size(c, 1) /= ncoeffs .or. size(c, 2) /= ncoeffs) then
-        call report_matrix_size_error(errmgr, "covariance_matrix", &
-            "c", ncoeffs, ncoeffs, size(c, 1), size(c, 2))
-        return
-    end if
-
     ! Local Memory Allocation
-    allocate(xtx(ncoeffs, ncoeffs), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "covariance_matrix", flag)
-        return
-    end if
+    allocate(xtx(ncoeffs, ncoeffs))
 
     ! Compute X**T * X
     call DGEMM("T", "N", ncoeffs, ncoeffs, npts, one, x, npts, x, npts, &
         zero, xtx, ncoeffs)
     
     ! Compute the inverse of X**T * X to obtain the covariance matrix
-    call mtx_pinverse(xtx, c, err = errmgr)
-    if (errmgr%has_error_occurred()) return
-end subroutine
+    c = mtx_pinverse(xtx)
+end function
 
 ! ------------------------------------------------------------------------------
 subroutine linear_least_squares(order, intercept, x, y, coeffs, &
-    ymod, resid, stats, alpha, err)
+    ymod, resid, stats, alpha)
     !! Computes a linear least-squares regression to fit a set of data.
     !!
     !! See Also
     !!
-    !! - [Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
-    !! - [SPC Excel Understanding Regression Statistics](https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1)
+    !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
+    !! - <a href="https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1" 
+    !! target="_blank">SPC Excel Understanding Regression Statistics</a>
     integer(int32), intent(in) :: order
         !! The order of the equation to fit.  This value must be at 
         !! least one (linear equation), but can be higher as desired, 
@@ -497,15 +416,6 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
         !! The significance level at which to evaluate the confidence 
         !! intervals.  The default value is 0.05 such that a 95% 
         !! confidence interval is calculated.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
-        !!      approriately sized.
-        !! - FS_INVALID_INPUT_ERROR: Occurs if order is less than 1.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
 
     ! Parameters
     real(real64), parameter :: zero = 0.0d0
@@ -513,19 +423,12 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, npts, ncols, ncoeffs, flag
+    integer(int32) :: i, npts, ncols, ncoeffs
     real(real64) :: alph, var, df, ssr, talpha
     real(real64), allocatable :: a(:,:), c(:,:), cxt(:,:)
     type(t_distribution) :: dist
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     npts = size(x)
     ncoeffs = order + 1
     ncols = order
@@ -534,55 +437,23 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
     if (present(alpha)) alph = alpha
 
     ! Input Check
-    if (order < 1) then
-        call errmgr%report_error("linear_least_squares", &
-            "The model order must be at least one.", FS_INVALID_INPUT_ERROR)
-        return
-    end if
-    if (size(y) /= npts) then
-        call report_array_size_error(errmgr, "linear_least_squares", &
-            "y", npts, size(y))
-        return
-    end if
-    if (size(coeffs) /= ncoeffs) then
-        call report_array_size_error(errmgr, "linear_least_squares", &
-            "coeffs", ncoeffs, size(coeffs))
-        return
-    end if
-    if (size(ymod) /= npts) then
-        call report_array_size_error(errmgr, "linear_least_squares", &
-            "ymod", npts, size(ymod))
-        return
-    end if
-    if (size(resid) /= npts) then
-        call report_array_size_error(errmgr, "linear_least_squares", &
-            "resid", npts, size(resid))
-        return
-    end if
+    if (order < 1) error stop FS_INVALID_INPUT_ERROR
+    if (size(y) /= npts) error stop FS_ARRAY_SIZE_ERROR
+    if (size(coeffs) /= ncoeffs) error stop FS_ARRAY_SIZE_ERROR
+    if (size(ymod) /= npts) error stop FS_ARRAY_SIZE_ERROR
+    if (size(resid) /= npts) error stop FS_ARRAY_SIZE_ERROR
     if (present(stats)) then
-        if (size(stats) /= ncols) then
-            call report_array_size_error(errmgr, &
-                "linear_least_squares", "stats", ncols, size(stats))
-            return
-        end if
+        if (size(stats) /= ncols) error stop FS_ARRAY_SIZE_ERROR
     end if
 
     ! Memory Allocation
-    allocate(a(npts, ncols), stat = flag)
-    if (flag == 0) allocate(c(ncols, ncols), stat = flag)
-    if (flag == 0) allocate(cxt(ncols, npts), stat = flag)
-    if (flag /= 0) then
-        call report_memory_error(errmgr, "linear_least_squares", flag)
-        return
-    end if
+    allocate(a(npts, ncols), c(ncols, ncols), cxt(ncols, npts))
 
     ! Compute the coefficient matrix
-    call design_matrix(order, intercept, x, a, errmgr)
-    if (errmgr%has_error_occurred()) return
+    a = design_matrix(order, intercept, x)
 
     ! Compute the covariance matrix
-    call covariance_matrix(a, c, errmgr)
-    if (errmgr%has_error_occurred()) return
+    c = covariance_matrix(a)
 
     ! Compute the coefficients (NCOLS-by-1)
     call DGEMM("N", "T", ncols, npts, ncols, one, c, ncols, a, npts, zero, &
@@ -603,12 +474,11 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
     if (.not.present(stats)) return
     
     ! Start the process of computing statistics
-    stats = calculate_regression_statistics(resid, coeffs(i:), c, alph, &
-        errmgr)
+    stats = calculate_regression_statistics(resid, coeffs(i:), c, alph)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-function calculate_regression_statistics(resid, params, c, alpha, err) &
+function calculate_regression_statistics(resid, params, c, alpha) &
     result(rst)
     !! Computes statistics for the quality of fit for a regression 
     !! model.
@@ -622,14 +492,6 @@ function calculate_regression_statistics(resid, params, c, alpha, err) &
         !! The significance level at which to evaluate the confidence 
         !! intervals.  The default value is 0.05 such that a 95% 
         !! confidence interval is calculated.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if c is not sized correctly.
-        !! - FS_INVALID_INPUT_ERROR: Occurs if order is less than 1.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
     type(regression_statistics), allocatable :: rst(:)
         !! A regression_statistics object containing the analysis results.
 
@@ -639,18 +501,9 @@ function calculate_regression_statistics(resid, params, c, alpha, err) &
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, m, n, dof, flag
+    integer(int32) :: i, m, n, dof
     real(real64) :: a, ssr, var, talpha
     type(t_distribution) :: dist
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
-    
-    ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
 
     ! Initialization
     m = size(resid)
@@ -661,13 +514,10 @@ function calculate_regression_statistics(resid, params, c, alpha, err) &
     else
         a = p05
     end if
-    allocate(rst(n), stat = flag)
-    if (flag /= 0) then
-    end if
+    allocate(rst(n))
 
     ! Input Checking
-    if (size(c, 1) /= n .or. size(c, 2) /= n) then
-    end if
+    if (size(c, 1) /= n .or. size(c, 2) /= n) error stop FS_MATRIX_SIZE_ERROR
 
     ! Process
     ssr = norm2(resid)**2   ! sum of the squares of the residual
@@ -688,7 +538,7 @@ end function
 
 ! ------------------------------------------------------------------------------
 subroutine jacobian(fun, xdata, params, &
-    jac, stop, f0, f1, step, args, err)
+    jac, stop, f0, f1, step, args)
     !! Computes the Jacobian matrix for a nonlinear regression problem.
     procedure(regression_function), intent(in), pointer :: fun
         !! A pointer to the regression_function to evaluate.
@@ -715,29 +565,14 @@ subroutine jacobian(fun, xdata, params, &
         !! root of machine precision.
     class(*), intent(inout), optional :: args
         !! An optional argument allowing the passing in/out of data.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
-        !!      properly sized.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
 
     ! Local Variables
     real(real64) :: h
-    integer(int32) :: m, n, flag, expected, actual
+    integer(int32) :: m, n, expected, actual
     real(real64), pointer :: f1p(:), f0p(:)
     real(real64), allocatable, target :: f1a(:), f0a(:), work(:)
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
 
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     if (present(step)) then
         h = step
     else
@@ -747,64 +582,41 @@ subroutine jacobian(fun, xdata, params, &
     n = size(params)
 
     ! Input Size Checking
-    if (size(jac, 1) /= m .or. size(jac, 2) /= n) then
-        call report_matrix_size_error(errmgr, "jacobian", &
-            "JAC", m, n, size(jac, 1), size(jac, 2))
-        return
-    end if
+    if (size(jac, 1) /= m .or. size(jac, 2) /= n) error stop FS_MATRIX_SIZE_ERROR
     if (present(f0)) then
         ! Check Size
-        if (size(f0) /= m) then
-            call report_array_size_error(errmgr, "jacobian", &
-                "F0", m, size(f0))
-            return
-        end if
+        if (size(f0) /= m) error stop FS_ARRAY_SIZE_ERROR
         f0p(1:m) => f0
     else
         ! Allocate space, and fill the array with the current function
         ! results
-        allocate(f0a(m), stat = flag)
-        if (flag /= 0) go to 20
+        allocate(f0a(m))
         f0p(1:m) => f0a
         call fun(xdata, params, f0p, stop, args = args)
         if (stop) return
     end if
     if (present(f1)) then
         ! Check Size
-        if (size(f1) /= m) then
-            call report_array_size_error(errmgr, "jacobian", &
-                "F1", m, size(f1))
-            return
-        end if
+        if (size(f1) /= m) error stop FS_ARRAY_SIZE_ERROR
         f1p(1:m) => f1
     else
         ! Allocate space
-        allocate(f1a(m), stat = flag)
-        if (flag /= 0) go to 20
+        allocate(f1a(m))
         f1p(1:m) => f1a
     end if
 
     ! Allocate a workspace array the same size as params
-    allocate(work(n), stat = flag)
-    if (flag /= 0) go to 20
+    allocate(work(n))
 
     ! Compute the Jacobian
     call jacobian_finite_diff(fun, xdata, params, f0p, jac, f1p, &
         stop, h, work, args = args)
-
-    ! End
-    return
-
-    ! Memroy Allocation Error Handling
-20  continue
-    call report_memory_error(errmgr, "jacobian", flag)
-    return
 end subroutine
 
 ! ------------------------------------------------------------------------------
 subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     resid, weights, maxp, minp, stats, alpha, controls, settings, info, &
-    status, cov, args, err)
+    status, cov, args)
     !! Performs a nonlinear regression to fit a model using a version
     !! of the Levenberg-Marquardt algorithm.
     procedure(regression_function), intent(in), pointer :: fun
@@ -860,25 +672,6 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     class(*), intent(inout), optional :: args
         !! An optional argument allowing the passing in/out of data for the
         !! [[fun]] routine.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !!
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
-        !!      properly sized.
-        !!
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation 
-        !!      error.
-        !!
-        !! - FS_UNDERDEFINED_PROBLEM_ERROR: Occurs if the problem posed 
-        !!      is underdetetermined (M < N).
-        !!
-        !! - FS_TOLERANCE_TOO_SMALL_ERROR: Occurs if any supplied 
-        !!      tolerances are too small to be practical.
-        !!
-        !! - FS_TOO_FEW_ITERATION_ERROR: Occurs if too few iterations 
-        !!      are allowed.
 
     ! Parameters
     real(real64), parameter :: too_small = 1.0d-14
@@ -888,15 +681,13 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
 
     ! Local Variables
     logical :: stop
-    integer(int32) :: m, n, actual, expected, flag
+    integer(int32) :: m, n, actual, expected
     real(real64), pointer :: w(:), pmax(:), pmin(:)
     real(real64), allocatable, target :: defaultWeights(:), maxparam(:), &
         minparam(:), JtWJ(:,:)
     type(iteration_controls) :: tol
     type(lm_solver_options) :: opt
     type(convergence_info) :: cInfo
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     type(convergence_info), target :: defaultinfo
     type(convergence_info), pointer :: inf
     
@@ -908,11 +699,6 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
         inf => info
     else
         inf => defaultinfo
-    end if
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
     end if
     if (present(controls)) then
         tol = controls
@@ -926,160 +712,72 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     end if
 
     ! Input Checking
-    if (size(y) /= m) then
-        call report_array_size_error(errmgr, "nonlinear_least_squares", &
-            "y", m, size(y))
-        return
-    end if
-    if (size(ymod) /= m) then
-        call report_array_size_error(errmgr, "nonlinear_least_squares", &
-            "ymod", m, size(ymod))
-        return
-    end if
-    if (size(resid) /= m) then
-        call report_array_size_error(errmgr, "nonlinear_least_squares", &
-            "resid", m, size(resid))
-        return
-    end if
-    if (m < n) then
-        call report_underdefined_error(errmgr, &
-            "nonlinear_least_squares", n, m)
-        return
-    end if
+    if (size(y) /= m) error stop FS_ARRAY_SIZE_ERROR
+    if (size(ymod) /= m) error stop FS_ARRAY_SIZE_ERROR
+    if (size(resid) /= m) error stop FS_ARRAY_SIZE_ERROR
+    if (m < n) error stop FS_UNDERDEFINED_PROBLEM_ERROR
 
     ! Tolerance Checking
-    if (tol%gradient_tolerance < too_small) then
-        call errmgr%report_error("nonlinear_least_squares", &
-            "The gradient tolerance was found to be too small.", &
-            FS_TOLERANCE_TOO_SMALL_ERROR)
-        return
-    end if
-    if (tol%change_in_solution_tolerance < too_small) then
-        call errmgr%report_error("nonlinear_least_squares", &
-            "The change in solution tolerance was found to be too small.", &
-            FS_TOLERANCE_TOO_SMALL_ERROR)
-        return
-    end if
-    if (tol%residual_tolerance < too_small) then
-        call errmgr%report_error("nonlinear_least_squares", &
-            "The residual error tolerance was found to be too small.", &
-            FS_TOLERANCE_TOO_SMALL_ERROR)
-        return
-    end if
-    if (tol%iteration_improvement_tolerance < too_small) then
-        call errmgr%report_error("nonlinear_least_squares", &
-            "The iteration improvement tolerance was found to be too small.", &
-            FS_TOLERANCE_TOO_SMALL_ERROR)
-        return
-    end if
+    if (tol%gradient_tolerance < too_small) error stop FS_TOLERANCE_TOO_SMALL_ERROR
+    if (tol%change_in_solution_tolerance < too_small) error stop FS_TOLERANCE_TOO_SMALL_ERROR
+    if (tol%residual_tolerance < too_small) error stop FS_TOLERANCE_TOO_SMALL_ERROR
+    if (tol%iteration_improvement_tolerance < too_small) error stop FS_TOLERANCE_TOO_SMALL_ERROR
 
     ! Iteration Count Checking
-    if (tol%max_iteration_count < min_iter_count) then
-        call report_iteration_count_error(errmgr, &
-            "nonlinear_least_squares", &
-            "Too few iterations were specified.", &
-            min_iter_count)
-        return
-    end if
-    if (tol%max_function_evaluations < min_fun_count) then
-        call report_iteration_count_error(errmgr, &
-            "nonlinear_least_squares", &
-            "Too few function evaluations were specified.", &
-            min_fun_count)
-        return
-    end if
-    if (tol%max_iteration_between_updates < min_update_count) then
-        call report_iteration_count_error(errmgr, &
-            "nonlinear_least_squares", &
-            "Too few iterations between updates were specified.", &
-            min_update_count)
-        return
-    end if
+    if (tol%max_iteration_count < min_iter_count) error stop FS_TOO_FEW_ITERATION_ERROR
+    if (tol%max_function_evaluations < min_fun_count) error stop FS_TOO_FEW_ITERATION_ERROR
+    if (tol%max_iteration_between_updates < min_update_count) error stop FS_TOO_FEW_ITERATION_ERROR
 
     ! Optional Array Arguments (weights, parameter limits, etc.)
     if (present(weights)) then
-        if (size(weights) < m) then
-            call report_array_size_error(errmgr, &
-                "nonlinear_least_squares", "weights", m, size(weights))
-            return
-        end if
+        if (size(weights) < m) error stop FS_ARRAY_SIZE_ERROR
         w(1:m) => weights(1:m)
     else
-        allocate(defaultWeights(m), source = 1.0d0, stat = flag)
-        if (flag /= 0) go to 50
+        allocate(defaultWeights(m), source = 1.0d0)
         w(1:m) => defaultWeights(1:m)
     end if
 
     if (present(maxp)) then
-        if (size(maxp) /= n) then
-            call report_array_size_error(errmgr, &
-                "nonlinear_least_squares", "maxp", n, size(maxp))
-            return
-        end if
+        if (size(maxp) /= n) error stop FS_ARRAY_SIZE_ERROR
         pmax(1:n) => maxp(1:n)
     else
-        allocate(maxparam(n), source = huge(1.0d0), stat = flag)
-        if (flag /= 0) go to 50
+        allocate(maxparam(n), source = huge(1.0d0))
         pmax(1:n) => maxparam(1:n)
     end if
 
     if (present(minp)) then
-        if (size(minp) /= n) then
-            call report_array_size_error(errmgr, &
-                "nonlinear_least_squares", "minp", n, size(minp))
-            return
-        end if
+        if (size(minp) /= n) error stop FS_ARRAY_SIZE_ERROR
         pmin(1:n) => minp(1:n)
     else
-        allocate(minparam(n), source = -huge(1.0d0), stat = flag)
-        if (flag /= 0) go to 50
+        allocate(minparam(n), source = -huge(1.0d0))
         pmin(1:n) => minparam(1:n)
     end if
 
     ! Local Memory Allocations
-    allocate(JtWJ(n, n), stat = flag)
-    if (flag /= 0) go to 50
+    allocate(JtWJ(n, n))
 
     ! Process
     call lm_solve(fun, x, y, params, w, pmax, pmin, tol, opt, ymod, &
-        resid, JtWJ, inf, stop, errmgr, status, args = args)
+        resid, JtWJ, inf, stop, status, args = args)
 
     ! Compute the covariance matrix
     if (present(stats) .or. present(cov)) then
-        call mtx_inverse(JtWJ, err = errmgr)
-        if (errmgr%has_error_occurred()) return
+        JtWJ = mtx_inverse(JtWJ)
     end if
 
     ! Statistical Parameters
     if (present(stats)) then
-        if (size(stats) /= n) then
-            call report_array_size_error(errmgr, &
-                "nonlinear_least_squares", "stats", n, size(stats))
-            return
-        end if
+        if (size(stats) /= n) error stop FS_ARRAY_SIZE_ERROR
 
         ! Compute the statistics
-        stats = calculate_regression_statistics(resid, params, JtWJ, &
-            alpha, errmgr)
+        stats = calculate_regression_statistics(resid, params, JtWJ, alpha)
     end if
 
     ! Return the covariance matrix
     if (present(cov)) then
-        if (size(cov, 1) /= n .or. size(cov, 2) /= n) then
-            call report_matrix_size_error(errmgr, "nonlinear_least_squares", &
-                "cov", n, n, size(cov, 1), size(cov, 2))
-            return
-        end if
+        if (size(cov, 1) /= n .or. size(cov, 2) /= n) error stop FS_MATRIX_SIZE_ERROR
         cov = JtWJ
     end if
-
-    ! End
-    return
-
-    ! Memory Error Handler
-50      continue
-    call report_memory_error(errmgr, "nonlinear_least_squares", flag)
-    return
 end subroutine
 
 ! ******************************************************************************
@@ -1307,7 +1005,6 @@ end subroutine
 ! - JtWdy: linearized fitting vector (N-by-1)
 !
 ! Outputs:
-! - JtWJ: overwritten LU factorization of the original matrix (N-by-N)
 ! - h: The new estimate of the change in parameter (N-by-1)
 ! - pNew: The new parameter estimates (N-by-1)
 ! - deltaY: The new difference between data and model (M-by-1)
@@ -1316,11 +1013,9 @@ end subroutine
 ! - niter: updated current iteration number
 ! - X2: updated Chi-squared criteria
 ! - stop: A flag allowing the user to terminate model execution
-! - iwork: A workspace array (N-by-1)
-! - err: An error handling mechanism
 subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     maxP, minP, weights, JtWJ, JtWdy, h, pNew, deltaY, yNew, X2, X2Old, &
-    alpha, stop, iwork, err, status, args)
+    alpha, stop, status, args)
     ! Arguments
     procedure(regression_function), pointer :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), p(:), maxP(:), &
@@ -1328,48 +1023,45 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     real(real64), intent(in) :: lambda, X2Old
     integer(int32), intent(inout) :: neval, niter
     integer(int32), intent(in) :: update
-    real(real64), intent(inout) :: JtWJ(:,:)
+    real(real64), intent(in) :: JtWJ(:,:)
     real(real64), intent(out) :: h(:), pNew(:), deltaY(:), yNew(:)
     real(real64), intent(out) :: X2, alpha
     logical, intent(out) :: stop
-    integer(int32), intent(out) :: iwork(:)
-    class(errors), intent(inout) :: err
     procedure(iteration_update), intent(in), pointer, optional :: status
     class(*), intent(inout), optional :: args
 
     ! Local Variables
     integer(int32) :: i, n
+    integer(int32), allocatable, dimension(:) :: iwork
     real(real64) :: dpJh
+    real(real64), allocatable, dimension(:,:) :: a, lu
 
     ! Initialization
     n = size(p)
+    allocate(a(n,n), source = JtWJ)
 
     ! Increment the iteration counter
     niter = niter + 1
 
     ! Solve the linear system to determine the change in parameters
-    ! A is N-by-N and is stored in JtWJ
     ! b is N-by-1
     if (update == FS_LEVENBERG_MARQUARDT_UPDATE) then
         ! Compute: h = A \ b
         ! A = J**T * W * J + lambda * diag(J**T * W * J)
         ! b = J**T * W * dy
         do i = 1, n
-            JtWJ(i,i) = JtWJ(i,i) * (1.0d0 + lambda)
-            h(i) = JtWdy(i)
+            a(i,i) = a(i,i) * (1.0d0 + lambda)
         end do
     else
         ! Compute: h = A \ b
         ! A = J**T * W * J + lambda * I
         ! b = J**T * W * dy
         do i = 1, n
-            JtWJ(i,i) = JtWJ(i,i) + lambda
-            h(i) = JtWdy(i)
+            a(i,i) = a(i,i) + lambda
         end do
     end if
-    call lu_factor(JtWJ, iwork, err)        ! overwrites JtWJ with [L\U]
-    if (err%has_error_occurred()) return    ! if JtWJ is singular
-    call solve_lu(JtWJ, iwork, h)           ! solution stored in h
+    call lu_factor(a, ipvt = iwork, lu = lu)
+    h = solve_lu(lu, iwork, JtWdy)
 
     ! Compute the new attempted solution, and apply any constraints
     do i = 1, n
@@ -1429,9 +1121,8 @@ end subroutine
 ! - opt: a convergence_info object containing information regarding 
 !       convergence of the iteration
 ! - stop: A flag allowing the user to terminate model execution
-! - err: An error handling object
 subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
-    opt, y, resid, JtWJ, info, stop, err, status, args)
+    opt, y, resid, JtWJ, info, stop, status, args)
     ! Arguments
     procedure(regression_function), intent(in), pointer :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), weights(:), maxP(:), &
@@ -1442,7 +1133,6 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     real(real64), intent(out) :: y(:), resid(:), JtWJ(:,:)
     class(convergence_info), intent(out) :: info
     logical, intent(out) :: stop
-    class(errors), intent(inout) :: err
     procedure(iteration_update), intent(in), pointer, optional :: status
     class(*), intent(inout), optional :: args
 
@@ -1452,8 +1142,6 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     real(real64) :: dX2, X2, X2Old, X2Try, lambda, alpha, nu, step
     real(real64), allocatable :: pOld(:), yOld(:), J(:,:), JtWdy(:), &
         work(:), mwork(:,:), pTry(:), yTemp(:), JtWJc(:,:), h(:)
-    integer(int32), allocatable :: iwork(:)
-    character(len = :), allocatable :: errmsg
 
     ! Initialization
     update = .true.
@@ -1467,18 +1155,18 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     nupdate = 0
 
     ! Local Memory Allocation
-    allocate(pOld(n), source = 0.0d0, stat = flag)
-    if (flag == 0) allocate(yOld(m), source = 0.0d0, stat = flag)
-    if (flag == 0) allocate(J(m, n), stat = flag)
-    if (flag == 0) allocate(JtWdy(n), stat = flag)
-    if (flag == 0) allocate(work(m + n), stat = flag)
-    if (flag == 0) allocate(mwork(n, m), stat = flag)
-    if (flag == 0) allocate(pTry(n), stat = flag)
-    if (flag == 0) allocate(h(n), stat = flag)
-    if (flag == 0) allocate(yTemp(m), stat = flag)
-    if (flag == 0) allocate(JtWJc(n, n), stat = flag)
-    if (flag == 0) allocate(iwork(n), stat = flag)
-    if (flag /= 0) go to 10
+    allocate(pOld(n), source = 0.0d0)
+    allocate(yOld(m), source = 0.0d0)
+    allocate( &
+        J(m, n), &
+        JtWdy(n), &
+        work(m + n), &
+        mwork(n, m), &
+        pTry(n), &
+        h(n), &
+        yTemp(m), &
+        JtWJc(n, n) &
+    )
 
     ! Perform an initial function evaluation
     call fun(xdata, p, y, stop, args = args)
@@ -1495,7 +1183,7 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     if (opt%method == FS_LEVENBERG_MARQUARDT_UPDATE) then
         lambda = 1.0d-2
     else
-        call extract_diagonal(JtWJ, work(1:n))
+        work(1:n) = extract_diagonal(JtWJ)
         lambda = 1.0d-2 * maxval(work(1:n))
         nu = 2.0d0
     end if
@@ -1506,9 +1194,8 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
         ! update the new parameter estimates
         call lm_iter(fun, xdata, ydata, p, neval, niter, opt%method, &
             lambda, maxP, minP, weights, JtWJc, JtWdy, h, pTry, resid, &
-            yTemp, X2Try, X2Old, alpha, stop, iwork, err, status, args = args)
+            yTemp, X2Try, X2Old, alpha, stop, status, args = args)
         if (stop) go to 5
-        if (err%has_error_occurred()) return
 
         ! Update the Chi-squared estimate, update the damping parameter
         ! lambda, and, if necessary, update the matrices
@@ -1542,18 +1229,6 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     ! User Requested End
 5       continue
     info%user_requested_stop = .true.
-    return
-
-    ! Memory Error Handling
-10      continue
-    allocate(character(len = 512) :: errmsg)
-    write(errmsg, 100) "Memory allocation error code ", flag, "."
-    call err%report_error("lm_solve", &
-        trim(errmsg), FS_MEMORY_ERROR)
-    return
-
-    ! Formatting
-100     format(A, I0, A)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -1585,7 +1260,7 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
 
     ! Process
     if (opt%method == FS_LEVENBERG_MARQUARDT_UPDATE) then
-        call extract_diagonal(JtWJ, work(1:n))
+        work(1:n) = extract_diagonal(JtWJ)
         work(1:n) = lambda * work(1:n) * h + JtWdy
     else
         work(1:n) = lambda * h + JtWdy

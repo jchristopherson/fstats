@@ -109,6 +109,29 @@ module fstats
     public :: doe_fit_model
     public :: doe_evaluate_model
     public :: doe_model
+    public :: doe_model_diagnostics
+    public :: doe_predict
+    public :: doe_predict_enhanced
+    public :: doe_residuals_analysis
+    public :: fractional_factorial
+    public :: fractional_factorial_size
+    public :: encode_variables
+    public :: decode_variables
+    public :: central_composite_design
+    public :: central_composite_design_size
+    public :: latin_hypercube_design
+    public :: doe_diagnostics
+    public :: doe_prediction
+    public :: doe_residuals
+    public :: doe_efficiency_metrics
+    public :: doe_rsm_model
+    public :: doe_optimization_result
+    public :: doe_comparison_result
+    public :: doe_anova_table
+    public :: doe_design_efficiency
+    public :: doe_optimize_rsm
+    public :: doe_compare_models
+    public :: doe_model_anova
 
     ! FSTATS_BOOTSTRAP.F90
     public :: bootstrap_resampling_routine
