@@ -11,7 +11,6 @@ homepage = "https://github.com/jchristopherson/fstats"
 source-dir = "src"
 
 [dependencies]
-ferror = { git = "https://github.com/jchristopherson/ferror" }
 linalg = { git = "https://github.com/jchristopherson/linalg" }
 collections = { git = "https://github.com/jchristopherson/collections" }
 openmp = "*"
