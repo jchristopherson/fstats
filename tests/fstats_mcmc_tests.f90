@@ -13,7 +13,7 @@ contains
 ! ******************************************************************************
 ! TEST_MCMC_TARGET
 ! ------------------------------------------------------------------------------
-subroutine tmt_eval(this, xdata, xc, y)
+pure subroutine tmt_eval(this, xdata, xc, y)
     class(test_mcmc_target), intent(in) :: this
     real(real64), intent(in), dimension(:) :: xdata
     real(real64), intent(in), dimension(:) :: xc
@@ -90,10 +90,11 @@ function test_mcmc_target_likelihood() result(rst)
     integer(int32), parameter :: ndata = 21
     real(real64), parameter :: var = 1.0d-2
     real(real64), parameter :: tol = 1.0d-8
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 
     ! Local Variables
     integer(int32) :: i
-    real(real64) :: v, prd, l, xdata(ndata), ydata(ndata), ymod(ndata), params(2)
+    real(real64) :: v, sm, l, xdata(ndata), ydata(ndata), ymod(ndata), params(2)
     type(normal_distribution) :: dist, param1, param2
     type(test_mcmc_target) :: target
 
@@ -125,22 +126,23 @@ function test_mcmc_target_likelihood() result(rst)
     ! Evaluate the model - store in ymod
     call target%model(xdata, params, ymod)
 
-    ! Evaluate the distribution - this will be our answer term
-    ! Use a log approach to avoid underflow/overflow issues
+    ! Evaluate the Gaussian log-density directly to avoid underflow from the
+    ! raw PDF in the far tail of the distribution.  The target likelihood is
+    ! computed in log-space as a sum of log densities.
     dist%standard_deviation = sqrt(var)
-    prd = 0.0d0
+    sm = 0.0d0
     do i = 1, ndata
         dist%mean_value = ymod(i)
-        v = log(dist%pdf(ydata(i)))  ! evaluate the distribution at the measued y
-        prd = prd + v
+        v = -0.5d0 * ((ydata(i) - dist%mean_value) / dist%standard_deviation)**2 &
+            - log(dist%standard_deviation * sqrt(2.0d0 * pi))
+        sm = sm + v
     end do
-    prd = exp(prd)
 
     ! Compute the likelihood via the target type
     l = target%likelihood(xdata, ydata, params, var)
 
     ! Test
-    if (.not.assert(prd, l, tol)) then
+    if (.not.assert(sm, l, tol)) then
         rst = .false.
         print "(A)", "Test Failed: test_mcmc_target_likelihood -1"
     end if

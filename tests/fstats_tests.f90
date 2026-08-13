@@ -107,6 +107,41 @@ program tests
     local = test_doe_fit_1()
     if (.not.local) overall = .false.
 
+    ! New Feature Tests
+    local = test_model_diagnostics_1()
+    if (.not.local) overall = .false.
+
+    local = test_fractional_factorial_1()
+    if (.not.local) overall = .false.
+
+    local = test_encode_decode_1()
+    if (.not.local) overall = .false.
+
+    local = test_central_composite_design_1()
+    if (.not.local) overall = .false.
+
+    local = test_residuals_analysis_1()
+    if (.not.local) overall = .false.
+
+    local = test_latin_hypercube_1()
+    if (.not.local) overall = .false.
+
+    ! Enhanced Feature Tests
+    local = test_design_efficiency_1()
+    if (.not.local) overall = .false.
+
+    local = test_model_comparison_1()
+    if (.not.local) overall = .false.
+
+    local = test_model_anova_1()
+    if (.not.local) overall = .false.
+
+    local = test_rsm_optimization_1()
+    if (.not.local) overall = .false.
+
+    local = test_enhanced_prediction_1()
+    if (.not.local) overall = .false.
+
     ! Nonlinear Regression
     local = test_prototype_function_call()
     if (.not.local) overall = .false.

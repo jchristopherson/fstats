@@ -245,8 +245,7 @@ contains
         call dist%initialize(mu, sigma)
 
         ! Compute the actual solution
-        inv = sigma
-        call mtx_inverse(inv)
+        inv = mtx_inverse(sigma)
         arg = -0.5d0 * dot_product(x - mu, matmul(inv, x - mu))
         dsig = det(sigma)
         ans = exp(arg) / sqrt((2.0d0 * pi)**2 * dsig)

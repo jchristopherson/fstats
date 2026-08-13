@@ -1,6 +1,5 @@
 module fstats_smoothing
     use iso_fortran_env
-    use ferror
     use fstats_errors
     use linalg, only : sort
     implicit none
@@ -8,7 +7,7 @@ module fstats_smoothing
     public :: lowess
 contains
 ! ------------------------------------------------------------------------------
-subroutine lowess(x, y, ys, fsmooth, nstps, del, rweights, resid, err)
+subroutine lowess(x, y, ys, fsmooth, nstps, del, rweights, resid)
     !! Computes the smoothing of a data set using a robust locally weighted
     !! scatterplot smoothing (LOWESS) algorithm.  Fitted values are computed at
     !! each of the supplied x values.
@@ -43,13 +42,6 @@ subroutine lowess(x, y, ys, fsmooth, nstps, del, rweights, resid, err)
     real(real64), intent(out), optional, dimension(:), target :: resid
         !! An optional N-element array, that if supplied, will be used to 
         !! return the residual.
-    class(errors), intent(inout), optional, target :: err
-        !! A mechanism for communicating errors and warnings to the 
-        !! caller.  Possible warning and error codes are as follows.
-        !! - FS_NO_ERROR: No errors encountered.
-        !! - FS_ARRAY_SIZE_ERROR: Occurs if any of the arrays are not 
-        !!      approriately sized.
-        !! - FS_MEMORY_ERROR: Occurs if there is a memory allocation error.
 
     ! Parameters
     real(real64), parameter :: zero = 0.0d0
@@ -61,19 +53,12 @@ subroutine lowess(x, y, ys, fsmooth, nstps, del, rweights, resid, err)
 
     ! Local Variables
     logical :: ok
-    integer(int32) :: iter, i, j, nleft, nright, ns, last, m1, m2, n, nsteps, flag
+    integer(int32) :: iter, i, j, nleft, nright, ns, last, m1, m2, n, nsteps
     real(real64) :: f, delta, d1, d2, denom, alpha, cut, eps, cmad, c1, c9, r
     real(real64), allocatable, target, dimension(:) :: rwdef, rsdef
     real(real64), pointer, dimension(:) :: rw, res
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(x)
     if (present(fsmooth)) then
         f = fsmooth
@@ -94,48 +79,26 @@ subroutine lowess(x, y, ys, fsmooth, nstps, del, rweights, resid, err)
     end if
 
     if (present(rweights)) then
-        if (size(rweights) /= n) then
-            call report_array_size_error(errmgr, "lowess", "rweights", n, &
-                size(rweights))
-            return
-        end if
+        if (size(rweights) /= n) error stop FS_ARRAY_SIZE_ERROR
         rw => rweights
     else
-        allocate(rwdef(n), stat = flag)
-        if (flag /= 0) then
-            call report_memory_error(errmgr, "lowess", flag)
-            return
-        end if
+        allocate(rwdef(n))
         rw => rwdef
     end if
 
     if (present(resid)) then
-        if (size(resid) /= n) then
-            call report_array_size_error(errmgr, "lowess", "resid", n, &
-                size(resid))
-            return
-        end if
+        if (size(resid) /= n) error stop FS_ARRAY_SIZE_ERROR
         res => resid
     else
-        allocate(rsdef(n), stat = flag)
-        if (flag /= 0) then
-            call report_memory_error(errmgr, "lowess", flag)
-            return
-        end if
+        allocate(rsdef(n))
         res => rsdef
     end if
     ns = max(min(int(f * real(n), int32), n), 2)
     eps = epsilon(eps)
 
     ! Input Checking
-    if (size(y) /= n) then
-        call report_array_size_error(errmgr, "lowess", "y", n, size(y))
-        return
-    end if
-    if (size(ys) /= n) then
-        call report_array_size_error(errmgr, "lowess", "ys", n, size(ys))
-        return
-    end if
+    if (size(y) /= n) error stop FS_ARRAY_SIZE_ERROR
+    if (size(ys) /= n) error stop FS_ARRAY_SIZE_ERROR
 
     ! Quick Return
     if (n < 2) then

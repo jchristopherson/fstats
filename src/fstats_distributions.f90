@@ -3,7 +3,6 @@ module fstats_distributions
     use ieee_arithmetic
     use fstats_special_functions
     use fstats_helper_routines
-    use ferror
     use fstats_errors
     implicit none
     private
@@ -876,7 +875,7 @@ end subroutine
 ! ******************************************************************************
 ! MULTIVARIATE NORMAL DISTRIBUTION
 ! ------------------------------------------------------------------------------
-subroutine mvnd_init(this, mu, sigma, err)
+pure subroutine mvnd_init(this, mu, sigma)
     use linalg, only : cholesky_factor
     !! Initializes the multivariate normal distribution by defining the mean
     !! values and covariance matrix.
@@ -889,28 +888,15 @@ subroutine mvnd_init(this, mu, sigma, err)
         !! is positive-definite; therefore, the positive-definite constraint 
         !! is checked within this routine and enforced.  An error is thrown if
         !! the supplied matrix is not positive-definite.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handling object.
 
     ! Local Variables
-    integer(int32) :: n, flag
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: n
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(mu)
 
     ! Input Checking
-    if (size(sigma, 1) /= n .or. size(sigma, 2) /= n) then
-        call report_matrix_size_error(errmgr, "mvnd_init", "sigma", n, n, &
-            size(sigma, 1), size(sigma, 2))
-        return
-    end if
+    if (size(sigma, 1) /= n .or. size(sigma, 2) /= n) error stop 3
 
     ! Store the matrices
     this%m_means = mu
@@ -918,40 +904,19 @@ subroutine mvnd_init(this, mu, sigma, err)
     if (allocated(this%m_covInv)) then
         if (size(this%m_covInv, 1) /= n .or. size(this%m_covInv, 2) /= n) then
             deallocate(this%m_covInv)
-            allocate(this%m_covInv(n, n), stat = flag)
-            if (flag /= 0) go to 10
+            allocate(this%m_covInv(n, n))
         end if
     else
-        allocate(this%m_covInv(n, n), stat = flag)
-        if (flag /= 0) go to 10
-    end if
-    if (allocated(this%m_cholesky)) then
-        if (size(this%m_cholesky, 1) /= n .or. size(this%m_cholesky, 2) /= n) then
-            deallocate(this%m_cholesky)
-            allocate(this%m_cholesky(n, n), stat = flag)
-            if (flag /= 0) go to 10
-        end if
-    else
-        allocate(this%m_cholesky(n, n), stat = flag, source = sigma)
-        if (flag /= 0) go to 10
+        allocate(this%m_covInv(n, n))
     end if
 
     ! Compute the Cholesky factorization of the covariance matrix
-    call cholesky_factor(this%m_cholesky, upper = .false., err = errmgr)
-    if (errmgr%has_error_occurred()) return
+    this%m_cholesky = cholesky_factor(sigma, upper = .false.)
 
     ! Compute the inverse and determinant
     call populate_identity(this%m_covInv)
     call cholesky_inverse(this%m_cholesky, this%m_covInv)
     this%m_covDet = cholesky_determinant(this%m_cholesky)
-
-    ! End
-    return
-
-    ! Memory Error Handling
-10  continue
-    call report_memory_error(errmgr, "mvnd_init", flag)
-    return
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -978,46 +943,28 @@ pure function mvnd_pdf(this, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine mvnd_update_mean(this, x, err)
+pure subroutine mvnd_update_mean(this, x)
     !! Updates the mean value array.
     class(multivariate_normal_distribution), intent(inout) :: this
         !! The multivariate_normal_distribution object.
     real(real64), intent(in), dimension(:) :: x
         !! The N-element array of new mean values.
-    class(errors), intent(inout), optional, target :: err
-        !! The error handling object.  This is referenced only in the event that
-        !! the size of x is not compatible with the existing state.
 
     ! Local Variables
-    integer(int32) :: n, nc, flag
-    class(errors), pointer :: errmgr
-    type(errors), target :: deferr
+    integer(int32) :: n, nc
     
     ! Initialization
-    if (present(err)) then
-        errmgr => err
-    else
-        errmgr => deferr
-    end if
     n = size(x)
     nc = size(this%m_means)
 
     ! Process
     if (.not.allocated(this%m_means)) then
         ! This is an initial set-up - just store the values and be done
-        allocate(this%m_means(n), stat = flag, source = x)
-        if (flag /= 0) then
-            call report_memory_error(errmgr, "mvnd_update_mean", flag)
-            return
-        end if
-        return
+        allocate(this%m_means(n), source = x)
     end if
 
     ! Else, ensure the array is of the correct size before updating
-    if (n /= nc) then
-        call report_array_size_error(errmgr, "mvnd_update_mean", "x", nc, n)
-        return
-    end if
+    if (n /= nc) error stop 2
     this%m_means = x
 end subroutine
 
@@ -1302,7 +1249,7 @@ end function
 ! ******************************************************************************
 ! SUPPORTING ROUTINES
 ! ------------------------------------------------------------------------------
-subroutine cholesky_inverse(x, u)
+pure subroutine cholesky_inverse(x, u)
     use linalg, only : solve_triangular_system
     !! Computes the inverse of a Cholesky-factored matrix.
     real(real64), intent(in), dimension(:,:) :: x
@@ -1323,10 +1270,10 @@ subroutine cholesky_inverse(x, u)
     ! And then solve L' * inv(A) = U for inv(A)
 
     ! Solve L * U = I for U
-    call solve_triangular_system(.true., .false., .false., .true., 1.0d0, x, u)
+    u = solve_triangular_system(.true., .false., .false., .true., 1.0d0, x, u)
 
     ! Solve L**T * inv(A) = U for inv(A)
-    call solve_triangular_system(.true., .false., .true., .true., 1.0d0, x, u)
+    u = solve_triangular_system(.true., .false., .true., .true., 1.0d0, x, u)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -1369,7 +1316,7 @@ pure function cholesky_determinant(x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-subroutine populate_identity(x)
+pure subroutine populate_identity(x)
     !! Populates the supplied matrix as an identity matrix.
     real(real64), intent(inout), dimension(:,:) :: x
 
