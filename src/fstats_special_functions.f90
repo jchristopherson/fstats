@@ -35,13 +35,20 @@ pure elemental function beta(a, b) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-! source: https://people.math.sc.edu/Burkardt/f_src/special_functions/special_functions.f90
 pure elemental function regularized_beta(a, b, x) result(rst)
     !! Computes the regularized beta function.
     !!
     !! The regularized beta function is defined as the ratio between
     !! the incomplete beta function and the beta function.
     !! $$ I_{x}(a,b) = \frac{\beta(x;a,b)}{\beta(a,b)} $$.
+    !!
+    !! Remarks
+    !!
+    !! The routine employs the continued fraction representation of the
+    !! function, evaluated by means of the modified Lentz algorithm.  The
+    !! leading factor is formed in logarithmic space such that the routine
+    !! remains well-behaved for large arguments, where the beta function
+    !! itself underflows.
     !!
     !! See Also
     !!
@@ -59,45 +66,91 @@ pure elemental function regularized_beta(a, b, x) result(rst)
     real(real64), parameter :: zero = 0.0d0
     real(real64), parameter :: one = 1.0d0
     real(real64), parameter :: two = 2.0d0
-    real(real64) :: bt, dk(51), fk(51), s0, t1, t2, ta, tb
-    integer(int32) :: k
+    real(real64) :: bt
+
+    ! Handle the limits of the interval directly
+    if (x <= zero) then
+        rst = zero
+        return
+    end if
+    if (x >= one) then
+        rst = one
+        return
+    end if
+
+    ! The leading factor x**a * (1 - x)**b / beta(a,b)
+    bt = exp(log_gamma(a + b) - log_gamma(a) - log_gamma(b) + &
+        a * log(x) + b * log(one - x))
+
+    ! The continued fraction converges rapidly only for x below the mean of
+    ! the distribution; the symmetry relation handles the remainder
+    if (x < (a + one) / (a + b + two)) then
+        rst = bt * beta_continued_fraction(a, b, x) / a
+    else
+        rst = one - bt * beta_continued_fraction(b, a, one - x) / b
+    end if
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental function beta_continued_fraction(a, b, x) result(rst)
+    !! Evaluates the continued fraction expansion of the incomplete beta
+    !! function by means of the modified Lentz algorithm.
+    real(real64), intent(in) :: a
+        !! The first argument of the function.
+    real(real64), intent(in) :: b
+        !! The second argument of the function.
+    real(real64), intent(in) :: x
+        !! The upper limit of the integration.
+    real(real64) :: rst
+        !! The value of the continued fraction.
+
+    ! Parameters
+    integer(int32), parameter :: maxiter = 1000
+    real(real64), parameter :: one = 1.0d0
+    real(real64), parameter :: two = 2.0d0
+
+    ! Local Variables
+    integer(int32) :: m, m2
+    real(real64) :: aa, c, d, del, qab, qam, qap, eps, fpmin, rm
+
+    ! Initialization
+    eps = epsilon(eps)
+    fpmin = tiny(fpmin) / eps
+    qab = a + b
+    qap = a + one
+    qam = a - one
+    c = one
+    d = one - qab * x / qap
+    if (abs(d) < fpmin) d = fpmin
+    d = one / d
+    rst = d
 
     ! Process
-    s0 = (a + one) / (a + b + two)
-    bt = beta(a, b)
+    do m = 1, maxiter
+        rm = real(m, real64)
+        m2 = 2 * m
 
-    if (x <= s0) then
-        do k = 1, 20
-            dk(2*k) = k * (b - k) * x / (a + two * k - one) / (a + two * k)
-        end do
-        do k = 0, 20
-            dk(2*k+1) = -(a + k) * (a + b + k) * x / (a + two * k) / &
-                (a + two * k + one)
-        end do
+        ! The even step of the recurrence
+        aa = rm * (b - rm) * x / ((qam + m2) * (a + m2))
+        d = one + aa * d
+        if (abs(d) < fpmin) d = fpmin
+        c = one + aa / c
+        if (abs(c) < fpmin) c = fpmin
+        d = one / d
+        rst = rst * d * c
 
-        t1 = zero
-        do k = 20, 1, -1
-            t1 = dk(k) / (one + t1)
-        end do
-        ta = one / (one + t1)
-        rst = x**a * (one - x)**b / (a * bt) * ta
-    else
-        do k = 1, 20
-            fk(2*k) = k * (a - k) * (one - x) / (b + two * k - one) / &
-                (b + two * k)
-        end do
-        do k = 0, 20
-            fk(2*k+1) = -(b + k) * (a + b + k) * (one - x) / (b + two * k) / &
-                (b + two * k + one)
-        end do
+        ! The odd step of the recurrence
+        aa = -(a + rm) * (qab + rm) * x / ((a + m2) * (qap + m2))
+        d = one + aa * d
+        if (abs(d) < fpmin) d = fpmin
+        c = one + aa / c
+        if (abs(c) < fpmin) c = fpmin
+        d = one / d
+        del = d * c
+        rst = rst * del
 
-        t2 = zero
-        do k = 20, 1, -1
-            t2 = fk(k) / (one + t2)
-        end do
-        tb = one / (one + t2)
-        rst = one - x**a * (one - x)**b / (b * bt) * tb
-    end if
+        if (abs(del - one) <= eps) exit
+    end do
 end function
 
 ! ------------------------------------------------------------------------------

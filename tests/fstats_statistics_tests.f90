@@ -391,6 +391,87 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function f_test_test_2() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! If X follows an F distribution with equal degrees of freedom then so
+        ! does 1 / X; consequently P(X < 1) must be exactly 0.5.  The identity
+        ! exercises the regularized beta function over the range of arguments
+        ! where a truncated series expansion silently loses accuracy.
+
+        ! Variables
+        integer(int32), parameter :: dofs(8) = [2, 10, 50, 200, 500, 2000, &
+            10000, 100000]
+        real(real64), parameter :: tol = 1.0d-9
+        integer(int32) :: i
+        real(real64) :: c
+        type(f_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+
+        do i = 1, size(dofs)
+            dist%d1 = real(dofs(i), real64)
+            dist%d2 = real(dofs(i), real64)
+            c = dist%cdf(1.0d0)
+            if (.not.is_equal(c, 0.5d0, tol)) then
+                rst = .false.
+                print '(A, I0)', "TEST FAILED: F Test 2, DOF = ", dofs(i)
+            end if
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
+    function t_test_test_2() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The test statistic must be signed such that the direction of the
+        ! difference in means is recoverable, and the two-tailed probability
+        ! must be unaffected by the order of the arguments.
+
+        ! Variables
+        integer(int32), parameter :: n = 8
+        real(real64), parameter :: tol = 1.0d-12
+        real(real64), parameter :: x1(n) = [2.0d2, 2.1d2, 1.9d2, 2.05d2, &
+            2.15d2, 2.2d2, 1.95d2, 2.0d2]
+        real(real64), parameter :: x2(n) = [1.95d2, 2.0d2, 1.85d2, 2.0d2, &
+            2.1d2, 2.15d2, 1.9d2, 1.92d2]
+        real(real64) :: ta, pa, da, tb, pb, db
+
+        ! Initialization
+        rst = .true.
+
+        ! Test 1 - Equal Variances
+        call t_test_equal_variance(x1, x2, ta, pa, da)
+        call t_test_equal_variance(x2, x1, tb, pb, db)
+        if (ta <= 0.0d0 .or. .not.is_equal(ta, -tb, tol) .or. &
+            .not.is_equal(pa, pb, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: T-Test 2-1"
+        end if
+
+        ! Test 2 - Unequal Variances
+        call t_test_unequal_variance(x1, x2, ta, pa, da)
+        call t_test_unequal_variance(x2, x1, tb, pb, db)
+        if (ta <= 0.0d0 .or. .not.is_equal(ta, -tb, tol) .or. &
+            .not.is_equal(pa, pb, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: T-Test 2-2"
+        end if
+
+        ! Test 3 - Paired
+        call t_test_paired(x1, x2, ta, pa, da)
+        call t_test_paired(x2, x1, tb, pb, db)
+        if (ta <= 0.0d0 .or. .not.is_equal(ta, -tb, tol) .or. &
+            .not.is_equal(pa, pb, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: T-Test 2-3"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
     function anova_test_1() result(rst)
         ! Arguments
         logical :: rst

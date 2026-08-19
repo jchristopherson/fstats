@@ -59,6 +59,12 @@ program tests
     local = f_test_test_1()
     if (.not.local) overall = .false.
 
+    local = t_test_test_2()
+    if (.not.local) overall = .false.
+
+    local = f_test_test_2()
+    if (.not.local) overall = .false.
+
     local = anova_test_1()
     if (.not.local) overall = .false.
 
