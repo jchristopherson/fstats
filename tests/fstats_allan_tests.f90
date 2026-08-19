@@ -34,6 +34,62 @@ function test_allan_variance() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+function test_allan_variance_2() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Local Variables
+    integer(int32), parameter :: n = 201
+    real(real64), parameter :: dt = 2.5d-1
+    real(real64), parameter :: slope = 3.0d0
+    real(real64), parameter :: tol = 1.0d-10
+    integer(int32) :: i, m
+    real(real64) :: x(n), ans
+    real(real64), allocatable, dimension(:,:) :: v, w
+
+    ! Initialization
+    rst = .true.
+    do i = 1, n
+        x(i) = slope * i
+    end do
+
+    ! Test 1 - for a linear ramp the Allan variance is (slope * m)**2 / 2, and
+    ! the first column holds the averaging time m * dt
+    v = allan_variance(x, dt)
+    if (size(v, 1) /= n / 2 - 1) then
+        rst = .false.
+        print "(A)", "TEST FAILED: test_allan_variance 2-1"
+    end if
+    do m = 1, size(v, 1)
+        ans = 0.5d0 * (slope * m)**2
+        if (abs(v(m,2) - ans) > tol * ans) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_allan_variance 2-2"
+            exit
+        end if
+        if (.not.assert(v(m,1), dt * m, tol)) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_allan_variance 2-3"
+            exit
+        end if
+    end do
+
+    ! Test 2 - the time increment is optional and defaults to unity
+    w = allan_variance(x)
+    if (.not.assert(w(:,2), v(:,2), tol)) then
+        rst = .false.
+        print "(A)", "TEST FAILED: test_allan_variance 2-4"
+    end if
+    do m = 1, size(w, 1)
+        if (.not.assert(w(m,1), real(m, real64), tol)) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_allan_variance 2-5"
+            exit
+        end if
+    end do
+end function
+
+! ------------------------------------------------------------------------------
 ! REF: https://en.wikipedia.org/wiki/Allan_variance
 function ref_allan_mean(x, m, j) result(rst)
     ! Arguments
