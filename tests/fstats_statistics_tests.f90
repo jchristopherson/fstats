@@ -994,6 +994,163 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function incomplete_gamma_test_2() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The reference values were computed by an independent series and
+        ! continued fraction evaluation carried to convergence.  The large
+        ! arguments lie well beyond the range over which a fixed-length series
+        ! retains any accuracy.
+
+        ! Parameters
+        integer(int32), parameter :: nc = 5
+        real(real64), parameter :: tol = 1.0d-12
+        real(real64), parameter :: av(nc) = [1.2d2, 1.65d2, 5.0d2, 5.0d3, &
+            1.0d5]
+        real(real64), parameter :: pans(nc) = [ &
+            5.121399785494269d-1, &
+            5.103528819860939d-1, &
+            5.059471461707328d-1, &
+            5.018806340390044d-1, &
+            5.004205222992676d-1 &
+        ]
+        real(real64), parameter :: qa(4) = [5.0d0, 1.0d1, 2.0d1, 5.0d1]
+        real(real64), parameter :: qx(4) = [4.0d1, 1.0d2, 2.0d2, 4.0d2]
+        real(real64), parameter :: qans(4) = [ &
+            5.020464318829131d-13, &
+            1.125347396084281d-31, &
+            6.586907311440748d-61, &
+            1.136640784050135d-109 &
+        ]
+
+        ! Local Variables
+        integer(int32) :: i
+        real(real64) :: p, q, x, t
+
+        ! Initialization
+        rst = .true.
+
+        ! Test 1 - the regularized function must remain accurate for large
+        ! arguments, where the unregularized form overflows.  The attainable
+        ! accuracy is limited by the cancellation in a log(a) - log(gamma(a)),
+        ! so the tolerance is scaled accordingly.
+        do i = 1, nc
+            p = regularized_gamma_lower(av(i), av(i))
+            t = max(tol, 1.0d1 * epsilon(t) * av(i) * log(av(i)))
+            if (abs(p - pans(i)) > t * pans(i)) then
+                rst = .false.
+                print '(A, E10.2)', "TEST FAILED: Incomplete Gamma 2 - 1, " // &
+                    "a = ", av(i)
+            end if
+        end do
+
+        ! Test 2 - the deep tail must retain its relative accuracy
+        do i = 1, size(qa)
+            q = regularized_gamma_upper(qa(i), qx(i))
+            if (abs(q - qans(i)) > tol * qans(i)) then
+                rst = .false.
+                print '(A, E10.2)', "TEST FAILED: Incomplete Gamma 2 - 2, " // &
+                    "a = ", qa(i)
+            end if
+        end do
+
+        ! Test 3 - P + Q = 1, and the closed forms for a = 1 and a = 1/2
+        do i = 1, 40
+            x = 2.5d-1 * i
+            p = regularized_gamma_lower(7.5d0, x)
+            q = regularized_gamma_upper(7.5d0, x)
+            if (.not.is_equal(p + q, 1.0d0)) then
+                rst = .false.
+                print '(A)', "TEST FAILED: Incomplete Gamma 2 - 3"
+            end if
+            if (.not.is_equal(regularized_gamma_upper(1.0d0, x), exp(-x))) then
+                rst = .false.
+                print '(A)', "TEST FAILED: Incomplete Gamma 2 - 4"
+            end if
+            if (.not.is_equal(regularized_gamma_lower(5.0d-1, x), &
+                erf(sqrt(x)))) then
+                rst = .false.
+                print '(A)', "TEST FAILED: Incomplete Gamma 2 - 5"
+            end if
+        end do
+
+        ! Test 4 - the endpoints
+        if (.not.is_equal(regularized_gamma_lower(2.5d0, 0.0d0), 0.0d0) .or. &
+            .not.is_equal(regularized_gamma_upper(2.5d0, 0.0d0), 1.0d0)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Incomplete Gamma 2 - 6"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function beta_test_3() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The gamma function alternates in sign along the negative real axis,
+        ! so the beta function is negative over some of that range.
+
+        ! Parameters
+        real(real64), parameter :: tol = 1.0d-12
+
+        ! Initialization
+        rst = .true.
+
+        ! B(-1/2, 2) = -4
+        if (.not.is_equal(beta(-5.0d-1, 2.0d0), -4.0d0, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Beta 3 - 1"
+        end if
+
+        ! B(-3/2, 3) = 16 / 3
+        if (.not.is_equal(beta(-1.5d0, 3.0d0), 16.0d0 / 3.0d0, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Beta 3 - 2"
+        end if
+
+        ! Positive arguments must be unaffected
+        if (.not.is_equal(beta(2.0d0, 3.0d0), 1.0d0 / 12.0d0, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Beta 3 - 3"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function digamma_test_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        real(real64), parameter :: tol = 1.0d-14
+        real(real64), parameter :: gam = 0.5772156649015328606065121d0
+
+        ! Local Variables
+        integer(int32) :: i
+        real(real64) :: x
+
+        ! Initialization
+        rst = .true.
+
+        ! Test 1 - psi(1) = -gamma and psi(1/2) = -gamma - 2 ln 2
+        if (.not.is_equal(digamma(1.0d0), -gam, tol) .or. &
+            .not.is_equal(digamma(5.0d-1), -gam - 2.0d0 * log(2.0d0), tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Digamma 1 - 1"
+        end if
+
+        ! Test 2 - the recurrence psi(x + 1) - psi(x) = 1 / x
+        do i = 1, 400
+            x = 5.0d-2 * i
+            if (.not.is_equal(digamma(x + 1.0d0) - digamma(x), 1.0d0 / x, &
+                tol)) then
+                rst = .false.
+                print '(A, F8.3)', "TEST FAILED: Digamma 1 - 2, x = ", x
+            end if
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
     function trimmed_mean_test_1() result(rst)
         use linalg, only : sort
 

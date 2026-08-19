@@ -53,6 +53,8 @@ module fstats
     public :: incomplete_beta
     public :: incomplete_gamma_lower
     public :: incomplete_gamma_upper
+    public :: regularized_gamma_lower
+    public :: regularized_gamma_upper
     public :: digamma
 
     ! FSTATS_SMOOTHING.F90

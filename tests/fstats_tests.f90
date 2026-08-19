@@ -95,6 +95,15 @@ program tests
     local = incomplete_gamma_test_1()
     if (.not.local) overall = .false.
 
+    local = incomplete_gamma_test_2()
+    if (.not.local) overall = .false.
+
+    local = beta_test_3()
+    if (.not.local) overall = .false.
+
+    local = digamma_test_1()
+    if (.not.local) overall = .false.
+
     local = design_matrix_test_1()
     if (.not.local) overall = .false.
 
