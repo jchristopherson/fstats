@@ -11,6 +11,7 @@ set(fstats_test_sources
     fstats_mcmc_tests.f90
     fstats_interp_tests.f90
     fstats_bootstrap_tests.f90
+    fstats_missing_data_tests.f90
 )
 
 # Dependencies

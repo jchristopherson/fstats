@@ -9,6 +9,7 @@ program tests
     use fstats_mcmc_tests
     use fstats_interp_tests
     use fstats_bootstrap_tests
+    use fstats_missing_data_tests
     implicit none
 
     ! Variables
@@ -205,6 +206,25 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_bootstrap_2()
+    if (.not.local) overall = .false.
+
+    ! Missing Data Tests
+    local = test_missing_value()
+    if (.not.local) overall = .false.
+
+    local = test_knn_impute()
+    if (.not.local) overall = .false.
+
+    local = test_em_impute_complete()
+    if (.not.local) overall = .false.
+
+    local = test_em_impute()
+    if (.not.local) overall = .false.
+
+    local = test_multiple_impute()
+    if (.not.local) overall = .false.
+
+    local = test_pool_imputations()
     if (.not.local) overall = .false.
 
     ! End
