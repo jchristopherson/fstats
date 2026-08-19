@@ -41,7 +41,7 @@ function box_muller_sample_driver(mu, sigma, prev) result(rst)
             call random_number(u1)
             call random_number(u2)
             v1 = 2.0d0 * u1 - 1.0d0
-            v2 = 2.0d0 * u2 - 1.020
+            v2 = 2.0d0 * u2 - 1.0d0
             rsq = v1**2 + v2**2
         end do
         fac = sqrt(-2.0d0 * log(rsq) / rsq)

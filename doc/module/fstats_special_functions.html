@@ -88,7 +88,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 3.7% of total for modules and submodules.">169 statements</a>
+                 title=" 4.3% of total for modules and submodules.">220 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -145,6 +145,8 @@
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_lower">incomplete_gamma_lower</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_upper">incomplete_gamma_upper</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_beta">regularized_beta</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_gamma_lower">regularized_gamma_lower</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_gamma_upper">regularized_gamma_upper</a>
         </div>
       </div>
     </div>
@@ -171,8 +173,8 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
               </ul>
             </li>
         </ul>
@@ -210,7 +212,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~7"></span>
+              <span class="anchor" id="variable-a~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -225,7 +227,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~5"></span>
+              <span class="anchor" id="variable-b~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -270,7 +272,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~85"></span>
+              <span class="anchor" id="variable-x~27"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -315,7 +317,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~9"></span>
+              <span class="anchor" id="variable-a~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -330,7 +332,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~7"></span>
+              <span class="anchor" id="variable-b~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -345,7 +347,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~82"></span>
+              <span class="anchor" id="variable-x~20"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -390,7 +392,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~11"></span>
+              <span class="anchor" id="variable-a~12"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -405,7 +407,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~84"></span>
+              <span class="anchor" id="variable-x~26"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -450,7 +452,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~10"></span>
+              <span class="anchor" id="variable-a~11"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -465,7 +467,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~83"></span>
+              <span class="anchor" id="variable-x~25"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -510,7 +512,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~8"></span>
+              <span class="anchor" id="variable-a~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -525,7 +527,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~6"></span>
+              <span class="anchor" id="variable-b~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -540,7 +542,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~81"></span>
+              <span class="anchor" id="variable-x~18"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -561,6 +563,128 @@
     <small>real(kind=real64)</small>
     </h4>
     <p>The value of the regularized beta function.</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_lower"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_lower.html'>regularized_gamma_lower</a>(a, x) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes the regularized lower incomplete gamma function.</p><a href="../proc/regularized_gamma_lower.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~7"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>The coefficient value.  The value must be positive.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~21"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>The value at which to evaluate the function.  The value must be
+non-negative.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The function value, which lies on the interval [0, 1].</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_upper"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_upper.html'>regularized_gamma_upper</a>(a, x) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes the regularized upper incomplete gamma function.</p><a href="../proc/regularized_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~8"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>The coefficient value.  The value must be positive.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~22"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>The value at which to evaluate the function.  The value must be
+non-negative.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The function value, which lies on the interval [0, 1].</p>
 
     </div>
   </div>
@@ -589,7 +713,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-12 15:42 -0500             </p>
+ on 2026-08-19 15:29 -0500             </p>
           </div>
         </div>
         <br>

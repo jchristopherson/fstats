@@ -217,7 +217,7 @@ subroutine im_init(this, x, y, order)
     ! Input Checking
     if (size(y) /= n) error stop FS_ARRAY_SIZE_ERROR
 
-    if (order < 1) error stop 4
+    if (order < 1) error stop FS_INVALID_INPUT_ERROR
 
     if (.not.is_monotonic(x)) error stop FS_NONMONOTONIC_ARRAY_ERROR
 
@@ -269,11 +269,10 @@ function im_locate(this, x) result(rst)
 
     ! Local Variables
     logical :: ascnd
-    integer(int32) :: ju, jm, jl, mm, n
+    integer(int32) :: ju, jm, jl, n
 
     ! Initialization
     n = size(this%x)
-    mm = this%m_order + 1
     ascnd = this%x(n) >= this%x(1)
     jl = 1
     ju = n
@@ -319,12 +318,11 @@ function im_hunt(this, x) result(rst)
         !! the range of possible indices for the stored data.
 
     ! Local Variables
-    integer(int32) :: jl, jm, ju, inc, n, mm
+    integer(int32) :: jl, jm, ju, inc, n
     logical :: ascnd
 
     ! Initialization
     n = size(this%x)
-    mm = this%m_order + 1
     jl = this%m_nearestIndex
     inc = 1
     ascnd = this%x(n) >= this%x(1)
@@ -364,7 +362,7 @@ function im_hunt(this, x) result(rst)
         end if
     end if
 
-    ! THe hunt is done, so begin the final bisection
+    ! The hunt is done, so begin the final bisection
     do while (ju - jl > 1)
         jm = (ju + jl) / 2
         if (x >= this%x(jm) .eqv. ascnd) then
@@ -495,7 +493,7 @@ function pi_raw_interp(this, x) result(rst)
         !! The interpolated value.
 
     ! Local Variables
-    integer(int32) :: i, ind, m, ns, mm, jl, jlo
+    integer(int32) :: i, ind, m, n, ns, mm, jl, jlo
     real(real64) :: den, dif, dift, ho, hp, w, dy
 
     ! Initialization
@@ -504,13 +502,13 @@ function pi_raw_interp(this, x) result(rst)
     else
         jlo = this%m_manager%locate(x)
     end if
+    n = this%m_manager%size()
     mm = this%m_manager%order() + 1
     ns = 1
-    if (jlo == 1) then
-        jl = 1
-    else
-        jl = jlo - 1
-    end if
+
+    ! Center the window of MM points on the bracketing interval, and hold it
+    ! within the bounds of the data
+    jl = min(max(jlo - (mm - 2) / 2, 1), n - mm + 1)
     dif = abs(x - this%m_manager%x(jl))
 
     ! Process
@@ -654,7 +652,7 @@ subroutine penta_solve(a1, a2, a3, a4, a5, b, x)
         a3(i) = a3(i) - xmult * a4(i - 1)
         a4(i) = a4(i) - xmult * a5(i - 1)
         b(i) = b(i) - xmult * b(i - 1)
-        xmult = a1(i + 1) - xmult * a4(i - 1)
+        xmult = a1(i + 1) / a3(i - 1)
         a2(i + 1) = a2(i + 1) - xmult * a4(i - 1)
         a3(i + 1) = a3(i + 1) - xmult * a5(i - 1)
         b(i + 1) = b(i + 1) - xmult * b(i - 1)
@@ -910,7 +908,7 @@ subroutine hi_dif_deriv(this)
     call dif_shift_zero(this%m_xwork, this%m_ywork)
 
     ! Construct the derivative
-    this%m_ydp = (/ (i * this%m_ywork(i), i = 1, ndp) /)
+    this%m_ydp = (/ (i * this%m_ywork(i+1), i = 1, ndp) /)
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -972,8 +970,8 @@ subroutine hi_init(this, x, y, yp)
     n = size(x)
 
     ! Input Checking
-    if (size(y) /= n) error stop 3
-    if (size(yp) /= n) error stop 4
+    if (size(y) /= n) error stop FS_ARRAY_SIZE_ERROR
+    if (size(yp) /= n) error stop FS_ARRAY_SIZE_ERROR
 
     ! Allocate memory
     if (allocated(this%m_x)) deallocate(this%m_x)
@@ -1031,9 +1029,9 @@ subroutine hi_interp_all(this, x, yi, ypi)
     if (.not.allocated(this%M_x)) error stop FS_UNINITIALIZED_OBJECT_ERROR
 
     ! Input Check
-    if (size(yi) /= nv) error stop 3
+    if (size(yi) /= nv) error stop FS_ARRAY_SIZE_ERROR
     if (present(ypi)) then
-        if (size(ypi) /= nv) error stop 4
+        if (size(ypi) /= nv) error stop FS_ARRAY_SIZE_ERROR
     end if
 
     ! Process

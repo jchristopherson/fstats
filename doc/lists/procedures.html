@@ -119,9 +119,11 @@ set.</p><a href="../interface/anova.html" class="pull-right"><emph>Read more&hel
                  <td><a href='..\module\fstats_bootstrap.html'>fstats_bootstrap</a></td>
                  <td>Function</td>
                  <td><p>Performs a bootstrap calculation on the supplied data set for the given
-statistic.  The default implementation utlizes a random resampling based
-upon a normal distribution.  Other resampling methods may be defined by 
-specifying an appropriate routine by means of the method input.</p></td>
+statistic.  The default implementation utlizes a random resampling with
+replacement.  Other resampling methods may be defined by specifying an 
+appropriate routine by means of the method input.  The module provides
+another option, <a href="..\proc\random_resample.html">random_resample</a> that utilizes a scheme based upon
+sampling a normal distribution.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a></td>
@@ -296,6 +298,17 @@ vector of measured dependent variables.</p><a href="../proc/design_matrix.html" 
                  <td><p>Computes residual analysis data for model diagnostics.</p></td>
                </tr>
 			   <tr>
+                 <td><a href='..\proc\em_impute.html'>em_impute</a></td>
+                 <td><a href='..\module\fstats_missing_data.html'>fstats_missing_data</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Employs the expectation-maximization (EM) algorithm to compute the
+maximum-likelihood estimates of the mean vector and covariance matrix of
+a multivariate normal population from a data set containing missing
+values.  The missing values are then replaced by their conditional
+expectations given the observed values and the converged parameter
+estimates.</p><a href="../proc/em_impute.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
                  <td><a href='..\proc\encode_variables.html'>encode_variables</a></td>
                  <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
                  <td>Subroutine</td>
@@ -370,6 +383,12 @@ full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-righ
                  <td></td>
                </tr>
 			   <tr>
+                 <td><a href='..\proc\is_missing.html'>is_missing</a></td>
+                 <td><a href='..\module\fstats_missing_data.html'>fstats_missing_data</a></td>
+                 <td>Function</td>
+                 <td><p>Determines if the supplied value represents a missing observation.</p></td>
+               </tr>
+			   <tr>
                  <td><a href='..\interface\iteration_update.html'>iteration_update</a></td>
                  <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
                  <td>Interface</td>
@@ -380,6 +399,12 @@ full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-righ
                  <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
                  <td>Subroutine</td>
                  <td><p>Computes the Jacobian matrix for a nonlinear regression problem.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\knn_impute.html'>knn_impute</a></td>
+                 <td><a href='..\module\fstats_missing_data.html'>fstats_missing_data</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Imputes missing values by means of a k-nearest neighbors approach.</p><a href="../proc/knn_impute.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\latin_hypercube_design.html'>latin_hypercube_design</a></td>
@@ -420,6 +445,21 @@ each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-righ
                  <td><p>Computes the median of the values in an array.</p></td>
                </tr>
 			   <tr>
+                 <td><a href='..\proc\missing_value.html'>missing_value</a></td>
+                 <td><a href='..\module\fstats_missing_data.html'>fstats_missing_data</a></td>
+                 <td>Function</td>
+                 <td><p>Returns the value used to flag a missing observation.  The value is an
+IEEE quiet NaN.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\multiple_impute.html'>multiple_impute</a></td>
+                 <td><a href='..\module\fstats_missing_data.html'>fstats_missing_data</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Generates multiple completed copies of a data set containing missing
+values by means of Bayesian data augmentation under a multivariate
+normal model with the noninformative Jeffreys prior.</p><a href="../proc/multiple_impute.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
                  <td><a href='..\interface\multivariate_distribution_function.html'>multivariate_distribution_function</a></td>
                  <td><a href='..\module\fstats_distributions.html'>fstats_distributions</a></td>
                  <td>Interface</td>
@@ -431,6 +471,13 @@ each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-righ
                  <td>Subroutine</td>
                  <td><p>Performs a nonlinear regression to fit a model using a version
 of the Levenberg-Marquardt algorithm.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\pool_imputations.html'>pool_imputations</a></td>
+                 <td><a href='..\module\fstats_missing_data.html'>fstats_missing_data</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Combines the results of the analyses of multiply-imputed data sets by
+means of Rubin's rules.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\pooled_variance.html'>pooled_variance</a></td>
@@ -474,6 +521,18 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
                  <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
                  <td>Function</td>
                  <td><p>Computes the regularized beta function.</p><a href="../proc/regularized_beta.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\regularized_gamma_lower.html'>regularized_gamma_lower</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the regularized lower incomplete gamma function.</p><a href="../proc/regularized_gamma_lower.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\regularized_gamma_upper.html'>regularized_gamma_upper</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the regularized upper incomplete gamma function.</p><a href="../proc/regularized_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\rejection_sample.html'>rejection_sample</a></td>
@@ -556,7 +615,7 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-12 15:42 -0500             </p>
+ on 2026-08-19 15:29 -0500             </p>
           </div>
         </div>
         <br>

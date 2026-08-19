@@ -53,7 +53,7 @@ function allan_variance(x, dt) result(rst)
     ! Initialization
     n = size(x)
     limit = n
-    nr = floor(0.5 * n) - 1
+    nr = max(n / 2 - 1, 0)
     allocate(tall1(n - 1), source = x(:n-1))
     allocate(tall2(n - 1), source = x(2:n))
     allocate(rst(nr, 2), source = 0.0d0)
@@ -67,7 +67,7 @@ function allan_variance(x, dt) result(rst)
             tall2(j) = tall2(min(n - 1, j + 1)) + x(min(n, 2 * m + j + 1))
         end do
         limit = limit - 2
-        rst(m,1) = dt * m
+        rst(m,1) = deltaT * m
         rst(m,2) = temp / (2.0d0 * (n - 2 * m + 1) * m**2)
     end do
 end function

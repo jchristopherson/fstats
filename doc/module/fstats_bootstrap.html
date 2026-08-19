@@ -88,7 +88,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 2.5% of total for modules and submodules.">113 statements</a>
+                 title=" 2.2% of total for modules and submodules.">113 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -201,15 +201,15 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
-                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
-                  <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
-                  <li class="list-inline-item"><a href='https://www.openmp.org/spec-html/5.1/openmpch3.html#x156-1890003'>omp_lib</a></li>
                   <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
-                  <li class="list-inline-item"><a href='fstats_sampling.html'>fstats_sampling</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
                   <li class="list-inline-item">linalg</li>
+                  <li class="list-inline-item"><a href='https://www.openmp.org/spec-html/5.1/openmpch3.html#x156-1890003'>omp_lib</a></li>
+                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
+                  <li class="list-inline-item"><a href='fstats_sampling.html'>fstats_sampling</a></li>
+                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
               </ul>
             </li>
         </ul>
@@ -252,7 +252,7 @@ resampling of data for bootstrapping purposes.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~58"></span>
+              <span class="anchor" id="variable-x~71"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -317,7 +317,7 @@ bootstrap statistic.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~59"></span>
+              <span class="anchor" id="variable-x~72"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -426,7 +426,7 @@ process.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_error"></span>
+              <span class="anchor" id="variable-standard_error~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -495,9 +495,11 @@ process.</p>
     <div class="card-body">
           
   <p>Performs a bootstrap calculation on the supplied data set for the given
-statistic.  The default implementation utlizes a random resampling based
-upon a normal distribution.  Other resampling methods may be defined by 
-specifying an appropriate routine by means of the method input.</p>
+statistic.  The default implementation utlizes a random resampling with
+replacement.  Other resampling methods may be defined by specifying an 
+appropriate routine by means of the method input.  The module provides
+another option, <a href="..\proc\random_resample.html">random_resample</a> that utilizes a scheme based upon
+sampling a normal distribution.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -512,7 +514,7 @@ specifying an appropriate routine by means of the method input.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-stat"></span>
+              <span class="anchor" id="variable-stat~7"></span>
               procedure(<a href='..\interface\bootstrap_statistic_routine.html'>bootstrap_statistic_routine</a>),
             </td>
 <td>intent(in),</td>
@@ -527,7 +529,7 @@ specifying an appropriate routine by means of the method input.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~62"></span>
+              <span class="anchor" id="variable-x~75"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -542,7 +544,7 @@ specifying an appropriate routine by means of the method input.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~2"></span>
+              <span class="anchor" id="variable-method~3"></span>
               procedure(<a href='..\interface\bootstrap_resampling_routine.html'>bootstrap_resampling_routine</a>),
             </td>
 <td>intent(in),</td>
@@ -558,7 +560,7 @@ If no method is supplied, a random resampling is utilized.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-nsamples"></span>
+              <span class="anchor" id="variable-nsamples~2"></span>
               integer(kind=int32),
             </td>
 <td>intent(in),</td>
@@ -574,7 +576,7 @@ resampling runs to perform.  The default is 10 000.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha"></span>
+              <span class="anchor" id="variable-alpha~14"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -626,7 +628,7 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~60"></span>
+              <span class="anchor" id="variable-x~73"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -681,7 +683,7 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~61"></span>
+              <span class="anchor" id="variable-x~74"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -739,7 +741,7 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-12 15:42 -0500             </p>
+ on 2026-08-19 15:29 -0500             </p>
           </div>
         </div>
         <br>

@@ -17,6 +17,7 @@ module fstats
     use fstats_smoothing
     use fstats_mcmc
     use fstats_interp
+    use fstats_missing_data
     implicit none
     private
 
@@ -52,6 +53,8 @@ module fstats
     public :: incomplete_beta
     public :: incomplete_gamma_lower
     public :: incomplete_gamma_upper
+    public :: regularized_gamma_lower
+    public :: regularized_gamma_upper
     public :: digamma
 
     ! FSTATS_SMOOTHING.F90
@@ -102,6 +105,14 @@ module fstats
     ! FSTATS_HELPER_ROUTINES.F90
     public :: difference
     public :: factorial
+
+    ! FSTATS_MISSING_DATA.F90
+    public :: missing_value
+    public :: is_missing
+    public :: knn_impute
+    public :: em_impute
+    public :: multiple_impute
+    public :: pool_imputations
 
     ! FSTATS_EXPERIMENTAL_DESIGN.F90
     public :: get_full_factorial_matrix_size
