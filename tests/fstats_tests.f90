@@ -222,6 +222,15 @@ program tests
     local = test_polynomial_interp()
     if (.not.local) overall = .false.
 
+    local = test_polynomial_interp_orders()
+    if (.not.local) overall = .false.
+
+    local = test_spline_interp()
+    if (.not.local) overall = .false.
+
+    local = test_hermite_interp()
+    if (.not.local) overall = .false.
+
     ! Bootstrap Tests
     local = test_bootstrap_1()
     if (.not.local) overall = .false.
