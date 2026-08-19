@@ -74,6 +74,12 @@ program tests
     local = anova_test_3()
     if (.not.local) overall = .false.
 
+    local = anova_test_4()
+    if (.not.local) overall = .false.
+
+    local = anova_test_5()
+    if (.not.local) overall = .false.
+
     local = test_standardized_variable()
     if (.not.local) overall = .false.
 

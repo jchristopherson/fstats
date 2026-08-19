@@ -259,13 +259,13 @@ pure subroutine f_test(x1, x2, stat, p, dof1, dof2)
 
     ! Parameters
     real(real64), parameter :: zero = 0.0d0
+    real(real64), parameter :: half = 0.5d0
     real(real64), parameter :: one = 1.0d0
     real(real64), parameter :: two = 2.0d0
 
     ! Local Variables
     integer(int32) :: n1, n2
-    real(real64) :: v1, v2
-    type(f_distribution) :: dist
+    real(real64) :: v1, v2, pupper
 
     ! Compute the F-statistic
     n1 = size(x1)
@@ -283,10 +283,11 @@ pure subroutine f_test(x1, x2, stat, p, dof1, dof2)
         dof2 = n1 - one
     end if
 
-    dist%d1 = dof1
-    dist%d2 = dof2
-    p = two * (one - dist%cdf(stat))! 2x because this is a two-tailed estimate
-    if (p > one) p = two - p
+    ! The upper tail follows from the reflection I(x; a, b) = 1 - I(1 - x; b, a),
+    ! which avoids the cancellation inherent in forming 1 - CDF
+    pupper = regularized_beta(half * dof2, half * dof1, &
+        dof2 / (dof1 * stat + dof2))
+    p = two * min(pupper, one - pupper)  ! 2x because this is a two-tailed test
 end subroutine
 
 ! ------------------------------------------------------------------------------

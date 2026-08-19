@@ -715,6 +715,96 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function anova_test_4() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The sums of squares are invariant under a shift of the data, so
+        ! shifting by a large offset exposes any cancellation in the way the
+        ! terms are accumulated.
+
+        ! Variables
+        integer(int32), parameter :: n = 10
+        real(real64), parameter :: tol = 1.0d-6
+        real(real64), parameter :: offsets(4) = [1.0d3, 1.0d5, 1.0d7, 1.0d9]
+        real(real64), parameter :: bssq = 352.8d0
+        real(real64), parameter :: essq = 2958.2d0
+        real(real64), parameter :: tssq = 3311.0d0
+        integer(int32) :: i
+        real(real64) :: x(n, 2)
+        type(single_factor_anova_table) :: tbl
+
+        ! Initialization
+        rst = .true.
+        x = reshape( &
+            [ &
+                3.086d3, 3.082d3, 3.069d3, 3.072d3, 3.045d3, 3.070d3, 3.079d3, &
+                3.050d3, 3.062d3, 3.062d3, 3.075d3, 3.061d3, 3.063d3, 3.038d3, &
+                3.070d3, 3.062d3, 3.070d3, 3.049d3, 3.042d3, 3.063d3 &
+            ], &
+            [n, 2] &
+        )
+
+        do i = 1, size(offsets)
+            tbl = anova(x + offsets(i))
+            if (abs(tbl%main_factor%sum_of_squares - bssq) > tol * bssq .or. &
+                abs(tbl%within_factor%sum_of_squares - essq) > tol * essq .or. &
+                abs(tbl%total_sum_of_squares - tssq) > tol * tssq) then
+                rst = .false.
+                print '(A, E10.2)', "TEST FAILED: ANOVA 4, offset = ", &
+                    offsets(i)
+            end if
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
+    function anova_test_5() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The tail probability must retain its relative accuracy for small
+        ! values; forming it as 1 - CDF loses every digit and eventually
+        ! flushes the result to zero.  The reference value was obtained by
+        ! numerically integrating the F density.
+
+        ! Variables
+        integer(int32), parameter :: n = 5
+        real(real64), parameter :: pans = 2.882865908493307d-9
+        real(real64), parameter :: tol = 1.0d-6
+        real(real64) :: x(n, 4), y(n, 2), p
+        type(single_factor_anova_table) :: tbl
+
+        ! Initialization
+        rst = .true.
+        x = reshape( &
+            [ &
+                575.0d0, 542.0d0, 530.0d0, 539.0d0, 570.0d0, &
+                565.0d0, 593.0d0, 590.0d0, 579.0d0, 610.0d0, &
+                600.0d0, 651.0d0, 610.0d0, 637.0d0, 629.0d0, &
+                725.0d0, 700.0d0, 715.0d0, 685.0d0, 710.0d0 &
+            ], &
+            [n, 4] &
+        )
+
+        ! Test 1 - a small probability must be accurate in a relative sense
+        tbl = anova(x)
+        p = tbl%main_factor%probability
+        if (abs(p - pans) > tol * pans) then
+            rst = .false.
+            print '(A)', "TEST FAILED: ANOVA 5 - 1"
+        end if
+
+        ! Test 2 - an extreme separation must not flush the probability to zero
+        y(:,1) = [1.0d0, 1.1d0, 0.9d0, 1.05d0, 0.95d0]
+        y(:,2) = y(:,1) + 1.0d4
+        tbl = anova(y)
+        if (tbl%main_factor%probability <= 0.0d0) then
+            rst = .false.
+            print '(A)', "TEST FAILED: ANOVA 5 - 2"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
     function confidence_interval_test_1() result(rst)
         ! Arguments
         logical :: rst
