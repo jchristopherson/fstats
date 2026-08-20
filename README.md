@@ -14,6 +14,7 @@ FSTATS includes the following areas of functionality:
 - ANOVA: one-factor and two-factor analysis of variance.
 - Regression: polynomial linear least squares, regression statistics, R-squared metrics, correlations, numerical Jacobians, and nonlinear Levenberg-Marquardt least squares.
 - Experimental design: full and fractional factorial designs, central composite designs, Latin hypercube designs, model fitting, diagnostics, prediction, model comparison, ANOVA, efficiency, and response-surface optimization.
+- Measurement systems analysis: gauge repeatability and reproducibility (gauge R&R) studies of crossed, nested, and expanded designs, reporting variance components, percent contribution, percent study variation, percent tolerance, and the number of distinct categories.
 - Resampling and simulation: bootstrap resampling, random sampling, rejection sampling, Box-Muller sampling, and multivariate normal sampling.
 - Markov chain Monte Carlo: chains, target distributions, proposals, samplers, and model evaluation.
 - Signal and numerical methods: Allan variance, LOWESS smoothing, linear/polynomial/spline/Hermite interpolation, and missing-data imputation.
