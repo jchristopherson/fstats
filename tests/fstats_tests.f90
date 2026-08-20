@@ -10,6 +10,7 @@ program tests
     use fstats_interp_tests
     use fstats_bootstrap_tests
     use fstats_missing_data_tests
+    use fstats_msa_tests
     implicit none
 
     ! Variables
@@ -261,6 +262,22 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_pool_imputations()
+    if (.not.local) overall = .false.
+
+    ! Measurement Systems Analysis Tests
+    local = test_gauge_rr_crossed()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_nested()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_expanded()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_pooling()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_tolerance()
     if (.not.local) overall = .false.
 
     ! End
