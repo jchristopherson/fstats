@@ -12,29 +12,14 @@
 
     <title>fstats_distributions.f90 &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -87,8 +72,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="14.5% of total for source files.">657 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="11.9% of total for source files.">657 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -107,11 +93,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -846,7 +830,7 @@
 <a id="ln-677" name="ln-677" href="#ln-677"></a>
 <a id="ln-678" name="ln-678" href="#ln-678"></a><span class="w">    </span><span class="c">! Process</span>
 <a id="ln-679" name="ln-679" href="#ln-679"></a><span class="w">    </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5d0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">dof</span>
-<a id="ln-680" name="ln-680" href="#ln-680"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">incomplete_gamma_lower</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5d0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">gamma</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+<a id="ln-680" name="ln-680" href="#ln-680"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">regularized_gamma_lower</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5d0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
 <a id="ln-681" name="ln-681" href="#ln-681"></a><span class="k">end function</span>
 <a id="ln-682" name="ln-682" href="#ln-682"></a>
 <a id="ln-683" name="ln-683" href="#ln-683"></a><span class="c">! ------------------------------------------------------------------------------</span>
@@ -1337,173 +1321,172 @@
 <a id="ln-1168" name="ln-1168" href="#ln-1168"></a>
 <a id="ln-1169" name="ln-1169" href="#ln-1169"></a><span class="w">    </span><span class="c">! Process</span>
 <a id="ln-1170" name="ln-1170" href="#ln-1170"></a><span class="w">    </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span>
-<a id="ln-1171" name="ln-1171" href="#ln-1171"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">incomplete_gamma_upper</span><span class="p">(</span><span class="kt">real</span><span class="p">(</span><span class="nb">floor</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">),</span><span class="w"> </span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="n">lambda</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">&amp;</span>
-<a id="ln-1172" name="ln-1172" href="#ln-1172"></a><span class="w">        </span><span class="n">factorial</span><span class="p">(</span><span class="kt">real</span><span class="p">(</span><span class="nb">floor</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="n">real64</span><span class="p">))</span>
-<a id="ln-1173" name="ln-1173" href="#ln-1173"></a><span class="k">end function</span>
-<a id="ln-1174" name="ln-1174" href="#ln-1174"></a>
-<a id="ln-1175" name="ln-1175" href="#ln-1175"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1176" name="ln-1176" href="#ln-1176"></a><span class="k">pure function </span><span class="n">pd_mean</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
-<a id="ln-1177" name="ln-1177" href="#ln-1177"></a><span class="w">    </span><span class="c">!! Computes the mean of the distribution.</span>
-<a id="ln-1178" name="ln-1178" href="#ln-1178"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
-<a id="ln-1179" name="ln-1179" href="#ln-1179"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
-<a id="ln-1180" name="ln-1180" href="#ln-1180"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
-<a id="ln-1181" name="ln-1181" href="#ln-1181"></a><span class="w">        </span><span class="c">!! The mean.</span>
-<a id="ln-1182" name="ln-1182" href="#ln-1182"></a>
-<a id="ln-1183" name="ln-1183" href="#ln-1183"></a><span class="w">    </span><span class="c">! Process</span>
-<a id="ln-1184" name="ln-1184" href="#ln-1184"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span>
-<a id="ln-1185" name="ln-1185" href="#ln-1185"></a><span class="k">end function</span>
-<a id="ln-1186" name="ln-1186" href="#ln-1186"></a>
-<a id="ln-1187" name="ln-1187" href="#ln-1187"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1188" name="ln-1188" href="#ln-1188"></a><span class="k">pure function </span><span class="n">pd_median</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
-<a id="ln-1189" name="ln-1189" href="#ln-1189"></a><span class="w">    </span><span class="c">!! Computes the median of the distribution.</span>
-<a id="ln-1190" name="ln-1190" href="#ln-1190"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
-<a id="ln-1191" name="ln-1191" href="#ln-1191"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
-<a id="ln-1192" name="ln-1192" href="#ln-1192"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
-<a id="ln-1193" name="ln-1193" href="#ln-1193"></a><span class="w">        </span><span class="c">!! The median.</span>
-<a id="ln-1194" name="ln-1194" href="#ln-1194"></a>
-<a id="ln-1195" name="ln-1195" href="#ln-1195"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lambda</span>
-<a id="ln-1196" name="ln-1196" href="#ln-1196"></a><span class="w">    </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span>
-<a id="ln-1197" name="ln-1197" href="#ln-1197"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">floor</span><span class="p">(</span><span class="n">lambda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">3.0d0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">5.0d1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">lambda</span><span class="p">))</span>
-<a id="ln-1198" name="ln-1198" href="#ln-1198"></a><span class="k">end function</span>
-<a id="ln-1199" name="ln-1199" href="#ln-1199"></a>
-<a id="ln-1200" name="ln-1200" href="#ln-1200"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1201" name="ln-1201" href="#ln-1201"></a><span class="k">pure function </span><span class="n">pd_mode</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
-<a id="ln-1202" name="ln-1202" href="#ln-1202"></a><span class="w">    </span><span class="c">!! Computes the mode of the distribution.</span>
-<a id="ln-1203" name="ln-1203" href="#ln-1203"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
-<a id="ln-1204" name="ln-1204" href="#ln-1204"></a><span class="w">    </span><span class="c">!! The poisson_distribution object.</span>
-<a id="ln-1205" name="ln-1205" href="#ln-1205"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
-<a id="ln-1206" name="ln-1206" href="#ln-1206"></a><span class="w">        </span><span class="c">!! The mode.</span>
-<a id="ln-1207" name="ln-1207" href="#ln-1207"></a>
-<a id="ln-1208" name="ln-1208" href="#ln-1208"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
-<a id="ln-1209" name="ln-1209" href="#ln-1209"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">ceiling</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="p">&amp;</span>
-<a id="ln-1210" name="ln-1210" href="#ln-1210"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">floor</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span><span class="p">),</span><span class="w"> </span><span class="n">real64</span><span class="p">))</span>
-<a id="ln-1211" name="ln-1211" href="#ln-1211"></a><span class="k">end function</span>
-<a id="ln-1212" name="ln-1212" href="#ln-1212"></a>
-<a id="ln-1213" name="ln-1213" href="#ln-1213"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1214" name="ln-1214" href="#ln-1214"></a><span class="k">pure function </span><span class="n">pd_variance</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
-<a id="ln-1215" name="ln-1215" href="#ln-1215"></a><span class="w">    </span><span class="c">!! Computes the variance.</span>
-<a id="ln-1216" name="ln-1216" href="#ln-1216"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
-<a id="ln-1217" name="ln-1217" href="#ln-1217"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
-<a id="ln-1218" name="ln-1218" href="#ln-1218"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
-<a id="ln-1219" name="ln-1219" href="#ln-1219"></a><span class="w">        </span><span class="c">!! The variance.</span>
-<a id="ln-1220" name="ln-1220" href="#ln-1220"></a>
-<a id="ln-1221" name="ln-1221" href="#ln-1221"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span>
-<a id="ln-1222" name="ln-1222" href="#ln-1222"></a><span class="k">end function</span>
-<a id="ln-1223" name="ln-1223" href="#ln-1223"></a>
-<a id="ln-1224" name="ln-1224" href="#ln-1224"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1225" name="ln-1225" href="#ln-1225"></a><span class="k">subroutine </span><span class="n">pd_recenter</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
-<a id="ln-1226" name="ln-1226" href="#ln-1226"></a><span class="w">    </span><span class="c">!! Recenters the distribution about the supplied value.  This routine has</span>
-<a id="ln-1227" name="ln-1227" href="#ln-1227"></a><span class="w">    </span><span class="c">!! no effect for this distribution as it is always centered about 0.</span>
-<a id="ln-1228" name="ln-1228" href="#ln-1228"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
-<a id="ln-1229" name="ln-1229" href="#ln-1229"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
-<a id="ln-1230" name="ln-1230" href="#ln-1230"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
-<a id="ln-1231" name="ln-1231" href="#ln-1231"></a><span class="w">        </span><span class="c">!! The value about which to recenter.</span>
-<a id="ln-1232" name="ln-1232" href="#ln-1232"></a>
-<a id="ln-1233" name="ln-1233" href="#ln-1233"></a><span class="w">    </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span>
-<a id="ln-1234" name="ln-1234" href="#ln-1234"></a><span class="k">end subroutine</span>
-<a id="ln-1235" name="ln-1235" href="#ln-1235"></a>
-<a id="ln-1236" name="ln-1236" href="#ln-1236"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1237" name="ln-1237" href="#ln-1237"></a><span class="k">pure function </span><span class="n">pd_range</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
-<a id="ln-1238" name="ln-1238" href="#ln-1238"></a><span class="w">    </span><span class="c">!! Gets the defined range for the distribution.</span>
-<a id="ln-1239" name="ln-1239" href="#ln-1239"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
-<a id="ln-1240" name="ln-1240" href="#ln-1240"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
-<a id="ln-1241" name="ln-1241" href="#ln-1241"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
-<a id="ln-1242" name="ln-1242" href="#ln-1242"></a><span class="w">        </span><span class="c">!! The defined range of the probability distributions [0, infinity).  As</span>
-<a id="ln-1243" name="ln-1243" href="#ln-1243"></a><span class="w">        </span><span class="c">!! using a value of infinity may cause issue, this routine returns</span>
-<a id="ln-1244" name="ln-1244" href="#ln-1244"></a><span class="w">        </span><span class="c">!! huge(0.0d0) instead.</span>
-<a id="ln-1245" name="ln-1245" href="#ln-1245"></a>
-<a id="ln-1246" name="ln-1246" href="#ln-1246"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0d0</span><span class="p">,</span><span class="w"> </span><span class="nb">huge</span><span class="p">(</span><span class="mf">0.0d0</span><span class="p">)]</span>
-<a id="ln-1247" name="ln-1247" href="#ln-1247"></a><span class="k">end function</span>
-<a id="ln-1248" name="ln-1248" href="#ln-1248"></a>
-<a id="ln-1249" name="ln-1249" href="#ln-1249"></a><span class="c">! ******************************************************************************</span>
-<a id="ln-1250" name="ln-1250" href="#ln-1250"></a><span class="c">! SUPPORTING ROUTINES</span>
-<a id="ln-1251" name="ln-1251" href="#ln-1251"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1252" name="ln-1252" href="#ln-1252"></a><span class="k">pure subroutine </span><span class="n">cholesky_inverse</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span>
-<a id="ln-1253" name="ln-1253" href="#ln-1253"></a><span class="w">    </span><span class="k">use </span><span class="n">linalg</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">solve_triangular_system</span>
-<a id="ln-1254" name="ln-1254" href="#ln-1254"></a><span class="w">    </span><span class="c">!! Computes the inverse of a Cholesky-factored matrix.</span>
-<a id="ln-1255" name="ln-1255" href="#ln-1255"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
-<a id="ln-1256" name="ln-1256" href="#ln-1256"></a><span class="w">        </span><span class="c">!! The lower-triangular Cholesky factored matrix.</span>
-<a id="ln-1257" name="ln-1257" href="#ln-1257"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">u</span>
-<a id="ln-1258" name="ln-1258" href="#ln-1258"></a><span class="w">        </span><span class="c">!! On input, an N-by-N identity matrix.  On output, the N-by-N inverted</span>
-<a id="ln-1259" name="ln-1259" href="#ln-1259"></a><span class="w">        </span><span class="c">!! matrix.</span>
-<a id="ln-1260" name="ln-1260" href="#ln-1260"></a>
-<a id="ln-1261" name="ln-1261" href="#ln-1261"></a><span class="w">    </span><span class="c">! To compute the inverse of a Cholesky factored matrix (L) consider the </span>
-<a id="ln-1262" name="ln-1262" href="#ln-1262"></a><span class="w">    </span><span class="c">! following:</span>
-<a id="ln-1263" name="ln-1263" href="#ln-1263"></a><span class="w">    </span><span class="c">!</span>
-<a id="ln-1264" name="ln-1264" href="#ln-1264"></a><span class="w">    </span><span class="c">! A = L * L**T</span>
-<a id="ln-1265" name="ln-1265" href="#ln-1265"></a><span class="w">    </span><span class="c">!</span>
-<a id="ln-1266" name="ln-1266" href="#ln-1266"></a><span class="w">    </span><span class="c">! (L * L**T) * inv(A) = I, where I is an identity matrix</span>
-<a id="ln-1267" name="ln-1267" href="#ln-1267"></a><span class="w">    </span><span class="c">!</span>
-<a id="ln-1268" name="ln-1268" href="#ln-1268"></a><span class="w">    </span><span class="c">! First, solve L * U = I, for the N-by-N matrix U</span>
-<a id="ln-1269" name="ln-1269" href="#ln-1269"></a><span class="w">    </span><span class="c">!</span>
-<a id="ln-1270" name="ln-1270" href="#ln-1270"></a><span class="w">    </span><span class="c">! And then solve L&#39; * inv(A) = U for inv(A)</span>
-<a id="ln-1271" name="ln-1271" href="#ln-1271"></a>
-<a id="ln-1272" name="ln-1272" href="#ln-1272"></a><span class="w">    </span><span class="c">! Solve L * U = I for U</span>
-<a id="ln-1273" name="ln-1273" href="#ln-1273"></a><span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve_triangular_system</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span>
-<a id="ln-1274" name="ln-1274" href="#ln-1274"></a>
-<a id="ln-1275" name="ln-1275" href="#ln-1275"></a><span class="w">    </span><span class="c">! Solve L**T * inv(A) = U for inv(A)</span>
-<a id="ln-1276" name="ln-1276" href="#ln-1276"></a><span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve_triangular_system</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span>
-<a id="ln-1277" name="ln-1277" href="#ln-1277"></a><span class="k">end subroutine</span>
-<a id="ln-1278" name="ln-1278" href="#ln-1278"></a>
-<a id="ln-1279" name="ln-1279" href="#ln-1279"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1280" name="ln-1280" href="#ln-1280"></a><span class="k">pure function </span><span class="n">cholesky_determinant</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
-<a id="ln-1281" name="ln-1281" href="#ln-1281"></a><span class="w">    </span><span class="c">!! Computes the determinant of a Cholesky factored (lower) matrix.</span>
-<a id="ln-1282" name="ln-1282" href="#ln-1282"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
-<a id="ln-1283" name="ln-1283" href="#ln-1283"></a><span class="w">        </span><span class="c">!! The lower-triangular Cholesky-factored matrix.</span>
-<a id="ln-1284" name="ln-1284" href="#ln-1284"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
-<a id="ln-1285" name="ln-1285" href="#ln-1285"></a><span class="w">        </span><span class="c">!! The determinant.</span>
-<a id="ln-1286" name="ln-1286" href="#ln-1286"></a>
-<a id="ln-1287" name="ln-1287" href="#ln-1287"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-1288" name="ln-1288" href="#ln-1288"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ep</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
-<a id="ln-1289" name="ln-1289" href="#ln-1289"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">temp</span>
-<a id="ln-1290" name="ln-1290" href="#ln-1290"></a>
-<a id="ln-1291" name="ln-1291" href="#ln-1291"></a><span class="w">    </span><span class="c">! Initialization</span>
-<a id="ln-1292" name="ln-1292" href="#ln-1292"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
-<a id="ln-1293" name="ln-1293" href="#ln-1293"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
-<a id="ln-1294" name="ln-1294" href="#ln-1294"></a>
-<a id="ln-1295" name="ln-1295" href="#ln-1295"></a><span class="w">    </span><span class="c">! Compute the product of the squares of the diagonal</span>
-<a id="ln-1296" name="ln-1296" href="#ln-1296"></a><span class="w">    </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
-<a id="ln-1297" name="ln-1297" href="#ln-1297"></a><span class="w">    </span><span class="n">ep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
-<a id="ln-1298" name="ln-1298" href="#ln-1298"></a><span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
-<a id="ln-1299" name="ln-1299" href="#ln-1299"></a><span class="w">        </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temp</span>
-<a id="ln-1300" name="ln-1300" href="#ln-1300"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">temp</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.0d0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<a id="ln-1301" name="ln-1301" href="#ln-1301"></a><span class="k">            </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
-<a id="ln-1302" name="ln-1302" href="#ln-1302"></a><span class="w">            </span><span class="k">return</span>
-<a id="ln-1303" name="ln-1303" href="#ln-1303"></a><span class="k">        end if</span>
-<a id="ln-1304" name="ln-1304" href="#ln-1304"></a>
-<a id="ln-1305" name="ln-1305" href="#ln-1305"></a><span class="k">        do while</span><span class="w"> </span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">)</span>
-<a id="ln-1306" name="ln-1306" href="#ln-1306"></a><span class="w">            </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temp</span>
-<a id="ln-1307" name="ln-1307" href="#ln-1307"></a><span class="w">            </span><span class="n">ep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ep</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
-<a id="ln-1308" name="ln-1308" href="#ln-1308"></a><span class="w">        </span><span class="k">end do</span>
-<a id="ln-1309" name="ln-1309" href="#ln-1309"></a>
-<a id="ln-1310" name="ln-1310" href="#ln-1310"></a><span class="k">        do while</span><span class="w"> </span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.0d1</span><span class="p">)</span>
-<a id="ln-1311" name="ln-1311" href="#ln-1311"></a><span class="w">            </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d-1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temp</span>
-<a id="ln-1312" name="ln-1312" href="#ln-1312"></a><span class="w">            </span><span class="n">ep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
-<a id="ln-1313" name="ln-1313" href="#ln-1313"></a><span class="w">        </span><span class="k">end do</span>
-<a id="ln-1314" name="ln-1314" href="#ln-1314"></a><span class="k">    end do</span>
-<a id="ln-1315" name="ln-1315" href="#ln-1315"></a><span class="k">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0d1</span><span class="p">)</span><span class="o">**</span><span class="n">ep</span>
-<a id="ln-1316" name="ln-1316" href="#ln-1316"></a><span class="k">end function</span>
-<a id="ln-1317" name="ln-1317" href="#ln-1317"></a>
-<a id="ln-1318" name="ln-1318" href="#ln-1318"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1319" name="ln-1319" href="#ln-1319"></a><span class="k">pure subroutine </span><span class="n">populate_identity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<a id="ln-1320" name="ln-1320" href="#ln-1320"></a><span class="w">    </span><span class="c">!! Populates the supplied matrix as an identity matrix.</span>
-<a id="ln-1321" name="ln-1321" href="#ln-1321"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
-<a id="ln-1322" name="ln-1322" href="#ln-1322"></a>
-<a id="ln-1323" name="ln-1323" href="#ln-1323"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-1324" name="ln-1324" href="#ln-1324"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mn</span>
-<a id="ln-1325" name="ln-1325" href="#ln-1325"></a>
-<a id="ln-1326" name="ln-1326" href="#ln-1326"></a><span class="w">    </span><span class="c">! Process</span>
-<a id="ln-1327" name="ln-1327" href="#ln-1327"></a><span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
-<a id="ln-1328" name="ln-1328" href="#ln-1328"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-<a id="ln-1329" name="ln-1329" href="#ln-1329"></a><span class="w">    </span><span class="n">mn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
-<a id="ln-1330" name="ln-1330" href="#ln-1330"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
-<a id="ln-1331" name="ln-1331" href="#ln-1331"></a><span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">mn</span>
-<a id="ln-1332" name="ln-1332" href="#ln-1332"></a><span class="w">        </span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
-<a id="ln-1333" name="ln-1333" href="#ln-1333"></a><span class="w">    </span><span class="k">end do</span>
-<a id="ln-1334" name="ln-1334" href="#ln-1334"></a><span class="k">end subroutine</span>
-<a id="ln-1335" name="ln-1335" href="#ln-1335"></a>
-<a id="ln-1336" name="ln-1336" href="#ln-1336"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-1337" name="ln-1337" href="#ln-1337"></a><span class="k">end module</span>
+<a id="ln-1171" name="ln-1171" href="#ln-1171"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">regularized_gamma_upper</span><span class="p">(</span><span class="kt">real</span><span class="p">(</span><span class="nb">floor</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">),</span><span class="w"> </span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="n">lambda</span><span class="p">)</span>
+<a id="ln-1172" name="ln-1172" href="#ln-1172"></a><span class="k">end function</span>
+<a id="ln-1173" name="ln-1173" href="#ln-1173"></a>
+<a id="ln-1174" name="ln-1174" href="#ln-1174"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1175" name="ln-1175" href="#ln-1175"></a><span class="k">pure function </span><span class="n">pd_mean</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
+<a id="ln-1176" name="ln-1176" href="#ln-1176"></a><span class="w">    </span><span class="c">!! Computes the mean of the distribution.</span>
+<a id="ln-1177" name="ln-1177" href="#ln-1177"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-1178" name="ln-1178" href="#ln-1178"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
+<a id="ln-1179" name="ln-1179" href="#ln-1179"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-1180" name="ln-1180" href="#ln-1180"></a><span class="w">        </span><span class="c">!! The mean.</span>
+<a id="ln-1181" name="ln-1181" href="#ln-1181"></a>
+<a id="ln-1182" name="ln-1182" href="#ln-1182"></a><span class="w">    </span><span class="c">! Process</span>
+<a id="ln-1183" name="ln-1183" href="#ln-1183"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span>
+<a id="ln-1184" name="ln-1184" href="#ln-1184"></a><span class="k">end function</span>
+<a id="ln-1185" name="ln-1185" href="#ln-1185"></a>
+<a id="ln-1186" name="ln-1186" href="#ln-1186"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1187" name="ln-1187" href="#ln-1187"></a><span class="k">pure function </span><span class="n">pd_median</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
+<a id="ln-1188" name="ln-1188" href="#ln-1188"></a><span class="w">    </span><span class="c">!! Computes the median of the distribution.</span>
+<a id="ln-1189" name="ln-1189" href="#ln-1189"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-1190" name="ln-1190" href="#ln-1190"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
+<a id="ln-1191" name="ln-1191" href="#ln-1191"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-1192" name="ln-1192" href="#ln-1192"></a><span class="w">        </span><span class="c">!! The median.</span>
+<a id="ln-1193" name="ln-1193" href="#ln-1193"></a>
+<a id="ln-1194" name="ln-1194" href="#ln-1194"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lambda</span>
+<a id="ln-1195" name="ln-1195" href="#ln-1195"></a><span class="w">    </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span>
+<a id="ln-1196" name="ln-1196" href="#ln-1196"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">floor</span><span class="p">(</span><span class="n">lambda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">3.0d0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">5.0d1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">lambda</span><span class="p">))</span>
+<a id="ln-1197" name="ln-1197" href="#ln-1197"></a><span class="k">end function</span>
+<a id="ln-1198" name="ln-1198" href="#ln-1198"></a>
+<a id="ln-1199" name="ln-1199" href="#ln-1199"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1200" name="ln-1200" href="#ln-1200"></a><span class="k">pure function </span><span class="n">pd_mode</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
+<a id="ln-1201" name="ln-1201" href="#ln-1201"></a><span class="w">    </span><span class="c">!! Computes the mode of the distribution.</span>
+<a id="ln-1202" name="ln-1202" href="#ln-1202"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-1203" name="ln-1203" href="#ln-1203"></a><span class="w">    </span><span class="c">!! The poisson_distribution object.</span>
+<a id="ln-1204" name="ln-1204" href="#ln-1204"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-1205" name="ln-1205" href="#ln-1205"></a><span class="w">        </span><span class="c">!! The mode.</span>
+<a id="ln-1206" name="ln-1206" href="#ln-1206"></a>
+<a id="ln-1207" name="ln-1207" href="#ln-1207"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-1208" name="ln-1208" href="#ln-1208"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">ceiling</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-1209" name="ln-1209" href="#ln-1209"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="nb">floor</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span><span class="p">),</span><span class="w"> </span><span class="n">real64</span><span class="p">))</span>
+<a id="ln-1210" name="ln-1210" href="#ln-1210"></a><span class="k">end function</span>
+<a id="ln-1211" name="ln-1211" href="#ln-1211"></a>
+<a id="ln-1212" name="ln-1212" href="#ln-1212"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1213" name="ln-1213" href="#ln-1213"></a><span class="k">pure function </span><span class="n">pd_variance</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
+<a id="ln-1214" name="ln-1214" href="#ln-1214"></a><span class="w">    </span><span class="c">!! Computes the variance.</span>
+<a id="ln-1215" name="ln-1215" href="#ln-1215"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-1216" name="ln-1216" href="#ln-1216"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
+<a id="ln-1217" name="ln-1217" href="#ln-1217"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-1218" name="ln-1218" href="#ln-1218"></a><span class="w">        </span><span class="c">!! The variance.</span>
+<a id="ln-1219" name="ln-1219" href="#ln-1219"></a>
+<a id="ln-1220" name="ln-1220" href="#ln-1220"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span>
+<a id="ln-1221" name="ln-1221" href="#ln-1221"></a><span class="k">end function</span>
+<a id="ln-1222" name="ln-1222" href="#ln-1222"></a>
+<a id="ln-1223" name="ln-1223" href="#ln-1223"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1224" name="ln-1224" href="#ln-1224"></a><span class="k">subroutine </span><span class="n">pd_recenter</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<a id="ln-1225" name="ln-1225" href="#ln-1225"></a><span class="w">    </span><span class="c">!! Recenters the distribution about the supplied value.  This routine has</span>
+<a id="ln-1226" name="ln-1226" href="#ln-1226"></a><span class="w">    </span><span class="c">!! no effect for this distribution as it is always centered about 0.</span>
+<a id="ln-1227" name="ln-1227" href="#ln-1227"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-1228" name="ln-1228" href="#ln-1228"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
+<a id="ln-1229" name="ln-1229" href="#ln-1229"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
+<a id="ln-1230" name="ln-1230" href="#ln-1230"></a><span class="w">        </span><span class="c">!! The value about which to recenter.</span>
+<a id="ln-1231" name="ln-1231" href="#ln-1231"></a>
+<a id="ln-1232" name="ln-1232" href="#ln-1232"></a><span class="w">    </span><span class="n">this</span><span class="p">%</span><span class="n">occrence_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span>
+<a id="ln-1233" name="ln-1233" href="#ln-1233"></a><span class="k">end subroutine</span>
+<a id="ln-1234" name="ln-1234" href="#ln-1234"></a>
+<a id="ln-1235" name="ln-1235" href="#ln-1235"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1236" name="ln-1236" href="#ln-1236"></a><span class="k">pure function </span><span class="n">pd_range</span><span class="p">(</span><span class="n">this</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
+<a id="ln-1237" name="ln-1237" href="#ln-1237"></a><span class="w">    </span><span class="c">!! Gets the defined range for the distribution.</span>
+<a id="ln-1238" name="ln-1238" href="#ln-1238"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">poisson_distribution</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<a id="ln-1239" name="ln-1239" href="#ln-1239"></a><span class="w">        </span><span class="c">!! The poisson_distribution object.</span>
+<a id="ln-1240" name="ln-1240" href="#ln-1240"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-1241" name="ln-1241" href="#ln-1241"></a><span class="w">        </span><span class="c">!! The defined range of the probability distributions [0, infinity).  As</span>
+<a id="ln-1242" name="ln-1242" href="#ln-1242"></a><span class="w">        </span><span class="c">!! using a value of infinity may cause issue, this routine returns</span>
+<a id="ln-1243" name="ln-1243" href="#ln-1243"></a><span class="w">        </span><span class="c">!! huge(0.0d0) instead.</span>
+<a id="ln-1244" name="ln-1244" href="#ln-1244"></a>
+<a id="ln-1245" name="ln-1245" href="#ln-1245"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0d0</span><span class="p">,</span><span class="w"> </span><span class="nb">huge</span><span class="p">(</span><span class="mf">0.0d0</span><span class="p">)]</span>
+<a id="ln-1246" name="ln-1246" href="#ln-1246"></a><span class="k">end function</span>
+<a id="ln-1247" name="ln-1247" href="#ln-1247"></a>
+<a id="ln-1248" name="ln-1248" href="#ln-1248"></a><span class="c">! ******************************************************************************</span>
+<a id="ln-1249" name="ln-1249" href="#ln-1249"></a><span class="c">! SUPPORTING ROUTINES</span>
+<a id="ln-1250" name="ln-1250" href="#ln-1250"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1251" name="ln-1251" href="#ln-1251"></a><span class="k">pure subroutine </span><span class="n">cholesky_inverse</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span>
+<a id="ln-1252" name="ln-1252" href="#ln-1252"></a><span class="w">    </span><span class="k">use </span><span class="n">linalg</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">solve_triangular_system</span>
+<a id="ln-1253" name="ln-1253" href="#ln-1253"></a><span class="w">    </span><span class="c">!! Computes the inverse of a Cholesky-factored matrix.</span>
+<a id="ln-1254" name="ln-1254" href="#ln-1254"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
+<a id="ln-1255" name="ln-1255" href="#ln-1255"></a><span class="w">        </span><span class="c">!! The lower-triangular Cholesky factored matrix.</span>
+<a id="ln-1256" name="ln-1256" href="#ln-1256"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">u</span>
+<a id="ln-1257" name="ln-1257" href="#ln-1257"></a><span class="w">        </span><span class="c">!! On input, an N-by-N identity matrix.  On output, the N-by-N inverted</span>
+<a id="ln-1258" name="ln-1258" href="#ln-1258"></a><span class="w">        </span><span class="c">!! matrix.</span>
+<a id="ln-1259" name="ln-1259" href="#ln-1259"></a>
+<a id="ln-1260" name="ln-1260" href="#ln-1260"></a><span class="w">    </span><span class="c">! To compute the inverse of a Cholesky factored matrix (L) consider the </span>
+<a id="ln-1261" name="ln-1261" href="#ln-1261"></a><span class="w">    </span><span class="c">! following:</span>
+<a id="ln-1262" name="ln-1262" href="#ln-1262"></a><span class="w">    </span><span class="c">!</span>
+<a id="ln-1263" name="ln-1263" href="#ln-1263"></a><span class="w">    </span><span class="c">! A = L * L**T</span>
+<a id="ln-1264" name="ln-1264" href="#ln-1264"></a><span class="w">    </span><span class="c">!</span>
+<a id="ln-1265" name="ln-1265" href="#ln-1265"></a><span class="w">    </span><span class="c">! (L * L**T) * inv(A) = I, where I is an identity matrix</span>
+<a id="ln-1266" name="ln-1266" href="#ln-1266"></a><span class="w">    </span><span class="c">!</span>
+<a id="ln-1267" name="ln-1267" href="#ln-1267"></a><span class="w">    </span><span class="c">! First, solve L * U = I, for the N-by-N matrix U</span>
+<a id="ln-1268" name="ln-1268" href="#ln-1268"></a><span class="w">    </span><span class="c">!</span>
+<a id="ln-1269" name="ln-1269" href="#ln-1269"></a><span class="w">    </span><span class="c">! And then solve L&#39; * inv(A) = U for inv(A)</span>
+<a id="ln-1270" name="ln-1270" href="#ln-1270"></a>
+<a id="ln-1271" name="ln-1271" href="#ln-1271"></a><span class="w">    </span><span class="c">! Solve L * U = I for U</span>
+<a id="ln-1272" name="ln-1272" href="#ln-1272"></a><span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve_triangular_system</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span>
+<a id="ln-1273" name="ln-1273" href="#ln-1273"></a>
+<a id="ln-1274" name="ln-1274" href="#ln-1274"></a><span class="w">    </span><span class="c">! Solve L**T * inv(A) = U for inv(A)</span>
+<a id="ln-1275" name="ln-1275" href="#ln-1275"></a><span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve_triangular_system</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span>
+<a id="ln-1276" name="ln-1276" href="#ln-1276"></a><span class="k">end subroutine</span>
+<a id="ln-1277" name="ln-1277" href="#ln-1277"></a>
+<a id="ln-1278" name="ln-1278" href="#ln-1278"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1279" name="ln-1279" href="#ln-1279"></a><span class="k">pure function </span><span class="n">cholesky_determinant</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
+<a id="ln-1280" name="ln-1280" href="#ln-1280"></a><span class="w">    </span><span class="c">!! Computes the determinant of a Cholesky factored (lower) matrix.</span>
+<a id="ln-1281" name="ln-1281" href="#ln-1281"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
+<a id="ln-1282" name="ln-1282" href="#ln-1282"></a><span class="w">        </span><span class="c">!! The lower-triangular Cholesky-factored matrix.</span>
+<a id="ln-1283" name="ln-1283" href="#ln-1283"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-1284" name="ln-1284" href="#ln-1284"></a><span class="w">        </span><span class="c">!! The determinant.</span>
+<a id="ln-1285" name="ln-1285" href="#ln-1285"></a>
+<a id="ln-1286" name="ln-1286" href="#ln-1286"></a><span class="w">    </span><span class="c">! Local Variables</span>
+<a id="ln-1287" name="ln-1287" href="#ln-1287"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ep</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-1288" name="ln-1288" href="#ln-1288"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">temp</span>
+<a id="ln-1289" name="ln-1289" href="#ln-1289"></a>
+<a id="ln-1290" name="ln-1290" href="#ln-1290"></a><span class="w">    </span><span class="c">! Initialization</span>
+<a id="ln-1291" name="ln-1291" href="#ln-1291"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-1292" name="ln-1292" href="#ln-1292"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
+<a id="ln-1293" name="ln-1293" href="#ln-1293"></a>
+<a id="ln-1294" name="ln-1294" href="#ln-1294"></a><span class="w">    </span><span class="c">! Compute the product of the squares of the diagonal</span>
+<a id="ln-1295" name="ln-1295" href="#ln-1295"></a><span class="w">    </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
+<a id="ln-1296" name="ln-1296" href="#ln-1296"></a><span class="w">    </span><span class="n">ep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-1297" name="ln-1297" href="#ln-1297"></a><span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-1298" name="ln-1298" href="#ln-1298"></a><span class="w">        </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temp</span>
+<a id="ln-1299" name="ln-1299" href="#ln-1299"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">temp</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.0d0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-1300" name="ln-1300" href="#ln-1300"></a><span class="k">            </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
+<a id="ln-1301" name="ln-1301" href="#ln-1301"></a><span class="w">            </span><span class="k">return</span>
+<a id="ln-1302" name="ln-1302" href="#ln-1302"></a><span class="k">        end if</span>
+<a id="ln-1303" name="ln-1303" href="#ln-1303"></a>
+<a id="ln-1304" name="ln-1304" href="#ln-1304"></a><span class="k">        do while</span><span class="w"> </span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">1.0d0</span><span class="p">)</span>
+<a id="ln-1305" name="ln-1305" href="#ln-1305"></a><span class="w">            </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temp</span>
+<a id="ln-1306" name="ln-1306" href="#ln-1306"></a><span class="w">            </span><span class="n">ep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ep</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-1307" name="ln-1307" href="#ln-1307"></a><span class="w">        </span><span class="k">end do</span>
+<a id="ln-1308" name="ln-1308" href="#ln-1308"></a>
+<a id="ln-1309" name="ln-1309" href="#ln-1309"></a><span class="k">        do while</span><span class="w"> </span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1.0d1</span><span class="p">)</span>
+<a id="ln-1310" name="ln-1310" href="#ln-1310"></a><span class="w">            </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d-1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temp</span>
+<a id="ln-1311" name="ln-1311" href="#ln-1311"></a><span class="w">            </span><span class="n">ep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<a id="ln-1312" name="ln-1312" href="#ln-1312"></a><span class="w">        </span><span class="k">end do</span>
+<a id="ln-1313" name="ln-1313" href="#ln-1313"></a><span class="k">    end do</span>
+<a id="ln-1314" name="ln-1314" href="#ln-1314"></a><span class="k">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0d1</span><span class="p">)</span><span class="o">**</span><span class="n">ep</span>
+<a id="ln-1315" name="ln-1315" href="#ln-1315"></a><span class="k">end function</span>
+<a id="ln-1316" name="ln-1316" href="#ln-1316"></a>
+<a id="ln-1317" name="ln-1317" href="#ln-1317"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1318" name="ln-1318" href="#ln-1318"></a><span class="k">pure subroutine </span><span class="n">populate_identity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<a id="ln-1319" name="ln-1319" href="#ln-1319"></a><span class="w">    </span><span class="c">!! Populates the supplied matrix as an identity matrix.</span>
+<a id="ln-1320" name="ln-1320" href="#ln-1320"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
+<a id="ln-1321" name="ln-1321" href="#ln-1321"></a>
+<a id="ln-1322" name="ln-1322" href="#ln-1322"></a><span class="w">    </span><span class="c">! Local Variables</span>
+<a id="ln-1323" name="ln-1323" href="#ln-1323"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mn</span>
+<a id="ln-1324" name="ln-1324" href="#ln-1324"></a>
+<a id="ln-1325" name="ln-1325" href="#ln-1325"></a><span class="w">    </span><span class="c">! Process</span>
+<a id="ln-1326" name="ln-1326" href="#ln-1326"></a><span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<a id="ln-1327" name="ln-1327" href="#ln-1327"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<a id="ln-1328" name="ln-1328" href="#ln-1328"></a><span class="w">    </span><span class="n">mn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<a id="ln-1329" name="ln-1329" href="#ln-1329"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
+<a id="ln-1330" name="ln-1330" href="#ln-1330"></a><span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">mn</span>
+<a id="ln-1331" name="ln-1331" href="#ln-1331"></a><span class="w">        </span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
+<a id="ln-1332" name="ln-1332" href="#ln-1332"></a><span class="w">    </span><span class="k">end do</span>
+<a id="ln-1333" name="ln-1333" href="#ln-1333"></a><span class="k">end subroutine</span>
+<a id="ln-1334" name="ln-1334" href="#ln-1334"></a>
+<a id="ln-1335" name="ln-1335" href="#ln-1335"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-1336" name="ln-1336" href="#ln-1336"></a><span class="k">end module</span>
 </pre></div>
 
       </section>
@@ -1515,21 +1498,40 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-12 15:42 -0500             </p>
+ on 2026-08-20 05:53              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>
