@@ -1,0 +1,483 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="FSTATS is a modern Fortran statistical library containing routines for computing basic statistical properties, hypothesis testing, regression, special functions, and experimental design.">
+    <meta name="author" content="Jason Christopherson" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>gauge_rr &ndash; FSTATS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">FSTATS </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>gauge_rr
+      <small>Interface</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="<p> 0.2% of total for procedures.</p>Including implementation: 92 statements,  4.8% of total for procedures.">4 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/fstats_msa.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_msa.f90.html'>fstats_msa.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_msa.html'>fstats_msa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">gauge_rr</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#modprocs-0"
+         aria-expanded="false" aria-controls="modprocs-0">
+         <h4 class="card-header bg-primary text-white">Module Procedures</h4>
+      </a>
+      <div id="modprocs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../interface/gauge_rr.html#moduleprocedure-gauge_rr_2_factor">gauge_rr_2_factor</a>
+            <a class="list-group-item" href="../interface/gauge_rr.html#moduleprocedure-gauge_rr_3_factor">gauge_rr_3_factor</a>
+        </div>
+      </div>
+    </div>
+
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      <h2>public interface gauge_rr</h2>
+      <p>Performs a gauge repeatability and reproducibility (gauge R&amp;R)
+study by means of the analysis of variance (ANOVA) method.</p>
+<p>A gauge R&amp;R study apportions the observed variation between the
+parts being measured and the measurement system itself.  The
+measurement system contribution is split into repeatability, the
+variation seen when one operator measures one part repeatedly, and
+reproducibility, the variation seen between operators.  Three study
+designs are supported.</p>
+<h2>Crossed</h2>
+<p>Every operator measures every part, and each combination is
+measured repeatedly.  Because each part is seen by every operator,
+the operator-by-part interaction can be separated from the residual,
+and the measurements are described by
+<script type="math/tex; mode=display"> y_{ijk} = \mu + P_{i} + O_{j} + (PO)_{ij} + \epsilon_{ijk} </script>
+where <script type="math/tex"> P </script> is the part effect, <script type="math/tex"> O </script> the operator effect,
+<script type="math/tex"> (PO) </script> their interaction, and <script type="math/tex"> \epsilon </script> the residual.  The
+interaction describes the tendency of operators to differ from one
+another by differing amounts from part to part, and it contributes
+to reproducibility.  This is the appropriate design whenever the
+measurement is non-destructive, and it is the design assumed by
+default.  Supply an M-by-P-by-O array and, optionally,
+GAUGE_RR_CROSSED_STUDY.</p>
+<h2>Nested</h2>
+<p>Each operator measures its own distinct set of parts, so no part is
+shared between operators.  This is the appropriate design when the
+measurement destroys or alters the part, or when the parts cannot
+otherwise be circulated.  Since no part is common to two operators
+there is no information with which to separate an interaction from
+the part effect, and the parts are said to be nested within the
+operators
+<script type="math/tex; mode=display"> y_{ijk} = \mu + O_{j} + P_{i(j)} + \epsilon_{ijk} </script>
+where <script type="math/tex"> P_{i(j)} </script> denotes the effect of the i-th part measured by
+the j-th operator.  Reproducibility is therefore the operator term
+alone.  Supply an M-by-P-by-O array together with
+GAUGE_RR_NESTED_STUDY; the P parts measured by one operator are
+understood to be different from those measured by any other.</p>
+<h2>Expanded</h2>
+<p>A third factor, such as the day, the setup, the fixture, or the
+measurement site, is varied alongside the parts and the operators in
+a fully crossed arrangement.  All two-way interactions and the
+three-way interaction are estimated
+<script type="math/tex; mode=display"> y_{ijkl} = \mu + P_{i} + O_{j} + C_{k} + (PO)_{ij} + (PC)_{ik} +
+(OC)_{jk} + (POC)_{ijk} + \epsilon_{ijkl} </script>
+where <script type="math/tex"> C </script> is the third factor.  This design answers whether the
+measurement system is stable with respect to an influence that a
+conventional study would leave confounded with the repeatability.
+Every term other than the part term describes variation introduced
+by the measurement system, so all of them contribute to
+reproducibility.  Supply an M-by-P-by-O-by-C array; the study type
+follows from the rank of the argument.</p>
+<br>
+
+
+        <h2>Module Procedures</h2>
+            <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-gauge_rr_2_factor"></span> <h3>private  function gauge_rr_2_factor(x, study, tolerance, alpha, multiplier) result(rst)  
+</h3></div>
+    <div class="card-body">
+        <p>Performs a crossed or nested gauge repeatability and reproducibility
+study.  See the <a href="..\interface\gauge_rr.html">gauge_rr</a> interface for a description of the designs.</p>
+<p>The variance of each term is estimated from the corresponding mean
+squares.  In a crossed study, if the operator-by-part interaction is
+found to be insignificant it is pooled into the repeatability term and
+the remaining components are re-estimated from the pooled residual.  Any
+variance estimate that would otherwise be negative is taken as zero.</p>
+<p>See Also</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/ANOVA_gauge_R%26R" target="_blank">Wikipedia</a></li>
+</ul>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~38"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>An M-by-P-by-O array containing the M replicate measurements of each
+of the P parts, taken by each of the O operators.  In a nested study
+the P parts measured by each operator are distinct from those
+measured by any other.  At least two replicates, two parts, and two
+operators are required.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-study"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>study</strong></td>
+            <td>
+                <p>An optional input specifying the design, either
+GAUGE_RR_CROSSED_STUDY or GAUGE_RR_NESTED_STUDY.  The default is a
+crossed study.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tolerance~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tolerance</strong></td>
+            <td>
+                <p>An optional input specifying the width of the tolerance range of the
+characteristic being measured.  If supplied, the study variation of
+each component is additionally expressed as a percentage of this
+value.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~6"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>An optional input specifying the significance level above which the
+operator-by-part interaction is considered insignificant and is
+pooled into the repeatability.  The default is 0.25.  A value of 1
+retains the interaction unconditionally, and a value of 0 pools it
+unconditionally.  The term is ignored by a nested study, which has
+no interaction.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-multiplier"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>multiplier</strong></td>
+            <td>
+                <p>An optional input specifying the number of standard deviations
+spanned by the study variation.  The default is 6, which captures
+99.73% of a normally distributed population.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\gauge_rr_results.html'>gauge_rr_results</a>)</small>
+    </h4>
+    <p>The results of the study.</p>
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-gauge_rr_3_factor"></span> <h3>private  function gauge_rr_3_factor(x, tolerance, alpha, multiplier) result(rst)  
+</h3></div>
+    <div class="card-body">
+        <p>Performs an expanded gauge repeatability and reproducibility study, in
+which a third factor is crossed with the parts and the operators.  See
+the <a href="..\interface\gauge_rr.html">gauge_rr</a> interface for a description of the design.</p>
+<p>If the three-way interaction is found to be insignificant it is pooled
+into the repeatability term, and the remaining components are
+re-estimated from the pooled residual.  Any variance estimate that would
+otherwise be negative is taken as zero.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~39"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:,:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>An M-by-P-by-O-by-C array containing the M replicate measurements of
+each of the P parts, taken by each of the O operators, at each of
+the C levels of the third factor.  At least two of each are
+required.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tolerance~3"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tolerance</strong></td>
+            <td>
+                <p>An optional input specifying the width of the tolerance range of the
+characteristic being measured.  If supplied, the study variation of
+each component is additionally expressed as a percentage of this
+value.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~7"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>An optional input specifying the significance level above which the
+three-way interaction is considered insignificant and is pooled into
+the repeatability.  The default is 0.25.  A value of 1 retains the
+interaction unconditionally, and a value of 0 pools it
+unconditionally.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-multiplier~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>multiplier</strong></td>
+            <td>
+                <p>An optional input specifying the number of standard deviations
+spanned by the study variation.  The default is 6, which captures
+99.73% of a normally distributed population.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\gauge_rr_results.html'>gauge_rr_results</a>)</small>
+    </h4>
+    <p>The results of the study.</p>
+
+    </div>
+  </div>
+
+</div>
+  </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-08-20 05:53              </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>

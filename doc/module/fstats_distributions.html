@@ -12,29 +12,14 @@
 
     <title>fstats_distributions &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -87,8 +72,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="13.0% of total for modules and submodules.">657 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="11.9% of total for modules and submodules.">657 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -108,11 +94,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -189,11 +173,11 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
                   <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_helper_routines.html'>fstats_helper_routines</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
               </ul>
             </li>
         </ul>
@@ -250,7 +234,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~78"></span>
+              <span class="anchor" id="variable-x~99"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -371,7 +355,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~79"></span>
+              <span class="anchor" id="variable-x~100"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -435,7 +419,7 @@ function.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~80"></span>
+              <span class="anchor" id="variable-x~101"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -493,7 +477,7 @@ the probability p of getting k successes in n independent trials.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~65"></span>
+              <span class="anchor" id="variable-n~83"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -510,7 +494,7 @@ the probability p of getting k successes in n independent trials.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~19"></span>
+              <span class="anchor" id="variable-p~26"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -538,47 +522,47 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-cdf~6'>cdf</a></strong> => bd_cdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-defined_range~4'>defined_range</a></strong> => bd_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-mean~6'>mean</a></strong> => bd_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-median~6'>median</a></strong> => bd_median</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-mode~6'>mode</a></strong> => bd_mode</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-pdf~6'>pdf</a></strong> => bd_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\binomial_distribution.html#boundprocedure-recenter~6'>recenter</a></strong> => bd_recenter</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\binomial_distribution.html#boundprocedure-variance~7'>variance</a></strong> => bd_variance</td>
-                  <td></td>
+  <strong><a href='..\type\binomial_distribution.html#boundprocedure-variance~8'>variance</a></strong> => bd_variance</td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -610,7 +594,7 @@ exist on the set [0, 1].</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof~10"></span>
+              <span class="anchor" id="variable-dof~11"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -637,47 +621,47 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-cdf~5'>cdf</a></strong> => cs_cdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-defined_range~3'>defined_range</a></strong> => cs_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-mean~5'>mean</a></strong> => cs_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-median~5'>median</a></strong> => cs_median</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-mode~5'>mode</a></strong> => cs_mode</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-pdf~5'>pdf</a></strong> => cs_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-recenter~5'>recenter</a></strong> => cs_recenter</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-variance~6'>variance</a></strong> => cs_variance</td>
-                  <td></td>
+  <strong><a href='..\type\chi_squared_distribution.html#boundprocedure-variance~7'>variance</a></strong> => cs_variance</td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -688,7 +672,7 @@ exist on the set [0, 1].</p>
     <div class="card-header codesum">
       <span class="anchor" id="type-distribution"></span>
       <h3>
-        type, public, abstract&nbsp;::&nbsp;
+        type, public&nbsp;::&nbsp;
         <a href='..\type\distribution.html'>distribution</a>
         
       </h3>
@@ -705,47 +689,47 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_function.html'>distribution_function</a>), public, deferred, pass ::
   <strong><a href='..\type\distribution.html#boundprocedure-cdf'>cdf</a></strong></td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-defined_range'>defined_range</a></strong> => dist_defined_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
   <strong><a href='..\type\distribution.html#boundprocedure-mean'>mean</a></strong></td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
   <strong><a href='..\type\distribution.html#boundprocedure-median'>median</a></strong></td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
   <strong><a href='..\type\distribution.html#boundprocedure-mode'>mode</a></strong></td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_function.html'>distribution_function</a>), public, deferred, pass ::
   <strong><a href='..\type\distribution.html#boundprocedure-pdf'>pdf</a></strong></td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_recenter.html'>distribution_recenter</a>), public, deferred, pass ::
   <strong><a href='..\type\distribution.html#boundprocedure-recenter'>recenter</a></strong></td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure(<a href='..\interface\distribution_property.html'>distribution_property</a>), public, deferred, pass ::
-  <strong><a href='..\type\distribution.html#boundprocedure-variance~2'>variance</a></strong></td>
-                  <td></td>
+  <strong><a href='..\type\distribution.html#boundprocedure-variance~3'>variance</a></strong></td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -821,47 +805,47 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-cdf~4'>cdf</a></strong> => fd_cdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-defined_range~2'>defined_range</a></strong> => fd_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-mean~4'>mean</a></strong> => fd_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-median~4'>median</a></strong> => fd_median</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-mode~4'>mode</a></strong> => fd_mode</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-pdf~4'>pdf</a></strong> => fd_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\f_distribution.html#boundprocedure-recenter~4'>recenter</a></strong> => fd_recenter</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\f_distribution.html#boundprocedure-variance~5'>variance</a></strong> => fd_variance</td>
-                  <td></td>
+  <strong><a href='..\type\f_distribution.html#boundprocedure-variance~6'>variance</a></strong> => fd_variance</td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -910,7 +894,7 @@ exist on the set [0, 1].</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_deviation~2"></span>
+              <span class="anchor" id="variable-standard_deviation~3"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -937,47 +921,47 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\log_normal_distribution.html#boundprocedure-cdf~7'>cdf</a></strong> => lnd_cdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\log_normal_distribution.html#boundprocedure-defined_range~5'>defined_range</a></strong> => lnd_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\log_normal_distribution.html#boundprocedure-mean~7'>mean</a></strong> => lnd_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\log_normal_distribution.html#boundprocedure-median~7'>median</a></strong> => lnd_median</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\log_normal_distribution.html#boundprocedure-mode~7'>mode</a></strong> => lnd_mode</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\log_normal_distribution.html#boundprocedure-pdf~7'>pdf</a></strong> => lnd_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\log_normal_distribution.html#boundprocedure-recenter~7'>recenter</a></strong> => lnd_recenter</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\log_normal_distribution.html#boundprocedure-variance~8'>variance</a></strong> => lnd_variance</td>
-                  <td></td>
+  <strong><a href='..\type\log_normal_distribution.html#boundprocedure-variance~9'>variance</a></strong> => lnd_variance</td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -988,7 +972,7 @@ exist on the set [0, 1].</p>
     <div class="card-header codesum">
       <span class="anchor" id="type-multivariate_distribution"></span>
       <h3>
-        type, public, abstract&nbsp;::&nbsp;
+        type, public&nbsp;::&nbsp;
         <a href='..\type\multivariate_distribution.html'>multivariate_distribution</a>
         
       </h3>
@@ -1005,7 +989,7 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure(<a href='..\interface\multivariate_distribution_function.html'>multivariate_distribution_function</a>), public, deferred, pass ::
   <strong><a href='..\type\multivariate_distribution.html#boundprocedure-pdf~9'>pdf</a></strong></td>
-                  <td><p>Computes the probability density function.</p></td>
+                <td>..\..\<p>Computes the probability density function.<\p></td>
               </tr>
           </tbody>
         </table>
@@ -1033,32 +1017,32 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\multivariate_normal_distribution.html#boundprocedure-get_cholesky_factored_matrix'>get_cholesky_factored_matrix</a></strong> => mvnd_get_cholesky</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\multivariate_normal_distribution.html#boundprocedure-get_covariance'>get_covariance</a></strong> => mvnd_get_covariance</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\multivariate_normal_distribution.html#boundprocedure-get_means'>get_means</a></strong> => mvnd_get_means</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\multivariate_normal_distribution.html#boundprocedure-initialize~6'>initialize</a></strong> => mvnd_init</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\multivariate_normal_distribution.html#boundprocedure-pdf~10'>pdf</a></strong> => mvnd_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\multivariate_normal_distribution.html#boundprocedure-set_means'>set_means</a></strong> => mvnd_update_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -1107,7 +1091,7 @@ exist on the set [0, 1].</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_deviation"></span>
+              <span class="anchor" id="variable-standard_deviation~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1134,52 +1118,52 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-cdf~3'>cdf</a></strong> => nd_cdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-defined_range'>defined_range</a></strong> => dist_defined_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-mean~3'>mean</a></strong> => nd_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-median~3'>median</a></strong> => nd_median</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-mode~3'>mode</a></strong> => nd_mode</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-pdf~3'>pdf</a></strong> => nd_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-recenter~3'>recenter</a></strong> => nd_recenter</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\normal_distribution.html#boundprocedure-standardize'>standardize</a></strong> => nd_standardize</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\normal_distribution.html#boundprocedure-variance~4'>variance</a></strong> => nd_variance</td>
-                  <td></td>
+  <strong><a href='..\type\normal_distribution.html#boundprocedure-variance~5'>variance</a></strong> => nd_variance</td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -1238,47 +1222,47 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\poisson_distribution.html#boundprocedure-cdf~8'>cdf</a></strong> => pd_cdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\poisson_distribution.html#boundprocedure-defined_range~6'>defined_range</a></strong> => pd_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\poisson_distribution.html#boundprocedure-mean~8'>mean</a></strong> => pd_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\poisson_distribution.html#boundprocedure-median~8'>median</a></strong> => pd_median</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\poisson_distribution.html#boundprocedure-mode~8'>mode</a></strong> => pd_mode</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\poisson_distribution.html#boundprocedure-pdf~8'>pdf</a></strong> => pd_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\poisson_distribution.html#boundprocedure-recenter~8'>recenter</a></strong> => pd_recenter</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\poisson_distribution.html#boundprocedure-variance~9'>variance</a></strong> => pd_variance</td>
-                  <td></td>
+  <strong><a href='..\type\poisson_distribution.html#boundprocedure-variance~10'>variance</a></strong> => pd_variance</td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -1310,7 +1294,7 @@ exist on the set [0, 1].</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-dof~9"></span>
+              <span class="anchor" id="variable-dof~10"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1337,47 +1321,47 @@ exist on the set [0, 1].</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\t_distribution.html#boundprocedure-cdf~2'>cdf</a></strong> => td_cdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-defined_range'>defined_range</a></strong> => dist_defined_range</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\t_distribution.html#boundprocedure-mean~2'>mean</a></strong> => td_mean</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\t_distribution.html#boundprocedure-median~2'>median</a></strong> => td_median</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\t_distribution.html#boundprocedure-mode~2'>mode</a></strong> => td_mode</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\t_distribution.html#boundprocedure-pdf~2'>pdf</a></strong> => td_pdf</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\t_distribution.html#boundprocedure-recenter~2'>recenter</a></strong> => td_recenter</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\distribution.html#boundprocedure-standardized_variable'>standardized_variable</a></strong> => dist_std_var</td>
-                  <td></td>
+                <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\t_distribution.html#boundprocedure-variance~3'>variance</a></strong> => td_variance</td>
-                  <td></td>
+  <strong><a href='..\type\t_distribution.html#boundprocedure-variance~4'>variance</a></strong> => td_variance</td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -1399,21 +1383,40 @@ exist on the set [0, 1].</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-19 15:29 -0500             </p>
+ on 2026-08-20 05:53              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

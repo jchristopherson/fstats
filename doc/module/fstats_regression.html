@@ -12,29 +12,14 @@
 
     <title>fstats_regression &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -87,8 +72,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="13.7% of total for modules and submodules.">692 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="12.5% of total for modules and submodules.">692 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -108,11 +94,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -223,15 +207,15 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
-                  <li class="list-inline-item">blas</li>
                   <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
                   <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item">linalg</li>
                   <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                  <li class="list-inline-item">blas</li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
               </ul>
             </li>
         </ul>
@@ -342,7 +326,7 @@ process.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-iter~5"></span>
+              <span class="anchor" id="variable-iter~2"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -452,7 +436,7 @@ analysis.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-xdata~4"></span>
+              <span class="anchor" id="variable-xdata"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -482,7 +466,7 @@ analysis.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-f~3"></span>
+              <span class="anchor" id="variable-f~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -655,7 +639,7 @@ false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-iteration_count"></span>
+              <span class="anchor" id="variable-iteration_count~2"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -923,7 +907,7 @@ error.</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\iteration_controls.html#boundprocedure-set_to_default'>set_to_default</a></strong> => lm_set_default_tolerances</td>
-                  <td></td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -1007,7 +991,7 @@ Jacobian matrix.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~2"></span>
+              <span class="anchor" id="variable-method~4"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -1037,7 +1021,7 @@ Jacobian matrix.</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\lm_solver_options.html#boundprocedure-set_to_default~2'>set_to_default</a></strong> => lm_set_default_settings</td>
-                  <td></td>
+                <td></td>
               </tr>
           </tbody>
         </table>
@@ -1087,7 +1071,7 @@ determined by the regression process.</p><a href="../type/regression_statistics.
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-probability~2"></span>
+              <span class="anchor" id="variable-probability"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1104,12 +1088,12 @@ important.  A statistically important coefficient will have a
 low probability (p-value), typically 0.05 or lower; however, a 
 p-value of up to ~0.2 may be acceptable dependent upon the 
 problem.  Typically any p-value larger than ~0.2 indicates the 
-parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_error"></span>
+              <span class="anchor" id="variable-standard_error~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1121,7 +1105,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
                 <td></td>
                 <td></td>
             <td>
-<p>The standard error for the model coefficient.</p><a href="../type/regression_statistics.html#variable-standard_error" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>The standard error for the model coefficient.</p><a href="../type/regression_statistics.html#variable-standard_error~2" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -1175,7 +1159,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~6"></span>
+              <span class="anchor" id="variable-p~16"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -1190,7 +1174,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~55"></span>
+              <span class="anchor" id="variable-x~51"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1283,7 +1267,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~10"></span>
+              <span class="anchor" id="variable-c~9"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1298,7 +1282,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~6"></span>
+              <span class="anchor" id="variable-alpha~13"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1346,7 +1330,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~56"></span>
+              <span class="anchor" id="variable-x~52"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1361,7 +1345,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~11"></span>
+              <span class="anchor" id="variable-y~12"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1408,7 +1392,7 @@ by design_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~58"></span>
+              <span class="anchor" id="variable-x~54"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1458,7 +1442,7 @@ vector of measured dependent variables.</p><a href="../proc/design_matrix.html" 
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-order~4"></span>
+              <span class="anchor" id="variable-order"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -1474,7 +1458,7 @@ at least one (linear equation), but can be higher as desired.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-intercept"></span>
+              <span class="anchor" id="variable-intercept~2"></span>
               logical,
             </td>
 <td>intent(in)</td>
@@ -1490,7 +1474,7 @@ as part of the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~57"></span>
+              <span class="anchor" id="variable-x~53"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1538,7 +1522,7 @@ however, if intercept is false, K must equal order.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~54"></span>
+              <span class="anchor" id="variable-x~50"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1620,7 +1604,7 @@ values.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xdata~5"></span>
+              <span class="anchor" id="variable-xdata~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1772,7 +1756,7 @@ root of machine precision.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-order~5"></span>
+              <span class="anchor" id="variable-order~2"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -1789,7 +1773,7 @@ as long as there is sufficient data.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-intercept~2"></span>
+              <span class="anchor" id="variable-intercept~3"></span>
               logical,
             </td>
 <td>intent(in)</td>
@@ -1805,7 +1789,7 @@ the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~59"></span>
+              <span class="anchor" id="variable-x~55"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1821,7 +1805,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~12"></span>
+              <span class="anchor" id="variable-y~13"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1837,7 +1821,7 @@ measurement points.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-coeffs"></span>
+              <span class="anchor" id="variable-coeffs~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -1883,7 +1867,7 @@ written (modeled - actual).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats"></span>
+              <span class="anchor" id="variable-stats~3"></span>
               type(<a href='..\type\regression_statistics.html'>regression_statistics</a>),
             </td>
 <td>intent(out),</td>
@@ -1900,7 +1884,7 @@ intercept is set to false, M = ORDER.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~5"></span>
+              <span class="anchor" id="variable-alpha~12"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1958,7 +1942,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~60"></span>
+              <span class="anchor" id="variable-x~56"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1973,7 +1957,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~13"></span>
+              <span class="anchor" id="variable-y~14"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -2090,7 +2074,7 @@ as a value.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats~2"></span>
+              <span class="anchor" id="variable-stats~4"></span>
               type(<a href='..\type\regression_statistics.html'>regression_statistics</a>),
             </td>
 <td>intent(out),</td>
@@ -2106,7 +2090,7 @@ to return statistics about the fit for each parameter.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~7"></span>
+              <span class="anchor" id="variable-alpha~14"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -2185,7 +2169,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cov"></span>
+              <span class="anchor" id="variable-cov~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -2235,21 +2219,40 @@ the covariance matrix.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-19 15:29 -0500             </p>
+ on 2026-08-20 05:53              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>
