@@ -39,8 +39,8 @@ configure_file(
     COPYONLY
 )
 add_executable(allan_example allan_example.f90)
-target_link_libraries(allan_example PRIVATE fstats ${fplot_LIBRARY} ${ferror_LIBRARY} ${fortran-csv-module_LIBRARY})
-target_include_directories(allan_example PUBLIC ${fortran-csv-module_INCLUDE_DIR})
+target_link_libraries(allan_example PRIVATE fstats ${fplot_LIBRARY} ${fortran-csv-module_LIBRARY})
+target_include_directories(allan_example PRIVATE ${fortran-csv-module_INCLUDE_DIR})
 
 # Box-Muller Example
 add_executable(box_muller_example box_muller_example.f90)

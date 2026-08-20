@@ -677,7 +677,7 @@ pure elemental function cs_cdf(this, x) result(rst)
 
     ! Process
     arg = 0.5d0 * this%dof
-    rst = incomplete_gamma_lower(arg, 0.5d0 * x) / gamma(arg)
+    rst = regularized_gamma_lower(arg, 0.5d0 * x)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -1168,8 +1168,7 @@ pure elemental function pd_cdf(this, x) result(rst)
 
     ! Process
     lambda = this%occrence_rate
-    rst = incomplete_gamma_upper(real(floor(x + 1.0d0), real64), lambda) / &
-        factorial(real(floor(x), real64))
+    rst = regularized_gamma_upper(real(floor(x + 1.0d0), real64), lambda)
 end function
 
 ! ------------------------------------------------------------------------------

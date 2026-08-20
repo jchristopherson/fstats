@@ -9,6 +9,8 @@ program tests
     use fstats_mcmc_tests
     use fstats_interp_tests
     use fstats_bootstrap_tests
+    use fstats_missing_data_tests
+    use fstats_msa_tests
     implicit none
 
     ! Variables
@@ -58,6 +60,12 @@ program tests
     local = f_test_test_1()
     if (.not.local) overall = .false.
 
+    local = t_test_test_2()
+    if (.not.local) overall = .false.
+
+    local = f_test_test_2()
+    if (.not.local) overall = .false.
+
     local = anova_test_1()
     if (.not.local) overall = .false.
 
@@ -65,6 +73,12 @@ program tests
     if (.not.local) overall = .false.
 
     local = anova_test_3()
+    if (.not.local) overall = .false.
+
+    local = anova_test_4()
+    if (.not.local) overall = .false.
+
+    local = anova_test_5()
     if (.not.local) overall = .false.
 
     local = test_standardized_variable()
@@ -82,10 +96,22 @@ program tests
     local = incomplete_gamma_test_1()
     if (.not.local) overall = .false.
 
+    local = incomplete_gamma_test_2()
+    if (.not.local) overall = .false.
+
+    local = beta_test_3()
+    if (.not.local) overall = .false.
+
+    local = digamma_test_1()
+    if (.not.local) overall = .false.
+
     local = design_matrix_test_1()
     if (.not.local) overall = .false.
 
     local = regression_test_1()
+    if (.not.local) overall = .false.
+
+    local = regression_statistics_zero_variance_test()
     if (.not.local) overall = .false.
 
     ! Experimental Design
@@ -156,6 +182,9 @@ program tests
     local = test_allan_variance()
     if (.not.local) overall = .false.
 
+    local = test_allan_variance_2()
+    if (.not.local) overall = .false.
+
     ! Trimmed Mean Tests
     local = trimmed_mean_test_1()
     if (.not.local) overall = .false.
@@ -197,6 +226,15 @@ program tests
     local = test_polynomial_interp()
     if (.not.local) overall = .false.
 
+    local = test_polynomial_interp_orders()
+    if (.not.local) overall = .false.
+
+    local = test_spline_interp()
+    if (.not.local) overall = .false.
+
+    local = test_hermite_interp()
+    if (.not.local) overall = .false.
+
     ! Bootstrap Tests
     local = test_bootstrap_1()
     if (.not.local) overall = .false.
@@ -205,6 +243,41 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_bootstrap_2()
+    if (.not.local) overall = .false.
+
+    ! Missing Data Tests
+    local = test_missing_value()
+    if (.not.local) overall = .false.
+
+    local = test_knn_impute()
+    if (.not.local) overall = .false.
+
+    local = test_em_impute_complete()
+    if (.not.local) overall = .false.
+
+    local = test_em_impute()
+    if (.not.local) overall = .false.
+
+    local = test_multiple_impute()
+    if (.not.local) overall = .false.
+
+    local = test_pool_imputations()
+    if (.not.local) overall = .false.
+
+    ! Measurement Systems Analysis Tests
+    local = test_gauge_rr_crossed()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_nested()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_expanded()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_pooling()
+    if (.not.local) overall = .false.
+
+    local = test_gauge_rr_tolerance()
     if (.not.local) overall = .false.
 
     ! End

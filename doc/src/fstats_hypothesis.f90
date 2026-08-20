@@ -83,7 +83,8 @@ pure subroutine t_test_equal_variance(x1, x2, stat, p, dof)
     real(real64), intent(in) :: x2(:)
         !! An M-element array containing the second data set.
     real(real64), intent(out) :: stat
-        !! The Student-'s T-Test statistic.
+        !! The Student-'s T-Test statistic.  The statistic is positive if the
+        !! mean of the first data set exceeds that of the second.
     real(real64), intent(out) :: p
         !! The probability value that the two samples are likely to
         !! have come from two underlying populations that 
@@ -92,6 +93,7 @@ pure subroutine t_test_equal_variance(x1, x2, stat, p, dof)
         !! The degrees of freedom.
 
     ! Parameters
+    real(real64), parameter :: zero = 0.0d0
     real(real64), parameter :: half = 0.5d0
     real(real64), parameter :: one = 1.0d0
     real(real64), parameter :: two = 2.0d0
@@ -109,7 +111,9 @@ pure subroutine t_test_equal_variance(x1, x2, stat, p, dof)
     v2 = variance(x2)
     dof = n1 + n2 - two
     sv = ((n1 - one) * v1 + (n2 - one) * v2) / dof
-    stat = abs(m1 - m2) / sqrt(sv * (one / real(n1) + one / real(n2)))
+    if (sv <= zero) error stop FS_ZERO_VARIANCE_ERROR
+    stat = (m1 - m2) / sqrt(sv * (one / real(n1, real64) + &
+        one / real(n2, real64)))
 
     ! Compute the probability
     a = half * dof
@@ -131,7 +135,8 @@ pure subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
     real(real64), intent(in) :: x2(:)
         !! An M-element array containing the second data set.
     real(real64), intent(out) :: stat
-        !! The Student-'s T-Test statistic.
+        !! The Student-'s T-Test statistic.  The statistic is positive if the
+        !! mean of the first data set exceeds that of the second.
     real(real64), intent(out) :: p
         !! The probability value that the two samples are likely to
         !! have come from two underlying populations that 
@@ -140,6 +145,7 @@ pure subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
         !! The degrees of freedom.
 
     ! Parameters
+    real(real64), parameter :: zero = 0.0d0
     real(real64), parameter :: half = 0.5d0
     real(real64), parameter :: one = 1.0d0
 
@@ -154,8 +160,9 @@ pure subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
     m2 = mean(x2)
     v1 = variance(x1)
     v2 = variance(x2)
-    dof = (v1 / real(n1) + v2 / real(n2))**2 / ((v1 / n1)**2 / (n1 - one) + &
-        (v2 / n2)**2 / (n2 - one))
+    if (v1 <= zero .and. v2 <= zero) error stop FS_ZERO_VARIANCE_ERROR
+    dof = (v1 / real(n1, real64) + v2 / real(n2, real64))**2 / &
+        ((v1 / n1)**2 / (n1 - one) + (v2 / n2)**2 / (n2 - one))
     sv = sqrt(v1 / n1 + v2 / n2)
     stat = (m1 - m2) / sv
 
@@ -178,10 +185,11 @@ pure subroutine t_test_paired(x1, x2, stat, p, dof)
     real(real64), intent(in) :: x2(:)
         !! An N-element array containing the second data set.
     real(real64), intent(out) :: stat
-        !! The Student-'s T-Test statistic.
+        !! The Student-'s T-Test statistic.  The statistic is positive if the
+        !! mean of the first data set exceeds that of the second.
     real(real64), intent(out) :: p
         !! The probability value that the two samples are likely to
-        !! have come from  two underlying populations that 
+        !! have come from two underlying populations that 
         !! have the same mean.
     real(real64), intent(out) :: dof
         !! The degrees of freedom.
@@ -209,13 +217,14 @@ pure subroutine t_test_paired(x1, x2, stat, p, dof)
     m2 = mean(x2)
     v1 = variance(x1)
     v2 = variance(x2)
-    dof = real(n1) - one
+    dof = real(n1, real64) - one
     cov = zero
     do i = 1, n
         cov = cov + (x1(i) - m1) * (x2(i) - m2)
     end do
     cov = cov / dof
     sd = sqrt((v1 + v2 - two * cov) / n)
+    if (sd <= zero) error stop FS_ZERO_VARIANCE_ERROR
     stat = (m1 - m2) / sd
 
     ! Compute the probability
@@ -249,21 +258,21 @@ pure subroutine f_test(x1, x2, stat, p, dof1, dof2)
         !! A measure of the degrees of freedom.
 
     ! Parameters
+    real(real64), parameter :: zero = 0.0d0
+    real(real64), parameter :: half = 0.5d0
     real(real64), parameter :: one = 1.0d0
     real(real64), parameter :: two = 2.0d0
 
     ! Local Variables
     integer(int32) :: n1, n2
-    real(real64) :: v1, v2, m1, m2
-    type(f_distribution) :: dist
+    real(real64) :: v1, v2, pupper
 
     ! Compute the F-statistic
     n1 = size(x1)
     n2 = size(x2)
-    m1 = mean(x1)
-    m2 = mean(x2)
     v1 = variance(x1)
     v2 = variance(x2)
+    if (v1 <= zero .or. v2 <= zero) error stop FS_ZERO_VARIANCE_ERROR
     if (v1 > v2) then
         stat = v1 / v2
         dof1 = n1 - one
@@ -274,10 +283,11 @@ pure subroutine f_test(x1, x2, stat, p, dof1, dof2)
         dof2 = n1 - one
     end if
 
-    dist%d1 = dof1
-    dist%d2 = dof2
-    p = two * (one - dist%cdf(stat))! 2x because this is a two-tailed estimate
-    if (p > one) p = two - p
+    ! The upper tail follows from the reflection I(x; a, b) = 1 - I(1 - x; b, a),
+    ! which avoids the cancellation inherent in forming 1 - CDF
+    pupper = regularized_beta(half * dof2, half * dof1, &
+        dof2 / (dof1 * stat + dof2))
+    p = two * min(pupper, one - pupper)  ! 2x because this is a two-tailed test
 end subroutine
 
 ! ------------------------------------------------------------------------------

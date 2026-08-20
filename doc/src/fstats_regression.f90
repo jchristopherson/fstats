@@ -1,5 +1,6 @@
 module fstats_regression
     use iso_fortran_env
+    use ieee_arithmetic, only : ieee_value, IEEE_POSITIVE_INF
     use linalg
     use fstats_errors
     use blas
@@ -498,6 +499,7 @@ function calculate_regression_statistics(resid, params, c, alpha) &
     ! Parameters
     real(real64), parameter :: p05 = 0.05d0
     real(real64), parameter :: half = 0.5d0
+    real(real64), parameter :: zero = 0.0d0
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
@@ -514,10 +516,12 @@ function calculate_regression_statistics(resid, params, c, alpha) &
     else
         a = p05
     end if
-    allocate(rst(n))
 
     ! Input Checking
+    if (dof <= 0) error stop FS_INVALID_INPUT_ERROR
+    if (a <= zero .or. a >= one) error stop FS_INVALID_INPUT_ERROR
     if (size(c, 1) /= n .or. size(c, 2) /= n) error stop FS_MATRIX_SIZE_ERROR
+    allocate(rst(n))
 
     ! Process
     ssr = norm2(resid)**2   ! sum of the squares of the residual
@@ -526,13 +530,25 @@ function calculate_regression_statistics(resid, params, c, alpha) &
     talpha = confidence_interval(dist, a, one, 1)
     do i = 1, n
         rst(i)%standard_error = sqrt(var * c(i,i))
-        rst(i)%t_statistic = params(i) / rst(i)%standard_error
-        rst(i)%probability = regularized_beta( &
-            half * dof, &
-            half, &
-            real(dof, real64) / (dof + (rst(i)%t_statistic)**2) &
-        )
         rst(i)%confidence_interval = talpha * rst(i)%standard_error
+        if (ssr == zero) then
+            if (params(i) == zero) then
+                rst(i)%t_statistic = zero
+                rst(i)%probability = one
+            else
+                rst(i)%t_statistic = sign( &
+                    ieee_value(params(i), IEEE_POSITIVE_INF), params(i) &
+                )
+                rst(i)%probability = zero
+            end if
+        else
+            rst(i)%t_statistic = params(i) / rst(i)%standard_error
+            rst(i)%probability = regularized_beta( &
+                half * dof, &
+                half, &
+                real(dof, real64) / (dof + (rst(i)%t_statistic)**2) &
+            )
+        end if
     end do
 end function
 

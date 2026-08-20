@@ -12,29 +12,14 @@
 
     <title>fstats_special_functions &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -87,8 +72,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 3.7% of total for modules and submodules.">169 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 4.0% of total for modules and submodules.">220 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -108,11 +94,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -145,6 +129,8 @@
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_lower">incomplete_gamma_lower</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_upper">incomplete_gamma_upper</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_beta">regularized_beta</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_gamma_lower">regularized_gamma_lower</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_gamma_upper">regularized_gamma_upper</a>
         </div>
       </div>
     </div>
@@ -171,8 +157,8 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
               </ul>
             </li>
         </ul>
@@ -210,7 +196,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~7"></span>
+              <span class="anchor" id="variable-a~18"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -225,7 +211,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~5"></span>
+              <span class="anchor" id="variable-b~12"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -270,7 +256,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~85"></span>
+              <span class="anchor" id="variable-x~93"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -315,7 +301,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~9"></span>
+              <span class="anchor" id="variable-a~21"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -330,7 +316,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~7"></span>
+              <span class="anchor" id="variable-b~15"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -345,7 +331,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~82"></span>
+              <span class="anchor" id="variable-x~86"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -390,7 +376,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~11"></span>
+              <span class="anchor" id="variable-a~27"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -405,7 +391,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~84"></span>
+              <span class="anchor" id="variable-x~92"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -450,7 +436,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~10"></span>
+              <span class="anchor" id="variable-a~26"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -465,7 +451,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~83"></span>
+              <span class="anchor" id="variable-x~91"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -510,7 +496,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~8"></span>
+              <span class="anchor" id="variable-a~19"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -525,7 +511,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~6"></span>
+              <span class="anchor" id="variable-b~13"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -540,7 +526,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~81"></span>
+              <span class="anchor" id="variable-x~84"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -565,6 +551,128 @@
     </div>
   </div>
 
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_lower"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_lower.html'>regularized_gamma_lower</a>(a, x) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes the regularized lower incomplete gamma function.</p><a href="../proc/regularized_gamma_lower.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~22"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>The coefficient value.  The value must be positive.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~87"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>The value at which to evaluate the function.  The value must be
+non-negative.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The function value, which lies on the interval [0, 1].</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_upper"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_upper.html'>regularized_gamma_upper</a>(a, x) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes the regularized upper incomplete gamma function.</p><a href="../proc/regularized_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~23"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>The coefficient value.  The value must be positive.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~88"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>The value at which to evaluate the function.  The value must be
+non-negative.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The function value, which lies on the interval [0, 1].</p>
+
+    </div>
+  </div>
+
         </section>
         <br>
 
@@ -579,21 +687,40 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-12 15:42 -0500             </p>
+ on 2026-08-20 05:53              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

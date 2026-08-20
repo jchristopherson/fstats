@@ -111,9 +111,11 @@ end subroutine
 ! ------------------------------------------------------------------------------
 function bootstrap(stat, x, method, nsamples, alpha) result(rst)
     !! Performs a bootstrap calculation on the supplied data set for the given
-    !! statistic.  The default implementation utlizes a random resampling based
-    !! upon a normal distribution.  Other resampling methods may be defined by 
-    !! specifying an appropriate routine by means of the method input.
+    !! statistic.  The default implementation utlizes a random resampling with
+    !! replacement.  Other resampling methods may be defined by specifying an 
+    !! appropriate routine by means of the method input.  The module provides
+    !! another option, [[random_resample]] that utilizes a scheme based upon
+    !! sampling a normal distribution.
     procedure(bootstrap_statistic_routine), pointer, intent(in) :: stat
         !! The routine used to compute the desired statistic.
     real(real64), intent(in), dimension(:) :: x
@@ -146,7 +148,7 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
     if (present(method)) then
         resample => method
     else
-        resample => random_resample
+        resample => random_resample_with_replacement
     end if
     if (present(nsamples)) then
         ns = nsamples

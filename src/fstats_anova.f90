@@ -153,7 +153,7 @@ function anova_1_factor(x) result(rst)
 
     ! Local Variables
     integer(int32) :: j, a, n, nt
-    real(real64) :: sum_all, tssq, essq, bssq
+    real(real64) :: sum_all, tssq, essq, bssq, gmean, cmean
 
     ! Initialization
     a = size(x, 2)
@@ -181,16 +181,21 @@ function anova_1_factor(x) result(rst)
         return
     end if
 
-    ! Compute the sum of squares for all factors
-    sum_all = sum(x)
-    tssq = sum(x**2) - (sum_all**2 / n)
-    
+    ! Compute the sum of squares for all factors.  The terms are formed about
+    ! their means rather than from the raw sums of squares; the latter is
+    ! subject to severe cancellation when the mean is large relative to the
+    ! spread of the data.
+    gmean = mean(pack(x, .true.))
+    tssq = sum((x - gmean)**2)
+
     bssq = zero
+    essq = zero
     do j = 1, a
-        bssq = bssq + sum(x(:,j))**2
+        cmean = mean(x(:,j))
+        bssq = bssq + (cmean - gmean)**2
+        essq = essq + sum((x(:,j) - cmean)**2)
     end do
-    bssq = (bssq / nt) - (sum_all**2 / n)
-    essq = tssq - bssq
+    bssq = nt * bssq
 
     rst%main_factor%sum_of_squares = bssq
     rst%within_factor%sum_of_squares = essq
@@ -202,7 +207,7 @@ function anova_1_factor(x) result(rst)
     rst%total_variance = tssq / rst%total_dof
 
     ! Compute the overall mean
-    rst%overall_mean = mean(pack(x, .true.))
+    rst%overall_mean = gmean
 
     ! Compute the F-statistic and probability term
     call anova_probability( &
@@ -244,9 +249,10 @@ function anova_2_factor(x) result(rst)
     rst%within_factor%f_statistic = ieee_value(sum_all, IEEE_QUIET_NAN)
     rst%within_factor%probability = ieee_value(sum_all, IEEE_QUIET_NAN)
 
-    ! Quick Return
-    if (k == 1) then
-        ! This is a one-factor anova
+    ! Input Checking - each factor requires at least two levels, and each cell
+    ! at least two replicates, else the design is underdefined
+    if (r < 2 .or. k < 2 .or. n < 2) then
+        error stop FS_UNDERDEFINED_PROBLEM_ERROR
     end if
 
     ! Determine the number of DOF
@@ -350,7 +356,6 @@ function anova_model_fit(nmodelparams, ymeas, ymod) result(rst)
 
     ! Local Variables
     integer(int32) :: n
-    real(real64), allocatable :: ypack(:)
     real(real64) :: sum_all
     
     ! Initialization
@@ -359,20 +364,20 @@ function anova_model_fit(nmodelparams, ymeas, ymod) result(rst)
     rst%within_factor%probability = ieee_value(sum_all, IEEE_QUIET_NAN)
 
     ! Input Checking
-    if (size(ymod) /= n) error stop 3
-
-    ! Memory Allocation
-    allocate(ypack(2 * n))
+    if (size(ymod) /= n) error stop FS_ARRAY_SIZE_ERROR
+    if (nmodelparams < 2 .or. n <= nmodelparams) then
+        error stop FS_UNDERDEFINED_PROBLEM_ERROR
+    end if
 
     ! Determine the number of DOF
     rst%main_factor%dof = nmodelparams - 1
     rst%within_factor%dof = n - rst%main_factor%dof - 1
     rst%total_dof = n - 1
 
-    ! Process
-    ypack(1:n) = ymeas
-    ypack(n+1:2*n) = ymod
-    rst%overall_mean = mean(ypack)
+    ! Process.  The decomposition is taken about the mean of the measured
+    ! data; using any other center breaks the identity SST = SSR + SSE for
+    ! fits whose residuals do not sum to zero.
+    rst%overall_mean = mean(ymeas)
     rst%total_sum_of_squares = sum((ymeas - rst%overall_mean)**2)
     rst%main_factor%sum_of_squares = sum((ymod - rst%overall_mean)**2)
     rst%within_factor%sum_of_squares = sum((ymeas - ymod)**2)
@@ -402,17 +407,16 @@ subroutine anova_probability(v1, v2, dof1, dof2, f, p)
     real(real64), intent(in) :: v1, v2, dof1, dof2
     real(real64), intent(out) :: f, p
 
-    ! Local Variables
-    type(f_distribution) :: dist
-    
     ! Process
     f = v1 / v2
-    dist%d1 = dof1
-    dist%d2 = dof2
-    p = 1.0d0 - dist%cdf(f)
-    if (p > 1.0d0) then
-        p = 2.0d0 - p
-    end if
+
+    ! The upper tail of the F distribution follows from the reflection
+    ! I(x; a, b) = 1 - I(1 - x; b, a).  Evaluating it in this form retains
+    ! full relative accuracy for small probabilities, whereas forming
+    ! 1 - CDF(f) cancels away every digit once the probability drops much
+    ! below the machine epsilon.
+    p = regularized_beta(0.5d0 * dof2, 0.5d0 * dof1, &
+        dof2 / (dof1 * f + dof2))
 end subroutine
 
 ! ------------------------------------------------------------------------------

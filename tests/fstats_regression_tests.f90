@@ -177,4 +177,40 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function regression_statistics_zero_variance_test() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        real(real64) :: resid(4), params(2), c(2,2)
+        type(regression_statistics), allocatable :: stats(:)
+
+        ! Initialization
+        rst = .true.
+        resid = 0.0d0
+        params = [1.0d0, 0.0d0]
+        c = 0.0d0
+        c(1,1) = 1.0d0
+        c(2,2) = 1.0d0
+
+        ! Process
+        stats = calculate_regression_statistics(resid, params, c)
+
+        if (stats(1)%standard_error /= 0.0d0 .or. &
+            stats(1)%t_statistic <= 0.0d0 .or. &
+            stats(1)%probability /= 0.0d0 .or. &
+            stats(1)%confidence_interval /= 0.0d0) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Zero Variance Regression Statistics - 1"
+        end if
+        if (stats(2)%standard_error /= 0.0d0 .or. &
+            stats(2)%t_statistic /= 0.0d0 .or. &
+            stats(2)%probability /= 1.0d0 .or. &
+            stats(2)%confidence_interval /= 0.0d0) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Zero Variance Regression Statistics - 2"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

@@ -391,6 +391,87 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function f_test_test_2() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! If X follows an F distribution with equal degrees of freedom then so
+        ! does 1 / X; consequently P(X < 1) must be exactly 0.5.  The identity
+        ! exercises the regularized beta function over the range of arguments
+        ! where a truncated series expansion silently loses accuracy.
+
+        ! Variables
+        integer(int32), parameter :: dofs(8) = [2, 10, 50, 200, 500, 2000, &
+            10000, 100000]
+        real(real64), parameter :: tol = 1.0d-9
+        integer(int32) :: i
+        real(real64) :: c
+        type(f_distribution) :: dist
+
+        ! Initialization
+        rst = .true.
+
+        do i = 1, size(dofs)
+            dist%d1 = real(dofs(i), real64)
+            dist%d2 = real(dofs(i), real64)
+            c = dist%cdf(1.0d0)
+            if (.not.is_equal(c, 0.5d0, tol)) then
+                rst = .false.
+                print '(A, I0)', "TEST FAILED: F Test 2, DOF = ", dofs(i)
+            end if
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
+    function t_test_test_2() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The test statistic must be signed such that the direction of the
+        ! difference in means is recoverable, and the two-tailed probability
+        ! must be unaffected by the order of the arguments.
+
+        ! Variables
+        integer(int32), parameter :: n = 8
+        real(real64), parameter :: tol = 1.0d-12
+        real(real64), parameter :: x1(n) = [2.0d2, 2.1d2, 1.9d2, 2.05d2, &
+            2.15d2, 2.2d2, 1.95d2, 2.0d2]
+        real(real64), parameter :: x2(n) = [1.95d2, 2.0d2, 1.85d2, 2.0d2, &
+            2.1d2, 2.15d2, 1.9d2, 1.92d2]
+        real(real64) :: ta, pa, da, tb, pb, db
+
+        ! Initialization
+        rst = .true.
+
+        ! Test 1 - Equal Variances
+        call t_test_equal_variance(x1, x2, ta, pa, da)
+        call t_test_equal_variance(x2, x1, tb, pb, db)
+        if (ta <= 0.0d0 .or. .not.is_equal(ta, -tb, tol) .or. &
+            .not.is_equal(pa, pb, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: T-Test 2-1"
+        end if
+
+        ! Test 2 - Unequal Variances
+        call t_test_unequal_variance(x1, x2, ta, pa, da)
+        call t_test_unequal_variance(x2, x1, tb, pb, db)
+        if (ta <= 0.0d0 .or. .not.is_equal(ta, -tb, tol) .or. &
+            .not.is_equal(pa, pb, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: T-Test 2-2"
+        end if
+
+        ! Test 3 - Paired
+        call t_test_paired(x1, x2, ta, pa, da)
+        call t_test_paired(x2, x1, tb, pb, db)
+        if (ta <= 0.0d0 .or. .not.is_equal(ta, -tb, tol) .or. &
+            .not.is_equal(pa, pb, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: T-Test 2-3"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
     function anova_test_1() result(rst)
         ! Arguments
         logical :: rst
@@ -634,6 +715,96 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function anova_test_4() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The sums of squares are invariant under a shift of the data, so
+        ! shifting by a large offset exposes any cancellation in the way the
+        ! terms are accumulated.
+
+        ! Variables
+        integer(int32), parameter :: n = 10
+        real(real64), parameter :: tol = 1.0d-6
+        real(real64), parameter :: offsets(4) = [1.0d3, 1.0d5, 1.0d7, 1.0d9]
+        real(real64), parameter :: bssq = 352.8d0
+        real(real64), parameter :: essq = 2958.2d0
+        real(real64), parameter :: tssq = 3311.0d0
+        integer(int32) :: i
+        real(real64) :: x(n, 2)
+        type(single_factor_anova_table) :: tbl
+
+        ! Initialization
+        rst = .true.
+        x = reshape( &
+            [ &
+                3.086d3, 3.082d3, 3.069d3, 3.072d3, 3.045d3, 3.070d3, 3.079d3, &
+                3.050d3, 3.062d3, 3.062d3, 3.075d3, 3.061d3, 3.063d3, 3.038d3, &
+                3.070d3, 3.062d3, 3.070d3, 3.049d3, 3.042d3, 3.063d3 &
+            ], &
+            [n, 2] &
+        )
+
+        do i = 1, size(offsets)
+            tbl = anova(x + offsets(i))
+            if (abs(tbl%main_factor%sum_of_squares - bssq) > tol * bssq .or. &
+                abs(tbl%within_factor%sum_of_squares - essq) > tol * essq .or. &
+                abs(tbl%total_sum_of_squares - tssq) > tol * tssq) then
+                rst = .false.
+                print '(A, E10.2)', "TEST FAILED: ANOVA 4, offset = ", &
+                    offsets(i)
+            end if
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
+    function anova_test_5() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The tail probability must retain its relative accuracy for small
+        ! values; forming it as 1 - CDF loses every digit and eventually
+        ! flushes the result to zero.  The reference value was obtained by
+        ! numerically integrating the F density.
+
+        ! Variables
+        integer(int32), parameter :: n = 5
+        real(real64), parameter :: pans = 2.882865908493307d-9
+        real(real64), parameter :: tol = 1.0d-6
+        real(real64) :: x(n, 4), y(n, 2), p
+        type(single_factor_anova_table) :: tbl
+
+        ! Initialization
+        rst = .true.
+        x = reshape( &
+            [ &
+                575.0d0, 542.0d0, 530.0d0, 539.0d0, 570.0d0, &
+                565.0d0, 593.0d0, 590.0d0, 579.0d0, 610.0d0, &
+                600.0d0, 651.0d0, 610.0d0, 637.0d0, 629.0d0, &
+                725.0d0, 700.0d0, 715.0d0, 685.0d0, 710.0d0 &
+            ], &
+            [n, 4] &
+        )
+
+        ! Test 1 - a small probability must be accurate in a relative sense
+        tbl = anova(x)
+        p = tbl%main_factor%probability
+        if (abs(p - pans) > tol * pans) then
+            rst = .false.
+            print '(A)', "TEST FAILED: ANOVA 5 - 1"
+        end if
+
+        ! Test 2 - an extreme separation must not flush the probability to zero
+        y(:,1) = [1.0d0, 1.1d0, 0.9d0, 1.05d0, 0.95d0]
+        y(:,2) = y(:,1) + 1.0d4
+        tbl = anova(y)
+        if (tbl%main_factor%probability <= 0.0d0) then
+            rst = .false.
+            print '(A)', "TEST FAILED: ANOVA 5 - 2"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
     function confidence_interval_test_1() result(rst)
         ! Arguments
         logical :: rst
@@ -820,6 +991,163 @@ contains
             rst = .false.
             print '(A)', "TEST FAILED: Incomplete Gamma 1 - 6"
         end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function incomplete_gamma_test_2() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The reference values were computed by an independent series and
+        ! continued fraction evaluation carried to convergence.  The large
+        ! arguments lie well beyond the range over which a fixed-length series
+        ! retains any accuracy.
+
+        ! Parameters
+        integer(int32), parameter :: nc = 5
+        real(real64), parameter :: tol = 1.0d-12
+        real(real64), parameter :: av(nc) = [1.2d2, 1.65d2, 5.0d2, 5.0d3, &
+            1.0d5]
+        real(real64), parameter :: pans(nc) = [ &
+            5.121399785494269d-1, &
+            5.103528819860939d-1, &
+            5.059471461707328d-1, &
+            5.018806340390044d-1, &
+            5.004205222992676d-1 &
+        ]
+        real(real64), parameter :: qa(4) = [5.0d0, 1.0d1, 2.0d1, 5.0d1]
+        real(real64), parameter :: qx(4) = [4.0d1, 1.0d2, 2.0d2, 4.0d2]
+        real(real64), parameter :: qans(4) = [ &
+            5.020464318829131d-13, &
+            1.125347396084281d-31, &
+            6.586907311440748d-61, &
+            1.136640784050135d-109 &
+        ]
+
+        ! Local Variables
+        integer(int32) :: i
+        real(real64) :: p, q, x, t
+
+        ! Initialization
+        rst = .true.
+
+        ! Test 1 - the regularized function must remain accurate for large
+        ! arguments, where the unregularized form overflows.  The attainable
+        ! accuracy is limited by the cancellation in a log(a) - log(gamma(a)),
+        ! so the tolerance is scaled accordingly.
+        do i = 1, nc
+            p = regularized_gamma_lower(av(i), av(i))
+            t = max(tol, 1.0d1 * epsilon(t) * av(i) * log(av(i)))
+            if (abs(p - pans(i)) > t * pans(i)) then
+                rst = .false.
+                print '(A, E10.2)', "TEST FAILED: Incomplete Gamma 2 - 1, " // &
+                    "a = ", av(i)
+            end if
+        end do
+
+        ! Test 2 - the deep tail must retain its relative accuracy
+        do i = 1, size(qa)
+            q = regularized_gamma_upper(qa(i), qx(i))
+            if (abs(q - qans(i)) > tol * qans(i)) then
+                rst = .false.
+                print '(A, E10.2)', "TEST FAILED: Incomplete Gamma 2 - 2, " // &
+                    "a = ", qa(i)
+            end if
+        end do
+
+        ! Test 3 - P + Q = 1, and the closed forms for a = 1 and a = 1/2
+        do i = 1, 40
+            x = 2.5d-1 * i
+            p = regularized_gamma_lower(7.5d0, x)
+            q = regularized_gamma_upper(7.5d0, x)
+            if (.not.is_equal(p + q, 1.0d0)) then
+                rst = .false.
+                print '(A)', "TEST FAILED: Incomplete Gamma 2 - 3"
+            end if
+            if (.not.is_equal(regularized_gamma_upper(1.0d0, x), exp(-x))) then
+                rst = .false.
+                print '(A)', "TEST FAILED: Incomplete Gamma 2 - 4"
+            end if
+            if (.not.is_equal(regularized_gamma_lower(5.0d-1, x), &
+                erf(sqrt(x)))) then
+                rst = .false.
+                print '(A)', "TEST FAILED: Incomplete Gamma 2 - 5"
+            end if
+        end do
+
+        ! Test 4 - the endpoints
+        if (.not.is_equal(regularized_gamma_lower(2.5d0, 0.0d0), 0.0d0) .or. &
+            .not.is_equal(regularized_gamma_upper(2.5d0, 0.0d0), 1.0d0)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Incomplete Gamma 2 - 6"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function beta_test_3() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! The gamma function alternates in sign along the negative real axis,
+        ! so the beta function is negative over some of that range.
+
+        ! Parameters
+        real(real64), parameter :: tol = 1.0d-12
+
+        ! Initialization
+        rst = .true.
+
+        ! B(-1/2, 2) = -4
+        if (.not.is_equal(beta(-5.0d-1, 2.0d0), -4.0d0, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Beta 3 - 1"
+        end if
+
+        ! B(-3/2, 3) = 16 / 3
+        if (.not.is_equal(beta(-1.5d0, 3.0d0), 16.0d0 / 3.0d0, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Beta 3 - 2"
+        end if
+
+        ! Positive arguments must be unaffected
+        if (.not.is_equal(beta(2.0d0, 3.0d0), 1.0d0 / 12.0d0, tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Beta 3 - 3"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function digamma_test_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        real(real64), parameter :: tol = 1.0d-14
+        real(real64), parameter :: gam = 0.5772156649015328606065121d0
+
+        ! Local Variables
+        integer(int32) :: i
+        real(real64) :: x
+
+        ! Initialization
+        rst = .true.
+
+        ! Test 1 - psi(1) = -gamma and psi(1/2) = -gamma - 2 ln 2
+        if (.not.is_equal(digamma(1.0d0), -gam, tol) .or. &
+            .not.is_equal(digamma(5.0d-1), -gam - 2.0d0 * log(2.0d0), tol)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Digamma 1 - 1"
+        end if
+
+        ! Test 2 - the recurrence psi(x + 1) - psi(x) = 1 / x
+        do i = 1, 400
+            x = 5.0d-2 * i
+            if (.not.is_equal(digamma(x + 1.0d0) - digamma(x), 1.0d0 / x, &
+                tol)) then
+                rst = .false.
+                print '(A, F8.3)', "TEST FAILED: Digamma 1 - 2, x = ", x
+            end if
+        end do
     end function
 
 ! ------------------------------------------------------------------------------
