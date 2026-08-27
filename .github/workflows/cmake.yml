@@ -74,6 +74,7 @@ jobs:
           CC: ${{ steps.setup-fortran.outputs.cc }}
 
       - name: Install BLAS/LAPACK dependencies
+        shell: bash
         run: |
           if [ "${{ runner.os }}" = "Linux" ]; then
             sudo apt-get update
@@ -118,6 +119,7 @@ jobs:
         run: cmake --install build --prefix ${{ github.workspace }}/install --config ${{ env.BUILD_TYPE }}
 
       - name: Verify install with CMake consumer
+        shell: bash
         run: |
           mkdir -p consumer
           cat > consumer/CMakeLists.txt <<'EOF'
