@@ -74,7 +74,7 @@ jobs:
         shell: bash
         run: |
           C:/msys64/usr/bin/pacman.exe -S --noconfirm mingw-w64-x86_64-blas mingw-w64-x86_64-lapack
-          echo "C:/msys64/mingw64/bin" >> "$GITHUB_PATH"
+          echo "MSYS2_MINGW_BIN=/c/msys64/mingw64/bin" >> "$GITHUB_ENV"
           echo "LIBRARY_PATH=C:/msys64/mingw64/lib" >> "$GITHUB_ENV"
 
       - name: Install fpm
@@ -106,6 +106,9 @@ jobs:
           FPM_CC: ${{ steps.setup-fortran.outputs.cc }}
           FPM_FLAGS: ${{ matrix.shared && '--flag=-fPIC' || '' }}
         run: |
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            export PATH="$PATH:${MSYS2_MINGW_BIN}"
+          fi
           if [[ -n "$FPM_FLAGS" ]]; then
             fpm test $FPM_FLAGS
           else
