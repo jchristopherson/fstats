@@ -34,6 +34,14 @@ jobs:
             compiler: intel
             version: '2023.2'
             shared: true
+          - os: windows-latest
+            compiler: gcc
+            version: '14'
+            shared: false
+          - os: windows-latest
+            compiler: gcc
+            version: '14'
+            shared: true
 
     steps:
       - name: Checkout code
@@ -60,6 +68,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libopenblas-dev liblapack-dev
+
+      - name: Install BLAS/LAPACK (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          C:/msys64/usr/bin/pacman.exe -S --noconfirm mingw-w64-x86_64-openblas
+          echo "C:/msys64/mingw64/bin" >> "$GITHUB_PATH"
+          echo "LIBRARY_PATH=C:/msys64/mingw64/lib" >> "$GITHUB_ENV"
 
       - name: Install fpm
         uses: fortran-lang/setup-fpm@v5
