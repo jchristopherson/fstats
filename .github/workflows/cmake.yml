@@ -144,5 +144,18 @@ jobs:
           end program main
           EOF
 
-          cmake -S consumer -B consumer/build -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install
+          CMAKE_OPTIONS=(
+            -S consumer
+            -B consumer/build
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install
+            -DCMAKE_Fortran_COMPILER=${{ env.FC }}
+            -DCMAKE_C_COMPILER=${{ env.CC }}
+          )
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            CMAKE_OPTIONS+=( -G "MinGW Makefiles" )
+          fi
+          cmake "${CMAKE_OPTIONS[@]}"
           cmake --build consumer/build
+        env:
+          FC: ${{ steps.setup-fortran.outputs.fc }}
+          CC: ${{ steps.setup-fortran.outputs.cc }}
