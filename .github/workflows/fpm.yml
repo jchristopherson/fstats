@@ -73,7 +73,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          C:/msys64/usr/bin/pacman.exe -S --noconfirm mingw-w64-x86_64-openblas
+          C:/msys64/usr/bin/pacman.exe -S --noconfirm mingw-w64-x86_64-blas mingw-w64-x86_64-lapack
           echo "C:/msys64/mingw64/bin" >> "$GITHUB_PATH"
           echo "LIBRARY_PATH=C:/msys64/mingw64/lib" >> "$GITHUB_ENV"
 
