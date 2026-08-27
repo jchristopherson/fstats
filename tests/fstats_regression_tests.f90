@@ -10,20 +10,17 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: npts = 50
+        integer(int32), parameter :: npts = 5
         integer(int32), parameter :: order1 = 1
-        integer(int32), parameter :: order2 = 4
-        real(real64), parameter :: dx = 1.0d-2
-        integer(int32) :: i
+        integer(int32), parameter :: order2 = 3
+        integer(int32), parameter :: order4 = 4
         real(real64) :: x(npts), c1(npts, 2), c2(npts, 1), c3(npts, 5), &
-            ans1(npts, 2), ans2(npts, 1), ans3(npts, 5)
+            c4(npts, 3), ans1(npts, 2), ans2(npts, 1), ans3(npts, 5), &
+            ans4(npts, 3)
 
         ! Initialization
         rst = .true.
-        x(1) = 0.0d0
-        do i = 2, npts
-            x(i) = x(i-1) + dx
-        end do
+        x = [-2.0d0, -0.5d0, 0.0d0, 1.5d0, 3.0d0]
 
         ans1(:,1) = 1.0d0
         ans1(:,2) = x
@@ -35,6 +32,10 @@ contains
         ans3(:,3) = x**2
         ans3(:,4) = x**3
         ans3(:,5) = x**4
+
+        ans4(:,1) = x
+        ans4(:,2) = x**2
+        ans4(:,3) = x**3
 
         ! Test 1 - linear w/ intercept
         c1 = design_matrix(order1, .true., x)
@@ -51,10 +52,17 @@ contains
         end if
 
         ! Test 3 - 4th order w/ intercept
-        c3 = design_matrix(order2, .true., x)
+        c3 = design_matrix(order4, .true., x)
         if (.not.is_equal(c3, ans3)) then
             rst = .false.
             print '(A)', "TEST FAILED: Design Matrix Test 1 - 3"
+        end if
+
+        ! Test 4 - 3rd order w/o intercept
+        c4 = design_matrix(order2, .false., x)
+        if (.not.is_equal(c4, ans4)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Design Matrix Test 1 - 4"
         end if
     end function
 
