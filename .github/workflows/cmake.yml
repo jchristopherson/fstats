@@ -83,8 +83,8 @@ jobs:
             brew update
             brew install openblas
           elif [ "${{ runner.os }}" = "Windows" ]; then
-            C:/msys64/usr/bin/pacman.exe -S --noconfirm mingw-w64-x86_64-openblas
-            echo "C:/msys64/mingw64/bin" >> "$GITHUB_PATH"
+            C:/msys64/usr/bin/pacman.exe -S --noconfirm mingw-w64-x86_64-blas mingw-w64-x86_64-lapack
+            echo "MSYS2_MINGW_BIN=/c/msys64/mingw64/bin" >> "$GITHUB_ENV"
             echo "LIBRARY_PATH=C:/msys64/mingw64/lib" >> "$GITHUB_ENV"
           fi
 
@@ -112,8 +112,13 @@ jobs:
         run: cmake --build build --config ${{ env.BUILD_TYPE }}
 
       - name: Test with CMake
+        shell: bash
         working-directory: build
-        run: ctest --output-on-failure -C ${{ env.BUILD_TYPE }}
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            export PATH="$PATH:${MSYS2_MINGW_BIN}"
+          fi
+          ctest --output-on-failure -C ${{ env.BUILD_TYPE }}
 
       - name: Install with CMake
         run: cmake --install build --prefix ${{ github.workspace }}/install --config ${{ env.BUILD_TYPE }}
