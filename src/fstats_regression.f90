@@ -334,7 +334,7 @@ pure function design_matrix(order, intercept, x) result(c)
         c(:,1) = x
         start = 2
     end if
-    if (start >= ncols) return
+    if (start > ncols) return
     do i = start, ncols
         c(:,i) = c(:,i-1) * x
     end do
