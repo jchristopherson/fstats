@@ -207,8 +207,8 @@ function trimmed_mean(x, p) result(rst)
 
     ! Find the limiting indices
     n = size(x)
-    i1 = max(floor(n * pv, int32), 1)
-    i2 = min(n, n - i1 + 1)
+    i1 = min(n, floor(n * pv, int32) + 1)
+    i2 = max(1, n - floor(n * pv, int32))
     rst = mean(x(i1:i2))
 end function
 

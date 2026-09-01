@@ -42,13 +42,28 @@ program tests
     local = mean_test_1()
     if (.not.local) overall = .false.
 
+    local = mean_test_2()
+    if (.not.local) overall = .false.
+
     local = variance_test_1()
+    if (.not.local) overall = .false.
+
+    local = variance_test_2()
+    if (.not.local) overall = .false.
+
+    local = variance_test_3()
     if (.not.local) overall = .false.
 
     local = standard_deviation_test_1()
     if (.not.local) overall = .false.
 
+    local = standard_deviation_test_2()
+    if (.not.local) overall = .false.
+
     local = median_test_1()
+    if (.not.local) overall = .false.
+
+    local = median_test_2()
     if (.not.local) overall = .false.
 
     local = quantile_test_1()
@@ -198,8 +213,14 @@ program tests
     local = trimmed_mean_test_1()
     if (.not.local) overall = .false.
 
+    local = trimmed_mean_test_2()
+    if (.not.local) overall = .false.
+
     ! Covariance Tests
     local = test_covariance_1()
+    if (.not.local) overall = .false.
+
+    local = covariance_test_2()
     if (.not.local) overall = .false.
 
     ! Correlation Tests
@@ -208,6 +229,9 @@ program tests
 
     ! Additional Tests
     local = test_pooled_variance_1()
+    if (.not.local) overall = .false.
+
+    local = pooled_variance_test_2()
     if (.not.local) overall = .false.
 
     local = test_bartlett_1()
