@@ -102,6 +102,113 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function quantile_test_1() result(rst)
+        ! Test basic quantile computation with known data
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 9
+        real(real64) :: x(n), q25, q50, q75, ans
+        real(real64), allocatable :: xsort(:)
+
+        ! Initialization
+        rst = .true.
+        x = [1.0d0, 2.0d0, 3.0d0, 4.0d0, 5.0d0, 6.0d0, 7.0d0, 8.0d0, 9.0d0]
+
+        ! Test 25th percentile
+        ! For SAS Method 4: a = (n+1)*q = 10*0.25 = 2.5
+        ! ib = 2, b = 0.5, result = 0.5*x(2) + 0.5*x(3) = 0.5*2 + 0.5*3 = 2.5
+        q25 = quantile(x, 0.25d0)
+        ans = 2.5d0
+        if (.not.is_equal(q25, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 1a - q25: ", q25, " expected: ", ans
+        end if
+
+        ! Test 50th percentile (median)
+        ! a = 10*0.5 = 5.0
+        ! ib = 5, b = 0.0, result = 1.0*x(5) = 5.0
+        q50 = quantile(x, 0.5d0)
+        ans = 5.0d0
+        if (.not.is_equal(q50, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 1b - q50: ", q50, " expected: ", ans
+        end if
+
+        ! Test 75th percentile
+        ! a = 10*0.75 = 7.5
+        ! ib = 7, b = 0.5, result = 0.5*x(7) + 0.5*x(8) = 0.5*7 + 0.5*8 = 7.5
+        q75 = quantile(x, 0.75d0)
+        ans = 7.5d0
+        if (.not.is_equal(q75, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 1c - q75: ", q75, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function quantile_test_2() result(rst)
+        ! Test quantile with unsorted data
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 7
+        real(real64) :: x(n), q25, ans
+
+        ! Initialization
+        rst = .true.
+        ! Data is unsorted: should still compute correct quantile
+        x = [7.0d0, 2.0d0, 9.0d0, 1.0d0, 5.0d0, 3.0d0, 6.0d0]
+
+        ! After sorting: [1.0d0, 2.0d0, 3.0d0, 5.0d0, 6.0d0, 7.0d0, 9.0d0]
+        ! q25: a = 8*0.25 = 2.0, ib = 2, b = 0.0, result = x(2) = 2.0
+        q25 = quantile(x, 0.25d0)
+        ans = 2.0d0
+        if (.not.is_equal(q25, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 2 - unsorted data: ", q25, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function quantile_test_3() result(rst)
+        ! Test quantile edge cases (minimum and maximum)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 10
+        real(real64) :: x(n), qmin, qmax, ans
+        integer(int32) :: i
+
+        ! Initialization
+        rst = .true.
+        do i = 1, n
+            x(i) = real(i, real64)
+        end do
+
+        ! Test minimum (q ~ 0)
+        ! With q = 0.01: a = 11*0.01 = 0.11, ib = 0 (clamped to 1)
+        ! result should approach x(1) = 1.0
+        qmin = quantile(x, 0.01d0)
+        if (qmin < 1.0d0 .or. qmin > 2.0d0) then
+            rst = .false.
+            print '(A,F12.6)', "TEST FAILED: Quantile Test 3a - minimum edge case: ", qmin
+        end if
+
+        ! Test maximum (q ~ 1)
+        ! With q = 0.99: a = 11*0.99 = 10.89, ib = 10, b = 0.89
+        ! result = 0.11*x(10) + 0.89*x(10) = x(10) = 10.0 (or close due to clamping)
+        qmax = quantile(x, 0.99d0)
+        if (qmax < 9.0d0 .or. qmax > 10.0d0) then
+            rst = .false.
+            print '(A,F12.6)', "TEST FAILED: Quantile Test 3b - maximum edge case: ", qmax
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
     function r_squared_test_1() result(rst)
         ! Arguments
         logical :: rst
@@ -1151,6 +1258,174 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function mean_test_2() result(rst)
+        ! Test edge case: single element
+        logical :: rst
+
+        real(real64), parameter :: x(1) = [3.5d0]
+        real(real64) :: avg, ans
+
+        rst = .true.
+        ans = 3.5d0
+        avg = mean(x)
+        if (.not.is_equal(avg, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Mean Test 2 - ", avg, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function variance_test_2() result(rst)
+        ! Test edge case: n = 1 (should return 0)
+        logical :: rst
+
+        real(real64), parameter :: x(1) = [5.0d0]
+        real(real64) :: v
+
+        rst = .true.
+        v = variance(x)
+        if (.not.is_equal(v, 0.0d0)) then
+            rst = .false.
+            print '(A,F12.6)', "TEST FAILED: Variance Test 2 - n=1 should return 0, got: ", v
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function variance_test_3() result(rst)
+        ! Test with known small dataset
+        logical :: rst
+
+        real(real64), parameter :: x(4) = [1.0d0, 2.0d0, 3.0d0, 4.0d0]
+        real(real64) :: v, ans
+        ! Mean = 2.5, deviations = [-1.5, -0.5, 0.5, 1.5]
+        ! Sum of squared deviations = 2.25 + 0.25 + 0.25 + 2.25 = 5.0
+        ! Variance = 5.0 / 3 = 1.666...
+
+        rst = .true.
+        ans = 5.0d0 / 3.0d0
+        v = variance(x)
+        if (.not.is_equal(v, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Variance Test 3 - ", v, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function standard_deviation_test_2() result(rst)
+        ! Test that std dev = sqrt(variance)
+        logical :: rst
+
+        integer(int32), parameter :: n = 50
+        real(real64) :: x(n), sd, v
+
+        rst = .true.
+        call random_number(x)
+        
+        v = variance(x)
+        sd = standard_deviation(x)
+        
+        if (.not.is_equal(sd, sqrt(v))) then
+            rst = .false.
+            print '(A)', "TEST FAILED: Standard Deviation Test 2"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function median_test_2() result(rst)
+        ! Test median with even number of elements
+        logical :: rst
+
+        real(real64), parameter :: x(6) = [3.0d0, 1.0d0, 4.0d0, 1.0d0, 5.0d0, 9.0d0]
+        ! Sorted: [1, 1, 3, 4, 5, 9]
+        ! Median of 6 elements = (3 + 4) / 2 = 3.5
+        real(real64) :: med, ans
+
+        rst = .true.
+        ans = 3.5d0
+        med = median(x)
+        if (.not.is_equal(med, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Median Test 2 - ", med, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function trimmed_mean_test_2() result(rst)
+        ! Test trimmed mean with different trim percentage (0.1 = 10%)
+        use linalg, only : sort
+
+        logical :: rst
+        
+        integer(int32), parameter :: n = 50
+        integer(int32), parameter :: ntrm = floor(n * 0.1d0)
+        integer(int32), parameter :: i1 = ntrm + 1
+        integer(int32), parameter :: i2 = n - ntrm
+        real(real64), parameter :: p = 0.1d0
+        
+        real(real64) :: x(n), tm, ans
+        integer(int32) :: i
+
+        rst = .true.
+        ! Create sequential array
+        do i = 1, n
+            x(i) = real(i, real64)
+        end do
+        
+        ! Trimmed mean with 10% trim
+        ans = mean(x(i1:i2))
+        tm = trimmed_mean(x, p = p)
+        
+        if (.not.is_equal(tm, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Trimmed Mean Test 2 - ", tm, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function covariance_test_2() result(rst)
+        ! Test covariance with known data
+        logical :: rst
+
+        real(real64), parameter :: x(5) = [1.0d0, 2.0d0, 3.0d0, 4.0d0, 5.0d0]
+        real(real64), parameter :: y(5) = [2.0d0, 4.0d0, 5.0d0, 4.0d0, 6.0d0]
+        real(real64) :: cov, ans
+
+        rst = .true.
+        ! Mean of x = 3, mean of y = 4.2
+        ! Covariance = 2.0
+        ans = 2.0d0
+        
+        cov = covariance(x, y)
+        if (.not.is_equal(cov, ans, 1.0d-6)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Covariance Test 2 - ", cov, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function pooled_variance_test_2() result(rst)
+        ! Test pooled variance with two samples
+        logical :: rst
+
+        ! Sample 1: variance 1.0, n = 10
+        ! Sample 2: variance 2.0, n = 10
+        real(real64), parameter :: si(2) = [1.0d0, 2.0d0]
+        integer(int32), parameter :: ni(2) = [10, 10]
+        real(real64) :: sp, ans
+
+        rst = .true.
+        ! sp = [(10-1)*1.0 + (10-1)*2.0] / (10+10-2)
+        !    = [9 + 18] / 18 = 27 / 18 = 1.5
+        ans = 1.5d0
+        
+        sp = pooled_variance(si, ni)
+        if (.not.is_equal(sp, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Pooled Variance Test 2 - ", sp, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
     function trimmed_mean_test_1() result(rst)
         use linalg, only : sort
 
@@ -1159,8 +1434,9 @@ contains
 
         ! Parameters
         integer(int32), parameter :: n = 100
-        integer(int32), parameter :: i1 = 5
-        integer(int32), parameter :: i2 = n - i1 + 1
+        integer(int32), parameter :: ntrm = floor(n * 0.05d0)
+        integer(int32), parameter :: i1 = ntrm + 1
+        integer(int32), parameter :: i2 = n - ntrm
         real(real64), parameter :: p = 0.05d0
 
         ! Local Variables
