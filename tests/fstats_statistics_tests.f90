@@ -102,6 +102,113 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function quantile_test_1() result(rst)
+        ! Test basic quantile computation with known data
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 9
+        real(real64) :: x(n), q25, q50, q75, ans
+        real(real64), allocatable :: xsort(:)
+
+        ! Initialization
+        rst = .true.
+        x = [1.0d0, 2.0d0, 3.0d0, 4.0d0, 5.0d0, 6.0d0, 7.0d0, 8.0d0, 9.0d0]
+
+        ! Test 25th percentile
+        ! For SAS Method 4: a = (n+1)*q = 10*0.25 = 2.5
+        ! ib = 2, b = 0.5, result = 0.5*x(2) + 0.5*x(3) = 0.5*2 + 0.5*3 = 2.5
+        q25 = quantile(x, 0.25d0)
+        ans = 2.5d0
+        if (.not.is_equal(q25, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 1a - q25: ", q25, " expected: ", ans
+        end if
+
+        ! Test 50th percentile (median)
+        ! a = 10*0.5 = 5.0
+        ! ib = 5, b = 0.0, result = 1.0*x(5) = 5.0
+        q50 = quantile(x, 0.5d0)
+        ans = 5.0d0
+        if (.not.is_equal(q50, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 1b - q50: ", q50, " expected: ", ans
+        end if
+
+        ! Test 75th percentile
+        ! a = 10*0.75 = 7.5
+        ! ib = 7, b = 0.5, result = 0.5*x(7) + 0.5*x(8) = 0.5*7 + 0.5*8 = 7.5
+        q75 = quantile(x, 0.75d0)
+        ans = 7.5d0
+        if (.not.is_equal(q75, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 1c - q75: ", q75, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function quantile_test_2() result(rst)
+        ! Test quantile with unsorted data
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 7
+        real(real64) :: x(n), q25, ans
+
+        ! Initialization
+        rst = .true.
+        ! Data is unsorted: should still compute correct quantile
+        x = [7.0d0, 2.0d0, 9.0d0, 1.0d0, 5.0d0, 3.0d0, 6.0d0]
+
+        ! After sorting: [1.0d0, 2.0d0, 3.0d0, 5.0d0, 6.0d0, 7.0d0, 9.0d0]
+        ! q25: a = 8*0.25 = 2.0, ib = 2, b = 0.0, result = x(2) = 2.0
+        q25 = quantile(x, 0.25d0)
+        ans = 2.0d0
+        if (.not.is_equal(q25, ans)) then
+            rst = .false.
+            print '(A,F12.6,A,F12.6)', "TEST FAILED: Quantile Test 2 - unsorted data: ", q25, " expected: ", ans
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function quantile_test_3() result(rst)
+        ! Test quantile edge cases (minimum and maximum)
+        ! Arguments
+        logical :: rst
+
+        ! Variables
+        integer(int32), parameter :: n = 10
+        real(real64) :: x(n), qmin, qmax, ans
+        integer(int32) :: i
+
+        ! Initialization
+        rst = .true.
+        do i = 1, n
+            x(i) = real(i, real64)
+        end do
+
+        ! Test minimum (q ~ 0)
+        ! With q = 0.01: a = 11*0.01 = 0.11, ib = 0 (clamped to 1)
+        ! result should approach x(1) = 1.0
+        qmin = quantile(x, 0.01d0)
+        if (qmin < 1.0d0 .or. qmin > 2.0d0) then
+            rst = .false.
+            print '(A,F12.6)', "TEST FAILED: Quantile Test 3a - minimum edge case: ", qmin
+        end if
+
+        ! Test maximum (q ~ 1)
+        ! With q = 0.99: a = 11*0.99 = 10.89, ib = 10, b = 0.89
+        ! result = 0.11*x(10) + 0.89*x(10) = x(10) = 10.0 (or close due to clamping)
+        qmax = quantile(x, 0.99d0)
+        if (qmax < 9.0d0 .or. qmax > 10.0d0) then
+            rst = .false.
+            print '(A,F12.6)', "TEST FAILED: Quantile Test 3b - maximum edge case: ", qmax
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
     function r_squared_test_1() result(rst)
         ! Arguments
         logical :: rst

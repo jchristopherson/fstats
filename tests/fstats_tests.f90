@@ -51,6 +51,15 @@ program tests
     local = median_test_1()
     if (.not.local) overall = .false.
 
+    local = quantile_test_1()
+    if (.not.local) overall = .false.
+
+    local = quantile_test_2()
+    if (.not.local) overall = .false.
+
+    local = quantile_test_3()
+    if (.not.local) overall = .false.
+
     local = r_squared_test_1()
     if (.not.local) overall = .false.
 

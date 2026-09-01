@@ -150,24 +150,32 @@ pure function quantile(x, q) result(rst)
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    real(real64) :: a, b, c, tol
+    real(real64) :: a, b
     integer(int32) :: n, ib
+    real(real64), allocatable :: xc(:)
 
     ! Initialization
-    tol = sqrt(epsilon(tol))
     n = size(x)
+    allocate(xc(n), source = x)
+    
+    ! Sort the array in ascending order
+    call sort(xc, .true.)
 
     ! Process
     a = (n + one) * q
     b = mod(a, one)
-    c = a - b
-
-    ib = int(c, int32)
-    if ((ib + 1) > n) then
-        rst = (one - b) * x(ib) + b * x(n)
+    ib = int(a - b, int32)
+    
+    ! Clamp index to valid range [1, n]
+    ib = max(1, min(ib, n))
+    
+    if (ib >= n) then
+        rst = xc(n)
     else
-        rst = (one - b) * x(ib) + b * x(ib + 1)
+        rst = (one - b) * xc(ib) + b * xc(ib + 1)
     end if
+    
+    deallocate(xc)
 end function
 
 ! ------------------------------------------------------------------------------
