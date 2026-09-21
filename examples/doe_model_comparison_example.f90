@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 program doe_model_comparison_example
     !! Example demonstrating model comparison using ANOVA and F-tests
     use iso_fortran_env

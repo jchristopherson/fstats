@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 module fstats_experimental_design_tests
     use iso_fortran_env
     use fstats

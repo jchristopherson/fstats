@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 program test_trimmed_mean
     use fstats
     use linalg, only : sort

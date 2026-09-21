@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 program doe_design_efficiency_example
     !! This example demonstrates design efficiency metrics for design of experiments.
     !! It compares the efficiency of different design types.

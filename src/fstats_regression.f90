@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 module fstats_regression
     use iso_fortran_env
     use ieee_arithmetic, only : ieee_value, IEEE_POSITIVE_INF

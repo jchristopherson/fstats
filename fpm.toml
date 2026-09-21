@@ -1,6 +1,6 @@
 name = "fstats"
-version = "1.7.2"
-license = "GPL-3.0"
+version = "1.8.0"
+license = "MIT"
 author = "Jason Christopherson"
 maintainer = "Jason Christopherson"
 copyright = "Copyright 2022-2026, Jason Christopherson"
