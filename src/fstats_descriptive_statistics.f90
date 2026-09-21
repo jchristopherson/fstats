@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 module fstats_descriptive_statistics
     use iso_fortran_env
     use linalg, only : sort

@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 module fstats_missing_data
     !! Provides routines for dealing with data sets containing missing 
     !! observations.  Missing values are denoted by IEEE quiet NaN's.
