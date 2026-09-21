@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 program doe_prediction_example
     !! This example demonstrates the enhanced prediction capabilities with 
     !! confidence and prediction intervals for design of experiments models.

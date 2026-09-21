@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 module fstats_msa
     !! Provides routines supporting measurement systems analysis (MSA).
     use iso_fortran_env

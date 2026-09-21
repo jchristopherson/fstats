@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 module fstats_helper_routines
     use iso_fortran_env
     implicit none

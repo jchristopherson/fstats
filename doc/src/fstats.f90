@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 module fstats
     !! FSTATS is a modern Fortran statistical library containing routines for 
     !! computing basic statistical properties, hypothesis testing, regression, 

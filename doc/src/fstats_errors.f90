@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 ! A module providing a set of routines to handle errors for the FSTATS library.
 module fstats_errors
     use iso_fortran_env, only : int32

@@ -1,3 +1,6 @@
+! SPDX-FileCopyrightText: 2024 John Christopherson
+! SPDX-License-Identifier: MIT
+
 program doe_rsm_optimization_example
     !! This example demonstrates Response Surface Methodology (RSM) optimization
     !! for finding optimal factor settings to maximize (or minimize) a response.
