@@ -153,6 +153,9 @@ jobs:
           if [ "${{ runner.os }}" = "Windows" ]; then
             INSTALL_PREFIX="${GITHUB_WORKSPACE//\\//}/install"
             CMAKE_OPTIONS+=( -G "MinGW Makefiles" )
+            MINGW_LIB_DIR="${MSYS2_MINGW_BIN%/bin}/lib"
+            CMAKE_OPTIONS+=( "-DBLAS_LIBRARIES=${MINGW_LIB_DIR}/libblas.dll.a" )
+            CMAKE_OPTIONS+=( "-DLAPACK_LIBRARIES=${MINGW_LIB_DIR}/liblapack.dll.a;${MINGW_LIB_DIR}/libblas.dll.a" )
           else
             INSTALL_PREFIX="${{ github.workspace }}/install"
           fi
