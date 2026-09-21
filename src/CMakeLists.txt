@@ -34,8 +34,8 @@ set_source_files_properties(
 # Dependencies
 include(FetchContent)
 find_package(OpenMP REQUIRED COMPONENTS Fortran)
-find_package(linalg 2.0.0 QUIET)
-find_package(collections 1.1.0 QUIET)
+find_package(linalg 2.3.0 QUIET)
+find_package(collections 1.2.0 QUIET)
 
 if (NOT linalg_FOUND)
     message(STATUS "LINALG could not be found.  A reference version will be employed.")
