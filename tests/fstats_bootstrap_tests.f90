@@ -210,6 +210,55 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_structure_preserving_resamplers() result(rst)
+        logical :: rst
+        real(real64) :: paired(8), paired_sample(8)
+        real(real64) :: clustered(8), cluster_sample(8)
+        real(real64) :: series(12), block_sample(12)
+        integer(int32) :: i, block_size
+
+        rst = .true.
+        paired = [1.0d0, 101.0d0, 2.0d0, 102.0d0, &
+            3.0d0, 103.0d0, 4.0d0, 104.0d0]
+        call random_resample_paired(paired, paired_sample)
+        do i = 1, size(paired_sample), 2
+            if (paired_sample(i + 1) - paired_sample(i) /= 100.0d0) rst = .false.
+        end do
+
+        clustered = [1.0d0, 10.0d0, 1.0d0, 11.0d0, &
+            2.0d0, 20.0d0, 2.0d0, 21.0d0]
+        call random_resample_clusters(clustered, cluster_sample)
+        if (cluster_sample(1) /= cluster_sample(3)) rst = .false.
+        if (cluster_sample(5) /= cluster_sample(7)) rst = .false.
+        do i = 1, size(cluster_sample), 2
+            if (cluster_sample(i) == 1.0d0) then
+                if (cluster_sample(i + 1) < 10.0d0 .or. &
+                    cluster_sample(i + 1) > 11.0d0) rst = .false.
+            else if (cluster_sample(i) == 2.0d0) then
+                if (cluster_sample(i + 1) < 20.0d0 .or. &
+                    cluster_sample(i + 1) > 21.0d0) rst = .false.
+            else
+                rst = .false.
+            end if
+        end do
+
+        series = [(real(i, real64), i = 1, size(series))]
+        call random_resample_circular_blocks(series, block_sample)
+        block_size = max(2_int32, int(sqrt(real(size(series), real64)), int32))
+        if (any(block_sample < 1.0d0 .or. block_sample > real(size(series), real64))) &
+            rst = .false.
+        do i = 2, size(block_sample)
+            if (mod(i - 1, block_size) /= 0) then
+                if (block_sample(i) /= &
+                    real(modulo(int(block_sample(i - 1), int32), &
+                    size(series)) + 1, real64)) rst = .false.
+            end if
+        end do
+
+        if (.not.rst) print "(A)", "TEST FAILED: test_structure_preserving_resamplers"
+    end function
+
+! ------------------------------------------------------------------------------
     subroutine shift_resample(x, xn)
         real(real64), intent(in) :: x(:)
         real(real64), intent(out) :: xn(size(x))

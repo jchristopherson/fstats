@@ -32,12 +32,16 @@ module fstats_bootstrap
     use fstats_special_functions
     use fstats_regression
     use fstats_sampling
+    use linalg, only : sort
     implicit none
     private
     public :: bootstrap_resampling_routine
     public :: bootstrap_statistic_routine
     public :: random_resample
     public :: random_resample_with_replacement
+    public :: random_resample_paired
+    public :: random_resample_clusters
+    public :: random_resample_circular_blocks
     public :: bootstrap_statistics
     public :: bootstrap
 
@@ -129,6 +133,127 @@ subroutine random_resample_with_replacement(x, xn)
         idx = int(floor(u * n)) + 1
         if (idx > n) idx = n
         xn(i) = x(idx)
+    end do
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine random_resample_paired(x, xn)
+    !! Resamples paired observations with replacement.
+    !! The input stores each pair as adjacent values: [x1, y1, x2, y2, ...].
+    real(real64), intent(in), dimension(:) :: x
+        !! An even-length array of interleaved paired observations.
+    real(real64), intent(out), dimension(size(x)) :: xn
+        !! The resampled pairs in the same interleaved layout.
+
+    integer(int32) :: i, n, npairs, idx
+    real(real64) :: u
+
+    n = size(x)
+    if (n < 2 .or. mod(n, 2) /= 0) error stop FS_INVALID_INPUT_ERROR
+    npairs = n / 2
+    do i = 1, npairs
+        call random_number(u)
+        idx = floor(u * npairs, int32) + 1
+        idx = min(idx, npairs)
+        xn(2 * i - 1:2 * i) = x(2 * idx - 1:2 * idx)
+    end do
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine random_resample_clusters(x, xn)
+    !! Resamples balanced clusters with replacement.
+    !! The input stores contiguous records as [cluster_id, value], with every
+    !! cluster having the same number of records. The statistic routine should
+    !! use the value fields and ignore the cluster identifiers.
+    real(real64), intent(in), dimension(:) :: x
+        !! An even-length array of contiguous cluster-id/value records.
+    real(real64), intent(out), dimension(size(x)) :: xn
+        !! The resampled records in the same layout.
+
+    integer(int32) :: i, j, k, n, nrecords, nclusters, cluster_size
+    integer(int32) :: source_row, target_row, last_row, idx
+    integer(int32), allocatable :: cluster_starts(:)
+    real(real64), allocatable :: cluster_ids(:), sorted_ids(:)
+    real(real64) :: u
+
+    n = size(x)
+    if (n < 2 .or. mod(n, 2) /= 0) error stop FS_INVALID_INPUT_ERROR
+    nrecords = n / 2
+    allocate(cluster_starts(nrecords), cluster_ids(nrecords), &
+        sorted_ids(nrecords))
+
+    nclusters = 1
+    cluster_starts(1) = 1
+    cluster_ids(1) = x(1)
+    do i = 2, nrecords
+        if (x(2 * i - 1) /= x(2 * (i - 1) - 1)) then
+            nclusters = nclusters + 1
+            cluster_starts(nclusters) = i
+            cluster_ids(nclusters) = x(2 * i - 1)
+        end if
+    end do
+
+    cluster_size = nrecords
+    if (nclusters > 1) cluster_size = cluster_starts(2) - cluster_starts(1)
+    do i = 1, nclusters
+        if (i < nclusters) then
+            last_row = cluster_starts(i + 1) - 1
+        else
+            last_row = nrecords
+        end if
+        if (last_row - cluster_starts(i) + 1 /= cluster_size) &
+            error stop FS_INVALID_INPUT_ERROR
+    end do
+
+    sorted_ids(1:nclusters) = cluster_ids(1:nclusters)
+    call sort(sorted_ids(1:nclusters), .true.)
+    do i = 2, nclusters
+        if (sorted_ids(i) == sorted_ids(i - 1)) error stop FS_INVALID_INPUT_ERROR
+    end do
+
+    do i = 1, nclusters
+        call random_number(u)
+        idx = floor(u * nclusters, int32) + 1
+        idx = min(idx, nclusters)
+        source_row = cluster_starts(idx)
+        target_row = (i - 1) * cluster_size + 1
+        do j = 0, cluster_size - 1
+            k = target_row + j
+            xn(2 * k - 1:2 * k) = &
+                x(2 * (source_row + j) - 1:2 * (source_row + j))
+        end do
+    end do
+end subroutine
+
+! ------------------------------------------------------------------------------
+subroutine random_resample_circular_blocks(x, xn)
+    !! Resamples a time series using a circular moving-block bootstrap.
+    !! The block length is floor(sqrt(n)), with a minimum of two when possible.
+    !! Define a custom callback to use a domain-specific block length.
+    real(real64), intent(in), dimension(:) :: x
+        !! The N-element time series.
+    real(real64), intent(out), dimension(size(x)) :: xn
+        !! The resampled series, assembled from circular blocks.
+
+    integer(int32) :: i, j, n, block_size, nblocks, start, output_index
+    integer(int32) :: source_index
+    real(real64) :: u
+
+    n = size(x)
+    if (n < 1) error stop FS_INVALID_INPUT_ERROR
+    block_size = min(n, max(2_int32, int(sqrt(real(n, real64)), int32)))
+    nblocks = (n + block_size - 1) / block_size
+    output_index = 1
+    do i = 1, nblocks
+        call random_number(u)
+        start = floor(u * n, int32) + 1
+        start = min(start, n)
+        do j = 0, block_size - 1
+            if (output_index > n) exit
+            source_index = mod(start - 1 + j, n) + 1
+            xn(output_index) = x(source_index)
+            output_index = output_index + 1
+        end do
     end do
 end subroutine
 
