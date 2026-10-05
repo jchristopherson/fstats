@@ -166,7 +166,7 @@ contains
         mu = mean(x)
 
         ! Test
-        z = bootstrap(fcn, x, nsamples = nsamples)
+        z = bootstrap(fcn, x, method = sampler, nsamples = nsamples)
 
         if (.not.assert(z%statistic_value, mu, tol)) then
             rst = .false.
@@ -188,6 +188,34 @@ contains
             print "(A)", "TEST FAILED: test_bootstrap_2 -4"
         end if
     end function
+
+! ------------------------------------------------------------------------------
+    function test_bootstrap_small_nsamples() result(rst)
+        logical :: rst
+        real(real64) :: x(3)
+        procedure(bootstrap_statistic_routine), pointer :: fcn
+        procedure(bootstrap_resampling_routine), pointer :: sampler
+        type(bootstrap_statistics) :: z
+
+        x = [1.0d0, 2.0d0, 3.0d0]
+        fcn => mean
+        sampler => shift_resample
+        z = bootstrap(fcn, x, method = sampler, nsamples = 3)
+
+        rst = z%statistic_value == 2.0d0 .and. &
+            all(z%population == 12.0d0) .and. &
+            z%lower_confidence_interval == 12.0d0 .and. &
+            z%upper_confidence_interval == 12.0d0
+        if (.not.rst) print "(A)", "TEST FAILED: test_bootstrap_small_nsamples"
+    end function
+
+! ------------------------------------------------------------------------------
+    subroutine shift_resample(x, xn)
+        real(real64), intent(in) :: x(:)
+        real(real64), intent(out) :: xn(size(x))
+
+        xn = x + 10.0d0
+    end subroutine
 
 ! ------------------------------------------------------------------------------
 end module
