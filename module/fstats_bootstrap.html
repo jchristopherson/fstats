@@ -12,14 +12,29 @@
 
     <title>fstats_bootstrap &ndash; FSTATS</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -72,9 +87,8 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
-                 title=" 2.0% of total for modules and submodules.">113 statements</a>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 3.7% of total for modules and submodules.">201 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -94,9 +108,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -159,6 +175,9 @@
       <div id="subs-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../module/fstats_bootstrap.html#proc-random_resample">random_resample</a>
+            <a class="list-group-item" href="../module/fstats_bootstrap.html#proc-random_resample_circular_blocks">random_resample_circular_blocks</a>
+            <a class="list-group-item" href="../module/fstats_bootstrap.html#proc-random_resample_clusters">random_resample_clusters</a>
+            <a class="list-group-item" href="../module/fstats_bootstrap.html#proc-random_resample_paired">random_resample_paired</a>
             <a class="list-group-item" href="../module/fstats_bootstrap.html#proc-random_resample_with_replacement">random_resample_with_replacement</a>
         </div>
       </div>
@@ -185,14 +204,14 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
-                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='https://www.openmp.org/spec-html/5.1/openmpch3.html#x156-1890003'>omp_lib</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
                   <li class="list-inline-item"><a href='fstats_sampling.html'>fstats_sampling</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='https://www.openmp.org/spec-html/5.1/openmpch3.html#x156-1890003'>omp_lib</a></li>
                   <li class="list-inline-item">linalg</li>
+                  <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
                   <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
               </ul>
             </li>
@@ -236,7 +255,7 @@ resampling of data for bootstrapping purposes.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~16"></span>
+              <span class="anchor" id="variable-x~62"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -301,7 +320,7 @@ bootstrap statistic.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~17"></span>
+              <span class="anchor" id="variable-x~63"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -404,8 +423,8 @@ bootstrap statistic.</p>
                 <td></td>
                 <td></td>
             <td>
-<p>An array of the population values generated by the bootstrap
-process.</p>
+<p>The bootstrap statistic replicates, excluding the observed
+statistic.</p>
             </td>
         </tr>
         <tr>
@@ -482,8 +501,10 @@ process.</p>
 statistic.  The default implementation utlizes a random resampling with
 replacement.  Other resampling methods may be defined by specifying an 
 appropriate routine by means of the method input.  The module provides
-another option, <a href="..\proc\random_resample.html">random_resample</a> that utilizes a scheme based upon
-sampling a normal distribution.</p>
+another option, <a href="..\proc\random_resample.html">random_resample</a>, which is a parametric Gaussian
+bootstrap based on the sample mean and standard deviation. It assumes
+normally distributed observations. The confidence limits are percentile
+intervals calculated from the bootstrap replicates.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -513,7 +534,7 @@ sampling a normal distribution.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~20"></span>
+              <span class="anchor" id="variable-x~69"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -554,13 +575,13 @@ If no method is supplied, a random resampling is utilized.</p>
             <td>::</td>
             <td><strong>nsamples</strong></td>
             <td>
-<p>An optional input, that if supplied, specifies the number of 
-resampling runs to perform.  The default is 10 000.</p>
+<p>An optional input, that if supplied, specifies the number of
+bootstrap replicates to generate. The default is 10 000.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~5"></span>
+              <span class="anchor" id="variable-alpha~8"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -597,7 +618,9 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
 </h3></div>
     <div class="card-body">
           
-  <p>Random resampling based upon a normal distribution.</p>
+  <p>Parametric Gaussian resampling using the sample mean and standard
+deviation. This assumes the observations are normally distributed;
+it is not the nonparametric bootstrap.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -612,7 +635,7 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~18"></span>
+              <span class="anchor" id="variable-x~64"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -648,6 +671,177 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
   </div>
 
               <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-random_resample_circular_blocks"></span> <h3>public  subroutine <a href='..\proc\random_resample_circular_blocks.html'>random_resample_circular_blocks</a>(x, xn)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Resamples a time series using a circular moving-block bootstrap.
+The block length is floor(sqrt(n)), with a minimum of two when possible.
+Define a custom callback to use a domain-specific block length.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~68"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>The N-element time series.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xn~6"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(size(x))
+            </td>
+            <td>::</td>
+            <td><strong>xn</strong></td>
+            <td>
+<p>The resampled series, assembled from circular blocks.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-random_resample_clusters"></span> <h3>public  subroutine <a href='..\proc\random_resample_clusters.html'>random_resample_clusters</a>(x, xn)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Resamples balanced clusters with replacement.
+The input stores contiguous records as [cluster_id, value], with every
+cluster having the same number of records. The statistic routine should
+use the value fields and ignore the cluster identifiers.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~67"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>An even-length array of contiguous cluster-id/value records.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xn~5"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(size(x))
+            </td>
+            <td>::</td>
+            <td><strong>xn</strong></td>
+            <td>
+<p>The resampled records in the same layout.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-random_resample_paired"></span> <h3>public  subroutine <a href='..\proc\random_resample_paired.html'>random_resample_paired</a>(x, xn)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Resamples paired observations with replacement.
+The input stores each pair as adjacent values: [x1, y1, x2, y2, ...].</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~66"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>An even-length array of interleaved paired observations.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xn~4"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(size(x))
+            </td>
+            <td>::</td>
+            <td><strong>xn</strong></td>
+            <td>
+<p>The resampled pairs in the same interleaved layout.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
     <div class="card-header codesum"><span class="anchor" id="proc-random_resample_with_replacement"></span> <h3>public  subroutine <a href='..\proc\random_resample_with_replacement.html'>random_resample_with_replacement</a>(x, xn)  
 </h3></div>
     <div class="card-body">
@@ -667,7 +861,7 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~19"></span>
+              <span class="anchor" id="variable-x~65"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -715,40 +909,21 @@ intervals, bias, standard error, etc. for the analyzed statistic.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-08-20 05:53              </p>
+ on 2026-10-05 13:44 -0500             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>
