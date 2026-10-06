@@ -303,6 +303,12 @@ program tests
     local = test_bootstrap_2()
     if (.not.local) overall = .false.
 
+    local = test_bootstrap_small_nsamples()
+    if (.not.local) overall = .false.
+
+    local = test_structure_preserving_resamplers()
+    if (.not.local) overall = .false.
+
     ! Missing Data Tests
     local = test_missing_value()
     if (.not.local) overall = .false.

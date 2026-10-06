@@ -19,6 +19,7 @@ set(fstats_test_sources
 include(FetchContent)
 find_package(fortran_test_helper QUIET)
 if (NOT fortran_test_helper_FOUND)
+    set(BUILD_TESTING OFF)
     FetchContent_Declare(
         fortran_test_helper
         GIT_TAG "origin/main"

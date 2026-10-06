@@ -4,7 +4,7 @@ add_subdirectory(fortran_csv_module)
 find_package(fplot)
 if (NOT fplot_FOUND)
     include(FetchContent)
-
+    set(BUILD_TESTING OFF)
     FetchContent_Declare(
         fplot
         GIT_TAG "origin/master"

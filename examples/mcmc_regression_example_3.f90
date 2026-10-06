@@ -233,7 +233,7 @@ subroutine plot_chain(chain)
     call plt3%push(pd)
     call plt%set(3, 1, plt3)
 
-    call pd%define_data(chain(:,4))
+    call pd%define_data(exp(chain(:,4)))
     call plt4%push(pd)
     call plt%set(4, 1, plt4)
 
@@ -280,7 +280,7 @@ subroutine plot_chain_hist(chain)
     call plt3%push(pd)
     call plt%set(1, 2, plt3)
 
-    call pd%define_data(chain(:,4))
+    call pd%define_data(exp(chain(:,4)))
     call plt4%push(pd)
     call plt%set(2, 2, plt4)
 
@@ -354,7 +354,7 @@ program example
     wn = mean(chain(:,1))
     zeta = mean(chain(:,2))
     y = mean(chain(:,3))
-    sigma = mean(chain(:,4))
+    sigma = exp(mean(chain(:,4))) ! exp as the parameter is base-e log variance
 
     print "(A, F9.3)", "wn = ", wn
     print "(A, F9.3)", "fn = ", wn / (2.0d0 * pi)

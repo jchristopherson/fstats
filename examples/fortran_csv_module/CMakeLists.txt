@@ -1,4 +1,5 @@
 include(FetchContent)
+set(BUILD_TESTING OFF)
 FetchContent_Declare(
     fortran-csv-module
     GIT_TAG "origin/master"
