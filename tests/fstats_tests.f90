@@ -40,9 +40,26 @@ program tests
 
     ! Variables
     logical :: local, overall
+    character(32) :: test_group
 
     ! Initialization
     overall = .true.
+
+    call get_command_argument(1, test_group)
+    if (trim(test_group) == 'mcmc') then
+        local = test_mh_push()
+        if (.not.local) overall = .false.
+        local = test_mcmc_target_distributions()
+        if (.not.local) overall = .false.
+        local = test_mcmc_target_likelihood()
+        if (.not.local) overall = .false.
+        local = test_mcmc_parallel_likelihood()
+        if (.not.local) overall = .false.
+        local = test_mcmc_sample_chains()
+        if (.not.local) overall = .false.
+        if (.not.overall) stop 1
+        stop
+    end if
 
     ! Distribution Tests
     local = t_distribution_test_1()
@@ -276,6 +293,12 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_mcmc_target_likelihood()
+    if (.not.local) overall = .false.
+
+    local = test_mcmc_parallel_likelihood()
+    if (.not.local) overall = .false.
+
+    local = test_mcmc_sample_chains()
     if (.not.local) overall = .false.
 
     local = test_linear_interp()

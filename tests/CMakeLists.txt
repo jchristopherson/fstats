@@ -44,6 +44,16 @@ add_test(
     COMMAND $<TARGET_FILE:fstats_tests>
 )
 
+foreach(thread_count IN ITEMS 1 4)
+    add_test(
+        NAME fstats_mcmc_${thread_count}_threads
+        COMMAND $<TARGET_FILE:fstats_tests> mcmc
+    )
+    set_tests_properties(fstats_mcmc_${thread_count}_threads PROPERTIES
+        ENVIRONMENT "OMP_NUM_THREADS=${thread_count};OMP_MAX_ACTIVE_LEVELS=2"
+    )
+endforeach()
+
 if (${BUILD_SHARED_LIBS} AND WIN32)
     add_custom_command(
         TARGET fstats_tests

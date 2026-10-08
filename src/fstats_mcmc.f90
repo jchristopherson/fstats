@@ -33,6 +33,7 @@ module fstats_mcmc
     use fstats_regression
     use fstats_sampling
     use collections
+    !$ use omp_lib, only : omp_in_parallel
     implicit none
     private
     public :: chain_builder
@@ -40,6 +41,7 @@ module fstats_mcmc
     public :: mcmc_target
     public :: evaluate_model
     public :: mcmc_proposal
+    public :: sample_chains
     
     type, abstract :: mcmc_target
         !! Defines a model of the target distribution(s).
@@ -49,6 +51,9 @@ module fstats_mcmc
             !! A workspace array for containing the model values.
         real(real64), public :: data_noise = 1.0d0
             !! A parameter representing the noise in the data.
+        integer(int32), public :: likelihood_parallel_threshold = 10000
+            !! Minimum observation count for a threaded likelihood reduction.
+            !! Adjust for the workload; nested worker teams are not created.
     contains
         procedure(evaluate_model), deferred, public :: model
         procedure, public :: get_parameter_count => mt_get_param_count
@@ -205,8 +210,8 @@ function mt_likelihood(this, xdata, ydata, xc, var) result(rst)
 
     ! Local Variables
     integer(int32) :: i, m, n
-    real(real64) :: p, temp, v
-    real(real64), allocatable, dimension(:) :: resid, nrm, lognrm
+    real(real64) :: temp, v
+    logical :: use_parallel
     
     ! Initialization
     m = size(xdata)
@@ -236,11 +241,17 @@ function mt_likelihood(this, xdata, ydata, xc, var) result(rst)
     ! Evaluate the model at each data point
     call this%model(xdata, xc, this%m_y)
 
-    ! Compute the likelihood assuming the residual is normally distributed
-    resid = ydata - this%m_y
-    ! Compute log-likelihood per point and return the log-likelihood (sum)
-    lognrm = (-resid**2 / (2.0d0 * v)) - log(sqrt(2.0d0 * pi * v))
-    rst = sum(lognrm)
+    use_parallel = m >= this%likelihood_parallel_threshold
+    !$ use_parallel = use_parallel .and. .not. omp_in_parallel()
+    rst = 0.0d0
+    !$omp parallel do simd default(none) if(use_parallel) &
+    !$omp shared(this, ydata, m, v, use_parallel) private(temp) reduction(+:rst) schedule(static)
+    do i = 1, m
+        temp = ydata(i) - this%m_y(i)
+        rst = rst + temp**2 / (2.0d0 * v)
+    end do
+    !$omp end parallel do simd
+    rst = -rst - real(m, real64) * log(sqrt(2.0d0 * pi * v))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -663,6 +674,44 @@ end subroutine
 
 ! ******************************************************************************
 ! MCMC_SAMPLER
+! ------------------------------------------------------------------------------
+subroutine sample_chains(samplers, xdata, ydata, proposals, targets, niter)
+    !! Samples independent chains concurrently using OpenMP.
+    !! Initialize each target independently, with no shared mutable state in
+    !! distributions, models, proposals, or sampler callbacks.  The compiler
+    !! runtime must provide thread-safe RANDOM_NUMBER (as GNU Fortran does).
+    !! Random streams and reproducibility depend on the compiler runtime and
+    !! thread scheduling; no per-chain seed guarantee is provided.
+    class(mcmc_sampler), intent(inout) :: samplers(:)
+        !! One sampler per chain; existing samples are retained as in sample.
+    real(real64), intent(in) :: xdata(:), ydata(:)
+        !! Shared, read-only observations.
+    class(mcmc_proposal), intent(inout) :: proposals(:)
+        !! One independently configured proposal per chain.
+    class(mcmc_target), intent(inout) :: targets(:)
+        !! One independently initialized target per chain.
+    integer(int32), intent(in), optional :: niter
+        !! Iterations per chain; defaults to 10,000.
+
+    integer(int32) :: chain_index, nchains
+    logical :: use_parallel
+
+    nchains = size(samplers)
+    if (size(proposals) /= nchains .or. size(targets) /= nchains) &
+        error stop FS_ARRAY_SIZE_ERROR
+    if (size(xdata) /= size(ydata)) error stop FS_ARRAY_SIZE_ERROR
+
+    use_parallel = nchains > 1
+    !$ use_parallel = use_parallel .and. .not. omp_in_parallel()
+    !$omp parallel do default(none) if(use_parallel) schedule(static) &
+    !$omp shared(samplers, xdata, ydata, proposals, targets, niter, nchains, use_parallel)
+    do chain_index = 1, nchains
+        call samplers(chain_index)%sample(xdata, ydata, proposals(chain_index), &
+            targets(chain_index), niter)
+    end do
+    !$omp end parallel do
+end subroutine
+
 ! ------------------------------------------------------------------------------
 subroutine ms_on_success(this, iter, alpha, xc, xp)
     !! Currently, this routine does nothing and is a placeholder for the user
