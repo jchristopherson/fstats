@@ -35,6 +35,8 @@ module fstats
     use fstats_anova
     use fstats_helper_routines
     use fstats_regression
+    use fstats_linear_regression
+    use fstats_levenberg_marquardt
     use fstats_experimental_design
     use fstats_allan
     use fstats_bootstrap

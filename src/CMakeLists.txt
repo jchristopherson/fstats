@@ -10,7 +10,9 @@ set(FSTATS_SOURCES
     ${dir}/fstats_anova.f90
     ${dir}/fstats_distributions.f90
     ${dir}/fstats_helper_routines.f90
-    ${dir}/fstats_regression.f90
+    ${dir}/regression/fstats_regression.f90
+    ${dir}/regression/fstats_linear_regression.f90
+    ${dir}/regression/fstats_levenberg_marquardt.f90
     ${dir}/fstats_experimental_design.f90
     ${dir}/fstats_allan.f90
     ${dir}/fstats_errors.f90
