@@ -4,27 +4,27 @@ set(dir ${CMAKE_CURRENT_SOURCE_DIR})
 # Define the source files
 set(FSTATS_SOURCES
     ${dir}/fstats.f90
-    ${dir}/fstats_special_functions.f90
-    ${dir}/fstats_descriptive_statistics.f90
-    ${dir}/fstats_hypothesis.f90
-    ${dir}/fstats_anova.f90
-    ${dir}/fstats_distributions.f90
-    ${dir}/fstats_helper_routines.f90
+    ${dir}/utilities/fstats_special_functions.f90
+    ${dir}/statistics/fstats_descriptive_statistics.f90
+    ${dir}/hypothesis/fstats_hypothesis.f90
+    ${dir}/statistics/fstats_anova.f90
+    ${dir}/distributions/fstats_distributions.f90
+    ${dir}/utilities/fstats_helper_routines.f90
     ${dir}/regression/fstats_regression.f90
     ${dir}/regression/fstats_linear_regression.f90
     ${dir}/regression/fstats_levenberg_marquardt.f90
-    ${dir}/fstats_experimental_design.f90
-    ${dir}/fstats_allan.f90
-    ${dir}/fstats_errors.f90
-    ${dir}/fstats_bootstrap.f90
-    ${dir}/fstats_sampling.f90
-    ${dir}/fstats_smoothing.f90
-    ${dir}/fstats_types.f90
-    ${dir}/fstats_mcmc.f90
-    ${dir}/fstats_interp.f90
-    ${dir}/fstats_missing_data.f90
-    ${dir}/fstats_msa.f90
-    ${dir}/fstats_robust_statistics.f90
+    ${dir}/design/fstats_experimental_design.f90
+    ${dir}/measurement/fstats_allan.f90
+    ${dir}/utilities/fstats_errors.f90
+    ${dir}/modeling/fstats_bootstrap.f90
+    ${dir}/modeling/fstats_sampling.f90
+    ${dir}/interpolation/fstats_smoothing.f90
+    ${dir}/utilities/fstats_types.f90
+    ${dir}/monte_carlo/fstats_mcmc.f90
+    ${dir}/interpolation/fstats_interp.f90
+    ${dir}/measurement/fstats_missing_data.f90
+    ${dir}/measurement/fstats_msa.f90
+    ${dir}/statistics/fstats_robust_statistics.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 
