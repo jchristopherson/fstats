@@ -47,6 +47,8 @@ program tests
 
     call get_command_argument(1, test_group)
     if (trim(test_group) == 'mcmc') then
+        local = test_mcmc_numerical_robustness()
+        if (.not.local) overall = .false.
         local = test_mh_push()
         if (.not.local) overall = .false.
         local = test_mcmc_target_distributions()
@@ -62,6 +64,15 @@ program tests
     end if
 
     ! Distribution Tests
+    local = test_distribution_numerical_robustness()
+    if (.not.local) overall = .false.
+    local = test_multivariate_normal_numerical_robustness()
+    if (.not.local) overall = .false.
+    local = test_special_function_numerical_robustness()
+    if (.not.local) overall = .false.
+    local = test_regression_covariance_numerical_robustness()
+    if (.not.local) overall = .false.
+
     local = t_distribution_test_1()
     if (.not.local) overall = .false.
 
@@ -81,6 +92,9 @@ program tests
     if (.not.local) overall = .false.
 
     ! Statistics Tests
+    local = test_statistics_numerical_robustness()
+    if (.not.local) overall = .false.
+
     local = mean_test_1()
     if (.not.local) overall = .false.
 
@@ -290,6 +304,9 @@ program tests
     if (.not.local) overall = .false.
 
     local = test_mcmc_target_distributions()
+    if (.not.local) overall = .false.
+
+    local = test_mcmc_numerical_robustness()
     if (.not.local) overall = .false.
 
     local = test_mcmc_target_likelihood()

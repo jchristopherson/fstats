@@ -25,7 +25,7 @@
 
 module fstats_regression
     use iso_fortran_env
-    use ieee_arithmetic, only : ieee_value, IEEE_POSITIVE_INF
+    use ieee_arithmetic
     use linalg
     use fstats_errors
     use blas
@@ -46,6 +46,7 @@ module fstats_regression
     public :: correlation
     public :: design_matrix
     public :: covariance_matrix
+    public :: regression_covariance
     public :: linear_least_squares
     public :: calculate_regression_statistics
     public :: jacobian
@@ -141,6 +142,10 @@ module fstats_regression
             !! The function evaluation count.
         logical :: user_requested_stop
             !! True if the user requested the stop; else, false.
+        integer(int32) :: covariance_rank = 0
+            !! Numerical rank of the final weighted Jacobian when covariance is requested.
+        real(real64) :: covariance_condition_number = 0.0d0
+            !! Condition number of that Jacobian; infinity indicates rank deficiency.
     end type
 
     type lm_solver_options
@@ -302,10 +307,39 @@ pure function correlation(x, y) result(rst)
     real(real64), intent(in), dimension(size(x)) :: y
         !! The second N-element data set.
     real(real64) :: rst
-        !! The correlation coefficient.
+        !! Correlation coefficient on [-1, 1]; constant, nonfinite, or
+        !! undersized data give NaN. Scaled centering avoids overflowing moments.
 
-    ! Process
-    rst = covariance(x, y) / (standard_deviation(x) * standard_deviation(y))
+    real(real64), allocatable, dimension(:) :: centeredX, centeredY
+    real(real64) :: scaleX, scaleY, normX, normY
+    integer(int32) :: observation
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (size(x) < 2 .or. .not.all(ieee_is_finite(x)) .or. .not.all(ieee_is_finite(y))) return
+    scaleX = maxval(abs(x))
+    scaleY = maxval(abs(y))
+    if (scaleX == 0.0d0 .or. scaleY == 0.0d0) return
+    allocate(centeredX(size(x)), centeredY(size(x)))
+    do observation = 1, size(x)
+        if ((x(observation) >= 0.0d0 .and. x(1) >= 0.0d0) .or. &
+            (x(observation) <= 0.0d0 .and. x(1) <= 0.0d0)) then
+            centeredX(observation) = (x(observation) - x(1)) / scaleX
+        else
+            centeredX(observation) = x(observation) / scaleX - x(1) / scaleX
+        end if
+        if ((y(observation) >= 0.0d0 .and. y(1) >= 0.0d0) .or. &
+            (y(observation) <= 0.0d0 .and. y(1) <= 0.0d0)) then
+            centeredY(observation) = (y(observation) - y(1)) / scaleY
+        else
+            centeredY(observation) = y(observation) / scaleY - y(1) / scaleY
+        end if
+    end do
+    centeredX = centeredX - mean(centeredX)
+    centeredY = centeredY - mean(centeredY)
+    normX = norm2(centeredX)
+    normY = norm2(centeredY)
+    if (normX == 0.0d0 .or. normY == 0.0d0) return
+    rst = max(-1.0d0, min(1.0d0, dot_product(centeredX / normX, centeredY / normY)))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -370,6 +404,8 @@ pure function covariance_matrix(x) result(c)
     !! Computes the covariance matrix \( C \) where 
     !! \( C = \left( X^{T} X \right)^{-1} \) and \( X \) is computed
     !! by design_matrix.
+    !! Uses an SVD of X, without forming X**T * X. Rank-deficient inputs give
+    !! the Moore-Penrose covariance; use regression_covariance for rank diagnostics.
     !!
     !! See Also
     !!
@@ -381,28 +417,55 @@ pure function covariance_matrix(x) result(c)
     real(real64), allocatable :: c(:,:)
         !! The N-by-N covariance matrix.
 
-    ! Parameters
-    real(real64), parameter :: zero = 0.0d0
-    real(real64), parameter :: one = 1.0d0
-
-    ! Local Variables
-    integer(int32) :: npts, ncoeffs
-    real(real64), allocatable :: xtx(:,:)
-    
-    ! Initialization
-    npts = size(x, 1)
-    ncoeffs = size(x, 2)
-
-    ! Local Memory Allocation
-    allocate(xtx(ncoeffs, ncoeffs))
-
-    ! Compute X**T * X
-    call DGEMM("T", "N", ncoeffs, ncoeffs, npts, one, x, npts, x, npts, &
-        zero, xtx, ncoeffs)
-    
-    ! Compute the inverse of X**T * X to obtain the covariance matrix
-    c = mtx_pinverse(xtx)
+    call regression_covariance(x, c)
 end function
+
+pure subroutine regression_covariance(x, c, rank, condition_number)
+    !! Computes the unscaled regression covariance using an SVD of X itself.
+    !! Singular directions below MAX(M, N) * EPSILON * largest singular value
+    !! are discarded, giving the Moore-Penrose covariance on identifiable directions.
+    !! Rank-deficient fits require care: a zero pseudocovariance along a discarded
+    !! direction does not imply that the corresponding parameter is known exactly.
+    real(real64), intent(in), dimension(:,:) :: x
+        !! M-by-N design matrix, or a Jacobian whose rows include sqrt(weights).
+    real(real64), intent(out), allocatable, dimension(:,:) :: c
+        !! N-by-N covariance before residual-variance scaling. Nonfinite X gives NaNs.
+    integer(int32), intent(out), optional :: rank
+        !! Number of retained singular directions; zero for empty/invalid input.
+    real(real64), intent(out), optional :: condition_number
+        !! Condition number of X; +infinity for rank deficiency, NaN for invalid X.
+    real(real64), allocatable, dimension(:) :: singular_values
+    real(real64), allocatable, dimension(:,:) :: vectors, scaled_vectors
+    real(real64) :: relative_tolerance
+    integer(int32) :: ncols, direction, effective_rank
+
+    ncols = size(x, 2)
+    allocate(c(ncols, ncols), source = 0.0d0)
+    if (present(rank)) rank = 0
+    if (present(condition_number)) condition_number = ieee_value(0.0d0, ieee_positive_inf)
+    if (.not.all(ieee_is_finite(x))) then
+        c = ieee_value(0.0d0, ieee_quiet_nan)
+        if (present(condition_number)) condition_number = ieee_value(0.0d0, ieee_quiet_nan)
+        return
+    end if
+    if (minval(shape(x)) == 0) return
+    call svd(x, s = singular_values, vt = vectors)
+    if (singular_values(1) == 0.0d0) return
+    relative_tolerance = real(maxval(shape(x)), real64) * epsilon(1.0d0)
+    allocate(scaled_vectors(size(singular_values), ncols), source = 0.0d0)
+    effective_rank = 0
+    do direction = 1, size(singular_values)
+        if (singular_values(direction) / singular_values(1) <= relative_tolerance) cycle
+        effective_rank = effective_rank + 1
+        scaled_vectors(direction,:) = vectors(direction,:) / singular_values(direction)
+    end do
+    c = matmul(transpose(scaled_vectors), scaled_vectors)
+    if (present(rank)) rank = effective_rank
+    if (present(condition_number)) then
+        if (effective_rank == ncols) &
+            condition_number = singular_values(1) / singular_values(ncols)
+    end if
+end subroutine
 
 ! ------------------------------------------------------------------------------
 subroutine linear_least_squares(order, intercept, x, y, coeffs, &
@@ -709,7 +772,8 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
         !! iteration information.
     real(real64), intent(out), optional, dimension(:,:) :: cov
         !! An optional N-by-N matrix that, if supplied, will be used to return
-        !! the covariance matrix.
+        !! the covariance matrix, computed from an SVD of the final weighted
+        !! Jacobian. Rank diagnostics are available in info when requested.
     class(*), intent(inout), optional :: args
         !! An optional argument allowing the passing in/out of data for the
         !! [[fun]] routine.
@@ -726,6 +790,7 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     real(real64), pointer :: w(:), pmax(:), pmin(:)
     real(real64), allocatable, target :: defaultWeights(:), maxparam(:), &
         minparam(:), JtWJ(:,:)
+    real(real64), allocatable, dimension(:,:) :: final_jacobian, final_covariance
     type(iteration_controls) :: tol
     type(lm_solver_options) :: opt
     type(convergence_info) :: cInfo
@@ -777,6 +842,7 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
         allocate(defaultWeights(m), source = 1.0d0)
         w(1:m) => defaultWeights(1:m)
     end if
+    if (.not.all(ieee_is_finite(w)) .or. any(w < 0.0d0)) error stop FS_INVALID_INPUT_ERROR
 
     if (present(maxp)) then
         if (size(maxp) /= n) error stop FS_ARRAY_SIZE_ERROR
@@ -803,7 +869,19 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
 
     ! Compute the covariance matrix
     if (present(stats) .or. present(cov)) then
-        JtWJ = mtx_inverse(JtWJ)
+        allocate(final_jacobian(m, n))
+        call jacobian(fun, x, params, final_jacobian, stop, f0 = ymod, &
+            step = opt%finite_difference_step_size, args = args)
+        inf%function_evaluation_count = inf%function_evaluation_count + n
+        if (stop) then
+            inf%user_requested_stop = .true.
+            JtWJ = ieee_value(0.0d0, ieee_quiet_nan)
+        else
+            final_jacobian = final_jacobian * spread(sqrt(w), 2, n)
+            call regression_covariance(final_jacobian, final_covariance, &
+                inf%covariance_rank, inf%covariance_condition_number)
+            JtWJ = final_covariance
+        end if
     end if
 
     ! Statistical Parameters

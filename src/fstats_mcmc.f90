@@ -25,6 +25,7 @@
 
 module fstats_mcmc
     use iso_fortran_env
+    use ieee_arithmetic
     use fstats_distributions
     use fstats_sampling
     use fstats_errors
@@ -60,6 +61,12 @@ module fstats_mcmc
         procedure, public :: add_parameter => mt_add_param
         procedure, public :: get_parameter => mt_get_param
         procedure, public :: likelihood => mt_likelihood
+        procedure, public :: likelihood_log_variance => mt_log_likelihood
+            !! Gaussian log likelihood accepting log variance directly.
+        procedure, public :: evaluate_log_variance_prior => mt_eval_log_var_prior
+            !! Prior density in log-variance coordinates, including the Jacobian.
+        procedure, public :: log_posterior => mt_log_posterior
+            !! Posterior density in parameter/log-variance coordinates.
         procedure, public :: evaluate_variance_prior => mt_eval_var_prior
         procedure, public :: sample_variance_prior => mt_sample_var_prior
         procedure, public :: evaluate_prior => mt_eval_prior
@@ -191,7 +198,7 @@ end function
 
 ! ------------------------------------------------------------------------------
 function mt_likelihood(this, xdata, ydata, xc, var) result(rst)
-    !! Computes the target likelihood.
+    !! Computes the Gaussian log likelihood. Invalid variance gives NaN.
     class(mcmc_target), intent(inout) :: this
         !! The mcmc_target object.
     real(real64), intent(in), dimension(:) :: xdata
@@ -201,35 +208,67 @@ function mt_likelihood(this, xdata, ydata, xc, var) result(rst)
     real(real64), intent(in), dimension(:) :: xc
         !! An N-element array containing the model parameters.
     real(real64), intent(in) :: var
-        !! An estimate of the model variance.
+        !! Finite, strictly positive model variance; it is not silently clamped.
     real(real64) :: rst
-        !! The likelihood value.
+        !! Log likelihood, or NaN for invalid/nonfinite inputs.
 
-    ! Parameters
-    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (.not.ieee_is_finite(var) .or. var <= 0.0d0) return
+    rst = this%likelihood_log_variance(xdata, ydata, xc, log(var))
+end function
 
-    ! Local Variables
-    integer(int32) :: i, m, n
-    real(real64) :: temp, v
-    logical :: use_parallel
-    
-    ! Initialization
-    m = size(xdata)
-    n = size(xc)
+pure elemental function log_absolute_difference(first, second) result(rst)
+    !! Computes log(abs(first - second)) without overflowing the subtraction.
+    real(real64), intent(in) :: first, second
+        !! Finite values whose difference is required.
+    real(real64) :: rst
+        !! Log magnitude; equal inputs give -huge as an internal zero sentinel.
+    real(real64) :: scale
 
-    ! Input Checking
-    if (size(ydata) /= m) error stop FS_ARRAY_SIZE_ERROR
-    if (this%get_parameter_count() /= n) error stop FS_ARRAY_SIZE_ERROR
-
-    ! Ensure a positive, non-zero variance
-    if (var <= 0.0d0) then
-        ! Replace non-positive variance with a small epsilon to avoid log/denom issues
-        v = 1.0d-12
+    rst = -huge(1.0d0)
+    if (first == second) return
+    if ((first >= 0.0d0 .and. second >= 0.0d0) .or. &
+        (first <= 0.0d0 .and. second <= 0.0d0)) then
+        rst = log(abs(first - second))
     else
-        v = var
+        scale = max(abs(first), abs(second))
+        rst = log(scale) + log(abs(first / scale - second / scale))
     end if
+end function
 
-    ! Memory Allocations
+function mt_log_likelihood(this, xdata, ydata, xc, log_variance) result(rst)
+    !! Computes the Gaussian log likelihood without exponentiating the variance.
+    !! Residual magnitudes are scaled in log space before their squared reduction.
+    !! Override this binding for custom likelihoods used by the sampler; overriding
+    !! only likelihood changes calls to that variance-space entry point, not sampling.
+    class(mcmc_target), intent(inout) :: this
+        !! Target; its model workspace is resized as necessary.
+    real(real64), intent(in), dimension(:) :: xdata
+        !! M finite independent observations.
+    real(real64), intent(in), dimension(:) :: ydata
+        !! M finite dependent observations.
+    real(real64), intent(in), dimension(:) :: xc
+        !! Finite parameters, one per registered parameter distribution.
+    real(real64), intent(in) :: log_variance
+        !! Finite natural logarithm of the model variance.
+    real(real64) :: rst
+        !! Log likelihood; empty data give zero, invalid inputs/models give NaN,
+        !! and an unrepresentably large residual penalty gives negative infinity.
+    integer(int32) :: i, m
+    real(real64) :: log_scale, log_penalty, normalization
+    logical :: use_parallel
+
+    m = size(xdata)
+    if (size(ydata) /= m) error stop FS_ARRAY_SIZE_ERROR
+    if (this%get_parameter_count() /= size(xc)) error stop FS_ARRAY_SIZE_ERROR
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (.not.ieee_is_finite(log_variance)) return
+    if (.not.all(ieee_is_finite(xdata)) .or. .not.all(ieee_is_finite(ydata))) return
+    if (.not.all(ieee_is_finite(xc))) return
+    if (m == 0) then
+        rst = 0.0d0
+        return
+    end if
     if (.not.allocated(this%m_y)) then
         allocate(this%m_y(m))
     end if
@@ -240,46 +279,107 @@ function mt_likelihood(this, xdata, ydata, xc, var) result(rst)
 
     ! Evaluate the model at each data point
     call this%model(xdata, xc, this%m_y)
+    if (.not.all(ieee_is_finite(this%m_y))) return
 
     use_parallel = m >= this%likelihood_parallel_threshold
     !$ use_parallel = use_parallel .and. .not. omp_in_parallel()
-    rst = 0.0d0
+    log_scale = -huge(1.0d0)
     !$omp parallel do simd default(none) if(use_parallel) &
-    !$omp shared(this, ydata, m, v, use_parallel) private(temp) reduction(+:rst) schedule(static)
+    !$omp shared(this, ydata, m, use_parallel) reduction(max:log_scale) schedule(static)
     do i = 1, m
-        temp = ydata(i) - this%m_y(i)
-        rst = rst + temp**2 / (2.0d0 * v)
+        log_scale = max(log_scale, log_absolute_difference(ydata(i), this%m_y(i)))
     end do
     !$omp end parallel do simd
-    rst = -rst - real(m, real64) * log(sqrt(2.0d0 * pi * v))
+    rst = 0.0d0
+    if (log_scale > -huge(1.0d0)) then
+        !$omp parallel do simd default(none) if(use_parallel) &
+        !$omp shared(this, ydata, m, log_scale, use_parallel) reduction(+:rst) schedule(static)
+        do i = 1, m
+            if (ydata(i) /= this%m_y(i)) rst = rst + &
+                exp(2.0d0 * (log_absolute_difference(ydata(i), this%m_y(i)) - log_scale))
+        end do
+        !$omp end parallel do simd
+        log_penalty = 2.0d0 * log_scale - log_variance + log(rst) - log(2.0d0)
+        if (log_penalty > log(huge(1.0d0))) then
+            rst = ieee_value(0.0d0, ieee_negative_inf)
+            return
+        end if
+        rst = exp(log_penalty)
+    end if
+    normalization = 0.5d0 * (log(4.0d0 * acos(0.0d0)) + log_variance)
+    if (abs(normalization) > huge(1.0d0) / real(m, real64)) then
+        rst = ieee_value(0.0d0, ieee_quiet_nan)
+        return
+    end if
+    rst = -rst - real(m, real64) * normalization
+end function
+
+pure function mt_eval_log_var_prior(this, log_variance) result(rst)
+    !! Log density of log variance, including the variance-transform Jacobian.
+    !! The default variance-space prior is log-normal, so its transformed density
+    !! is normal with mean zero and standard deviation data_noise. Override this
+    !! binding when changing the variance prior used by the sampler.
+    class(mcmc_target), intent(in) :: this
+        !! Target with finite, positive data_noise.
+    real(real64), intent(in) :: log_variance
+        !! Natural logarithm of the variance.
+    real(real64) :: rst
+        !! Log transformed prior; invalid prior parameters or NaN input give NaN.
+    type(normal_distribution) :: prior
+
+    prior%mean_value = 0.0d0
+    prior%standard_deviation = this%data_noise
+    rst = prior%log_pdf(log_variance)
+end function
+
+function mt_log_posterior(this, xdata, ydata, xc, log_variance) result(rst)
+    !! Evaluates the posterior density with respect to parameters and log variance.
+    !! Includes the variance-transform Jacobian through evaluate_log_variance_prior.
+    !! Impossible parameter states are rejected before model evaluation.
+    class(mcmc_target), intent(inout) :: this
+        !! Target whose prior and log-likelihood bindings are evaluated.
+    real(real64), intent(in), dimension(:) :: xdata
+        !! Independent observations.
+    real(real64), intent(in), dimension(:) :: ydata
+        !! Dependent observations, the same size as xdata.
+    real(real64), intent(in), dimension(:) :: xc
+        !! Model parameters, one per registered distribution.
+    real(real64), intent(in) :: log_variance
+        !! Natural logarithm of the model variance.
+    real(real64) :: rst
+        !! Log posterior; impossible states give -infinity, invalid inputs give NaN.
+    real(real64) :: prior, variance_prior
+
+    prior = this%evaluate_prior(xc)
+    variance_prior = this%evaluate_log_variance_prior(log_variance)
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (ieee_is_nan(prior) .or. ieee_is_nan(variance_prior)) return
+    rst = ieee_value(0.0d0, ieee_negative_inf)
+    if (.not.ieee_is_finite(prior) .or. .not.ieee_is_finite(variance_prior)) return
+    rst = this%likelihood_log_variance(xdata, ydata, xc, log_variance)
+    rst = rst + prior + variance_prior
 end function
 
 ! ------------------------------------------------------------------------------
 pure function mt_eval_var_prior(this, x) result(rst)
-    !! Evalautes the model variance prior PDF.
+    !! Computes the log prior density with respect to variance, without its
+    !! log-coordinate Jacobian. Sampling uses evaluate_log_variance_prior instead.
     class(mcmc_target), intent(in) :: this
         !! The mcmc_target object.
     real(real64), intent(in) :: x
         !! The value at which to evaluate the variance prior distribution PDF.
     real(real64) :: rst
-        !! The value of the variance prior distribution's PDF.
+        !! Log prior density; outside support gives -infinity, invalid inputs NaN.
 
     ! Local Variables
     type(log_normal_distribution) :: dist
-    real(real64), parameter :: neg_inf = -huge(1.0d0)
-    real(real64) :: pdfv
 
     ! Initialization
     dist%mean_value = 0.0d0
     dist%standard_deviation = this%data_noise
     
     ! Process: return log of the variance prior PDF; handle zero/negative PDF
-    pdfv = dist%pdf(x)
-    if (pdfv <= 0.0d0) then
-        rst = neg_inf
-    else
-        rst = log(pdfv)
-    end if
+    rst = dist%log_pdf(x)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -327,10 +427,8 @@ function mt_eval_prior(this, x) result(rst)
 
     ! Local Variables
     integer(int32) :: i, n
-    real(real64) :: temp, p, neg_inf
+    real(real64) :: temp, p
     class(distribution), pointer :: dist
-
-    neg_inf = -huge(1.0d0)
     
     ! Initialization
     n = this%get_parameter_count()
@@ -344,13 +442,12 @@ function mt_eval_prior(this, x) result(rst)
         ! Evaluate the distribution
         dist => this%get_parameter(i)
         if (.not.associated(dist)) error stop FS_NULL_POINTER_ERROR
-        p = dist%pdf(x(i))
-        if (p <= 0.0d0) then
-            ! zero-probability parameter value — log prior is -inf
-            rst = neg_inf
+        p = dist%log_pdf(x(i))
+        if (.not.ieee_is_finite(p)) then
+            rst = p
             return
         end if
-        temp = temp + log(p)
+        temp = temp + p
     end do
     rst = temp  ! return log-prior
 end function
@@ -397,12 +494,16 @@ subroutine mp_gen(this, tgt, xc, xp, vc, vp)
         if (.not.associated(dist)) error stop FS_NULL_POINTER_ERROR
 
         ! Recenter is not needed for RW proposals; ignore recenter flag
-        sigma = sqrt(max(dist%variance(), 1.0d-12))
+        sigma = dist%variance()
+        if (.not.ieee_is_finite(sigma) .or. sigma <= 0.0d0) error stop FS_INVALID_INPUT_ERROR
+        sigma = sqrt(sigma)
 
         ! Generate a normal(0,1) using Box-Muller
-        call random_number(u1)
+        do
+            call random_number(u1)
+            if (u1 > 0.0d0) exit
+        end do
         call random_number(u2)
-        if (u1 <= 0.0d0) u1 = 1.0d-12
         z = sqrt(-2.0d0 * log(u1)) * cos(2.0d0 * acos(0.0d0) * u2)
 
         if (allocated(this%m_param_scale)) then
@@ -419,9 +520,11 @@ subroutine mp_gen(this, tgt, xc, xp, vc, vp)
 
     ! Propose log-variance (vc is the current log-variance)
     ! generate another normal variate for variance step
-    call random_number(u1v)
+    do
+        call random_number(u1v)
+        if (u1v > 0.0d0) exit
+    end do
     call random_number(u2v)
-    if (u1v <= 0.0d0) u1v = 1.0d-12
     zv = sqrt(-2.0d0 * log(u1v)) * cos(2.0d0 * acos(0.0d0) * u2v)
     vp = vc + this%m_scale * zv
 end subroutine
@@ -463,9 +566,8 @@ subroutine mp_set_scale(this, x)
     !! Sets the proposal scale multiplier.
     class(mcmc_proposal), intent(inout) :: this
     real(real64), intent(in) :: x
-    if (x > 0.0d0) then
-        this%m_scale = x
-    end if
+    if (.not.ieee_is_finite(x) .or. x <= 0.0d0) error stop FS_INVALID_INPUT_ERROR
+    this%m_scale = x
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -490,15 +592,16 @@ subroutine mp_set_param_scale(this, idx, val)
     integer(int32), intent(in) :: idx
     real(real64), intent(in) :: val
     integer(int32) :: n
-    if (val <= 0.0d0) return
+    if (idx < 1) error stop FS_INVALID_INPUT_ERROR
+    if (.not.ieee_is_finite(val) .or. val <= 0.0d0) error stop FS_INVALID_INPUT_ERROR
     if (.not.allocated(this%m_param_scale)) then
         n = max(1_int32, idx)
         allocate(this%m_param_scale(n))
-        this%m_param_scale = this%m_scale
+        this%m_param_scale = 1.0d0
     else
         if (idx > size(this%m_param_scale)) then
             n = idx
-            this%m_param_scale = [this%m_param_scale, spread(this%m_scale, 1, n - size(this%m_param_scale))]
+            this%m_param_scale = [this%m_param_scale, spread(1.0d0, 1, n - size(this%m_param_scale))]
         end if
     end if
     this%m_param_scale(idx) = val
@@ -508,6 +611,7 @@ end subroutine
 subroutine mp_set_param_scales(this, arr)
     class(mcmc_proposal), intent(inout) :: this
     real(real64), intent(in), dimension(:) :: arr
+    if (.not.all(ieee_is_finite(arr)) .or. any(arr <= 0.0d0)) error stop FS_INVALID_INPUT_ERROR
     if (.not.allocated(this%m_param_scale)) then
         allocate(this%m_param_scale(size(arr)))
     else
@@ -779,8 +883,8 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter)
     ! Local Variables
     integer(int32) :: i, n, n1, npts, m
     integer(int32) :: last_accept_count, adapt_interval
-    real(real64) :: pp, pc, alpha, r, qprior, qvar
-    real(real64) :: pc_log, pp_log, delta, u, current_variance
+    real(real64) :: alpha
+    real(real64) :: pc_log, pp_log, delta, u
     real(real64) :: adapt_gain, target_accept, accept_rate, cur_scale, new_scale
     real(real64), allocatable, dimension(:) :: buffer, xc
     class(distribution), pointer :: dist
@@ -798,6 +902,9 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter)
 
     ! Input Checking
     if (size(ydata) /= m) error stop FS_ARRAY_SIZE_ERROR
+    if (npts < 1) error stop FS_INVALID_INPUT_ERROR
+    if (.not.all(ieee_is_finite(xdata)) .or. .not.all(ieee_is_finite(ydata))) &
+        error stop FS_INVALID_INPUT_ERROR
 
     ! Memory Allocations
     allocate(buffer(n1), xc(n1), source = 0.0d0)
@@ -805,16 +912,15 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter)
     ! Get an initial starting point based upon the prior means
     do i = 1, n
         dist => tgt%get_parameter(i)
+        if (.not.associated(dist)) error stop FS_NULL_POINTER_ERROR
         xc(i) = dist%mean()
     end do
     ! Initialize log-variance to 0 (i.e., variance = 1.0)
     xc(n1) = 0.0d0
 
     ! Compute initial log-posterior for the starting state
-    current_variance = exp(xc(n1))
-    pc_log = tgt%likelihood(xdata, ydata, xc(1:n), current_variance)
-    pc_log = pc_log + tgt%evaluate_prior(xc(1:n))
-    pc_log = pc_log + tgt%evaluate_variance_prior(current_variance)
+    pc_log = tgt%log_posterior(xdata, ydata, xc(1:n), xc(n1))
+    if (.not.ieee_is_finite(pc_log)) error stop FS_INVALID_INPUT_ERROR
 
     ! Store the starting location
     call this%push_new_state(xc)
@@ -830,42 +936,44 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter)
         ! Create a proposal (note: xc(1:n) are parameters, xc(n1) is log-variance)
         call prop%generate_sample(tgt, xc(1:n), buffer(1:n), xc(n1), buffer(n1))
 
-        ! Evaluate the log-likelihood for proposed state
-        pp_log = tgt%likelihood(xdata, ydata, buffer(1:n), exp(buffer(n1)))
-
-        ! Evaluate log-prior for parameters
-        qprior = tgt%evaluate_prior(buffer(1:n))
-
-        ! Evaluate log-prior for variance (input in variance-space)
-        qvar = tgt%evaluate_variance_prior(exp(buffer(n1)))
-
-        ! Sum to get proposed log-posterior
-        pp_log = pp_log + qprior + qvar
+        pp_log = tgt%log_posterior(xdata, ydata, buffer(1:n), buffer(n1))
 
         ! MH acceptance in log-domain
-        delta = pp_log - pc_log
-        call random_number(u)
+        delta = ieee_value(0.0d0, ieee_negative_inf)
+        if (ieee_is_finite(pp_log)) then
+            if (pp_log >= pc_log) then
+                delta = 0.0d0
+            else if (pc_log > 0.0d0 .and. pp_log < 0.0d0) then
+                if (pp_log >= -huge(1.0d0) + pc_log) delta = pp_log - pc_log
+            else
+                delta = pp_log - pc_log
+            end if
+        end if
+        alpha = exp(min(0.0d0, delta))
+        do
+            call random_number(u)
+            if (u > 0.0d0) exit
+        end do
         if (log(u) <= delta) then
             ! Accept
             call this%push_new_state(buffer)
 
-            xc = buffer
-            pc_log = pp_log
-
             this%m_accepted = this%m_accepted + 1
 
             ! Call user hook
-            call this%on_acceptance(i, min(1.0d0, exp(delta)), xc, buffer)
+            call this%on_acceptance(i, alpha, xc, buffer)
+            xc = buffer
+            pc_log = pp_log
         else
             ! Reject: keep current state
             call this%push_new_state(xc)
 
-            call this%on_rejection(i, min(1.0d0, exp(delta)), xc, buffer)
+            call this%on_rejection(i, alpha, xc, buffer)
         end if
 
         ! Adapt proposal scale every adapt_interval iterations (simple global adaptation)
         if (mod(i, adapt_interval) == 0) then
-            accept_rate = real(this%m_accepted - last_accept_count) / real(adapt_interval)
+            accept_rate = real(this%m_accepted - last_accept_count, real64) / real(adapt_interval, real64)
             last_accept_count = this%m_accepted
             ! Update global scale multiplicatively toward target acceptance
             cur_scale = prop%get_scale()

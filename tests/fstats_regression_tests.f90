@@ -27,8 +27,35 @@ module fstats_regression_tests
     use iso_fortran_env
     use fstats
     use fstats_test_helper
+    use ieee_arithmetic
     implicit none
 contains
+    function test_regression_covariance_numerical_robustness() result(rst)
+        !! Checks near-collinearity, rank diagnostics, and invalid design matrices.
+        logical :: rst
+            !! True when covariance and numerical rank meet the reference values.
+        real(real64), dimension(3,2) :: design
+        real(real64), allocatable, dimension(:,:) :: covariance_values
+        real(real64) :: condition_number
+        integer(int32) :: rank
+
+        design(:,1) = [1.0d0, 0.0d0, 0.0d0]
+        design(:,2) = [1.0d0, 1.0d-8, 0.0d0]
+        call regression_covariance(design, covariance_values, rank, condition_number)
+        rst = rank == 2 .and. condition_number > 1.0d8
+        rst = rst .and. abs(covariance_values(1,1) / 1.0d16 - 1.0d0) < 1.0d-12
+        rst = rst .and. abs(covariance_values(2,2) / 1.0d16 - 1.0d0) < 1.0d-12
+        rst = rst .and. abs(covariance_values(1,2) / 1.0d16 + 1.0d0) < 1.0d-12
+        design(:,2) = design(:,1)
+        call regression_covariance(design, covariance_values, rank, condition_number)
+        rst = rst .and. rank == 1 .and. .not.ieee_is_finite(condition_number)
+        rst = rst .and. maxval(abs(covariance_values - 0.25d0)) < 1.0d-14
+        design(1,1) = ieee_value(0.0d0, ieee_quiet_nan)
+        call regression_covariance(design, covariance_values, rank, condition_number)
+        rst = rst .and. rank == 0 .and. all(ieee_is_nan(covariance_values))
+        if (.not.rst) print '(A)', 'TEST FAILED: regression covariance numerical robustness'
+    end function
+
 ! ------------------------------------------------------------------------------
     function design_matrix_test_1() result(rst)
         ! Arguments

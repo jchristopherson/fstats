@@ -60,6 +60,14 @@ module fstats_distributions
         procedure(distribution_recenter), public, deferred, pass :: recenter
         procedure, public :: standardized_variable => dist_std_var
         procedure, public :: defined_range => dist_defined_range
+        procedure, public :: log_pdf => dist_log_pdf
+            !! Natural log density (or log probability mass for discrete laws).
+        procedure, public :: survival => dist_survival
+            !! Upper-tail probability P(X > x), evaluated directly for built-ins.
+        procedure, public :: log_cdf => dist_log_cdf
+            !! Natural log of P(X <= x).
+        procedure, public :: log_survival => dist_log_survival
+            !! Natural log of P(X > x).
     end type
 
     interface
@@ -120,6 +128,10 @@ module fstats_distributions
     contains
         procedure, public :: pdf => nd_pdf
         procedure, public :: cdf => nd_cdf
+        procedure, public :: log_pdf => nd_log_pdf
+        procedure, public :: survival => nd_survival
+        procedure, public :: log_cdf => nd_log_cdf
+        procedure, public :: log_survival => nd_log_survival
         procedure, public :: mean => nd_mean
         procedure, public :: median => nd_median
         procedure, public :: mode => nd_mode
@@ -192,6 +204,10 @@ module fstats_distributions
     contains
         procedure, public :: pdf => lnd_pdf
         procedure, public :: cdf => lnd_cdf
+        procedure, public :: log_pdf => lnd_log_pdf
+        procedure, public :: survival => lnd_survival
+        procedure, public :: log_cdf => lnd_log_cdf
+        procedure, public :: log_survival => lnd_log_survival
         procedure, public :: mean => lnd_mean
         procedure, public :: median => lnd_median
         procedure, public :: mode => lnd_mode
@@ -224,6 +240,8 @@ module fstats_distributions
     contains
         procedure(multivariate_distribution_function), deferred, pass :: pdf
             !! Computes the probability density function.
+        procedure, public :: log_pdf => mvd_log_pdf
+            !! Computes the log density; custom laws should override the PDF fallback.
     end type
 
     interface
@@ -252,13 +270,12 @@ module fstats_distributions
         real(real64), private, allocatable, dimension(:,:) :: m_cholesky
             !! The N-by-N Cholesky factored form (lower) of the covariance
             !! matrix.
-        real(real64), private, allocatable, dimension(:,:) :: m_covInv
-            !! The N-by-N inverse of the covariance matrix.
-        real(real64), private :: m_covDet
-            !! The determinant of the covariance matrix.
+        real(real64), private :: m_logCovDet
+            !! Natural logarithm of the covariance determinant.
     contains
         procedure, public :: initialize => mvnd_init
         procedure, public :: pdf => mvnd_pdf
+        procedure, public :: log_pdf => mvnd_log_pdf
         procedure, public :: get_means => mvnd_get_means
         procedure, public :: set_means => mvnd_update_mean
         procedure, public :: get_covariance => mvnd_get_covariance
@@ -266,6 +283,467 @@ module fstats_distributions
     end type
 
 contains
+pure elemental function log_one_plus(value) result(rst)
+    !! Computes log(1 + value), retaining accuracy for small values.
+    real(real64), intent(in) :: value
+        !! Argument; values below -1 produce NaN.
+    real(real64) :: rst
+        !! Logarithm; -1 produces negative infinity.
+
+    rst = stable_log1p(value)
+end function
+
+pure elemental function softplus(value) result(rst)
+    !! Computes log(1 + exp(value)) without overflowing the exponential.
+    real(real64), intent(in) :: value
+        !! Exponent argument.
+    real(real64) :: rst
+        !! Softplus value; NaN inputs propagate.
+
+    rst = max(value, 0.0d0) + log_one_plus(exp(-abs(value)))
+end function
+
+pure elemental function probability_log(value) result(rst)
+    !! Computes a log density or probability with explicit zero handling.
+    real(real64), intent(in) :: value
+        !! Nonnegative density or probability.
+    real(real64) :: rst
+        !! Natural logarithm; zero gives -infinity, negative or NaN gives NaN.
+
+    if (value == 0.0d0) then
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+    else if (value < 0.0d0 .or. ieee_is_nan(value)) then
+        rst = ieee_value(0.0d0, ieee_quiet_nan)
+    else
+        rst = log(value)
+    end if
+end function
+
+pure function mvd_log_pdf(this, x) result(rst)
+    !! Compatibility log-density fallback for custom multivariate distributions.
+    !! Override this binding to compute log densities without PDF underflow.
+    class(multivariate_distribution), intent(in) :: this
+        !! Multivariate distribution whose PDF is evaluated.
+    real(real64), intent(in), dimension(:) :: x
+        !! Multivariate evaluation point.
+    real(real64) :: rst
+        !! Log PDF; zero density gives -infinity, negative/NaN density gives NaN.
+
+    rst = probability_log(this%pdf(x))
+end function
+
+pure elemental function dist_log_pdf(this, x) result(rst)
+    !! Computes the natural log density or probability mass.
+    !! Built-in distributions use analytic log-space expressions. Other
+    !! distributions fall back to log(pdf(x)); override this binding to avoid
+    !! underflow in custom PDFs. Subclasses changing a built-in law must also
+    !! override its log-density and tail bindings.
+    class(distribution), intent(in) :: this
+        !! Distribution with valid parameters.
+    real(real64), intent(in) :: x
+        !! Evaluation point; discrete masses require integer-valued x.
+    real(real64) :: rst
+        !! Log density; outside support gives -infinity, invalid inputs give NaN.
+        !! An integrable density singularity at a support endpoint gives +infinity.
+    real(real64) :: first, second, count, argument
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (ieee_is_nan(x)) return
+    select type (this)
+    class is (t_distribution)
+        if (.not.ieee_is_finite(this%dof) .or. this%dof <= 0.0d0) return
+        argument = 0.0d0
+        if (x /= 0.0d0) argument = softplus(2.0d0 * log(abs(x)) - log(this%dof))
+        rst = log_gamma(0.5d0 * this%dof + 0.5d0) - log_gamma(0.5d0 * this%dof) &
+            - 0.5d0 * (log(this%dof) + log(pi)) - (0.5d0 * this%dof + 0.5d0) * argument
+    class is (f_distribution)
+        if (.not.ieee_is_finite(this%d1) .or. .not.ieee_is_finite(this%d2)) return
+        if (this%d1 <= 0.0d0 .or. this%d2 <= 0.0d0) return
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+        if (x < 0.0d0 .or. .not.ieee_is_finite(x)) return
+        first = 0.5d0 * this%d1
+        second = 0.5d0 * this%d2
+        if (x == 0.0d0) then
+            if (first < 1.0d0) rst = ieee_value(0.0d0, ieee_positive_inf)
+            if (first == 1.0d0) rst = 0.0d0
+            return
+        end if
+        argument = log(this%d1) - log(this%d2)
+        rst = first * argument + (first - 1.0d0) * log(x) &
+            - (first + second) * softplus(argument + log(x)) &
+            - log_gamma(first) - log_gamma(second) + log_gamma(first + second)
+    class is (chi_squared_distribution)
+        if (this%dof <= 0) return
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+        if (x < 0.0d0 .or. .not.ieee_is_finite(x)) return
+        first = 0.5d0 * real(this%dof, real64)
+        if (x == 0.0d0) then
+            if (first < 1.0d0) rst = ieee_value(0.0d0, ieee_positive_inf)
+            if (first == 1.0d0) rst = -log(2.0d0)
+            return
+        end if
+        rst = (first - 1.0d0) * log(x) - 0.5d0 * x - first * log(2.0d0) - log_gamma(first)
+    class is (binomial_distribution)
+        if (this%n < 0 .or. .not.ieee_is_finite(this%p)) return
+        if (this%p < 0.0d0 .or. this%p > 1.0d0) return
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+        count = real(this%n, real64)
+        if (x < 0.0d0 .or. x > count) return
+        if (x /= aint(x)) return
+        if (this%p == 0.0d0 .or. this%p == 1.0d0) then
+            if (x == count * this%p) rst = 0.0d0
+            return
+        end if
+        rst = log_gamma(count + 1.0d0) - log_gamma(x + 1.0d0) - log_gamma(count - x + 1.0d0) &
+            + x * log(this%p) + (count - x) * log_one_plus(-this%p)
+    class is (poisson_distribution)
+        if (.not.ieee_is_finite(this%occrence_rate) .or. this%occrence_rate < 0.0d0) return
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+        if (x < 0.0d0 .or. .not.ieee_is_finite(x)) return
+        if (x /= aint(x)) return
+        if (this%occrence_rate == 0.0d0) then
+            if (x == 0.0d0) rst = 0.0d0
+        else
+            rst = x * log(this%occrence_rate) - this%occrence_rate - log_gamma(x + 1.0d0)
+        end if
+    class default
+        rst = probability_log(this%pdf(x))
+    end select
+end function
+
+pure elemental function dist_survival(this, x) result(rst)
+    !! Computes the upper-tail probability P(X > x).
+    !! Built-ins use beta/gamma upper tails rather than subtracting the CDF.
+    !! Custom distributions fall back to 1 - cdf(x), which can lose tail accuracy.
+    class(distribution), intent(in) :: this
+        !! Distribution with valid parameters.
+    real(real64), intent(in) :: x
+        !! Evaluation point; discrete tails include masses strictly above x.
+    real(real64) :: rst
+        !! Probability on [0, 1]; invalid parameters or NaN x give NaN.
+    real(real64) :: argument, tail, count
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (ieee_is_nan(x)) return
+    select type (this)
+    class is (t_distribution)
+        if (.not.ieee_is_finite(this%dof) .or. this%dof <= 0.0d0) return
+        argument = 1.0d0
+        if (x /= 0.0d0) argument = exp(-softplus(2.0d0 * log(abs(x)) - log(this%dof)))
+        tail = 0.5d0 * regularized_beta(0.5d0 * this%dof, 0.5d0, argument)
+        rst = tail
+        if (x < 0.0d0) rst = 1.0d0 - tail
+    class is (f_distribution)
+        if (.not.ieee_is_finite(this%d1) .or. .not.ieee_is_finite(this%d2)) return
+        if (this%d1 <= 0.0d0 .or. this%d2 <= 0.0d0) return
+        rst = 1.0d0
+        if (x <= 0.0d0) return
+        argument = exp(-softplus(log(this%d1) + log(x) - log(this%d2)))
+        rst = regularized_beta(0.5d0 * this%d2, 0.5d0 * this%d1, argument)
+    class is (chi_squared_distribution)
+        if (this%dof <= 0) return
+        rst = 1.0d0
+        if (x <= 0.0d0) return
+        rst = regularized_gamma_upper(0.5d0 * real(this%dof, real64), 0.5d0 * x)
+    class is (binomial_distribution)
+        if (this%n < 0 .or. .not.ieee_is_finite(this%p)) return
+        if (this%p < 0.0d0 .or. this%p > 1.0d0) return
+        count = real(this%n, real64)
+        if (x < 0.0d0) then
+            rst = 1.0d0
+        else if (x >= count) then
+            rst = 0.0d0
+        else
+            rst = regularized_beta(aint(x) + 1.0d0, count - aint(x), this%p)
+        end if
+    class is (poisson_distribution)
+        if (.not.ieee_is_finite(this%occrence_rate) .or. this%occrence_rate < 0.0d0) return
+        if (x < 0.0d0) then
+            rst = 1.0d0
+        else if (.not.ieee_is_finite(x)) then
+            rst = 0.0d0
+        else
+            rst = regularized_gamma_lower(aint(x) + 1.0d0, this%occrence_rate)
+        end if
+    class default
+        rst = 1.0d0 - this%cdf(x)
+    end select
+end function
+
+pure elemental function dist_log_cdf(this, x) result(rst)
+    !! Computes log(P(X <= x)), using log beta/gamma ratios for built-in laws.
+    !! Custom distributions fall back to log(cdf(x)); override for extreme tails.
+    class(distribution), intent(in) :: this
+        !! Distribution with valid parameters.
+    real(real64), intent(in) :: x
+        !! Evaluation point.
+    real(real64) :: rst
+        !! Log probability; zero probability gives -infinity, invalid inputs NaN.
+    real(real64) :: argument
+
+    rst = probability_log(this%cdf(x))
+    if (ieee_is_nan(rst)) return
+    select type (this)
+    class is (t_distribution)
+        rst = this%log_survival(-x)
+    class is (f_distribution)
+        if (x > 0.0d0) then
+            argument = exp(-softplus(log(this%d2) - log(this%d1) - log(x)))
+            rst = log_regularized_beta(0.5d0 * this%d1, 0.5d0 * this%d2, argument)
+        end if
+    class is (chi_squared_distribution)
+        if (x > 0.0d0) rst = log_regularized_gamma_lower(0.5d0 * real(this%dof, real64), 0.5d0 * x)
+    class is (binomial_distribution)
+        if (x >= 0.0d0 .and. x < real(this%n, real64)) &
+            rst = log_regularized_beta(real(this%n, real64) - aint(x), aint(x) + 1.0d0, 1.0d0 - this%p)
+    class is (poisson_distribution)
+        if (x >= 0.0d0 .and. ieee_is_finite(x)) &
+            rst = log_regularized_gamma_upper(aint(x) + 1.0d0, this%occrence_rate)
+    end select
+end function
+
+pure elemental function dist_log_survival(this, x) result(rst)
+    !! Computes log(P(X > x)), evaluating built-in beta/gamma tails in log space.
+    !! Custom distributions fall back to log(survival(x)).
+    class(distribution), intent(in) :: this
+        !! Distribution with valid parameters.
+    real(real64), intent(in) :: x
+        !! Evaluation point.
+    real(real64) :: rst
+        !! Log probability; zero probability gives -infinity, invalid inputs NaN.
+    real(real64) :: argument, tail
+
+    rst = probability_log(this%survival(x))
+    if (ieee_is_nan(rst)) return
+    select type (this)
+    class is (t_distribution)
+        argument = 1.0d0
+        if (x /= 0.0d0) argument = exp(-softplus(2.0d0 * log(abs(x)) - log(this%dof)))
+        tail = log_regularized_beta(0.5d0 * this%dof, 0.5d0, argument) - log(2.0d0)
+        rst = tail
+        if (x < 0.0d0) rst = stable_log1p(-exp(tail))
+    class is (f_distribution)
+        if (x > 0.0d0) then
+            argument = exp(-softplus(log(this%d1) + log(x) - log(this%d2)))
+            rst = log_regularized_beta(0.5d0 * this%d2, 0.5d0 * this%d1, argument)
+        end if
+    class is (chi_squared_distribution)
+        if (x > 0.0d0) rst = log_regularized_gamma_upper(0.5d0 * real(this%dof, real64), 0.5d0 * x)
+    class is (binomial_distribution)
+        if (x >= 0.0d0 .and. x < real(this%n, real64)) &
+            rst = log_regularized_beta(aint(x) + 1.0d0, real(this%n, real64) - aint(x), this%p)
+    class is (poisson_distribution)
+        if (x >= 0.0d0 .and. ieee_is_finite(x)) &
+            rst = log_regularized_gamma_lower(aint(x) + 1.0d0, this%occrence_rate)
+    end select
+end function
+
+pure elemental function nd_log_pdf(this, x) result(rst)
+    !! Computes a normal log density directly, without first evaluating its PDF.
+    class(normal_distribution), intent(in) :: this
+        !! Normal law with finite mean and finite, positive standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point; infinite x gives -infinity.
+    real(real64) :: rst
+        !! Log density; invalid parameters or NaN x give NaN.
+    real(real64) :: standardized
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (ieee_is_nan(x)) return
+    if (.not.ieee_is_finite(this%mean_value)) return
+    if (.not.ieee_is_finite(this%standard_deviation)) return
+    if (this%standard_deviation <= 0.0d0) return
+    standardized = normal_standardized(x, this%mean_value, this%standard_deviation) / sqrt(2.0d0)
+    if (abs(standardized) > sqrt(huge(1.0d0))) then
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+    else
+        rst = -standardized**2 - log(this%standard_deviation) - 0.5d0 * log(2.0d0 * pi)
+    end if
+end function
+
+pure elemental function normal_standardized(x, mu, sigma) result(rst)
+    !! Standardizes a normal evaluation point without an overflowing subtraction.
+    real(real64), intent(in) :: x
+        !! Evaluation point; NaN inputs propagate.
+    real(real64), intent(in) :: mu
+        !! Finite normal mean.
+    real(real64), intent(in) :: sigma
+        !! Finite, strictly positive normal standard deviation.
+    real(real64) :: rst
+        !! Standardized point (x - mu) / sigma.
+
+    if ((x >= 0.0d0 .and. mu >= 0.0d0) .or. (x <= 0.0d0 .and. mu <= 0.0d0)) then
+        rst = (x - mu) / sigma
+    else
+        rst = x / sigma - mu / sigma
+    end if
+end function
+
+pure elemental function nd_survival(this, x) result(rst)
+    !! Computes P(X > x) for a normal law using the complementary error function.
+    class(normal_distribution), intent(in) :: this
+        !! Normal law with finite mean and finite, positive standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point.
+    real(real64) :: rst
+        !! Upper-tail probability; invalid parameters or NaN x give NaN.
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (ieee_is_nan(x)) return
+    if (.not.ieee_is_finite(this%mean_value)) return
+    if (.not.ieee_is_finite(this%standard_deviation)) return
+    if (this%standard_deviation <= 0.0d0) return
+    rst = 0.5d0 * erfc(normal_standardized(x, this%mean_value, this%standard_deviation) / sqrt(2.0d0))
+end function
+
+pure elemental function normal_log_tail(z) result(rst)
+    !! Computes the standard-normal log upper tail.
+    !! Uses ERFC centrally and an asymptotic Mills-ratio expansion for z >= 26,
+    !! retaining finite log probabilities after the ordinary tail underflows.
+    real(real64), intent(in) :: z
+        !! Standardized evaluation point.
+    real(real64) :: rst
+        !! Log upper-tail probability; +infinity gives -infinity, NaN propagates.
+    real(real64) :: term, total, previous, inverse_square
+    integer(int32) :: iteration
+
+    if (ieee_is_nan(z)) then
+        rst = z
+    else if (z < 0.0d0) then
+        rst = stable_log1p(-0.5d0 * erfc(-z / sqrt(2.0d0)))
+    else if (z < 26.0d0) then
+        rst = probability_log(0.5d0 * erfc(z / sqrt(2.0d0)))
+    else if (.not.ieee_is_finite(z) .or. z / sqrt(2.0d0) > sqrt(huge(1.0d0))) then
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+    else
+        inverse_square = (1.0d0 / z)**2
+        term = 1.0d0
+        total = term
+        do iteration = 1, 100
+            previous = term
+            term = -term * real(2 * iteration - 1, real64) * inverse_square
+            if (abs(term) >= abs(previous)) exit
+            total = total + term
+            if (abs(term) <= epsilon(total) * abs(total)) exit
+        end do
+        rst = -(z / sqrt(2.0d0))**2 - log(z) - 0.5d0 * log(2.0d0 * pi) + log(total)
+    end if
+end function
+
+pure elemental function nd_log_cdf(this, x) result(rst)
+    !! Computes the normal log lower tail, including extreme negative tails.
+    class(normal_distribution), intent(in) :: this
+        !! Normal law with finite mean and finite, positive standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point.
+    real(real64) :: rst
+        !! Log CDF; invalid parameters or NaN x give NaN.
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (ieee_is_nan(x)) return
+    if (.not.ieee_is_finite(this%mean_value)) return
+    if (.not.ieee_is_finite(this%standard_deviation)) return
+    if (this%standard_deviation <= 0.0d0) return
+    rst = normal_log_tail(-normal_standardized(x, this%mean_value, this%standard_deviation))
+end function
+
+pure elemental function nd_log_survival(this, x) result(rst)
+    !! Computes the normal log upper tail, including extreme positive tails.
+    class(normal_distribution), intent(in) :: this
+        !! Normal law with finite mean and finite, positive standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point.
+    real(real64) :: rst
+        !! Log survival probability; invalid parameters or NaN x give NaN.
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (ieee_is_nan(x)) return
+    if (.not.ieee_is_finite(this%mean_value)) return
+    if (.not.ieee_is_finite(this%standard_deviation)) return
+    if (this%standard_deviation <= 0.0d0) return
+    rst = normal_log_tail(normal_standardized(x, this%mean_value, this%standard_deviation))
+end function
+
+pure elemental function lnd_log_pdf(this, x) result(rst)
+    !! Computes a log-normal log density from the underlying normal log density.
+    class(log_normal_distribution), intent(in) :: this
+        !! Law with finite log-mean and finite, positive log-standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point in observation space, not log space.
+    real(real64) :: rst
+        !! Log density; x <= 0 gives -infinity, invalid parameters or NaN x NaN.
+    type(normal_distribution) :: normal
+
+    normal%mean_value = this%mean_value
+    normal%standard_deviation = this%standard_deviation
+    rst = normal%log_pdf(0.0d0)
+    if (ieee_is_nan(rst) .or. ieee_is_nan(x)) then
+        rst = ieee_value(0.0d0, ieee_quiet_nan)
+        return
+    end if
+    if (x <= 0.0d0 .or. .not.ieee_is_finite(x)) then
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+    else
+        rst = normal%log_pdf(log(x)) - log(x)
+    end if
+end function
+
+pure elemental function lnd_survival(this, x) result(rst)
+    !! Computes the log-normal upper-tail probability P(X > x).
+    class(log_normal_distribution), intent(in) :: this
+        !! Law with finite log-mean and finite, positive log-standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point in observation space.
+    real(real64) :: rst
+        !! Survival probability; x <= 0 gives one, invalid inputs give NaN.
+
+    rst = exp(this%log_survival(x))
+end function
+
+pure elemental function lnd_log_cdf(this, x) result(rst)
+    !! Computes the log-normal log lower tail using the normal log-CDF.
+    class(log_normal_distribution), intent(in) :: this
+        !! Law with finite log-mean and finite, positive log-standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point in observation space.
+    real(real64) :: rst
+        !! Log CDF; x <= 0 gives -infinity, invalid inputs give NaN.
+    type(normal_distribution) :: normal
+
+    normal%mean_value = this%mean_value
+    normal%standard_deviation = this%standard_deviation
+    rst = normal%log_cdf(0.0d0)
+    if (ieee_is_nan(rst) .or. ieee_is_nan(x)) then
+        rst = ieee_value(0.0d0, ieee_quiet_nan)
+    else if (x <= 0.0d0) then
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+    else
+        rst = normal%log_cdf(log(x))
+    end if
+end function
+
+pure elemental function lnd_log_survival(this, x) result(rst)
+    !! Computes the log-normal log upper tail using the normal log-survival.
+    class(log_normal_distribution), intent(in) :: this
+        !! Law with finite log-mean and finite, positive log-standard deviation.
+    real(real64), intent(in) :: x
+        !! Evaluation point in observation space.
+    real(real64) :: rst
+        !! Log survival probability; x <= 0 gives zero, invalid inputs give NaN.
+    type(normal_distribution) :: normal
+
+    normal%mean_value = this%mean_value
+    normal%standard_deviation = this%standard_deviation
+    rst = normal%log_survival(0.0d0)
+    if (ieee_is_nan(rst) .or. ieee_is_nan(x)) then
+        rst = ieee_value(0.0d0, ieee_quiet_nan)
+    else if (x <= 0.0d0) then
+        rst = 0.0d0
+    else
+        rst = normal%log_survival(log(x))
+    end if
+end function
+
 ! ------------------------------------------------------------------------------
 pure elemental function dist_std_var(this, x) result(rst)
     !! Computes the standardized variable for the distribution.
@@ -332,9 +810,7 @@ pure elemental function td_pdf(this, x) result(rst)
         !! The value of the function.
 
     ! Process
-    rst = gamma((this%dof + 1.0d0) / 2.0d0) / &
-        (sqrt(this%dof * pi) * gamma(this%dof / 2.0d0)) *&
-        (1.0d0 + x**2 / this%dof)**(-0.5d0 * (1.0d0 + this%dof))
+    rst = exp(this%log_pdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -354,9 +830,7 @@ pure elemental function td_cdf(this, x) result(rst)
 
     ! Process
     real(real64) :: t
-    t = this%dof / (this%dof + x**2)
-    rst = 1.0d0 - 0.5d0 * regularized_beta(0.5d0 * this%dof, 0.5d0, t)
-    if (x < 0) rst = 1.0d0 - rst
+    rst = this%survival(-x)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -442,8 +916,7 @@ pure elemental function nd_pdf(this, x) result(rst)
     real(real64) :: rst
         !! The value of the function.
 
-    rst = exp(-0.5d0 * ((x - this%mean_value) / this%standard_deviation)**2) / &
-        (this%standard_deviation * sqrt(2.0d0 * pi))
+    rst = exp(this%log_pdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -460,8 +933,7 @@ pure elemental function nd_cdf(this, x) result(rst)
     real(real64) :: rst
         !! The value of the function.
 
-    rst = 0.5d0 * (1.0d0 + erf((x - this%mean_value) / &
-        (this%standard_deviation * sqrt(2.0d0))))
+    rst = exp(this%log_cdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -547,8 +1019,7 @@ pure elemental function fd_pdf(this, x) result(rst)
     real(real64) :: d1, d2
     d1 = this%d1
     d2 = this%d2
-    rst = (1.0d0 / beta(0.5d0 * d1, 0.5d0 * d2)) * (d1 / d2)**(0.5d0 * d1) * &
-        x**(0.5d0 * d1 - 1.0d0) * (1.0d0 + d1 * x/ d2)**(-0.5d0 * (d1 + d2))
+    rst = exp(this%log_pdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -569,7 +1040,15 @@ pure elemental function fd_cdf(this, x) result(rst)
     real(real64) :: d1, d2
     d1 = this%d1
     d2 = this%d2
-    rst = regularized_beta(0.5d0 * d1, 0.5d0 * d2, d1 * x / (d1 * x + d2))
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (.not.ieee_is_finite(d1) .or. .not.ieee_is_finite(d2)) return
+    if (d1 <= 0.0d0 .or. d2 <= 0.0d0 .or. ieee_is_nan(x)) return
+    if (x <= 0.0d0) then
+        rst = 0.0d0
+    else
+        rst = regularized_beta(0.5d0 * d1, 0.5d0 * d2, &
+            exp(-softplus(log(d2) - log(d1) - log(x))))
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
@@ -680,7 +1159,7 @@ pure elemental function cs_pdf(this, x) result(rst)
 
     ! Process
     arg = 0.5d0 * this%dof
-    rst = 1.0d0 / (2.0d0**arg * gamma(arg)) * x**(arg - 1.0d0) * exp(-0.5d0 * x)
+    rst = exp(this%log_pdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -702,7 +1181,13 @@ pure elemental function cs_cdf(this, x) result(rst)
 
     ! Process
     arg = 0.5d0 * this%dof
-    rst = regularized_gamma_lower(arg, 0.5d0 * x)
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (this%dof <= 0 .or. ieee_is_nan(x)) return
+    if (x <= 0.0d0) then
+        rst = 0.0d0
+    else
+        rst = regularized_gamma_lower(arg, 0.5d0 * x)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
@@ -801,7 +1286,7 @@ pure elemental function bd_pdf(this, x) result(rst)
 
     ! Process
     dn = real(this%n, real64)
-    rst = (factorial(dn) / (factorial(x) * factorial(dn - x))) * (this%p**x) * (1.0d0 - this%p)**(dn - x)
+    rst = exp(this%log_pdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -825,7 +1310,16 @@ pure elemental function bd_cdf(this, x) result(rst)
 
     ! Process
     dn = real(this%n, real64)
-    rst = regularized_beta(dn - x, x + 1.0d0, 1.0d0 - this%p)
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (this%n < 0 .or. .not.ieee_is_finite(this%p) .or. ieee_is_nan(x)) return
+    if (this%p < 0.0d0 .or. this%p > 1.0d0) return
+    if (x < 0.0d0) then
+        rst = 0.0d0
+    else if (x >= dn) then
+        rst = 1.0d0
+    else
+        rst = regularized_beta(dn - aint(x), aint(x) + 1.0d0, 1.0d0 - this%p)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
@@ -915,33 +1409,32 @@ pure subroutine mvnd_init(this, mu, sigma)
         !! the supplied matrix is not positive-definite.
 
     ! Local Variables
-    integer(int32) :: n
+    integer(int32) :: n, row_index
+    real(real64) :: scale
     
     ! Initialization
     n = size(mu)
 
     ! Input Checking
-    if (size(sigma, 1) /= n .or. size(sigma, 2) /= n) error stop 3
+    if (size(sigma, 1) /= n .or. size(sigma, 2) /= n) error stop FS_MATRIX_SIZE_ERROR
+    if (n < 1) error stop FS_INVALID_INPUT_ERROR
+    if (.not.all(ieee_is_finite(mu)) .or. .not.all(ieee_is_finite(sigma))) &
+        error stop FS_INVALID_INPUT_ERROR
+    scale = maxval(abs(sigma))
+    if (scale == 0.0d0) error stop FS_INVALID_INPUT_ERROR
+    if (any(abs(sigma / scale - transpose(sigma) / scale) > &
+        10.0d0 * real(n, real64) * epsilon(scale))) error stop FS_INVALID_INPUT_ERROR
 
     ! Store the matrices
     this%m_means = mu
     this%m_cov = sigma
-    if (allocated(this%m_covInv)) then
-        if (size(this%m_covInv, 1) /= n .or. size(this%m_covInv, 2) /= n) then
-            deallocate(this%m_covInv)
-            allocate(this%m_covInv(n, n))
-        end if
-    else
-        allocate(this%m_covInv(n, n))
-    end if
-
     ! Compute the Cholesky factorization of the covariance matrix
     this%m_cholesky = cholesky_factor(sigma, upper = .false.)
-
-    ! Compute the inverse and determinant
-    call populate_identity(this%m_covInv)
-    call cholesky_inverse(this%m_cholesky, this%m_covInv)
-    this%m_covDet = cholesky_determinant(this%m_cholesky)
+    if (.not.all(ieee_is_finite(this%m_cholesky))) error stop FS_INVALID_INPUT_ERROR
+    this%m_logCovDet = 0.0d0
+    do row_index = 1, n
+        this%m_logCovDet = this%m_logCovDet + 2.0d0 * log(this%m_cholesky(row_index, row_index))
+    end do
 end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -954,17 +1447,38 @@ pure function mvnd_pdf(this, x) result(rst)
     real(real64) :: rst
         !! The value of the function.
 
-    ! Local Variables
-    integer(int32) :: n
-    real(real64) :: arg
-    real(real64), allocatable, dimension(:) :: delta, prod
+    rst = exp(this%log_pdf(x))
+end function
 
-    ! Process
-    n = size(x)
+pure function mvnd_log_pdf(this, x) result(rst)
+    !! Computes the multivariate-normal log density without an explicit inverse.
+    !! A triangular solve whitens the residual; normalization uses a log determinant.
+    use blas, only : dtrsv
+    class(multivariate_normal_distribution), intent(in) :: this
+        !! Initialized distribution with a symmetric positive-definite covariance.
+    real(real64), intent(in), dimension(:) :: x
+        !! Evaluation point, the same length as the stored mean vector.
+    real(real64) :: rst
+        !! Log density; uninitialized objects or nonfinite points give NaN.
+        !! An unrepresentably large squared residual gives negative infinity.
+    real(real64), allocatable, dimension(:) :: delta
+    real(real64) :: residual_norm
+    integer(int32) :: n
+
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (.not.allocated(this%m_means)) return
+    n = size(this%m_means)
+    if (size(x) /= n) error stop FS_ARRAY_SIZE_ERROR
+    if (.not.all(ieee_is_finite(x))) return
     delta = x - this%m_means
-    prod = matmul(this%m_covInv, delta) ! prod = inv(sigma) * (x - mu)
-    arg = dot_product(delta, prod)      ! arg = (x - mu)**T * prod
-    rst = exp(-0.5d0 * arg) / sqrt((2.0d0 * pi)**n * this%m_covDet)
+    call dtrsv('L', 'N', 'N', n, this%m_cholesky, n, delta, 1)
+    residual_norm = norm2(delta) / sqrt(2.0d0)
+    if (residual_norm > sqrt(huge(1.0d0))) then
+        rst = ieee_value(0.0d0, ieee_negative_inf)
+    else
+        rst = -residual_norm**2 - 0.5d0 * &
+            (real(n, real64) * log(2.0d0 * pi) + this%m_logCovDet)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
@@ -1064,9 +1578,7 @@ pure elemental function lnd_pdf(this, x) result(rst)
     real(real64) :: rst
         !! The value of the function.
 
-    rst = exp(-(log(x) - this%mean_value)**2 / &
-        (2.0d0 * this%standard_deviation**2)) / &
-        (x * this%standard_deviation * sqrt(2.0d0 * pi))
+    rst = exp(this%log_pdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -1083,8 +1595,7 @@ pure elemental function lnd_cdf(this, x) result(rst)
     real(real64) :: rst
         !! The value of the function.
 
-    rst = 0.5d0 * (1.0d0 + erf((log(x) - this%standard_deviation) / &
-        (this%standard_deviation * sqrt(2.0d0))))
+    rst = exp(this%log_cdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -1124,7 +1635,7 @@ pure function lnd_variance(this) result(rst)
         !! The log_normal distribution object.
     real(real64) :: rst
         !! The variance
-    rst = (exp(this%standard_deviation**2) - 1.0d0) * &
+    rst = stable_expm1(this%standard_deviation**2) * &
         exp(2.0d0 * this%mean_value + this%standard_deviation**2)
 end function
 
@@ -1172,7 +1683,7 @@ pure elemental function pd_pdf(this, x) result(rst)
 
     ! Process
     lambda = this%occrence_rate
-    rst = (lambda**x) * exp(-lambda) / factorial(x)
+    rst = exp(this%log_pdf(x))
 end function
 
 ! ------------------------------------------------------------------------------
@@ -1193,7 +1704,16 @@ pure elemental function pd_cdf(this, x) result(rst)
 
     ! Process
     lambda = this%occrence_rate
-    rst = regularized_gamma_upper(real(floor(x + 1.0d0), real64), lambda)
+    rst = ieee_value(0.0d0, ieee_quiet_nan)
+    if (.not.ieee_is_finite(lambda) .or. ieee_is_nan(x)) return
+    if (lambda < 0.0d0) return
+    if (x < 0.0d0) then
+        rst = 0.0d0
+    else if (.not.ieee_is_finite(x)) then
+        rst = 1.0d0
+    else
+        rst = regularized_gamma_upper(aint(x) + 1.0d0, lambda)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------

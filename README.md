@@ -92,7 +92,7 @@ from the prior means; they do not resume from the last stored state. Omitting
 `niter` uses 10,000 iterations per chain. Arrays of polymorphic objects must
 have a common dynamic type within each array.
 
-Likelihood evaluation uses a fused SIMD residual reduction without temporary
+Likelihood evaluation uses scaled, two-pass SIMD residual reductions without temporary
 residual or log-density arrays. Outside an existing OpenMP parallel region, it
 uses worker threads when the observation count reaches the target's public
 `likelihood_parallel_threshold` (default 10,000). This default is a starting
@@ -108,6 +108,56 @@ thread-safe intrinsic `random_number`, such as GNU Fortran. Random-stream
 assignment and reproducibility depend on that runtime and thread scheduling;
 this API does not provide per-chain seeds or thread-count-independent results.
 Without OpenMP enabled, the same API runs serially.
+
+## Numerical Behavior
+Distributions expose `log_pdf`, `survival`, `log_cdf`, and `log_survival` in
+addition to `pdf` and `cdf`. Prefer log densities for posterior calculations
+and direct survival functions for small upper-tail probabilities. Built-in
+laws use analytic log densities and direct beta/gamma or normal tails. Discrete
+PDFs are probability masses at integer-valued points; their CDFs include all
+masses at or below the supplied point, and survival means `P(X > x)`.
+
+Density and tail evaluations with invalid parameters or NaN inputs return NaN. Outside
+support, PDFs return zero and log densities return negative infinity. A
+support-endpoint density singularity can legitimately return positive infinity.
+Custom distributions have compatibility fallbacks that take logs of their PDFs
+or CDFs; override these methods for accurate extreme tails. Subclasses that
+change a built-in probability law must also override its log-density/tail methods.
+
+`log_regularized_beta`, `log_regularized_gamma_lower`, and
+`log_regularized_gamma_upper` avoid underflow in special-function probabilities.
+The regularized routines accept an optional `max_iterations` limit and return
+NaN on invalid input or failure to converge. `stable_log1p` and `stable_expm1`
+retain small differences lost by `log(1 + x)` and `exp(x) - 1`.
+
+MCMC stores log variance and evaluates the default Gaussian likelihood without
+exponentiating it. `likelihood` still accepts variance, but nonpositive or
+nonfinite variance now returns NaN rather than being silently clamped.
+`likelihood_log_variance` accepts log variance directly. `log_posterior` uses
+`evaluate_log_variance_prior`, whose density includes the variance-transform
+Jacobian. Custom targets changing the likelihood or variance prior must override
+these log-coordinate bindings; overriding only the variance-space methods no
+longer changes sampling. Initial states must have finite log posterior; invalid
+or impossible proposals are rejected. Correcting the Jacobian changes sampled
+variance distributions relative to earlier versions.
+
+Descriptive statistics use scaled/compensated reductions. Empty statistics,
+sample moments with fewer than two observations, and nonfinite observations
+return NaN; constant-data correlation also returns NaN. Quantiles require
+`0 <= q <= 1`, trimming requires `0 <= p < 0.5`, and pooled variance requires
+at least two observations per group. These contracts replace some earlier zero
+results or silent clamping. Standard deviation can remain finite even when
+variance overflows; truly unrepresentable moments return infinity.
+
+Multivariate-normal log densities use Cholesky solves and log determinants.
+Regression covariance uses an SVD of the design matrix, not its normal equations.
+`regression_covariance` optionally reports numerical rank and condition number;
+nonlinear fits expose the same diagnostics in `convergence_info` when covariance
+is requested. Rank-deficient covariance is a pseudocovariance: discarded
+directions are not evidence of zero parameter uncertainty. Nonlinear covariance
+requires additional evaluations of the final Jacobian, counted in the reported
+function evaluations. Ordinary regression coefficients retain their existing
+parameterization; scaling polynomial predictors remains advisable.
 
 ## Documentation
 The generated API documentation is available [here](https://jchristopherson.github.io/fstats/).

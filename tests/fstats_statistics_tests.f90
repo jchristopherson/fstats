@@ -28,8 +28,42 @@ module fstats_statistics_tests
     use fstats
     use fstats_test_helper
     use fstats_types
+    use ieee_arithmetic
     implicit none
 contains
+    function test_statistics_numerical_robustness() result(rst)
+        !! Checks scaled moments, large offsets, cancellation, and undefined inputs.
+        logical :: rst
+            !! True when all descriptive-statistics numerical contracts hold.
+        real(real64), dimension(4) :: values, other
+        real(real64), dimension(0) :: empty
+        real(real64) :: expected
+
+        values = 1.0d12 + [0.0d0, 1.0d0, 2.0d0, 3.0d0]
+        other = 2.0d0 * values
+        rst = abs(variance(values) - 5.0d0 / 3.0d0) < 1.0d-13
+        rst = rst .and. abs(covariance(values, other) - 10.0d0 / 3.0d0) < 1.0d-12
+        rst = rst .and. abs(correlation(values, other) - 1.0d0) < 1.0d-14
+        values = [1.0d154, -1.0d154, 1.0d154, -1.0d154]
+        rst = rst .and. abs(variance(values) / 1.0d308 - 4.0d0 / 3.0d0) < 1.0d-14
+        rst = rst .and. abs(correlation(values, -values) + 1.0d0) < 1.0d-14
+        rst = rst .and. abs(standard_deviation([1.0d308, -1.0d308]) / 1.0d308 - sqrt(2.0d0)) < 1.0d-14
+        rst = rst .and. mean([1.0d308, -1.0d308]) == 0.0d0
+        rst = rst .and. abs(mean([1.0d308, 1.0d0, -1.0d308]) - 1.0d0 / 3.0d0) < 1.0d-14
+        expected = 0.75d0 * huge(1.0d0)
+        rst = rst .and. median([expected, expected]) == expected
+        rst = rst .and. quantile([1.0d0, 2.0d0, 3.0d0], 0.0d0) == 1.0d0
+        rst = rst .and. quantile([1.0d0, 2.0d0, 3.0d0], 1.0d0) == 3.0d0
+        rst = rst .and. ieee_is_nan(mean(empty))
+        rst = rst .and. ieee_is_nan(variance([1.0d0]))
+        rst = rst .and. ieee_is_nan(median(empty))
+        rst = rst .and. ieee_is_nan(quantile(empty, 0.5d0))
+        rst = rst .and. ieee_is_nan(correlation([1.0d0, 1.0d0], [2.0d0, 3.0d0]))
+        rst = rst .and. ieee_is_nan(mean([ieee_value(0.0d0, ieee_quiet_nan)]))
+        rst = rst .and. abs(pooled_variance([1.0d308, 1.0d308], [1000, 1000]) / 1.0d308 - 1.0d0) < 1.0d-14
+        if (.not.rst) print '(A)', 'TEST FAILED: statistics numerical robustness'
+    end function
+
 ! ------------------------------------------------------------------------------
     function mean_test_1() result(rst)
         ! Arguments
