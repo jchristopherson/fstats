@@ -44,4 +44,5 @@ module fstats
     use fstats_interp
     use fstats_missing_data
     use fstats_msa
+    use fstats_robust_statistics
 end module

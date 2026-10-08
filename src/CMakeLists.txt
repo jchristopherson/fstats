@@ -22,6 +22,7 @@ set(FSTATS_SOURCES
     ${dir}/fstats_interp.f90
     ${dir}/fstats_missing_data.f90
     ${dir}/fstats_msa.f90
+    ${dir}/fstats_robust_statistics.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 

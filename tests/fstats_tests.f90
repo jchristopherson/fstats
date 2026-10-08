@@ -95,6 +95,9 @@ program tests
     local = test_statistics_numerical_robustness()
     if (.not.local) overall = .false.
 
+    local = tukey_biweight_test()
+    if (.not.local) overall = .false.
+
     local = mean_test_1()
     if (.not.local) overall = .false.
 

@@ -26,6 +26,8 @@
 module fstats_statistics_tests
     use iso_fortran_env
     use fstats
+    use fstats_robust_statistics, only : median_absolute_deviation, &
+        tukey_biweight_psi, tukey_biweight_rho, tukey_biweight_irls_weight
     use fstats_test_helper
     use fstats_types
     use ieee_arithmetic
@@ -37,7 +39,7 @@ contains
             !! True when all descriptive-statistics numerical contracts hold.
         real(real64), dimension(4) :: values, other
         real(real64), dimension(0) :: empty
-        real(real64) :: expected
+        real(real64) :: expected, mad
 
         values = 1.0d12 + [0.0d0, 1.0d0, 2.0d0, 3.0d0]
         other = 2.0d0 * values
@@ -60,8 +62,62 @@ contains
         rst = rst .and. ieee_is_nan(quantile(empty, 0.5d0))
         rst = rst .and. ieee_is_nan(correlation([1.0d0, 1.0d0], [2.0d0, 3.0d0]))
         rst = rst .and. ieee_is_nan(mean([ieee_value(0.0d0, ieee_quiet_nan)]))
+        mad = median_absolute_deviation([1.0d0, 2.0d0, 2.0d0, 4.0d0, 100.0d0])
+        rst = rst .and. mad == 1.0d0
+        mad = median_absolute_deviation([1.0d0, 2.0d0, 3.0d0, 4.0d0])
+        rst = rst .and. mad == 1.0d0
+        rst = rst .and. ieee_is_nan(median_absolute_deviation(empty))
+        mad = median_absolute_deviation([-huge(1.0d0), huge(1.0d0), huge(1.0d0)])
+        rst = rst .and. mad == 0.0d0
         rst = rst .and. abs(pooled_variance([1.0d308, 1.0d308], [1000, 1000]) / 1.0d308 - 1.0d0) < 1.0d-14
         if (.not.rst) print '(A)', 'TEST FAILED: statistics numerical robustness'
+    end function
+
+! ------------------------------------------------------------------------------
+    function tukey_biweight_test() result(rst)
+        logical :: rst
+        real(real64), parameter :: k = 2.0d0
+        real(real64), parameter :: default_k = 4.685d0
+        real(real64), parameter :: tol = 1.0d-14
+
+        rst = .true.
+
+        if (tukey_biweight_psi(1.0d0, k) /= 9.0d0 / 16.0d0 .or. &
+            tukey_biweight_psi(-1.0d0, k) /= -9.0d0 / 16.0d0) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: Tukey biweight psi interior/symmetry'
+        end if
+        if (abs(tukey_biweight_rho(1.0d0, k) - 37.0d0 / 96.0d0) > tol .or. &
+            tukey_biweight_rho(-1.0d0, k) /= tukey_biweight_rho(1.0d0, k)) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: Tukey biweight rho interior/symmetry'
+        end if
+        if (tukey_biweight_irls_weight(1.0d0, k) /= 9.0d0 / 16.0d0 .or. &
+            tukey_biweight_irls_weight(-1.0d0, k) /= &
+            tukey_biweight_irls_weight(1.0d0, k)) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: Tukey biweight IRLS weight interior/symmetry'
+        end if
+
+        if (tukey_biweight_psi(k, k) /= 0.0d0 .or. &
+            abs(tukey_biweight_rho(k, k) - k**2 / 6.0d0) > tol .or. &
+            tukey_biweight_irls_weight(k, k) /= 0.0d0 .or. &
+            tukey_biweight_psi(k + 0.1d0, k) /= 0.0d0 .or. &
+            tukey_biweight_rho(k + 0.1d0, k) /= k**2 / 6.0d0 .or. &
+            tukey_biweight_irls_weight(k + 0.1d0, k) /= 0.0d0) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: Tukey biweight cutoff'
+        end if
+
+        if (tukey_biweight_psi(0.0d0) /= 0.0d0 .or. &
+            tukey_biweight_rho(0.0d0) /= 0.0d0 .or. &
+            tukey_biweight_irls_weight(0.0d0) /= 1.0d0 .or. &
+            tukey_biweight_psi(5.0d0) /= 0.0d0 .or. &
+            abs(tukey_biweight_rho(5.0d0) - default_k**2 / 6.0d0) > tol .or. &
+            tukey_biweight_irls_weight(5.0d0) /= 0.0d0) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: Tukey biweight default tuning constant'
+        end if
     end function
 
 ! ------------------------------------------------------------------------------
