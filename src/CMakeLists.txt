@@ -9,6 +9,14 @@ set(FSTATS_SOURCES
     ${dir}/hypothesis/fstats_hypothesis.f90
     ${dir}/statistics/fstats_anova.f90
     ${dir}/distributions/fstats_distributions.f90
+    ${dir}/distributions/fstats_t_distribution.f90
+    ${dir}/distributions/fstats_normal_distribution.f90
+    ${dir}/distributions/fstats_f_distribution.f90
+    ${dir}/distributions/fstats_chi_squared_distribution.f90
+    ${dir}/distributions/fstats_binomial_distribution.f90
+    ${dir}/distributions/fstats_log_normal_distribution.f90
+    ${dir}/distributions/fstats_poisson_distribution.f90
+    ${dir}/distributions/fstats_multivariate_normal_distribution.f90
     ${dir}/utilities/fstats_helper_routines.f90
     ${dir}/regression/fstats_regression.f90
     ${dir}/regression/fstats_linear_regression.f90

@@ -29,7 +29,123 @@ module fstats_distribution_tests
     use fstats_test_helper
     use ieee_arithmetic
     implicit none
+
+    type, extends(distribution) :: fallback_distribution
+    contains
+        procedure :: pdf => fallback_probability
+        procedure :: cdf => fallback_probability
+        procedure :: mean => fallback_property
+        procedure :: median => fallback_property
+        procedure :: mode => fallback_property
+        procedure :: variance => fallback_property
+        procedure :: recenter => fallback_recenter
+    end type
+
+    type, extends(multivariate_distribution) :: fallback_multivariate_distribution
+    contains
+        procedure :: pdf => fallback_multivariate_pdf
+    end type
 contains
+    function test_distribution_dispatch() result(rst)
+        use fstats_t_distribution, only : t_distribution
+        use fstats_normal_distribution, only : normal_distribution
+        use fstats_f_distribution, only : f_distribution
+        use fstats_chi_squared_distribution, only : chi_squared_distribution
+        use fstats_binomial_distribution, only : binomial_distribution
+        use fstats_log_normal_distribution, only : log_normal_distribution
+        use fstats_poisson_distribution, only : poisson_distribution
+        use fstats_multivariate_normal_distribution, only : multivariate_normal_distribution
+        logical :: rst
+        class(distribution), allocatable :: law
+        class(multivariate_distribution), allocatable :: multivariate_law
+        type(multivariate_normal_distribution) :: multivariate_normal
+        type(fallback_multivariate_distribution) :: multivariate_fallback
+        real(real64) :: nan, infinity, density, value
+
+        nan = ieee_value(0.0d0, ieee_quiet_nan)
+        infinity = ieee_value(0.0d0, ieee_positive_inf)
+        law = t_distribution(dof=1.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, 1.0d0 / (4.0d0 * acos(0.0d0)), 0.75d0, 0.25d0)
+        law = normal_distribution(standard_deviation=1.0d0, mean_value=0.0d0)
+        density = 1.0d0 / sqrt(4.0d0 * acos(0.0d0))
+        rst = check_distribution_bindings(law, 0.0d0, density, 0.5d0, 0.5d0) .and. rst
+        law = f_distribution(d1=2.0d0, d2=2.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, 0.25d0, 0.5d0, 0.5d0) .and. rst
+        law = chi_squared_distribution(dof=2)
+        rst = check_distribution_bindings(law, 2.0d0, 0.5d0 / exp(1.0d0), &
+            1.0d0 - exp(-1.0d0), exp(-1.0d0)) .and. rst
+        rst = abs(law%log_survival(2000.0d0) + 1000.0d0) < 1.0d-12 .and. rst
+        law = binomial_distribution(n=2, p=0.5d0)
+        rst = check_distribution_bindings(law, 1.0d0, 0.5d0, 0.75d0, 0.25d0) .and. rst
+        law = log_normal_distribution(standard_deviation=1.0d0, mean_value=0.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, density, 0.5d0, 0.5d0) .and. rst
+        law = poisson_distribution(occrence_rate=2.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, 2.0d0 * exp(-2.0d0), &
+            3.0d0 * exp(-2.0d0), 1.0d0 - 3.0d0 * exp(-2.0d0)) .and. rst
+        law = fallback_distribution()
+        rst = check_distribution_bindings(law, 0.25d0, 0.25d0, 0.25d0, 0.75d0) .and. rst
+        rst = law%log_pdf(0.0d0) == -infinity .and. rst
+        rst = law%log_cdf(0.0d0) == -infinity .and. rst
+        rst = law%log_survival(1.0d0) == -infinity .and. rst
+        rst = ieee_is_nan(law%log_pdf(-1.0d0)) .and. rst
+        rst = ieee_is_nan(law%log_cdf(-1.0d0)) .and. rst
+        rst = ieee_is_nan(law%log_survival(2.0d0)) .and. rst
+        rst = ieee_is_nan(law%log_pdf(nan)) .and. rst
+        rst = ieee_is_nan(law%survival(nan)) .and. rst
+        rst = ieee_is_nan(law%log_cdf(nan)) .and. rst
+        rst = ieee_is_nan(law%log_survival(nan)) .and. rst
+        call multivariate_normal%initialize([0.0d0], reshape([1.0d0], [1, 1]))
+        multivariate_law = multivariate_normal
+        value = multivariate_law%log_pdf([40.0d0])
+        rst = abs(value + 800.0d0 + 0.5d0 * log(4.0d0 * acos(0.0d0))) < 1.0d-12 .and. rst
+        multivariate_law = multivariate_fallback
+        rst = abs(multivariate_law%log_pdf([0.25d0]) - log(0.25d0)) < 1.0d-14 .and. rst
+        rst = multivariate_law%log_pdf([0.0d0]) == -infinity .and. rst
+        rst = ieee_is_nan(multivariate_law%log_pdf([-1.0d0])) .and. rst
+        rst = ieee_is_nan(multivariate_law%log_pdf([nan])) .and. rst
+        if (.not.rst) print '(A)', 'TEST FAILED: distribution dispatch and fallbacks'
+    end function
+
+    function check_distribution_bindings(law, point, density, lower_tail, upper_tail) result(rst)
+        class(distribution), intent(in) :: law
+        real(real64), intent(in) :: point, density, lower_tail, upper_tail
+        logical :: rst
+        real(real64), parameter :: tolerance = 1.0d-12
+
+        rst = abs(law%log_pdf(point) - log(density)) < tolerance
+        rst = abs(law%survival(point) - upper_tail) < tolerance .and. rst
+        rst = abs(law%log_cdf(point) - log(lower_tail)) < tolerance .and. rst
+        rst = abs(law%log_survival(point) - log(upper_tail)) < tolerance .and. rst
+    end function
+
+    pure elemental function fallback_probability(this, x) result(rst)
+        class(fallback_distribution), intent(in) :: this
+        real(real64), intent(in) :: x
+        real(real64) :: rst
+
+        rst = x
+    end function
+
+    pure function fallback_property(this) result(rst)
+        class(fallback_distribution), intent(in) :: this
+        real(real64) :: rst
+
+        rst = 0.0d0
+    end function
+
+    subroutine fallback_recenter(this, x)
+        class(fallback_distribution), intent(inout) :: this
+        real(real64), intent(in) :: x
+    end subroutine
+
+    pure function fallback_multivariate_pdf(this, x) result(rst)
+        class(fallback_multivariate_distribution), intent(in) :: this
+        real(real64), intent(in) :: x(:)
+        real(real64) :: rst
+
+        rst = x(1)
+    end function
+
     function test_distribution_numerical_robustness() result(rst)
         !! Checks extreme tails, log densities, discrete boundaries, and invalid inputs.
         logical :: rst

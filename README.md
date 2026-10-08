@@ -109,6 +109,25 @@ assignment and reproducibility depend on that runtime and thread scheduling;
 this API does not provide per-chain seeds or thread-count-independent results.
 Without OpenMP enabled, the same API runs serially.
 
+## Distribution Modules
+Each concrete distribution has its own module and source file in
+`src/distributions`. The module name is `fstats_` followed by the type name,
+for example:
+
+```fortran
+use fstats_distributions, only : distribution
+use fstats_normal_distribution, only : normal_distribution
+```
+
+`fstats_distributions` contains the abstract `distribution` and
+`multivariate_distribution` types, their interfaces, and shared supporting
+routines. It no longer exports concrete distribution types. Replace direct
+imports of concrete types from that module with their individual modules,
+or continue to use `use fstats` to access all distributions unchanged.
+
+Each built-in distribution implements its own log-density and tail bindings;
+the abstract bases supply generic compatibility fallbacks for custom laws.
+
 ## Numerical Behavior
 Distributions expose `log_pdf`, `survival`, `log_cdf`, and `log_survival` in
 addition to `pdf` and `cdf`. Prefer log densities for posterior calculations

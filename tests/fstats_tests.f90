@@ -64,6 +64,8 @@ program tests
     end if
 
     ! Distribution Tests
+    local = test_distribution_dispatch()
+    if (.not.local) overall = .false.
     local = test_distribution_numerical_robustness()
     if (.not.local) overall = .false.
     local = test_multivariate_normal_numerical_robustness()

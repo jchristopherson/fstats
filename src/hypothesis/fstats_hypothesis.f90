@@ -29,6 +29,8 @@ module fstats_hypothesis
     use fstats_errors
     use fstats_special_functions
     use fstats_distributions
+    use fstats_f_distribution, only : f_distribution
+    use fstats_chi_squared_distribution, only : chi_squared_distribution
     use fstats_descriptive_statistics
     use fstats_types
     private

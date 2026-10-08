@@ -27,6 +27,7 @@ module fstats_sampling
     use iso_fortran_env
     use linalg, only : sort
     use fstats_distributions
+    use fstats_multivariate_normal_distribution, only : multivariate_normal_distribution
     implicit none
     private
     public :: box_muller_sample

@@ -32,6 +32,14 @@ module fstats
     use fstats_descriptive_statistics
     use fstats_hypothesis
     use fstats_distributions
+    use fstats_t_distribution, only : t_distribution
+    use fstats_normal_distribution, only : normal_distribution
+    use fstats_f_distribution, only : f_distribution
+    use fstats_chi_squared_distribution, only : chi_squared_distribution
+    use fstats_binomial_distribution, only : binomial_distribution
+    use fstats_log_normal_distribution, only : log_normal_distribution
+    use fstats_poisson_distribution, only : poisson_distribution
+    use fstats_multivariate_normal_distribution, only : multivariate_normal_distribution
     use fstats_anova
     use fstats_helper_routines
     use fstats_regression

@@ -4,6 +4,7 @@ module fstats_linear_regression
     use blas
     use fstats_errors
     use fstats_distributions
+    use fstats_t_distribution, only : t_distribution
     implicit none
     private
     public :: linear_least_squares

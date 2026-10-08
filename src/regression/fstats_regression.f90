@@ -31,6 +31,7 @@ module fstats_regression
     use blas
     use fstats_descriptive_statistics
     use fstats_distributions
+    use fstats_t_distribution, only : t_distribution
     use fstats_special_functions
     use fstats_hypothesis
     implicit none

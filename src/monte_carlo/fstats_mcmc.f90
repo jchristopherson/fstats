@@ -27,6 +27,8 @@ module fstats_mcmc
     use iso_fortran_env
     use ieee_arithmetic
     use fstats_distributions
+    use fstats_normal_distribution, only : normal_distribution
+    use fstats_log_normal_distribution, only : log_normal_distribution
     use fstats_sampling
     use fstats_errors
     use fstats_descriptive_statistics
