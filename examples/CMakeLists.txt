@@ -96,12 +96,18 @@ add_executable(doe_rsm_optimization_example doe_rsm_optimization_example.f90)
 target_link_libraries(doe_rsm_optimization_example PRIVATE fstats)
 
 if (${BUILD_SHARED_LIBS} AND WIN32)
-    add_custom_command(
-        TARGET full_factorial_example
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy 
-        $<TARGET_RUNTIME_DLLS:full_factorial_example> 
-        $<TARGET_FILE_DIR:full_factorial_example>
-        COMMAND_EXPAND_LISTS
-    )
+    get_property(example_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+    foreach(example_target IN LISTS example_targets)
+        get_target_property(example_target_type ${example_target} TYPE)
+        if (example_target_type STREQUAL "EXECUTABLE")
+            add_custom_command(
+                TARGET ${example_target}
+                POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_RUNTIME_DLLS:${example_target}>
+                $<TARGET_FILE_DIR:${example_target}>
+                COMMAND_EXPAND_LISTS
+            )
+        endif()
+    endforeach()
 endif()
