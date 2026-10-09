@@ -30,8 +30,8 @@ set(FSTATS_SOURCES
     ${dir}/design/fstats_doe_response_surface.f90
     ${dir}/measurement/fstats_allan.f90
     ${dir}/utilities/fstats_errors.f90
-    ${dir}/modeling/fstats_bootstrap.f90
-    ${dir}/modeling/fstats_sampling.f90
+    ${dir}/sampling/fstats_bootstrap.f90
+    ${dir}/sampling/fstats_sampling.f90
     ${dir}/interpolation/fstats_smoothing.f90
     ${dir}/utilities/fstats_types.f90
     ${dir}/monte_carlo/fstats_mcmc.f90
