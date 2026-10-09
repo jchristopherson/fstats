@@ -46,6 +46,12 @@ module fstats
     use fstats_linear_regression
     use fstats_levenberg_marquardt
     use fstats_experimental_design
+    use fstats_doe_designs
+    use fstats_doe_coding
+    use fstats_doe_models
+    use fstats_doe_diagnostics
+    use fstats_doe_prediction
+    use fstats_doe_response_surface
     use fstats_allan
     use fstats_bootstrap
     use fstats_sampling

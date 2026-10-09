@@ -6,7 +6,7 @@ set(FSTATS_SOURCES
     ${dir}/fstats.f90
     ${dir}/utilities/fstats_special_functions.f90
     ${dir}/statistics/fstats_descriptive_statistics.f90
-    ${dir}/hypothesis/fstats_hypothesis.f90
+    ${dir}/tests/fstats_hypothesis.f90
     ${dir}/statistics/fstats_anova.f90
     ${dir}/distributions/fstats_distributions.f90
     ${dir}/distributions/fstats_t_distribution.f90
@@ -22,6 +22,12 @@ set(FSTATS_SOURCES
     ${dir}/regression/fstats_linear_regression.f90
     ${dir}/regression/fstats_levenberg_marquardt.f90
     ${dir}/design/fstats_experimental_design.f90
+    ${dir}/design/fstats_doe_designs.f90
+    ${dir}/design/fstats_doe_coding.f90
+    ${dir}/design/fstats_doe_models.f90
+    ${dir}/design/fstats_doe_diagnostics.f90
+    ${dir}/design/fstats_doe_prediction.f90
+    ${dir}/design/fstats_doe_response_surface.f90
     ${dir}/measurement/fstats_allan.f90
     ${dir}/utilities/fstats_errors.f90
     ${dir}/modeling/fstats_bootstrap.f90

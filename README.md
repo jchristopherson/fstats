@@ -20,6 +20,9 @@ FSTATS includes the following areas of functionality:
 - Signal and numerical methods: Allan variance, LOWESS smoothing, linear/polynomial/spline/Hermite interpolation, and missing-data imputation.
 - Special functions: beta and gamma functions, regularized and incomplete forms, and the digamma function.
 
+## Documentation
+The generated API documentation is available [here](https://jchristopherson.github.io/fstats/).
+
 ## Building with CMake
 [CMake](https://cmake.org/) 3.24 or newer, a Fortran 2018 compiler, Git, and OpenMP support are required. CMake looks for [LINALG](https://github.com/jchristopherson/linalg) and [COLLECTIONS](https://github.com/jchristopherson/collections); if compatible installations are not found, it fetches reference versions automatically.
 
@@ -178,8 +181,23 @@ requires additional evaluations of the final Jacobian, counted in the reported
 function evaluations. Ordinary regression coefficients retain their existing
 parameterization; scaling polynomial predictors remains advisable.
 
-## Documentation
-The generated API documentation is available [here](https://jchristopherson.github.io/fstats/).
+## Experimental Design Modules
+All experimental design types are declared in `fstats_experimental_design`.
+Procedures are organized into the following modules in `src/design`:
+
+- `fstats_doe_designs`: design generation, size calculations, and efficiency assessment.
+- `fstats_doe_coding`: natural-to-coded and coded-to-natural factor conversions.
+- `fstats_doe_models`: model fitting and evaluation.
+- `fstats_doe_diagnostics`: goodness of fit, residual analysis, model comparison, and model ANOVA.
+- `fstats_doe_prediction`: predictions and uncertainty intervals.
+- `fstats_doe_response_surface`: response-surface optimization.
+
+`use fstats` continues to expose all these types and procedures. Code that
+previously imported procedures directly from `fstats_experimental_design` must
+instead import them from the corresponding module above, or use `fstats`.
+Import shared types from `fstats_experimental_design` when using individual
+procedure modules. This organization does not change numerical behavior;
+existing approximations and placeholder calculations remain unchanged.
 
 ## External Libraries
 FSTATS uses [LINALG](https://github.com/jchristopherson/linalg) for linear algebra and [COLLECTIONS](https://github.com/jchristopherson/collections) for collection types. An optimized BLAS and LAPACK installation is recommended for best performance when using LINALG.
