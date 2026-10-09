@@ -5,7 +5,11 @@ set(dir ${CMAKE_CURRENT_SOURCE_DIR})
 set(FSTATS_SOURCES
     ${dir}/fstats.f90
     ${dir}/utilities/fstats_special_functions.f90
+    ${dir}/utilities/fstats_types.f90
+    ${dir}/utilities/fstats_errors.f90
+    ${dir}/utilities/fstats_helper_routines.f90
     ${dir}/statistics/fstats_descriptive_statistics.f90
+    ${dir}/statistics/fstats_robust_statistics.f90
     ${dir}/tests/fstats_hypothesis.f90
     ${dir}/statistics/fstats_anova.f90
     ${dir}/distributions/fstats_distributions.f90
@@ -17,7 +21,6 @@ set(FSTATS_SOURCES
     ${dir}/distributions/fstats_log_normal_distribution.f90
     ${dir}/distributions/fstats_poisson_distribution.f90
     ${dir}/distributions/fstats_multivariate_normal_distribution.f90
-    ${dir}/utilities/fstats_helper_routines.f90
     ${dir}/regression/fstats_regression.f90
     ${dir}/regression/fstats_linear_regression.f90
     ${dir}/regression/fstats_levenberg_marquardt.f90
@@ -29,16 +32,15 @@ set(FSTATS_SOURCES
     ${dir}/design/fstats_doe_prediction.f90
     ${dir}/design/fstats_doe_response_surface.f90
     ${dir}/measurement/fstats_allan.f90
-    ${dir}/utilities/fstats_errors.f90
+    ${dir}/measurement/fstats_missing_data.f90
+    ${dir}/measurement/fstats_msa.f90
     ${dir}/sampling/fstats_bootstrap.f90
     ${dir}/sampling/fstats_sampling.f90
     ${dir}/interpolation/fstats_smoothing.f90
-    ${dir}/utilities/fstats_types.f90
-    ${dir}/monte_carlo/fstats_mcmc.f90
     ${dir}/interpolation/fstats_interp.f90
-    ${dir}/measurement/fstats_missing_data.f90
-    ${dir}/measurement/fstats_msa.f90
-    ${dir}/statistics/fstats_robust_statistics.f90
+    ${dir}/monte_carlo/fstats_mcmc.f90
+    ${dir}/glm/fstats_glm_types.f90
+    ${dir}/glm/fstats_glm_irls.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 

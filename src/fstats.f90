@@ -61,4 +61,6 @@ module fstats
     use fstats_missing_data
     use fstats_msa
     use fstats_robust_statistics
+    use fstats_glm_types
+    use fstats_glm_irls
 end module

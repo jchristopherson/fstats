@@ -13,6 +13,7 @@ set(fstats_test_sources
     fstats_bootstrap_tests.f90
     fstats_missing_data_tests.f90
     fstats_msa_tests.f90
+    fstats_glm_tests.f90
 )
 
 # Dependencies
@@ -43,6 +44,19 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
     COMMAND $<TARGET_FILE:fstats_tests>
 )
+
+add_test(NAME fstats_glm COMMAND $<TARGET_FILE:fstats_tests> glm)
+foreach(invalid_case IN ITEMS
+    rows columns empty no-columns underdetermined family nan-x inf-y nan-beta
+    binomial-range poisson-range gamma-range iterations tolerance nan-tolerance
+    cutoff inf-cutoff singular zero-column gamma-domain poisson-overflow
+    poisson-underflow binomial-boundary predictor-overflow sum-overflow
+    negative nan infinite size unallocated zero
+)
+    add_test(NAME fstats_glm_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> glm-invalid-${invalid_case})
+    set_tests_properties(fstats_glm_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
 
 foreach(thread_count IN ITEMS 1 4)
     add_test(

@@ -36,6 +36,7 @@ program tests
     use fstats_bootstrap_tests
     use fstats_missing_data_tests
     use fstats_msa_tests
+    use fstats_glm_tests
     implicit none
 
     ! Variables
@@ -46,6 +47,15 @@ program tests
     overall = .true.
 
     call get_command_argument(1, test_group)
+    if (index(test_group, 'glm-invalid-') == 1) then
+        call test_glm_invalid_input(trim(test_group(13:)))
+        stop 0
+    end if
+    if (trim(test_group) == 'glm') then
+        local = test_glm_irls()
+        if (.not.local) stop 1
+        stop
+    end if
     if (trim(test_group) == 'mcmc') then
         local = test_mcmc_numerical_robustness()
         if (.not.local) overall = .false.
@@ -64,6 +74,9 @@ program tests
     end if
 
     ! Distribution Tests
+    local = test_glm_irls()
+    if (.not.local) overall = .false.
+
     local = test_distribution_dispatch()
     if (.not.local) overall = .false.
     local = test_distribution_numerical_robustness()
