@@ -51,7 +51,8 @@ foreach(invalid_case IN ITEMS
     binomial-range poisson-range gamma-range iterations tolerance nan-tolerance
     cutoff inf-cutoff singular zero-column gamma-domain poisson-overflow
     poisson-underflow binomial-boundary predictor-overflow sum-overflow
-    negative nan infinite size unallocated zero
+    negative nan infinite size unallocated zero stats-size covariance-size
+    alpha-zero alpha-one alpha-nan gamma-inference-dof robust-inference-dof covariance-overflow
 )
     add_test(NAME fstats_glm_invalid_${invalid_case}
         COMMAND $<TARGET_FILE:fstats_tests> glm-invalid-${invalid_case})

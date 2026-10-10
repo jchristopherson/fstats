@@ -33,6 +33,7 @@ module fstats_glm_types
     public :: FS_GLM_GAMMA
     public :: glm_options
     public :: glm_convergence_info
+    public :: glm_coefficient_statistics
     public :: inverse_link_function
     public :: robust_weight_function
     public :: assignment(=)
@@ -66,6 +67,39 @@ module fstats_glm_types
         !! Copy every component of a glm_options object.
         module procedure :: go_assign
     end interface
+
+    type glm_coefficient_statistics
+        !! Inferential statistics for one GLM coefficient, on the coefficient
+        !! (linear-predictor) scale rather than the response scale. Use one
+        !! object per fitted coefficient, in the same order as beta.
+        !!
+        !! This type is a container: components have no default values and
+        !! must be populated by an inference calculation before use. IRLS can
+        !! populate it through its optional stats output after convergence;
+        !! on nonconvergence that output contains NaNs. Standard errors require a GLM covariance estimate;
+        !! robust fits generally require an estimating-equation sandwich
+        !! covariance, not simply the inverse robust-weighted information.
+        real(real64) :: standard_error
+            !! Square root of the coefficient covariance diagonal entry.
+        real(real64) :: wald_statistic
+            !! Signed coefficient divided by its standard error, testing the
+            !! null hypothesis that the coefficient is zero. Ordinarily an
+            !! asymptotic z statistic; approximate t inference may be used
+            !! when dispersion is estimated. The reference distribution must
+            !! be specified by the calculation producing this object.
+        real(real64) :: p_value
+            !! Two-sided tail probability under the null hypothesis and the
+            !! chosen reference distribution, in [0,1]. This is not the
+            !! probability that the coefficient is unimportant or zero.
+        real(real64) :: confidence_interval_lower
+            !! Lower confidence bound for the coefficient, not an interval
+            !! half-width. The producing calculation specifies the confidence
+            !! level and interval method (for example, Wald or profile likelihood).
+        real(real64) :: confidence_interval_upper
+            !! Upper confidence bound at the same level and using the same
+            !! method as confidence_interval_lower. Separate bounds allow
+            !! asymmetric intervals; no inverse-link transformation is implied.
+    end type
 
     type glm_convergence_info
         !! Provides information regarding convergence status.

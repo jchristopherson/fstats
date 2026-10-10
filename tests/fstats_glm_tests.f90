@@ -2,7 +2,8 @@ module fstats_glm_tests
     use iso_fortran_env
     use ieee_arithmetic
     use fstats, only : irls, glm_options, glm_convergence_info, &
-        robust_weight_function, FS_GLM_BINOMIAL, FS_GLM_POISSON, FS_GLM_GAMMA
+        glm_coefficient_statistics, robust_weight_function, &
+        FS_GLM_BINOMIAL, FS_GLM_POISSON, FS_GLM_GAMMA
     use fortran_test_helper
     implicit none
     private
@@ -235,10 +236,153 @@ contains
             rst = .false.
             print '(A)', 'TEST FAILED: GLM disabled robust callback'
         end if
-        if (rst) print '(A)', 'GLM numerical and fit tests passed.'
+        if (.not.test_glm_inference()) rst = .false.
+        if (rst) print '(A)', 'GLM numerical, fit, and inference tests passed.'
         call ieee_set_halting_mode(ieee_overflow, halt_overflow)
         call ieee_set_halting_mode(ieee_invalid, halt_invalid)
         call ieee_set_halting_mode(ieee_divide_by_zero, halt_divide)
+    end function
+
+    function test_glm_inference() result(rst)
+        logical :: rst
+        type(glm_options) :: opts
+        type(glm_convergence_info) :: info
+        type(glm_coefficient_statistics), dimension(1) :: stats
+        type(glm_coefficient_statistics), dimension(2) :: two_stats
+        real(real64), dimension(4,1) :: x
+        real(real64), dimension(4,2) :: design
+        real(real64), dimension(4) :: y
+        real(real64), dimension(1) :: beta
+        real(real64), dimension(2) :: coefficients
+        real(real64), dimension(1,1) :: covariance, covariance_only
+        real(real64), dimension(2,2) :: two_covariance, expected
+        real(real64) :: variance, critical, wald, weight, derivative, cutoff
+        integer(int32) :: family
+        procedure(robust_weight_function), pointer :: weights
+        rst = .true.
+        opts%use_robust_weighting = .false.
+        x = 1.0d0
+        do family = FS_GLM_BINOMIAL, FS_GLM_GAMMA
+            beta = 0.0d0
+            critical = 1.959963984540054d0
+            select case (family)
+            case (FS_GLM_BINOMIAL)
+                y = [0.0d0, 0.0d0, 0.0d0, 1.0d0]
+                variance = 4.0d0 / 3.0d0
+            case (FS_GLM_POISSON)
+                y = [0.0d0, 1.0d0, 2.0d0, 5.0d0]
+                variance = 0.125d0
+            case (FS_GLM_GAMMA)
+                y = [1.0d0, 2.0d0, 3.0d0, 6.0d0]
+                beta = 0.2d0
+                variance = (14.0d0 / 27.0d0) / 36.0d0
+                critical = 3.182446305284263d0
+            end select
+            call irls(family, x, y, beta, options = opts, info = info, &
+                stats = stats, cov = covariance)
+            wald = beta(1) / sqrt(variance)
+            if (.not.info%converged .or. .not.assert(covariance(1,1), variance, 1.0d-8) .or. &
+                .not.assert(stats(1)%standard_error, sqrt(variance), 1.0d-8) .or. &
+                .not.assert(stats(1)%wald_statistic, wald, 1.0d-8) .or. &
+                .not.assert(stats(1)%confidence_interval_lower, beta(1) - critical * sqrt(variance), 1.0d-7) .or. &
+                .not.assert(stats(1)%confidence_interval_upper, beta(1) + critical * sqrt(variance), 1.0d-7)) then
+                rst = .false.
+                print '(A,I0)', 'TEST FAILED: GLM analytic inference family ', family
+            end if
+            if (family /= FS_GLM_GAMMA) then
+                if (.not.assert(stats(1)%p_value, erfc(abs(wald) / sqrt(2.0d0)), 1.0d-8)) then
+                    rst = .false.
+                    print '(A)', 'TEST FAILED: GLM normal Wald p-value'
+                end if
+            else
+                if (abs(stats(1)%p_value - (1.0d0 - (2.0d0 / acos(-1.0d0)) * &
+                    (atan(abs(wald) / sqrt(3.0d0)) + sqrt(3.0d0) * abs(wald) / &
+                    (wald**2 + 3.0d0)))) > 1.0d-8) then
+                    rst = .false.
+                    print '(A)', 'TEST FAILED: GLM Gamma t p-value'
+                end if
+            end if
+            call irls(family, x, y, beta, options = opts, cov = covariance_only)
+            if (.not.assert(covariance_only, covariance, 1.0d-8)) then
+                rst = .false.
+                print '(A)', 'TEST FAILED: GLM covariance-only output'
+            end if
+        end do
+        design(:,1) = 10.0d0
+        design(:,2) = [0.0d0, 0.0d0, 0.1d0, 0.1d0]
+        y = [1.0d0, 3.0d0, 4.0d0, 8.0d0]
+        coefficients = 0.0d0
+        expected(1,:) = [0.0025d0, -0.25d0]
+        expected(2,:) = [-0.25d0, 100.0d0 / 3.0d0]
+        call irls(FS_GLM_POISSON, design, y, coefficients, options = opts, &
+            stats = two_stats, cov = two_covariance)
+        if (.not.assert(two_covariance, expected, 1.0d-7) .or. &
+            .not.assert(two_stats(1)%standard_error**2, two_covariance(1,1), 1.0d-10) .or. &
+            .not.assert(two_stats(2)%standard_error**2, two_covariance(2,2), 1.0d-7)) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: GLM scaled/pivoted full covariance'
+        end if
+        weights => test_weights
+        callback_case = 'huge'
+        opts%use_robust_weighting = .true.
+        expected(2,2) = 325.0d0 / 9.0d0
+        call irls(FS_GLM_POISSON, design, y, coefficients, weights = weights, options = opts, &
+            cov = two_covariance)
+        if (.not.assert(two_covariance, expected, 1.0d-6)) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: GLM custom-weight full sandwich covariance'
+        end if
+        opts%use_robust_weighting = .false.
+        opts%max_iteration_count = 100
+        y = 1.0d308
+        beta = log(1.0d308)
+        call irls(FS_GLM_POISSON, x, y, beta, options = opts, stats = stats, cov = covariance)
+        if (abs(covariance(1,1) * 1.0d308 - 0.25d0) > 1.0d-10 .or. &
+            abs(stats(1)%standard_error * 1.0d154 - 0.5d0) > 1.0d-10) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: GLM subnormal covariance'
+        end if
+        y = 1.0d-308
+        beta = log(1.0d-308)
+        call irls(FS_GLM_POISSON, x, y, beta, options = opts, stats = stats, cov = covariance)
+        if (abs(covariance(1,1) * 1.0d-308 - 0.25d0) > 1.0d-10 .or. &
+            abs(stats(1)%standard_error * 1.0d-154 - 0.5d0) > 1.0d-10) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: GLM near-limit covariance'
+        end if
+        y = 1.0d0
+        beta = 1.0d0
+        call irls(FS_GLM_GAMMA, x, y, beta, options = opts, stats = stats, cov = covariance)
+        if (covariance(1,1) /= 0.0d0 .or. stats(1)%standard_error /= 0.0d0 .or. &
+            stats(1)%p_value /= 0.0d0 .or. .not.ieee_is_finite(stats(1)%confidence_interval_lower)) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: GLM zero Pearson dispersion'
+        end if
+        beta = 0.0d0
+        y = [0.0d0, 0.0d0, 1.0d0, 1.0d0]
+        opts%use_robust_weighting = .true.
+        cutoff = opts%robust_weighting_constant
+        weight = (1.0d0 - (0.5d0 / cutoff)**2)**2
+        derivative = -4.0d0 * 0.5d0 / cutoff**2 * (1.0d0 - (0.5d0 / cutoff)**2)
+        variance = (4.0d0 / 3.0d0) * weight**2 / (weight + 0.5d0 * derivative)**2
+        call irls(FS_GLM_BINOMIAL, x, y, beta, options = opts, stats = stats, cov = covariance)
+        if (.not.assert(covariance(1,1), variance, 1.0d-7) .or. &
+            .not.assert(stats(1)%p_value, 1.0d0, 1.0d-10)) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: GLM differentiated Tukey sandwich'
+        end if
+        opts%use_robust_weighting = .false.
+        opts%max_iteration_count = 1
+        beta = 0.0d0
+        y = 4.0d0
+        call irls(FS_GLM_POISSON, x, y, beta, options = opts, stats = stats, cov = covariance)
+        if (.not.all(ieee_is_nan(covariance)) .or. .not.ieee_is_nan(stats(1)%standard_error) .or. &
+            .not.ieee_is_nan(stats(1)%wald_statistic) .or. .not.ieee_is_nan(stats(1)%p_value) .or. &
+            .not.ieee_is_nan(stats(1)%confidence_interval_lower) .or. &
+            .not.ieee_is_nan(stats(1)%confidence_interval_upper)) then
+            rst = .false.
+            print '(A)', 'TEST FAILED: GLM nonconvergence inference NaNs'
+        end if
     end function
 
     subroutine test_glm_invalid_input(which)
@@ -246,6 +390,8 @@ contains
         real(real64), dimension(4,2) :: x
         real(real64), dimension(4) :: y
         real(real64), dimension(2) :: beta
+        real(real64), dimension(2,2) :: covariance
+        type(glm_coefficient_statistics), dimension(2) :: stats
         type(glm_options) :: opts
         procedure(robust_weight_function), pointer :: weights
         integer(int32) :: family
@@ -260,6 +406,33 @@ contains
         opts%use_robust_weighting = .false.
         nullify(weights)
         select case (which)
+        case ('stats-size')
+            call irls(family, x, y, beta, options = opts, stats = stats(:1))
+            return
+        case ('covariance-size')
+            call irls(family, x, y, beta, options = opts, cov = covariance(:1,:))
+            return
+        case ('alpha-zero')
+            call irls(family, x, y, beta, alpha = 0.0d0)
+            return
+        case ('alpha-one')
+            call irls(family, x, y, beta, alpha = 1.0d0)
+            return
+        case ('alpha-nan')
+            call irls(family, x, y, beta, alpha = ieee_value(0.0d0, ieee_quiet_nan))
+            return
+        case ('gamma-inference-dof')
+            call irls(FS_GLM_GAMMA, x(:2,:), y(:2), beta, options = opts, cov = covariance)
+            return
+        case ('robust-inference-dof')
+            call irls(family, x(:2,:), y(:2), beta, cov = covariance)
+            return
+        case ('covariance-overflow')
+            family = FS_GLM_POISSON
+            x(:,1) = 1.0d-200
+            y = 1.0d0
+            call irls(family, x(:,:1), y, beta(:1), options = opts, cov = covariance(:1,:1))
+            return
         case ('rows')
             call irls(family, x, y(:3), beta)
             return

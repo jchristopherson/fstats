@@ -95,6 +95,10 @@ target_link_libraries(doe_model_comparison_example PRIVATE fstats)
 add_executable(doe_rsm_optimization_example doe_rsm_optimization_example.f90)
 target_link_libraries(doe_rsm_optimization_example PRIVATE fstats)
 
+# GLM Example
+add_executable(glm_irls_example glm_irls_example.f90)
+target_link_libraries(glm_irls_example PRIVATE fstats ${fplot_LIBRARY})
+
 if (${BUILD_SHARED_LIBS} AND WIN32)
     get_property(example_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
     foreach(example_target IN LISTS example_targets)
