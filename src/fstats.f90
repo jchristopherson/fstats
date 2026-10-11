@@ -63,4 +63,6 @@ module fstats
     use fstats_robust_statistics
     use fstats_glm_types
     use fstats_glm_irls
+    use fstats_data_columns
+    use fstats_data_table
 end module
