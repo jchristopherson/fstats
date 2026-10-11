@@ -49,6 +49,18 @@ program tests
     overall = .true.
 
     call get_command_argument(1, test_group)
+    if (trim(test_group) == 'statistics-columns-invalid') then
+        call get_command_argument(2, invalid_case)
+        call test_statistics_column_invalid_input(trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'statistics-columns') then
+        local = test_statistics_columns()
+        if (.not.local) stop 1
+        local = test_statistics_numerical_robustness()
+        if (.not.local) stop 1
+        stop
+    end if
     if (trim(test_group) == 'columns-invalid') then
         call get_command_argument(2, column_type)
         call get_command_argument(3, invalid_case)
@@ -123,6 +135,9 @@ program tests
     if (.not.local) overall = .false.
 
     ! Statistics Tests
+    local = test_statistics_columns()
+    if (.not.local) overall = .false.
+
     local = test_statistics_numerical_robustness()
     if (.not.local) overall = .false.
 

@@ -47,6 +47,12 @@ add_test(
 )
 
 add_test(NAME fstats_columns COMMAND $<TARGET_FILE:fstats_tests> columns)
+add_test(NAME fstats_statistics_columns COMMAND $<TARGET_FILE:fstats_tests> statistics-columns)
+foreach(invalid_case IN ITEMS columns column-array array-column pooled)
+    add_test(NAME fstats_statistics_columns_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> statistics-columns-invalid ${invalid_case})
+    set_tests_properties(fstats_statistics_columns_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
 foreach(column_type IN ITEMS integer real logical string)
     foreach(invalid_case IN ITEMS
         append-type insert-type copy-type insert-low insert-high remove-empty
@@ -62,6 +68,11 @@ foreach(column_type IN ITEMS integer real logical string)
 endforeach()
 
 add_test(NAME fstats_glm COMMAND $<TARGET_FILE:fstats_tests> glm)
+foreach(invalid_case IN ITEMS add-size subtract-size multiply-size divide-size)
+    add_test(NAME fstats_columns_invalid_real_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> columns-invalid real ${invalid_case})
+    set_tests_properties(fstats_columns_invalid_real_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
 foreach(invalid_case IN ITEMS
     rows columns empty no-columns underdetermined family nan-x inf-y nan-beta
     binomial-range poisson-range gamma-range iterations tolerance nan-tolerance

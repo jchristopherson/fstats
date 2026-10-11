@@ -27,6 +27,7 @@ module fstats_data_columns
     use iso_fortran_env
     use fstats_errors
     use strings
+    use, intrinsic :: ieee_arithmetic
     implicit none
     private
     public :: FS_COLUMN_INTEGER
@@ -40,6 +41,10 @@ module fstats_data_columns
     public :: string_column
     public :: size
     public :: string
+    public :: ieee_is_finite, ieee_is_nan, ieee_is_negative, ieee_is_normal
+    public :: abs, maxval, minval, sin, cos, tan, asin, acos, atan
+    public :: exp, log, log10, sum, product, sqrt
+    public :: operator(+), operator(-), operator(*), operator(/)
 
     integer(int32), parameter :: FS_COLUMN_INTEGER = 1
         !! Denotes a column of integer values.
@@ -243,6 +248,76 @@ module fstats_data_columns
 ! ------------------------------------------------------------------------------
     interface size
         module procedure :: dc_size
+    end interface
+
+    interface ieee_is_finite
+        module procedure :: rc_ieee_is_finite
+    end interface
+    interface abs
+        module procedure :: rc_abs
+    end interface
+    interface maxval
+        module procedure :: rc_maxval
+    end interface
+    interface minval
+        module procedure :: rc_minval
+    end interface
+    interface sin
+        module procedure :: rc_sin
+    end interface
+    interface cos
+        module procedure :: rc_cos
+    end interface
+    interface tan
+        module procedure :: rc_tan
+    end interface
+    interface asin
+        module procedure :: rc_asin
+    end interface
+    interface acos
+        module procedure :: rc_acos
+    end interface
+    interface atan
+        module procedure :: rc_atan
+    end interface
+    interface exp
+        module procedure :: rc_exp
+    end interface
+    interface log
+        module procedure :: rc_log
+    end interface
+    interface log10
+        module procedure :: rc_log10
+    end interface
+    interface sum
+        module procedure :: rc_sum
+    end interface
+    interface product
+        module procedure :: rc_product
+    end interface
+    interface sqrt
+        module procedure :: rc_sqrt
+    end interface
+    interface operator(+)
+        module procedure :: rc_add, rc_add_scalar, scalar_add_rc, rc_positive
+    end interface
+    interface operator(-)
+        module procedure :: rc_subtract, rc_subtract_scalar, scalar_subtract_rc, rc_negative
+    end interface
+    interface operator(*)
+        module procedure :: rc_multiply, rc_multiply_scalar, scalar_multiply_rc
+    end interface
+    interface operator(/)
+        module procedure :: rc_divide, rc_divide_scalar, scalar_divide_rc
+    end interface
+    interface ieee_is_nan
+        module procedure :: rc_ieee_is_nan
+    end interface
+    interface ieee_is_negative
+        module procedure :: rc_ieee_is_negative
+    end interface
+    interface ieee_is_normal
+        module procedure :: rc_ieee_is_normal
     end interface
 
 contains
@@ -1040,6 +1115,422 @@ contains
             if (rst(last_character:last_character) == ".") last_character = last_character - 1
         end if
         rst = rst(:last_character) // rst(exponent_start:)
+    end function
+
+! ******************************************************************************
+! REAL_COLUMN MATH OPERATIONS
+! ------------------------------------------------------------------------------
+    ! Element-wise math and arithmetic return independent, unnamed columns.
+    ! Unallocated inputs are treated as empty for math and reductions.
+    ! Empty reductions follow intrinsic identities: sum = 0, product = 1,
+    ! maxval = -huge, and minval = huge. Domain errors follow intrinsic behavior.
+    ! IEEE queries require all elements to match; allocated empty arrays return
+    ! true, while unallocated columns return false.
+
+    pure function rc_ieee_is_finite(x) result(rst)
+        !! Overloads `ieee_is_finite` to test whether every column value is finite.
+        !! An allocated empty column returns true; unallocated storage returns false.
+        class(real_column), intent(in) :: x
+            !! The [[real_column]] object.
+        logical :: rst
+            !! True if every value in the column is finite; else, false.
+
+        if (allocated(x%m_values)) then
+            rst = all(ieee_is_finite(x%m_values))
+        else
+            rst = .false.
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_abs(x) result(rst)
+        !! Overloads `abs` to compute the absolute value of each column element.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column with the same count as x.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = abs(x%m_values)
+    end function
+! ------------------------------------------------------------------------------
+    pure function rc_sin(x) result(rst)
+        !! Overloads `sin` to compute the sine of each column element.
+        class(real_column), intent(in) :: x
+            !! The input angles in radians; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of sine values with the same count as x.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = sin(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_cos(x) result(rst)
+        !! Overloads `cos` to compute the cosine of each column element.
+        class(real_column), intent(in) :: x
+            !! The input angles in radians; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of cosine values with the same count as x.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = cos(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_tan(x) result(rst)
+        !! Overloads `tan` to compute the tangent of each column element.
+        !! Singularities and nonfinite inputs follow intrinsic `tan` behavior.
+        class(real_column), intent(in) :: x
+            !! The input angles in radians; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of tangent values with the same count as x.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = tan(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_asin(x) result(rst)
+        !! Overloads `asin` to compute the inverse sine of each column element.
+        !! Values outside [-1, 1] follow intrinsic domain-error behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of angles in radians, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = asin(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_acos(x) result(rst)
+        !! Overloads `acos` to compute the inverse cosine of each column element.
+        !! Values outside [-1, 1] follow intrinsic domain-error behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of angles in radians, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = acos(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_atan(x) result(rst)
+        !! Overloads the one-argument `atan` to compute each element's inverse tangent.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of angles in radians, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = atan(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_exp(x) result(rst)
+        !! Overloads `exp` to compute the natural exponential of each column element.
+        !! Overflow and underflow follow intrinsic `exp` behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of exponential values, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = exp(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_log(x) result(rst)
+        !! Overloads `log` to compute the natural logarithm of each column element.
+        !! Nonpositive values follow intrinsic domain-error behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of logarithms with the same count as x.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = log(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_log10(x) result(rst)
+        !! Overloads `log10` to compute the base-10 logarithm of each column element.
+        !! Nonpositive values follow intrinsic domain-error behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of logarithms with the same count as x.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = log10(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_sqrt(x) result(rst)
+        !! Overloads `sqrt` to compute the square root of each column element.
+        !! Negative values follow intrinsic domain-error behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of square roots with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = sqrt(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_sum(x) result(rst)
+        !! Overloads `sum` to add all column values, without copying the array.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        real(real64) :: rst
+            !! The sum, or zero for an empty column. Uses intrinsic summation semantics.
+        rst = 0.0d0
+        if (allocated(x%m_values)) rst = sum(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_product(x) result(rst)
+        !! Overloads `product` to multiply all column values, without copying the array.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        real(real64) :: rst
+            !! The product, or one for an empty column. Uses intrinsic product semantics.
+        rst = 1.0d0
+        if (allocated(x%m_values)) rst = product(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_maxval(x) result(rst)
+        !! Overloads `maxval` to find the largest column value without copying the array.
+        !! Nonfinite values follow intrinsic `maxval` behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        real(real64) :: rst
+            !! The maximum, or -huge(0.0d0) for an empty column.
+        rst = -huge(0.0d0)
+        if (allocated(x%m_values)) rst = maxval(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_minval(x) result(rst)
+        !! Overloads `minval` to find the smallest column value without copying the array.
+        !! Nonfinite values follow intrinsic `minval` behavior.
+        class(real_column), intent(in) :: x
+            !! The input [[real_column]]; unallocated storage is treated as empty.
+        real(real64) :: rst
+            !! The minimum, or huge(0.0d0) for an empty column.
+        rst = huge(0.0d0)
+        if (allocated(x%m_values)) rst = minval(x%m_values)
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_ieee_is_nan(x) result(rst)
+        !! Overloads `ieee_is_nan` to test whether every column value is NaN.
+        !! This is an all-elements query, not a test for the presence of any NaN.
+        class(real_column), intent(in) :: x
+            !! The [[real_column]] to inspect, without copying its array.
+        logical :: rst
+            !! True if all values are NaN, including an allocated empty array;
+            !! false for unallocated storage.
+        rst = .false.
+        if (allocated(x%m_values)) rst = all(ieee_is_nan(x%m_values))
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_ieee_is_negative(x) result(rst)
+        !! Overloads `ieee_is_negative` to test the sign of every column value.
+        !! Uses IEEE sign classification, including negative zero, rather than x < 0.
+        class(real_column), intent(in) :: x
+            !! The [[real_column]] to inspect, without copying its array.
+        logical :: rst
+            !! True if all values satisfy intrinsic `ieee_is_negative`, including
+            !! an allocated empty array; false for unallocated storage.
+        rst = .false.
+        if (allocated(x%m_values)) rst = all(ieee_is_negative(x%m_values))
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_ieee_is_normal(x) result(rst)
+        !! Overloads `ieee_is_normal` to classify every column value.
+        !! Zero, subnormal, infinite, and NaN values follow intrinsic classification.
+        class(real_column), intent(in) :: x
+            !! The [[real_column]] to inspect, without copying its array.
+        logical :: rst
+            !! True if all values satisfy intrinsic `ieee_is_normal`, including
+            !! an allocated empty array; false for unallocated storage.
+        rst = .false.
+        if (allocated(x%m_values)) rst = all(ieee_is_normal(x%m_values))
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_positive(x) result(rst)
+        !! Overloads unary `+` to create a copy of the column's values.
+        class(real_column), intent(in) :: x
+            !! The operand [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column with the same values and count as x.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = +x%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_negative(x) result(rst)
+        !! Overloads unary `-` to negate each column value.
+        class(real_column), intent(in) :: x
+            !! The operand [[real_column]]; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column with negated values and x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = -x%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_add(x, y) result(rst)
+        !! Overloads `+` to add corresponding elements of two columns.
+        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        class(real_column), intent(in) :: x, y
+            !! The left and right operands; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x + y, with the operands' count.
+        if (x%count() /= y%count()) error stop FS_ARRAY_SIZE_ERROR
+        rst = real_column(0)
+        if (x%count() > 0) rst%m_values = x%m_values + y%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_subtract(x, y) result(rst)
+        !! Overloads `-` to subtract corresponding elements of two columns.
+        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        class(real_column), intent(in) :: x, y
+            !! The left and right operands; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x - y, with the operands' count.
+        if (x%count() /= y%count()) error stop FS_ARRAY_SIZE_ERROR
+        rst = real_column(0)
+        if (x%count() > 0) rst%m_values = x%m_values - y%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_multiply(x, y) result(rst)
+        !! Overloads `*` to multiply corresponding elements, not compute a dot product.
+        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        class(real_column), intent(in) :: x, y
+            !! The left and right operands; unallocated storage is treated as empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x * y, with the operands' count.
+        if (x%count() /= y%count()) error stop FS_ARRAY_SIZE_ERROR
+        rst = real_column(0)
+        if (x%count() > 0) rst%m_values = x%m_values * y%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_divide(x, y) result(rst)
+        !! Overloads `/` to divide corresponding elements of two columns.
+        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        !! Zero divisors and nonfinite values follow intrinsic division behavior.
+        class(real_column), intent(in) :: x, y
+            !! The numerator and denominator columns; unallocated storage is empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x / y, with the operands' count.
+        if (x%count() /= y%count()) error stop FS_ARRAY_SIZE_ERROR
+        rst = real_column(0)
+        if (x%count() > 0) rst%m_values = x%m_values / y%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_add_scalar(x, y) result(rst)
+        !! Overloads `+` to add a scalar to each column value.
+        class(real_column), intent(in) :: x
+            !! The left operand [[real_column]]; unallocated storage is empty.
+        real(real64), intent(in) :: y
+            !! The scalar right operand, broadcast to every row.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x + y, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = x%m_values + y
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function scalar_add_rc(x, y) result(rst)
+        !! Overloads `+` to add each column value to a scalar.
+        real(real64), intent(in) :: x
+            !! The scalar left operand, broadcast to every row.
+        class(real_column), intent(in) :: y
+            !! The right operand [[real_column]]; unallocated storage is empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x + y, with y's count.
+        rst = y + x
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_subtract_scalar(x, y) result(rst)
+        !! Overloads `-` to subtract a scalar from each column value.
+        class(real_column), intent(in) :: x
+            !! The left operand [[real_column]]; unallocated storage is empty.
+        real(real64), intent(in) :: y
+            !! The scalar right operand, broadcast to every row.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x - y, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = x%m_values - y
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function scalar_subtract_rc(x, y) result(rst)
+        !! Overloads `-` to subtract each column value from a scalar.
+        real(real64), intent(in) :: x
+            !! The scalar left operand, broadcast to every row.
+        class(real_column), intent(in) :: y
+            !! The right operand [[real_column]]; unallocated storage is empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x - y, with y's count.
+        rst = real_column(0)
+        if (allocated(y%m_values)) rst%m_values = x - y%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_multiply_scalar(x, y) result(rst)
+        !! Overloads `*` to multiply each column value by a scalar.
+        class(real_column), intent(in) :: x
+            !! The left operand [[real_column]]; unallocated storage is empty.
+        real(real64), intent(in) :: y
+            !! The scalar right operand, broadcast to every row.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x * y, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = x%m_values * y
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function scalar_multiply_rc(x, y) result(rst)
+        !! Overloads `*` to multiply a scalar by each column value.
+        real(real64), intent(in) :: x
+            !! The scalar left operand, broadcast to every row.
+        class(real_column), intent(in) :: y
+            !! The right operand [[real_column]]; unallocated storage is empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x * y, with y's count.
+        rst = y * x
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function rc_divide_scalar(x, y) result(rst)
+        !! Overloads `/` to divide each column value by a scalar.
+        !! Zero divisors and nonfinite values follow intrinsic division behavior.
+        class(real_column), intent(in) :: x
+            !! The numerator [[real_column]]; unallocated storage is empty.
+        real(real64), intent(in) :: y
+            !! The scalar denominator, broadcast to every row.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x / y, with x's count.
+        rst = real_column(0)
+        if (allocated(x%m_values)) rst%m_values = x%m_values / y
+    end function
+
+! ------------------------------------------------------------------------------
+    pure function scalar_divide_rc(x, y) result(rst)
+        !! Overloads `/` to divide a scalar by each column value.
+        !! Zero divisors and nonfinite values follow intrinsic division behavior.
+        real(real64), intent(in) :: x
+            !! The scalar numerator, broadcast to every row.
+        class(real_column), intent(in) :: y
+            !! The denominator [[real_column]]; unallocated storage is empty.
+        type(real_column) :: rst
+            !! An independent, unnamed column of x / y, with y's count.
+        rst = real_column(0)
+        if (allocated(y%m_values)) rst%m_values = x / y%m_values
     end function
 
 ! ------------------------------------------------------------------------------

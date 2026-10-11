@@ -3,6 +3,8 @@ module fstats_data_column_tests
     use fortran_test_helper
     use fstats_data_columns
     use strings
+    use, intrinsic :: ieee_arithmetic, only : ieee_value, ieee_quiet_nan, ieee_positive_inf, &
+        ieee_negative_zero, ieee_positive_denormal, intrinsic_is_normal => ieee_is_normal
     implicit none
     private
     public :: test_data_columns, test_data_column_invalid_input
@@ -17,6 +19,8 @@ contains
         local = test_logical_column()
         rst = rst .and. local
         local = test_string_column()
+        rst = rst .and. local
+        local = test_real_column_math()
         rst = rst .and. local
     end function
 
@@ -311,6 +315,151 @@ contains
         call check(column%get(3) == 'character append', rst, 'character append')
     end function
 
+    function test_real_column_math() result(rst)
+        logical :: rst
+        type(real_column) :: column, other, result_column, empty, uninitialized
+        class(real_column), allocatable :: polymorphic
+        real(real64), dimension(3) :: values, rhs, expected
+        real(real64) :: nan_value, infinity, negative_zero, denormal
+        integer(int32) :: operation, empty_case
+
+        rst = .true.
+        values = [0.25d0, 0.5d0, 0.75d0]
+        rhs = [2.0d0, 3.0d0, 4.0d0]
+        column = real_column(values)
+        allocate(polymorphic, source = column)
+        other = real_column(rhs)
+        do operation = 1, 11
+            select case (operation)
+            case (1)
+                result_column = abs(-polymorphic)
+                expected = abs(-values)
+            case (2)
+                result_column = sin(polymorphic)
+                expected = sin(values)
+            case (3)
+                result_column = cos(polymorphic)
+                expected = cos(values)
+            case (4)
+                result_column = tan(polymorphic)
+                expected = tan(values)
+            case (5)
+                result_column = asin(polymorphic)
+                expected = asin(values)
+            case (6)
+                result_column = acos(polymorphic)
+                expected = acos(values)
+            case (7)
+                result_column = atan(polymorphic)
+                expected = atan(values)
+            case (8)
+                result_column = exp(polymorphic)
+                expected = exp(values)
+            case (9)
+                result_column = log(polymorphic)
+                expected = log(values)
+            case (10)
+                result_column = log10(polymorphic)
+                expected = log10(values)
+            case (11)
+                result_column = sqrt(polymorphic)
+                expected = sqrt(values)
+            end select
+            call check_values(result_column, expected, rst, 'element-wise math')
+        end do
+        call check(assert(sum(polymorphic), sum(values)), rst, 'column sum')
+        call check(assert(product(polymorphic), product(values)), rst, 'column product')
+        call check(assert(maxval(polymorphic), maxval(values)), rst, 'column maxval')
+        call check(assert(minval(polymorphic), minval(values)), rst, 'column minval')
+        call check_values(+polymorphic, +values, rst, 'unary plus')
+        call check_values(-polymorphic, -values, rst, 'unary minus')
+        call check_values(polymorphic + other, values + rhs, rst, 'column addition')
+        call check_values(polymorphic - other, values - rhs, rst, 'column subtraction')
+        call check_values(polymorphic * other, values * rhs, rst, 'column multiplication')
+        call check_values(polymorphic / other, values / rhs, rst, 'column division')
+        call check_values(polymorphic + 2.0d0, values + 2.0d0, rst, 'right scalar addition')
+        call check_values(2.0d0 + polymorphic, 2.0d0 + values, rst, 'left scalar addition')
+        call check_values(polymorphic - 2.0d0, values - 2.0d0, rst, 'right scalar subtraction')
+        call check_values(2.0d0 - polymorphic, 2.0d0 - values, rst, 'left scalar subtraction')
+        call check_values(polymorphic * 2.0d0, values * 2.0d0, rst, 'right scalar multiplication')
+        call check_values(2.0d0 * polymorphic, 2.0d0 * values, rst, 'left scalar multiplication')
+        call check_values(polymorphic / 2.0d0, values / 2.0d0, rst, 'right scalar division')
+        call check_values(2.0d0 / polymorphic, 2.0d0 / values, rst, 'left scalar division')
+        result_column = sin(polymorphic) + cos(polymorphic)
+        call check_values(result_column, sin(values) + cos(values), rst, 'chained math')
+        call result_column%set(1, 99.0d0)
+        call check_values(polymorphic, values, rst, 'math leaves source independent')
+
+        do empty_case = 1, 2
+            if (empty_case == 1) then
+                empty = uninitialized
+            else
+                empty = real_column(0)
+            end if
+            call check_values(abs(empty), values(:0), rst, 'empty abs')
+            call check_values(sin(empty), values(:0), rst, 'empty sin')
+            call check_values(cos(empty), values(:0), rst, 'empty cos')
+            call check_values(tan(empty), values(:0), rst, 'empty tan')
+            call check_values(asin(empty), values(:0), rst, 'empty asin')
+            call check_values(acos(empty), values(:0), rst, 'empty acos')
+            call check_values(atan(empty), values(:0), rst, 'empty atan')
+            call check_values(exp(empty), values(:0), rst, 'empty exp')
+            call check_values(log(empty), values(:0), rst, 'empty log')
+            call check_values(log10(empty), values(:0), rst, 'empty log10')
+            call check_values(sqrt(empty), values(:0), rst, 'empty sqrt')
+            call check_values(+empty, values(:0), rst, 'empty unary plus')
+            call check_values(-empty, values(:0), rst, 'empty unary minus')
+            call check_values(empty + uninitialized, values(:0), rst, 'empty addition')
+            call check_values(empty - uninitialized, values(:0), rst, 'empty subtraction')
+            call check_values(empty * uninitialized, values(:0), rst, 'empty multiplication')
+            call check_values(empty / uninitialized, values(:0), rst, 'empty division')
+            call check_values(empty + 2.0d0, values(:0), rst, 'empty scalar addition')
+            call check_values(2.0d0 + empty, values(:0), rst, 'empty left addition')
+            call check_values(empty - 2.0d0, values(:0), rst, 'empty scalar subtraction')
+            call check_values(2.0d0 - empty, values(:0), rst, 'empty left subtraction')
+            call check_values(empty * 2.0d0, values(:0), rst, 'empty scalar multiplication')
+            call check_values(2.0d0 * empty, values(:0), rst, 'empty left multiplication')
+            call check_values(empty / 2.0d0, values(:0), rst, 'empty scalar division')
+            call check_values(2.0d0 / empty, values(:0), rst, 'empty left division')
+            call check(sum(empty) == 0.0d0, rst, 'empty sum')
+            call check(product(empty) == 1.0d0, rst, 'empty product')
+            call check(maxval(empty) == -huge(0.0d0), rst, 'empty maxval')
+            call check(minval(empty) == huge(0.0d0), rst, 'empty minval')
+            call check(ieee_is_finite(empty) .eqv. (empty_case == 2), rst, 'empty finite')
+            call check(ieee_is_nan(empty) .eqv. (empty_case == 2), rst, 'empty nan')
+            call check(ieee_is_negative(empty) .eqv. (empty_case == 2), rst, 'empty negative')
+            call check(ieee_is_normal(empty) .eqv. (empty_case == 2), rst, 'empty normal')
+        end do
+
+        nan_value = ieee_value(0.0d0, ieee_quiet_nan)
+        infinity = ieee_value(0.0d0, ieee_positive_inf)
+        negative_zero = ieee_value(0.0d0, ieee_negative_zero)
+        denormal = ieee_value(0.0d0, ieee_positive_denormal)
+        call check(ieee_is_finite(column), rst, 'finite ordinary column')
+        call check(.not.ieee_is_nan(column), rst, 'ordinary column not nan')
+        call check(.not.ieee_is_negative(column), rst, 'positive column')
+        call check(ieee_is_normal(column), rst, 'normal ordinary column')
+        column = real_column([nan_value, nan_value])
+        call check(ieee_is_nan(column), rst, 'all nan')
+        call check(.not.ieee_is_finite(column), rst, 'nan not finite')
+        call check(.not.ieee_is_normal(column), rst, 'nan not normal')
+        column = real_column([nan_value, 1.0d0])
+        call check(.not.ieee_is_nan(column), rst, 'mixed nan uses all')
+        column = real_column([1.0d0, infinity])
+        call check(.not.ieee_is_finite(column), rst, 'mixed infinity')
+        call check(.not.ieee_is_normal(column), rst, 'infinity not normal')
+        column = real_column([-1.0d0, negative_zero])
+        call check(ieee_is_negative(column), rst, 'negative signed zero')
+        column = real_column([-1.0d0, 0.0d0])
+        call check(.not.ieee_is_negative(column), rst, 'mixed sign')
+        column = real_column([1.0d0, denormal])
+        call check(ieee_is_normal(column) .eqv. all(intrinsic_is_normal([1.0d0, denormal])), &
+            rst, 'denormal classification matches intrinsic')
+        column = real_column([1.0d0, 0.0d0])
+        call check(ieee_is_normal(column) .eqv. all(intrinsic_is_normal([1.0d0, 0.0d0])), &
+            rst, 'zero classification matches intrinsic')
+    end function
+
     subroutine test_data_column_invalid_input(dtype, invalid_case)
         character(len = *), intent(in) :: dtype, invalid_case
         class(data_column), allocatable :: column
@@ -323,6 +472,7 @@ contains
         real(real64) :: real_value
         logical :: logical_value
         character(len = :), allocatable :: text
+        type(real_column) :: math_result, math_other
 
         select case (dtype)
         case ('integer')
@@ -392,6 +542,18 @@ contains
                     end select
                 type is (real_column)
                     select case (invalid_case)
+                    case ('add-size', 'subtract-size', 'multiply-size', 'divide-size')
+                        math_other = real_column(2)
+                        select case (invalid_case)
+                        case ('add-size')
+                            math_result = column + math_other
+                        case ('subtract-size')
+                            math_result = column - math_other
+                        case ('multiply-size')
+                            math_result = column * math_other
+                        case ('divide-size')
+                            math_result = column / math_other
+                        end select
                     case ('negative-size')
                         column = real_column(-1)
                     case ('get-low', 'get-high', 'get-unallocated')

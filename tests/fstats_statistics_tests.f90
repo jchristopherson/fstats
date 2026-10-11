@@ -30,9 +30,173 @@ module fstats_statistics_tests
         tukey_biweight_psi, tukey_biweight_rho, tukey_biweight_irls_weight
     use fstats_test_helper
     use fstats_types
+    use fstats_data_columns, only : real_column
     use ieee_arithmetic
     implicit none
 contains
+    function test_statistics_columns() result(rst)
+        !! Checks each column overload against its array counterpart and side effects.
+        logical :: rst
+            !! True when every column statistic matches the existing array contract.
+        class(real_column), allocatable :: column
+        type(real_column) :: other, uninitialized
+        type(real_column), dimension(2) :: groups
+        type(array_container), dimension(2) :: containers
+        real(real64), allocatable, dimension(:) :: values, paired, sorted, copied
+        real(real64), dimension(9) :: actual, expected
+        real(real64), dimension(6) :: probabilities, fractions
+        real(real64) :: nan_value, infinity
+        integer(int32) :: data_case, parameter_case, empty_case
+        integer(int32), allocatable, dimension(:) :: counts
+
+        rst = .true.
+        nan_value = ieee_value(0.0d0, ieee_quiet_nan)
+        infinity = ieee_value(0.0d0, ieee_positive_inf)
+        probabilities = [0.0d0, 0.25d0, 1.0d0, -0.1d0, 1.1d0, nan_value]
+        fractions = [0.0d0, 0.2d0, 0.49d0, -0.1d0, 0.5d0, nan_value]
+        do data_case = 1, 9
+            select case (data_case)
+            case (1)
+                values = [4.0d0, 1.0d0, 100.0d0, 2.0d0, 2.0d0]
+            case (2)
+                values = [4.0d0, 1.0d0, 3.0d0, 2.0d0]
+            case (3)
+                values = [7.0d0]
+            case (4)
+                values = [0.0d0, 0.0d0, 0.0d0]
+            case (5)
+                values = [1.0d12, 1.0d12 + 1.0d0, 1.0d12 + 3.0d0]
+            case (6)
+                values = [1.0d308, 1.0d0, -1.0d308]
+            case (7)
+                values = [1.0d0, nan_value, 3.0d0]
+            case (8)
+                values = [1.0d0, infinity, 3.0d0]
+            case (9)
+                values = [-huge(1.0d0), huge(1.0d0), huge(1.0d0)]
+            end select
+            if (allocated(column)) deallocate(column)
+            allocate(column, source = real_column(values))
+            paired = values
+            other = real_column(paired)
+            counts = spread(3, 1, size(values))
+            actual = [mean(column), variance(column), standard_deviation(column), &
+                median(column), quantile(column, 0.5d0), covariance(column, other), &
+                covariance(column, paired), covariance(values, other), median_absolute_deviation(column)]
+            expected = [mean(values), variance(values), standard_deviation(values), &
+                median(values), quantile(values, 0.5d0), covariance(values, paired), &
+                covariance(values, paired), covariance(values, paired), median_absolute_deviation(values)]
+            call check_statistic_results(actual, expected, rst, 'column/array equivalence')
+            call check_statistic_results([pooled_variance(column, counts)], &
+                [pooled_variance(values, counts)], rst, 'pooled estimates')
+            copied = values
+            call column%copy(copied)
+            call check_statistic_results(copied, values, rst, 'nonmutating statistics')
+            do parameter_case = 1, size(probabilities)
+                call check_statistic_results([quantile(column, probabilities(parameter_case))], &
+                    [quantile(values, probabilities(parameter_case))], rst, 'quantile parameters')
+            end do
+            sorted = values
+            call check_statistic_results([trimmed_mean(column)], [trimmed_mean(sorted)], rst, 'default trim')
+            call column%copy(copied)
+            call check_statistic_results(copied, sorted, rst, 'default trim sorts column')
+            do parameter_case = 1, size(fractions)
+                deallocate(column)
+                allocate(column, source = real_column(values))
+                sorted = values
+                call check_statistic_results([trimmed_mean(column, fractions(parameter_case))], &
+                    [trimmed_mean(sorted, fractions(parameter_case))], rst, 'trim parameters')
+                call column%copy(copied)
+                call check_statistic_results(copied, sorted, rst, 'trim side effect')
+            end do
+        end do
+
+        values = [real(real64) ::]
+        counts = [integer(int32) ::]
+        other = real_column(0)
+        do empty_case = 1, 2
+            deallocate(column)
+            if (empty_case == 1) then
+                allocate(column, source = uninitialized)
+            else
+                allocate(column, source = real_column(0))
+            end if
+            actual = [mean(column), variance(column), standard_deviation(column), median(column), &
+                quantile(column, 0.5d0), covariance(column, other), covariance(column, values), &
+                covariance(values, column), median_absolute_deviation(column)]
+            call check_statistic_results(actual, spread(nan_value, 1, size(actual)), rst, 'empty statistics')
+            call check_statistic_results([trimmed_mean(column), pooled_variance(column, counts)], &
+                [nan_value, nan_value], rst, 'empty trim and pooled estimates')
+        end do
+
+        groups(1) = real_column([1.0d0, 2.0d0, 4.0d0])
+        groups(2) = real_column([5.0d0, 9.0d0])
+        containers(1)%x = [1.0d0, 2.0d0, 4.0d0]
+        containers(2)%x = [5.0d0, 9.0d0]
+        call check_statistic_results([pooled_variance(groups)], [pooled_variance(containers)], rst, 'pooled groups')
+        call check_statistic_results([pooled_variance(groups(:0))], [nan_value], rst, 'no pooled groups')
+        groups(2) = real_column([1.0d0])
+        call check_statistic_results([pooled_variance(groups)], [nan_value], rst, 'undersized group')
+        groups(2) = uninitialized
+        call check_statistic_results([pooled_variance(groups)], [nan_value], rst, 'uninitialized group')
+        groups(2) = real_column([1.0d0, nan_value])
+        call check_statistic_results([pooled_variance(groups)], [nan_value], rst, 'nonfinite group')
+        groups(2) = real_column(0)
+        call check_statistic_results([pooled_variance(groups)], [nan_value], rst, 'empty group')
+        groups(1) = real_column([4.0d0, 9.0d0])
+        call check_statistic_results([pooled_variance(groups(1), [1, 3])], [nan_value], rst, 'invalid group counts')
+        if (.not.rst) print '(A)', 'TEST FAILED: statistics column overloads'
+    end function
+
+    subroutine check_statistic_results(actual, expected, rst, label)
+        !! Compares finite values with relative tolerance and matches IEEE results.
+        real(real64), intent(in), dimension(:) :: actual, expected
+            !! Equally sized actual and reference results.
+        logical, intent(inout) :: rst
+            !! Accumulated test status; set false on a mismatch.
+        character(len = *), intent(in) :: label
+            !! Diagnostic label for the comparison.
+        logical :: matches
+        integer(int32) :: observation
+
+        do observation = 1, size(actual)
+            if (ieee_is_nan(expected(observation))) then
+                matches = ieee_is_nan(actual(observation))
+            else if (.not.ieee_is_finite(expected(observation))) then
+                matches = actual(observation) == expected(observation)
+            else if (.not.ieee_is_finite(actual(observation))) then
+                matches = .false.
+            else
+                matches = abs(actual(observation) / max(1.0d0, abs(expected(observation))) - &
+                    expected(observation) / max(1.0d0, abs(expected(observation)))) < 1.0d-12
+            end if
+            if (matches) cycle
+            rst = .false.
+            print '(A,I0)', 'TEST FAILED: ' // label // ' result ', observation
+        end do
+    end subroutine
+
+    subroutine test_statistics_column_invalid_input(invalid_case)
+        !! Exercises size validation in covariance and pooled-variance overloads.
+        character(len = *), intent(in) :: invalid_case
+            !! The covariance operand form or pooled-variance case to exercise.
+        type(real_column) :: column, other
+        real(real64) :: value
+
+        column = real_column([1.0d0, 2.0d0])
+        other = real_column([3.0d0])
+        select case (invalid_case)
+        case ('columns')
+            value = covariance(column, other)
+        case ('column-array')
+            value = covariance(column, [3.0d0])
+        case ('array-column')
+            value = covariance([3.0d0], column)
+        case ('pooled')
+            value = pooled_variance(column, [3])
+        end select
+    end subroutine
+
     function test_statistics_numerical_robustness() result(rst)
         !! Checks scaled moments, large offsets, cancellation, and undefined inputs.
         logical :: rst

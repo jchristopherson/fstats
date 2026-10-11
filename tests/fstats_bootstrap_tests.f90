@@ -66,7 +66,7 @@ contains
             0.988756414d0, 0.214287163d0, 0.579534890d0, 0.770211065d0, &
             0.307955851d0, 0.509150720d0, 0.665120628d0, 0.817904438d0, &
             0.896080063d0, 0.599850776d0]
-        fcn => mean
+        fcn => mean_array
         mu = mean(x)
 
         ! Test
@@ -91,6 +91,12 @@ contains
             rst = .false.
             print "(A)", "TEST FAILED: test_bootstrap_1 -4"
         end if
+    contains
+        pure function mean_array(x_) result(rst_)
+            real(real64), intent(in), dimension(:) :: x_
+            real(real64) :: rst_
+            rst_ = mean(x_)
+        end function
     end function
 
 ! ------------------------------------------------------------------------------
@@ -161,7 +167,7 @@ contains
             0.988756414d0, 0.214287163d0, 0.579534890d0, 0.770211065d0, &
             0.307955851d0, 0.509150720d0, 0.665120628d0, 0.817904438d0, &
             0.896080063d0, 0.599850776d0]
-        fcn => mean
+        fcn => mean_array
         sampler => random_resample_with_replacement
         mu = mean(x)
 
@@ -187,6 +193,12 @@ contains
             rst = .false.
             print "(A)", "TEST FAILED: test_bootstrap_2 -4"
         end if
+    contains
+        pure function mean_array(x_) result(rst_)
+            real(real64), intent(in), dimension(:) :: x_
+            real(real64) :: rst_
+            rst_ = mean(x_)
+        end function
     end function
 
 ! ------------------------------------------------------------------------------
@@ -198,7 +210,7 @@ contains
         type(bootstrap_statistics) :: z
 
         x = [1.0d0, 2.0d0, 3.0d0]
-        fcn => mean
+        fcn => mean_array
         sampler => shift_resample
         z = bootstrap(fcn, x, method = sampler, nsamples = 3)
 
@@ -207,6 +219,13 @@ contains
             z%lower_confidence_interval == 12.0d0 .and. &
             z%upper_confidence_interval == 12.0d0
         if (.not.rst) print "(A)", "TEST FAILED: test_bootstrap_small_nsamples"
+
+    contains
+        pure function mean_array(x_) result(rst_)
+            real(real64), intent(in), dimension(:) :: x_
+            real(real64) :: rst_
+            rst_ = mean(x_)
+        end function
     end function
 
 ! ------------------------------------------------------------------------------

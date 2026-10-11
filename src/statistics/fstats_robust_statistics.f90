@@ -26,6 +26,7 @@
 module fstats_robust_statistics
     use iso_fortran_env
     use fstats_descriptive_statistics
+    use fstats_data_columns, only : real_column
     implicit none
     private
     public :: median_absolute_deviation
@@ -33,9 +34,14 @@ module fstats_robust_statistics
     public :: tukey_biweight_rho
     public :: tukey_biweight_irls_weight
 
+    interface median_absolute_deviation
+        module procedure :: median_absolute_deviation_array
+        module procedure :: median_absolute_deviation_column
+    end interface
+
 contains
 ! ------------------------------------------------------------------------------
-pure function median_absolute_deviation(x) result(rst)
+pure function median_absolute_deviation_array(x) result(rst)
     !! Computes the median absolute deviation of a data set by determining the
     !! median of distances of each data point from the data set median.
     real(real64), intent(in), dimension(:) :: x
@@ -68,6 +74,21 @@ pure function median_absolute_deviation(x) result(rst)
         end if
     end do
     rst = median(distances)
+end function
+
+! ------------------------------------------------------------------------------
+pure function median_absolute_deviation_column(x) result(rst)
+    !! Computes median absolute deviation using the array implementation on a copy.
+    !! Distances that overflow are saturated as in the array overload.
+    class(real_column), intent(in) :: x
+        !! The input column, unchanged; unallocated storage is treated as empty.
+    real(real64) :: rst
+        !! Unscaled median absolute deviation; empty/nonfinite data give NaN.
+    real(real64), allocatable, dimension(:) :: values
+
+    allocate(values(x%count()))
+    call x%copy(values)
+    rst = median_absolute_deviation_array(values)
 end function
 
 ! ------------------------------------------------------------------------------
