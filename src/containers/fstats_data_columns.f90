@@ -38,6 +38,8 @@ module fstats_data_columns
     public :: real_column
     public :: logical_column
     public :: string_column
+    public :: size
+    public :: string
 
     integer(int32), parameter :: FS_COLUMN_INTEGER = 1
         !! Denotes a column of integer values.
@@ -238,6 +240,11 @@ module fstats_data_columns
         module procedure :: sc_init_array
     end interface
 
+! ------------------------------------------------------------------------------
+    interface size
+        module procedure :: dc_size
+    end interface
+
 contains
 ! ******************************************************************************
 ! DATA_COLUMN MEMBERS
@@ -398,6 +405,53 @@ contains
         rst = trim(adjustl(buffer))
     end function
 
+! ------------------------------------------------------------------------------
+    subroutine ic_append(this, x)
+        class(integer_column), intent(inout) :: this
+        class(*), intent(in) :: x
+
+        call this%insert(this%count() + 1, x)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine ic_insert(this, row, x)
+        class(integer_column), intent(inout) :: this
+        integer(int32), intent(in) :: row
+        class(*), intent(in) :: x
+        integer(int32), allocatable, dimension(:) :: values
+        integer(int32) :: n
+
+        n = this%count()
+        if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
+        select type (x)
+        type is (integer(int32))
+            allocate(values(n + 1))
+            if (allocated(this%m_values)) then
+                values(:row - 1) = this%m_values(:row - 1)
+                values(row + 1:) = this%m_values(row:)
+            end if
+            values(row) = x
+        class default
+            error stop FS_INVALID_ARGUMENT_ERROR
+        end select
+        call move_alloc(values, this%m_values)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine ic_remove(this, row)
+        class(integer_column), intent(inout) :: this
+        integer(int32), intent(in) :: row
+        integer(int32), allocatable, dimension(:) :: values
+        integer(int32) :: n
+
+        n = this%count()
+        if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
+        allocate(values(n - 1))
+        values(:row - 1) = this%m_values(:row - 1)
+        values(row:) = this%m_values(row + 1:)
+        call move_alloc(values, this%m_values)
+    end subroutine
+
 ! ******************************************************************************
 ! REAL_COLUMN MEMBERS
 ! ------------------------------------------------------------------------------
@@ -541,6 +595,53 @@ contains
         rst = trim_trailing_zeros(trim(adjustl(buffer)))
     end function
 
+! ------------------------------------------------------------------------------
+    subroutine rc_append(this, x)
+        class(real_column), intent(inout) :: this
+        class(*), intent(in) :: x
+
+        call this%insert(this%count() + 1, x)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine rc_insert(this, row, x)
+        class(real_column), intent(inout) :: this
+        integer(int32), intent(in) :: row
+        class(*), intent(in) :: x
+        real(real64), allocatable, dimension(:) :: values
+        integer(int32) :: n
+
+        n = this%count()
+        if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
+        select type (x)
+        type is (real(real64))
+            allocate(values(n + 1))
+            if (allocated(this%m_values)) then
+                values(:row - 1) = this%m_values(:row - 1)
+                values(row + 1:) = this%m_values(row:)
+            end if
+            values(row) = x
+        class default
+            error stop FS_INVALID_ARGUMENT_ERROR
+        end select
+        call move_alloc(values, this%m_values)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine rc_remove(this, row)
+        class(real_column), intent(inout) :: this
+        integer(int32), intent(in) :: row
+        real(real64), allocatable, dimension(:) :: values
+        integer(int32) :: n
+
+        n = this%count()
+        if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
+        allocate(values(n - 1))
+        values(:row - 1) = this%m_values(:row - 1)
+        values(row:) = this%m_values(row + 1:)
+        call move_alloc(values, this%m_values)
+    end subroutine
+
 ! ******************************************************************************
 ! LOGICAL_COLUMN MEMBERS
 ! ------------------------------------------------------------------------------
@@ -678,6 +779,53 @@ contains
         rst = trim(adjustl(buffer))
     end function
 
+! ------------------------------------------------------------------------------
+    subroutine lc_append(this, x)
+        class(logical_column), intent(inout) :: this
+        class(*), intent(in) :: x
+
+        call this%insert(this%count() + 1, x)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine lc_insert(this, row, x)
+        class(logical_column), intent(inout) :: this
+        integer(int32), intent(in) :: row
+        class(*), intent(in) :: x
+        logical, allocatable, dimension(:) :: values
+        integer(int32) :: n
+
+        n = this%count()
+        if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
+        select type (x)
+        type is (logical)
+            allocate(values(n + 1))
+            if (allocated(this%m_values)) then
+                values(:row - 1) = this%m_values(:row - 1)
+                values(row + 1:) = this%m_values(row:)
+            end if
+            values(row) = x
+        class default
+            error stop FS_INVALID_ARGUMENT_ERROR
+        end select
+        call move_alloc(values, this%m_values)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine lc_remove(this, row)
+        class(logical_column), intent(inout) :: this
+        integer(int32), intent(in) :: row
+        logical, allocatable, dimension(:) :: values
+        integer(int32) :: n
+
+        n = this%count()
+        if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
+        allocate(values(n - 1))
+        values(:row - 1) = this%m_values(:row - 1)
+        values(row:) = this%m_values(row + 1:)
+        call move_alloc(values, this%m_values)
+    end subroutine
+
 ! ******************************************************************************
 ! STRING_COLUMN MEMBERS
 ! ------------------------------------------------------------------------------
@@ -806,149 +954,6 @@ contains
         rst = char(this%m_values(row))
     end function
 
-! ******************************************************************************
-! ADDITIONAL ROUTINES
-! ------------------------------------------------------------------------------
-    subroutine ic_append(this, x)
-        class(integer_column), intent(inout) :: this
-        class(*), intent(in) :: x
-
-        call this%insert(this%count() + 1, x)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine ic_insert(this, row, x)
-        class(integer_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
-        class(*), intent(in) :: x
-        integer(int32), allocatable, dimension(:) :: values
-        integer(int32) :: n
-
-        n = this%count()
-        if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
-        select type (x)
-        type is (integer(int32))
-            allocate(values(n + 1))
-            if (allocated(this%m_values)) then
-                values(:row - 1) = this%m_values(:row - 1)
-                values(row + 1:) = this%m_values(row:)
-            end if
-            values(row) = x
-        class default
-            error stop FS_INVALID_ARGUMENT_ERROR
-        end select
-        call move_alloc(values, this%m_values)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine ic_remove(this, row)
-        class(integer_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
-        integer(int32), allocatable, dimension(:) :: values
-        integer(int32) :: n
-
-        n = this%count()
-        if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
-        allocate(values(n - 1))
-        values(:row - 1) = this%m_values(:row - 1)
-        values(row:) = this%m_values(row + 1:)
-        call move_alloc(values, this%m_values)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine rc_append(this, x)
-        class(real_column), intent(inout) :: this
-        class(*), intent(in) :: x
-
-        call this%insert(this%count() + 1, x)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine rc_insert(this, row, x)
-        class(real_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
-        class(*), intent(in) :: x
-        real(real64), allocatable, dimension(:) :: values
-        integer(int32) :: n
-
-        n = this%count()
-        if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
-        select type (x)
-        type is (real(real64))
-            allocate(values(n + 1))
-            if (allocated(this%m_values)) then
-                values(:row - 1) = this%m_values(:row - 1)
-                values(row + 1:) = this%m_values(row:)
-            end if
-            values(row) = x
-        class default
-            error stop FS_INVALID_ARGUMENT_ERROR
-        end select
-        call move_alloc(values, this%m_values)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine rc_remove(this, row)
-        class(real_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
-        real(real64), allocatable, dimension(:) :: values
-        integer(int32) :: n
-
-        n = this%count()
-        if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
-        allocate(values(n - 1))
-        values(:row - 1) = this%m_values(:row - 1)
-        values(row:) = this%m_values(row + 1:)
-        call move_alloc(values, this%m_values)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine lc_append(this, x)
-        class(logical_column), intent(inout) :: this
-        class(*), intent(in) :: x
-
-        call this%insert(this%count() + 1, x)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine lc_insert(this, row, x)
-        class(logical_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
-        class(*), intent(in) :: x
-        logical, allocatable, dimension(:) :: values
-        integer(int32) :: n
-
-        n = this%count()
-        if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
-        select type (x)
-        type is (logical)
-            allocate(values(n + 1))
-            if (allocated(this%m_values)) then
-                values(:row - 1) = this%m_values(:row - 1)
-                values(row + 1:) = this%m_values(row:)
-            end if
-            values(row) = x
-        class default
-            error stop FS_INVALID_ARGUMENT_ERROR
-        end select
-        call move_alloc(values, this%m_values)
-    end subroutine
-
-! ------------------------------------------------------------------------------
-    subroutine lc_remove(this, row)
-        class(logical_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
-        logical, allocatable, dimension(:) :: values
-        integer(int32) :: n
-
-        n = this%count()
-        if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
-        allocate(values(n - 1))
-        values(:row - 1) = this%m_values(:row - 1)
-        values(row:) = this%m_values(row + 1:)
-        call move_alloc(values, this%m_values)
-    end subroutine
-
 ! ------------------------------------------------------------------------------
     subroutine sc_append(this, x)
         class(string_column), intent(inout) :: this
@@ -999,6 +1004,18 @@ contains
         values(row:) = this%m_values(row + 1:)
         call move_alloc(values, this%m_values)
     end subroutine
+
+! ******************************************************************************
+! ADDITIONAL ROUTINES
+! ------------------------------------------------------------------------------
+    pure function dc_size(col) result(rst)
+        !! Returns the number of items in the column.
+        class(data_column), intent(in) :: col
+            !! The [[data_column]] object.
+        integer :: rst
+            !! The size of the column.
+        rst = col%count()
+    end function
 
 ! ------------------------------------------------------------------------------
     function trim_trailing_zeros(value) result(rst)
