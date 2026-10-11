@@ -14,6 +14,7 @@ set(fstats_test_sources
     fstats_missing_data_tests.f90
     fstats_msa_tests.f90
     fstats_glm_tests.f90
+    fstats_data_column_tests.f90
 )
 
 # Dependencies
@@ -44,6 +45,21 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
     COMMAND $<TARGET_FILE:fstats_tests>
 )
+
+add_test(NAME fstats_columns COMMAND $<TARGET_FILE:fstats_tests> columns)
+foreach(column_type IN ITEMS integer real logical string)
+    foreach(invalid_case IN ITEMS
+        append-type insert-type copy-type insert-low insert-high remove-empty
+        remove-low remove-high negative-size get-low get-high get-unallocated
+        set-low set-high set-unallocated format-low format-high format-unallocated
+        copy-small copy-large
+    )
+        add_test(NAME fstats_columns_invalid_${column_type}_${invalid_case}
+            COMMAND $<TARGET_FILE:fstats_tests> columns-invalid ${column_type} ${invalid_case})
+        set_tests_properties(fstats_columns_invalid_${column_type}_${invalid_case}
+            PROPERTIES WILL_FAIL TRUE)
+    endforeach()
+endforeach()
 
 add_test(NAME fstats_glm COMMAND $<TARGET_FILE:fstats_tests> glm)
 foreach(invalid_case IN ITEMS

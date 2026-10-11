@@ -41,6 +41,8 @@ set(FSTATS_SOURCES
     ${dir}/monte_carlo/fstats_mcmc.f90
     ${dir}/glm/fstats_glm_types.f90
     ${dir}/glm/fstats_glm_irls.f90
+    ${dir}/containers/fstats_data_columns.f90
+    ${dir}/containers/fstats_data_table.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 
@@ -55,6 +57,7 @@ include(FetchContent)
 find_package(OpenMP REQUIRED COMPONENTS Fortran)
 find_package(linalg 2.3.0 QUIET)
 find_package(collections 1.2.0 QUIET)
+find_package(fstring 1.1.0 QUIET)
 
 if (NOT linalg_FOUND)
     message(STATUS "LINALG could not be found.  A reference version will be employed.")
@@ -85,6 +88,21 @@ else()
     set(BUILD_COLLECTIONS FALSE)
 endif()
 
+if (NOT collections_FOUND)
+    message(STATUS "FSTRING could not be found.  A reference version will be employed.")
+    FetchContent_Declare(
+        fstring
+        GIT_REPOSITORY "https://github.com/jchristopherson/fstring"
+        GIT_TAG main
+    )
+    FetchContent_MakeAvailable(fstring)
+    set(FSTRING_LIBRARIES fstring)
+    set(BUILD_COLLECTIONS TRUE)
+else()
+    set(FSTRING_LIBRARIES fstring::fstring)
+    set(BUILD_COLLECTIONS FALSE)
+endif()
+
 # Build
 add_library(${PROJECT_NAME} ${FSTATS_SOURCES})
 target_link_libraries(
@@ -92,6 +110,7 @@ target_link_libraries(
     PUBLIC
     ${COLLECTIONS_LIBRARIES}
     ${LINALG_LIBRARIES}
+    ${FSTRING_LIBRARIES}
 )
 if (OpenMP_Fortran_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_Fortran)
@@ -154,6 +173,12 @@ if (${BUILD_SHARED_LIBS})
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
     endif()
+    if (${BUILD_FSTRING})
+        install(TARGETS ${FSTRING_LIBRARIES}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        )
+    endif()
 else()
     if (${BUILD_LINALG})
         install(TARGETS ${LINALG_LIBRARIES}
@@ -163,6 +188,12 @@ else()
     endif()
     if (${BUILD_COLLECTIONS})
         install(TARGETS ${COLLECTIONS_LIBRARIES}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        )
+    endif()
+    if (${BUILD_FSTRING})
+        install(TARGETS ${FSTRING_LIBRARIES}
             RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )

@@ -37,16 +37,29 @@ program tests
     use fstats_missing_data_tests
     use fstats_msa_tests
     use fstats_glm_tests
+    use fstats_data_column_tests
     implicit none
 
     ! Variables
     logical :: local, overall
     character(32) :: test_group
+    character(32) :: column_type, invalid_case
 
     ! Initialization
     overall = .true.
 
     call get_command_argument(1, test_group)
+    if (trim(test_group) == 'columns-invalid') then
+        call get_command_argument(2, column_type)
+        call get_command_argument(3, invalid_case)
+        call test_data_column_invalid_input(trim(column_type), trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'columns') then
+        local = test_data_columns()
+        if (.not.local) stop 1
+        stop
+    end if
     if (index(test_group, 'glm-invalid-') == 1) then
         call test_glm_invalid_input(trim(test_group(13:)))
         stop 0
@@ -74,6 +87,9 @@ program tests
     end if
 
     ! Distribution Tests
+    local = test_data_columns()
+    if (.not.local) overall = .false.
+
     local = test_glm_irls()
     if (.not.local) overall = .false.
 
