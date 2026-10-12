@@ -1,6 +1,4 @@
-# Include Dependencies
-add_subdirectory(fortran_csv_module)
-
+# Dependencies
 find_package(fplot QUIET)
 if (NOT fplot_FOUND)
     include(FetchContent)
@@ -11,7 +9,7 @@ if (NOT fplot_FOUND)
         GIT_REPOSITORY https://github.com/jchristopherson/fplot
     )
     FetchContent_MakeAvailable(fplot)
-    set(fplot_LIBRARY fplot forcolormap)
+    set(fplot_LIBRARY fplot)
 else()
     set(fplot_LIBRARY fplot::fplot)
 endif()
@@ -39,8 +37,7 @@ configure_file(
     COPYONLY
 )
 add_executable(allan_example allan_example.f90)
-target_link_libraries(allan_example PRIVATE fstats ${fplot_LIBRARY} ${fortran-csv-module_LIBRARY})
-target_include_directories(allan_example PRIVATE ${fortran-csv-module_INCLUDE_DIR})
+target_link_libraries(allan_example PRIVATE fstats ${fplot_LIBRARY})
 
 # Box-Muller Example
 add_executable(box_muller_example box_muller_example.f90)
@@ -107,7 +104,7 @@ if (${BUILD_SHARED_LIBS} AND WIN32)
             add_custom_command(
                 TARGET ${example_target}
                 POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                COMMAND ${CMAKE_COMMAND} -E copy
                 $<TARGET_RUNTIME_DLLS:${example_target}>
                 $<TARGET_FILE_DIR:${example_target}>
                 COMMAND_EXPAND_LISTS
