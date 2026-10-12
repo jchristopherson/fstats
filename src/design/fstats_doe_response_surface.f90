@@ -34,11 +34,27 @@ module fstats_doe_response_surface
 contains
 ! ------------------------------------------------------------------------------
 pure function doe_optimize_rsm(mdl, x_low, x_high, method, tol) result(opt)
+    !! Returns the center point of the supplied factor bounds as an RSM
+    !! optimization result. This routine is currently a placeholder: it does
+    !! not evaluate `mdl` or perform an optimization. The result is marked as
+    !! converged with an iteration count of 50 and a predicted response of 0.
     class(doe_model), intent(in) :: mdl
-    real(real64), intent(in), dimension(:) :: x_low, x_high
+        !! The fitted DOE model. Currently unused.
+    real(real64), intent(in), dimension(:) :: x_low
+        !! Lower natural-scale bound for each factor.
+    real(real64), intent(in), dimension(:) :: x_high
+        !! Upper natural-scale bound for each factor. Its size must
+        !! match `x_low`.
     character(len=*), intent(in), optional :: method
+        !! Optional method name to store in the result. Defaults to `gradient`; 
+        !! the method is not used to select an algorithm.
     real(real64), intent(in), optional :: tol
+        !! Optional convergence tolerance to store in the result.  Defaults to 
+        !! 1.0d-6; it does not affect computation.
     type(doe_optimization_result) :: opt
+        !! An optimization result whose coded factors are zero, natural
+        !! factors are the bounds' midpoints, method and tolerance hold the
+        !! supplied or default values, and convergence is reported as successful.
     integer(int32) :: n
     
     n = size(x_low)
