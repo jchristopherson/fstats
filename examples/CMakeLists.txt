@@ -97,18 +97,12 @@ add_executable(glm_irls_example glm_irls_example.f90)
 target_link_libraries(glm_irls_example PRIVATE fstats ${fplot_LIBRARY})
 
 if (${BUILD_SHARED_LIBS} AND WIN32)
-    get_property(example_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
-    foreach(example_target IN LISTS example_targets)
-        get_target_property(example_target_type ${example_target} TYPE)
-        if (example_target_type STREQUAL "EXECUTABLE")
-            add_custom_command(
-                TARGET ${example_target}
-                POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                $<TARGET_RUNTIME_DLLS:${example_target}>
-                $<TARGET_FILE_DIR:${example_target}>
-                COMMAND_EXPAND_LISTS
-            )
-        endif()
-    endforeach()
+    add_custom_command(
+        TARGET glm_irls_example
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        $<TARGET_RUNTIME_DLLS:glm_irls_example>
+        $<TARGET_FILE_DIR:glm_irls_example>
+        COMMAND_EXPAND_LISTS
+    )
 endif()

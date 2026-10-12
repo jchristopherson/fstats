@@ -27,7 +27,6 @@ program example
     use iso_fortran_env
     use fstats
     use fplot_core
-    use csv_module
     implicit none
 
     ! Local Variables

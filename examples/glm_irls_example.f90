@@ -5,29 +5,45 @@ program example
     implicit none
 
     ! Local Variables
-    integer(int32), parameter :: eval_size = 500
-    integer(int32) :: i
-    real(real64) :: dx, x(10,2), y(10), beta_p(2), eta(eval_size), &
-        f(eval_size), xi(eval_size,2)
+    integer(int32), parameter :: eval_size = 500, group_count = 5, &
+        replicates_per_group = 10
+    integer(int32), dimension(group_count), parameter :: success_count = &
+        [1, 3, 5, 7, 9]
+    integer(int32) :: i, group_index, replicate_index, observation_index
+    real(real64) :: x(group_count * replicates_per_group,2), &
+        y(group_count * replicates_per_group), beta_p(2), eta(eval_size), &
+        f(eval_size), xi(eval_size,2), group_x(group_count), &
+        observed_rate(group_count)
     type(glm_coefficient_statistics) :: stats(2)
     type(glm_convergence_info) :: info
     type(glm_options) :: opts
 
     ! Plot Variables
     type(plot_2d) :: plt
-    type(plot_data_2d) :: pdata
+    type(plot_data_2d) :: pdata1, pdata2
+    class(legend), pointer :: lgnd
 
     ! The model is log(p / (1 - p)) = beta_p(1) + beta_p(2) * x,
     ! where p = P(y = 1). The first design column supplies the intercept.
-    dx = 0.5d0
-    do i = 1, size(x, 1)
-        x(i,1) = 1.0d0
-        x(i,2) = (i - 1.0d0) * dx
+    ! Success proportions rise from 0.1 to 0.9 across the five x levels.
+    do group_index = 1, group_count
+        group_x(group_index) = real(group_index - 3, real64)
+        observed_rate(group_index) = real(success_count(group_index), real64) / &
+            real(replicates_per_group, real64)
+        do replicate_index = 1, replicates_per_group
+            observation_index = (group_index - 1) * replicates_per_group + &
+                replicate_index
+            x(observation_index,1) = 1.0d0
+            x(observation_index,2) = group_x(group_index)
+            y(observation_index) = 0.0d0
+            if (replicate_index <= success_count(group_index)) then
+                y(observation_index) = 1.0d0
+            end if
+        end do
     end do
-    y = [0.0d0, 0.0d0, 1.0d0, 0.0d0, 0.0d0, 1.0d0, 1.0d0, 0.0d0, 1.0d0, 1.0d0]
     beta_p = 0.0d0
     xi(:,1) = 1.0d0
-    xi(:,2) = linspace(minval(x(:,2)), maxval(x(:,2)), eval_size)
+    xi(:,2) = linspace(minval(group_x), maxval(group_x), eval_size)
 
     ! Disable robust weighting for an ordinary Bernoulli likelihood fit.
     opts%use_robust_weighting = .false.
@@ -76,12 +92,24 @@ program example
     call plt%set_title("Binomial GLM with Logit Link")
     call plt%set_x_axis_title("Predictor x")
     call plt%set_y_axis_title("Response and P(y = 1)")
+    lgnd => plt%get_legend()
+    call lgnd%set_is_visible(.true.)
+    call lgnd%set_draw_border(.false.)
+    call lgnd%set_horizontal_position(LEGEND_RIGHT)
+    call lgnd%set_vertical_position(LEGEND_BOTTOM)
 
-    call pdata%define_data(x(:,2), y)
-    call pdata%set_draw_line(.false.)
-    call pdata%set_draw_markers(.true.)
-    call pdata%set_name("Observed binary response")
-    call plt%push(pdata)
+    call pdata1%define_data(x(:,2), y)
+    call pdata1%set_draw_line(.false.)
+    call pdata1%set_draw_markers(.true.)
+    call pdata1%set_name("Observed binary response")
+    call plt%push(pdata1)
+
+    call pdata2%define_data(group_x, observed_rate)
+    call pdata2%set_draw_line(.false.)
+    call pdata2%set_draw_markers(.true.)
+    call pdata2%set_name("Observed success proportion")
+    call pdata2%set_marker_style(MARKER_FILLED_TRIANGLE)
+    call plt%push(pdata2)
 
     call plt%push(xi(:,2), f, name = "Fitted P(y = 1)")
 
