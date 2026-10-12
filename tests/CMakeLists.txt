@@ -16,6 +16,7 @@ set(fstats_test_sources
     fstats_glm_tests.f90
     fstats_data_column_tests.f90
     fstats_data_table_tests.f90
+    fstats_data_table_io_tests.f90
 )
 
 # Dependencies
@@ -58,6 +59,16 @@ foreach(invalid_case IN ITEMS
     add_test(NAME fstats_table_invalid_${invalid_case}
         COMMAND $<TARGET_FILE:fstats_tests> table-invalid ${invalid_case})
     set_tests_properties(fstats_table_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
+add_test(NAME fstats_table_io COMMAND $<TARGET_FILE:fstats_tests> table-io)
+foreach(invalid_case IN ITEMS
+    missing-file quote-delimiter negative-header header-past-end blank-header
+    empty-file extra-fields unterminated-quote malformed-quote
+    write-quote-delimiter write-bad-path
+)
+    add_test(NAME fstats_table_io_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> table-io-invalid ${invalid_case})
+    set_tests_properties(fstats_table_io_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
 endforeach()
 add_test(NAME fstats_statistics_columns COMMAND $<TARGET_FILE:fstats_tests> statistics-columns)
 foreach(invalid_case IN ITEMS columns column-array array-column pooled)

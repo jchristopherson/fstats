@@ -43,6 +43,7 @@ set(FSTATS_SOURCES
     ${dir}/glm/fstats_glm_irls.f90
     ${dir}/containers/fstats_data_columns.f90
     ${dir}/containers/fstats_data_table.f90
+    ${dir}/containers/fstats_data_table_io.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 

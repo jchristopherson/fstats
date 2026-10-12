@@ -65,4 +65,5 @@ module fstats
     use fstats_glm_irls
     use fstats_data_columns
     use fstats_data_table
+    use fstats_data_table_io
 end module

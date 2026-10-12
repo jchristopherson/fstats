@@ -39,6 +39,7 @@ program tests
     use fstats_glm_tests
     use fstats_data_column_tests
     use fstats_data_table_tests
+    use fstats_data_table_io_tests
     implicit none
 
     ! Variables
@@ -57,6 +58,16 @@ program tests
     end if
     if (trim(test_group) == 'table') then
         local = test_data_table()
+        if (.not.local) stop 1
+        stop
+    end if
+    if (trim(test_group) == 'table-io-invalid') then
+        call get_command_argument(2, invalid_case)
+        call test_data_table_io_invalid_input(trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'table-io') then
+        local = test_data_table_io()
         if (.not.local) stop 1
         stop
     end if
@@ -111,6 +122,9 @@ program tests
 
     ! Distribution Tests
     local = test_data_table()
+    if (.not.local) overall = .false.
+
+    local = test_data_table_io()
     if (.not.local) overall = .false.
 
     local = test_data_columns()
