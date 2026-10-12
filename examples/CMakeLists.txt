@@ -1,7 +1,7 @@
 # Include Dependencies
 add_subdirectory(fortran_csv_module)
 
-find_package(fplot)
+find_package(fplot QUIET)
 if (NOT fplot_FOUND)
     include(FetchContent)
     set(BUILD_TESTING OFF)

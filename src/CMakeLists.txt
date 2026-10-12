@@ -56,7 +56,7 @@ set_source_files_properties(
 include(FetchContent)
 find_package(OpenMP REQUIRED COMPONENTS Fortran)
 find_package(linalg 2.3.0 QUIET)
-find_package(collections 1.2.0 QUIET)
+find_package(collections 1.2.1 QUIET)
 find_package(fstring 1.1.0 QUIET)
 
 if (NOT linalg_FOUND)

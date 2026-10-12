@@ -38,6 +38,7 @@ program tests
     use fstats_msa_tests
     use fstats_glm_tests
     use fstats_data_column_tests
+    use fstats_data_table_tests
     implicit none
 
     ! Variables
@@ -49,6 +50,16 @@ program tests
     overall = .true.
 
     call get_command_argument(1, test_group)
+    if (trim(test_group) == 'table-invalid') then
+        call get_command_argument(2, invalid_case)
+        call test_data_table_invalid_input(trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'table') then
+        local = test_data_table()
+        if (.not.local) stop 1
+        stop
+    end if
     if (trim(test_group) == 'statistics-columns-invalid') then
         call get_command_argument(2, invalid_case)
         call test_statistics_column_invalid_input(trim(invalid_case))
@@ -99,6 +110,9 @@ program tests
     end if
 
     ! Distribution Tests
+    local = test_data_table()
+    if (.not.local) overall = .false.
+
     local = test_data_columns()
     if (.not.local) overall = .false.
 

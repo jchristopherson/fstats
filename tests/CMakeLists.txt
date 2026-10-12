@@ -15,6 +15,7 @@ set(fstats_test_sources
     fstats_msa_tests.f90
     fstats_glm_tests.f90
     fstats_data_column_tests.f90
+    fstats_data_table_tests.f90
 )
 
 # Dependencies
@@ -47,6 +48,17 @@ add_test(
 )
 
 add_test(NAME fstats_columns COMMAND $<TARGET_FILE:fstats_tests> columns)
+add_test(NAME fstats_table COMMAND $<TARGET_FILE:fstats_tests> table)
+foreach(invalid_case IN ITEMS
+    get-empty get-low get-high remove-low remove-high
+    insert-low insert-high insert-empty-low insert-empty-high
+    add-short add-long insert-short insert-long add-zero insert-zero
+    zero-add-nonempty zero-insert-nonempty
+)
+    add_test(NAME fstats_table_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> table-invalid ${invalid_case})
+    set_tests_properties(fstats_table_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
 add_test(NAME fstats_statistics_columns COMMAND $<TARGET_FILE:fstats_tests> statistics-columns)
 foreach(invalid_case IN ITEMS columns column-array array-column pooled)
     add_test(NAME fstats_statistics_columns_invalid_${invalid_case}
