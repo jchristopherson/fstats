@@ -80,6 +80,13 @@ module fstats_data_columns
             !! The caller must not deallocate the returned pointer.
             !! Reallocation of the array or destruction of the column invalidates
             !! the view; discard it before either operation and reacquire afterward.
+        procedure(data_column_slice), deferred, public, pass :: slice
+            !! Borrows a mutable array pointer to a slice of the column without
+            !! copying the column.  The actual column must have TARGET or be an 
+            !! associated pointer.  The caller must not deallocate the returned 
+            !! pointer.  Reallocation of the array or destruction of the column 
+            !! invalidates the view; discard it before either operation and 
+            !! reacquire afterward.
         procedure(data_column_to_string), deferred, public, pass :: to_string
             !! Converts the requested value to a string.
         procedure(data_column_append), deferred, public, pass :: append
@@ -159,6 +166,21 @@ module fstats_data_columns
             class(data_column), intent(inout) :: this
             integer(int32), intent(in) :: row
         end subroutine
+
+        ! ------------------------------------------------------------------------------
+        function data_column_slice(this, first, last) result(rst)
+            !! Returns a borrowed, mutable slice of this column's array.
+            use iso_fortran_env, only : int32
+            import data_column
+            class(data_column), target, intent(inout) :: this
+                !! The [[data_column]] object.
+            integer(int32), intent(in) :: first
+                !! The one-based starting index of the slice.
+            integer(int32), intent(in) :: last
+                !! The one-based ending index of the slice.
+            class(*), pointer, dimension(:) :: rst
+                !! The array pointer, or null if unallocated.
+        end function
     end interface
 
     type, extends(data_column) :: integer_column
@@ -171,6 +193,7 @@ module fstats_data_columns
         procedure, public :: set => ic_set
         procedure, public :: copy => ic_copy
         procedure, public :: view => ic_view
+        procedure, public :: slice => ic_slice
         procedure, public :: to_string => ic_to_string
         procedure, public :: append => ic_append
         procedure, public :: insert => ic_insert
@@ -192,6 +215,7 @@ module fstats_data_columns
         procedure, public :: set => rc_set
         procedure, public :: copy => rc_copy
         procedure, public :: view => rc_view
+        procedure, public :: slice => rc_slice
         procedure, public :: to_string => rc_to_string
         procedure, public :: append => rc_append
         procedure, public :: insert => rc_insert
@@ -213,6 +237,7 @@ module fstats_data_columns
         procedure, public :: set => lc_set
         procedure, public :: copy => lc_copy
         procedure, public :: view => lc_view
+        procedure, public :: slice => lc_slice
         procedure, public :: to_string => lc_to_string
         procedure, public :: append => lc_append
         procedure, public :: insert => lc_insert
@@ -234,6 +259,7 @@ module fstats_data_columns
         procedure, public :: set => sc_set
         procedure, public :: copy => sc_copy
         procedure, public :: view => sc_view
+        procedure, public :: slice => sc_slice
         procedure, public :: to_string => sc_to_string
         procedure, public :: append => sc_append
         procedure, public :: insert => sc_insert
@@ -454,6 +480,25 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function ic_slice(this, first, last) result(rst)
+        !! Returns a borrowed, mutable slice of this column's array.
+        class(integer_column), target, intent(inout) :: this
+            !! The [[integer_column]] object.
+        integer(int32), intent(in) :: first
+            !! The one-based starting index of the slice.
+        integer(int32), intent(in) :: last
+            !! The one-based ending index of the slice.
+        class(*), pointer, dimension(:) :: rst
+            !! The array pointer, or null if unallocated.
+
+        nullify(rst)
+        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first < 1) error stop FS_INVALID_INPUT_ERROR
+        if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
+        if (allocated(this%m_values)) rst => this%m_values(first:last)
+    end function
+
+! ------------------------------------------------------------------------------
     function ic_to_string(this, row, fmt) result(rst)
         !! Returns the value in the requested row as a string.
         class(integer_column), intent(in) :: this
@@ -635,6 +680,25 @@ contains
 
         nullify(rst)
         if (allocated(this%m_values)) rst => this%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    function rc_slice(this, first, last) result(rst)
+        !! Returns a borrowed, mutable slice of this column's array.
+        class(real_column), target, intent(inout) :: this
+            !! The [[real_column]] object.
+        integer(int32), intent(in) :: first
+            !! The one-based starting index of the slice.
+        integer(int32), intent(in) :: last
+            !! The one-based ending index of the slice.
+        class(*), pointer, dimension(:) :: rst
+            !! The array pointer, or null if unallocated.
+
+        nullify(rst)
+        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first < 1) error stop FS_INVALID_INPUT_ERROR
+        if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
+        if (allocated(this%m_values)) rst => this%m_values(first:last)
     end function
 
 ! ------------------------------------------------------------------------------
@@ -828,6 +892,25 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function lc_slice(this, first, last) result(rst)
+        !! Returns a borrowed, mutable slice of this column's array.
+        class(logical_column), target, intent(inout) :: this
+            !! The [[logical_column]] object.
+        integer(int32), intent(in) :: first
+            !! The one-based starting index of the slice.
+        integer(int32), intent(in) :: last
+            !! The one-based ending index of the slice.
+        class(*), pointer, dimension(:) :: rst
+            !! The array pointer, or null if unallocated.
+
+        nullify(rst)
+        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first < 1) error stop FS_INVALID_INPUT_ERROR
+        if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
+        if (allocated(this%m_values)) rst => this%m_values(first:last)
+    end function
+
+! ------------------------------------------------------------------------------
     function lc_to_string(this, row, fmt) result(rst)
         !! Returns the value in the requested row as a string.
         class(logical_column), intent(in) :: this
@@ -1009,6 +1092,25 @@ contains
 
         nullify(rst)
         if (allocated(this%m_values)) rst => this%m_values
+    end function
+
+! ------------------------------------------------------------------------------
+    function sc_slice(this, first, last) result(rst)
+        !! Returns a borrowed, mutable slice of this column's array.
+        class(string_column), target, intent(inout) :: this
+            !! The [[string_column]] object.
+        integer(int32), intent(in) :: first
+            !! The one-based starting index of the slice.
+        integer(int32), intent(in) :: last
+            !! The one-based ending index of the slice.
+        class(*), pointer, dimension(:) :: rst
+            !! The array pointer, or null if unallocated.
+
+        nullify(rst)
+        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first < 1) error stop FS_INVALID_INPUT_ERROR
+        if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
+        if (allocated(this%m_values)) rst => this%m_values(first:last)
     end function
 
 ! ------------------------------------------------------------------------------
