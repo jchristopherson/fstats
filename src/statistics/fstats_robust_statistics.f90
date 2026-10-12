@@ -26,7 +26,8 @@
 module fstats_robust_statistics
     use iso_fortran_env
     use fstats_descriptive_statistics
-    use fstats_data_columns, only : real_column
+    use fstats_data_columns, only : data_column
+    use fstats_helper_routines, only : column_values
     implicit none
     private
     public :: median_absolute_deviation
@@ -80,15 +81,12 @@ end function
 pure function median_absolute_deviation_column(x) result(rst)
     !! Computes median absolute deviation using the array implementation on a copy.
     !! Distances that overflow are saturated as in the array overload.
-    class(real_column), intent(in) :: x
+    class(data_column), intent(in) :: x
         !! The input column, unchanged; unallocated storage is treated as empty.
     real(real64) :: rst
         !! Unscaled median absolute deviation; empty/nonfinite data give NaN.
-    real(real64), allocatable, dimension(:) :: values
 
-    allocate(values(x%count()))
-    call x%copy(values)
-    rst = median_absolute_deviation_array(values)
+    rst = median_absolute_deviation_array(column_values(x))
 end function
 
 ! ------------------------------------------------------------------------------

@@ -29,7 +29,8 @@ module fstats_descriptive_statistics
     use linalg, only : sort
     use fstats_errors
     use fstats_types
-    use fstats_data_columns, only : real_column
+    use fstats_data_columns, only : data_column
+    use fstats_helper_routines, only : column_values
     implicit none
     private
     public :: mean
@@ -178,7 +179,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function mean_column(x) result(rst)
     !! Computes a column mean using a scaled, compensated sum without copying data.
-    class(real_column), intent(in) :: x
+    class(data_column), intent(in) :: x
         !! The input column; unallocated storage is treated as empty.
     real(real64) :: rst
         !! Mean; empty arrays or nonfinite observations give NaN.
@@ -467,21 +468,9 @@ pure function pooled_variance_2(x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-pure function column_values(x) result(rst)
-    !! Copies a column to a work array for the existing array algorithms.
-    class(real_column), intent(in) :: x
-        !! The input column; unallocated storage is treated as empty.
-    real(real64), allocatable, dimension(:) :: rst
-        !! An independent array with the same count and values as x.
-
-    allocate(rst(x%count()))
-    call x%copy(rst)
-end function
-
-! ------------------------------------------------------------------------------
 pure function variance_column(x) result(rst)
     !! Computes sample variance using the array implementation on a copy.
-    class(real_column), intent(in) :: x
+    class(data_column), intent(in) :: x
         !! The input column, unchanged; unallocated storage is treated as empty.
     real(real64) :: rst
         !! Sample variance; fewer than two values or nonfinite data give NaN.
@@ -493,7 +482,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function standard_deviation_column(x) result(rst)
     !! Computes sample standard deviation using the array implementation on a copy.
-    class(real_column), intent(in) :: x
+    class(data_column), intent(in) :: x
         !! The input column, unchanged; unallocated storage is treated as empty.
     real(real64) :: rst
         !! Sample standard deviation; fewer than two values or nonfinite data
@@ -505,7 +494,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function median_column(x) result(rst)
     !! Computes the median by sorting a copy, leaving the column unchanged.
-    class(real_column), intent(in) :: x
+    class(data_column), intent(in) :: x
         !! The input column; unallocated storage is treated as empty.
     real(real64) :: rst
         !! Median; empty or nonfinite data give NaN.
@@ -516,7 +505,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function quantile_column(x, q) result(rst)
     !! Computes a quantile using the array implementation on a copy.
-    class(real_column), intent(in) :: x
+    class(data_column), intent(in) :: x
         !! The input column, unchanged; unallocated storage is treated as empty.
     real(real64), intent(in) :: q
         !! The quantile probability in [0, 1], using the array routine's interpolation.
@@ -530,7 +519,7 @@ end function
 function trimmed_mean_column(x, p) result(rst)
     !! Computes the trimmed mean and sorts the column's values in ascending order.
     !! Uses a borrowed view without reallocating the underlying array.
-    class(real_column), target, intent(inout) :: x
+    class(data_column), target, intent(inout) :: x
         !! The input column; sorted on success, unchanged for invalid inputs.
         !! Unallocated storage is treated as empty.
     real(real64), intent(in), optional :: p
@@ -552,7 +541,7 @@ end function
 pure function covariance_columns(x, y) result(rst)
     !! Computes sample covariance using independent copies of two columns.
     !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
-    class(real_column), intent(in) :: x, y
+    class(data_column), intent(in) :: x, y
         !! Paired observation columns, unchanged; unallocated storage is empty.
     real(real64) :: rst
         !! Sample covariance; fewer than two pairs or nonfinite values give NaN.
@@ -566,7 +555,7 @@ end function
 pure function covariance_column_array(x, y) result(rst)
     !! Computes sample covariance between a column and an array, copying the column.
     !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
-    class(real_column), intent(in) :: x
+    class(data_column), intent(in) :: x
         !! The first observation column, unchanged; unallocated storage is empty.
     real(real64), intent(in), dimension(:) :: y
         !! The paired observations; must have x's count.
@@ -584,7 +573,7 @@ pure function covariance_array_column(x, y) result(rst)
     !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
     real(real64), intent(in), dimension(:) :: x
         !! The first observation array.
-    class(real_column), intent(in) :: y
+    class(data_column), intent(in) :: y
         !! The paired observation column, unchanged; must have size(x) values.
         !! Unallocated storage is treated as empty.
     real(real64) :: rst
@@ -599,7 +588,7 @@ end function
 pure function pooled_variance_column(si, ni) result(rst)
     !! Pools variance estimates using the array implementation on a column copy.
     !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
-    class(real_column), intent(in) :: si
+    class(data_column), intent(in) :: si
         !! Group variance estimates, unchanged; unallocated storage is empty.
     integer(int32), intent(in), dimension(:) :: ni
         !! Group observation counts; must have si's count and each be at least two.
@@ -614,7 +603,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function pooled_variance_columns(x) result(rst)
     !! Pools sample variances from an array of columns, copying each group's data.
-    class(real_column), intent(in), dimension(:) :: x
+    class(data_column), intent(in), dimension(:) :: x
         !! Observation columns; groups may have different row counts.
     real(real64) :: rst
         !! Pooled variance; no groups, undersized/unallocated groups, or
