@@ -5,20 +5,26 @@ FSTATS is a modern Fortran 2018 statistical library. The public API is collected
 [![CMake](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml/badge.svg)](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml)
 [![Actions Status](https://github.com/jchristopherson/fstats/workflows/fpm/badge.svg)](https://github.com/jchristopherson/fstats/actions)
 
-## Capabilities
-FSTATS includes the following areas of functionality:
+## Feature Matrix
 
-- Descriptive statistics: means, variance, standard deviation, medians, quantiles, trimmed means, covariance, and pooled variance.
-- Probability distributions: normal, log-normal, Student's t, F, chi-squared, binomial, Poisson, and multivariate normal distributions.
-- Hypothesis testing: confidence intervals, t-tests, F-tests, Bartlett's test, Levene's test, and sample-size calculations.
-- ANOVA: one-factor and two-factor analysis of variance.
-- Regression: polynomial linear least squares, regression statistics, R-squared metrics, correlations, numerical Jacobians, and nonlinear Levenberg-Marquardt least squares.
-- Experimental design: full and fractional factorial designs, central composite designs, Latin hypercube designs, model fitting, diagnostics, prediction, model comparison, ANOVA, efficiency, and response-surface optimization.
-- Measurement systems analysis: gauge repeatability and reproducibility (gauge R&R) studies of crossed, nested, and expanded designs, reporting variance components, percent contribution, percent study variation, percent tolerance, and the number of distinct categories.
-- Resampling and simulation: bootstrap resampling, random sampling, rejection sampling, Box-Muller sampling, and multivariate normal sampling.
-- Markov chain Monte Carlo: chains, target distributions, proposals, samplers, and model evaluation.
-- Signal and numerical methods: Allan variance, LOWESS smoothing, linear/polynomial/spline/Hermite interpolation, and missing-data imputation.
-- Special functions: beta and gamma functions, regularized and incomplete forms, and the digamma function.
+| Category | Functionality | Status | Documentation | Examples |
+|-----------|---------------|--------|---------------|----------|
+| Descriptive statistics | Means, variance, standard deviation, medians, quantiles, trimmed means, covariance, and pooled variance | ✅ | ✅ | N/A |
+| Probability distributions | Normal, log-normal, Student's t, F, chi-squared, binomial, Poisson, and multivariate normal distributions | ✅ | ✅ | [Distribution](examples/distribution_example.f90) |
+| Statistical inference | Confidence intervals, t-tests, F-tests, Bartlett's test, Levene's test, and sample-size calculations | ✅ | ✅ | [ANOVA](examples/anova_example_1.f90), [model comparison](examples/doe_model_comparison_example.f90) |
+| ANOVA | One-factor and two-factor analysis of variance | ✅ | ✅ | [ANOVA](examples/anova_example_1.f90) |
+| Regression | Polynomial linear least squares, regression statistics, R-squared metrics, correlations, numerical Jacobians, and nonlinear Levenberg-Marquardt least squares | ✅ | ✅ | [Linear](examples/regression_example.f90), [nonlinear](examples/nl_regression_example.f90), [GLM](examples/glm_irls_example.f90) |
+| DOE design and analysis | Factorial and central-composite designs, Latin hypercube sampling, model fitting, diagnostics, prediction, comparison, ANOVA, and efficiency | ✅ | ✅ | [Design efficiency](examples/doe_design_efficiency_example.f90), [prediction](examples/doe_prediction_example.f90), [full factorial](examples/full_factorial_example.f90) |
+| Response-surface optimization | RSM optimization API; currently returns the factor-space center without optimizing the model | ⚠️ | ✅ | [Example](examples/doe_rsm_optimization_example.f90) |
+| Measurement systems analysis | Crossed, nested, and expanded gauge R&R studies with variance components, contribution, study variation, tolerance, and distinct categories | ✅ | ✅ | N/A |
+| Sampling and resampling | Bootstrap, random and rejection sampling, Box-Muller, and multivariate-normal sampling | ✅ | ✅ | [Bootstrap](examples/bootstrap_example.f90), [rejection](examples/rejection_sample_example.f90), [Box-Muller](examples/box_muller_example.f90) |
+| Markov chain Monte Carlo | Chains, target distributions, proposals, samplers, and model evaluation | ✅ | ✅ | [Regression](examples/mcmc_regression_example.f90), [example 2](examples/mcmc_regression_example_2.f90), [example 3](examples/mcmc_regression_example_3.f90) |
+| Signal and numerical methods | Allan variance, LOWESS smoothing, and linear, polynomial, spline, and Hermite interpolation | ✅ | ✅ | [Allan](examples/allan_example.f90), [interpolation](examples/interpolation_example.f90), [LOWESS](examples/lowess_example.f90) |
+| Missing-data handling | Missing-data imputation | ✅ | ✅ | N/A |
+| Special functions | Beta and gamma functions, regularized and incomplete forms, and the digamma function | ✅ | ✅ | N/A |
+| Data containers and I/O | Typed data columns and tables with delimited-file input and output | ✅ | ✅ | N/A |
+
+Documentation links to the [Fortran API reference](https://jchristopherson.github.io/fstats/). Status: ✅ available; ⚠️ partial implementation. N/A indicates no standalone example.
 
 ## Documentation
 The generated API documentation is available [here](https://jchristopherson.github.io/fstats/).
