@@ -624,13 +624,17 @@ contains
         !! NaN for a nonfinite argument or an unrepresentably large result.
         real(real64), intent(in) :: value
             !! Logarithm of a proposed nonnegative value.
-        real(real64) :: rst
+        real(real64) :: rst, safe_value, lower_bound, upper_bound
             !! Representable exponential, zero on underflow, or quiet NaN.
-        rst = ieee_value(0.0d0, ieee_quiet_nan)
-        if (.not.ieee_is_finite(value)) return
-        if (value >= log(huge(1.0d0))) return
-        rst = 0.0d0
-        if (value >= log(tiny(1.0d0)) + log(epsilon(1.0d0))) rst = exp(value)
+        lower_bound = log(tiny(1.0d0)) + log(epsilon(1.0d0))
+        upper_bound = nearest(log(huge(1.0d0)), -1.0d0)
+        safe_value = min(max(value, lower_bound), upper_bound)
+        rst = exp(safe_value)
+        if (.not.ieee_is_finite(value) .or. value >= log(huge(1.0d0))) then
+            rst = ieee_value(0.0d0, ieee_quiet_nan)
+        else if (value < lower_bound) then
+            rst = 0.0d0
+        end if
     end function
 
 ! ------------------------------------------------------------------------------

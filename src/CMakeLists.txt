@@ -98,10 +98,10 @@ if (NOT fstring_FOUND)
     )
     FetchContent_MakeAvailable(fstring)
     set(FSTRING_LIBRARIES fstring)
-    set(BUILD_COLLECTIONS TRUE)
+    set(BUILD_FSTRING TRUE)
 else()
     set(FSTRING_LIBRARIES fstring::fstring)
-    set(BUILD_COLLECTIONS FALSE)
+    set(BUILD_FSTRING FALSE)
 endif()
 
 # Build

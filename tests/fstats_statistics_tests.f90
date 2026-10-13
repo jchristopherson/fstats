@@ -181,7 +181,7 @@ contains
         character(len = *), intent(in) :: invalid_case
             !! The covariance operand form or pooled-variance case to exercise.
         type(real_column) :: column, other
-        real(real64) :: value
+        real(real64), volatile :: value
 
         column = real_column([1.0d0, 2.0d0])
         other = real_column([3.0d0])

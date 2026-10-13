@@ -468,9 +468,10 @@ contains
         real(real64), dimension(2) :: reals
         logical, dimension(2) :: logicals
         type(string), dimension(2) :: texts
-        integer(int32) :: row, int_value
-        real(real64) :: real_value
-        logical :: logical_value
+        integer(int32) :: row
+        integer(int32), volatile :: int_value
+        real(real64), volatile :: real_value
+        logical, volatile :: logical_value
         character(len = :), allocatable :: text
         type(real_column) :: math_result, math_other
 

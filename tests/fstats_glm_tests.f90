@@ -496,7 +496,7 @@ contains
         case ('sum-overflow')
             x = 1.0d0
             beta = huge(1.0d0)
-        case ('negative', 'nan', 'infinite', 'size', 'unallocated', 'zero')
+        case ('negative', 'nan', 'infinite', 'size', 'empty-weights', 'zero')
             opts%use_robust_weighting = .true.
             callback_case = which
             weights => test_weights
@@ -510,7 +510,10 @@ contains
         real(real64), intent(in), dimension(:) :: r
         real(real64), intent(in) :: c
         real(real64), allocatable, dimension(:) :: w
-        if (callback_case == 'unallocated') return
+        if (callback_case == 'empty-weights') then
+            allocate(w(0))
+            return
+        end if
         allocate(w(size(r)))
         w = 1.0d0
         select case (callback_case)
