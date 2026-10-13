@@ -27,6 +27,7 @@ module fstats_mcmc_tests
     use iso_fortran_env
     use fstats
     use fortran_test_helper
+    use, intrinsic :: ieee_arithmetic
     implicit none
 
     type, extends(mcmc_target) :: test_mcmc_target
@@ -34,7 +35,83 @@ module fstats_mcmc_tests
         procedure, public :: model => tmt_eval
     end type
 
+    type, extends(mcmc_proposal) :: invalid_mcmc_proposal
+    contains
+        procedure, public :: generate_sample => invalid_proposal
+    end type
+
 contains
+subroutine invalid_proposal(this, tgt, xc, xp, vc, vp)
+    !! Supplies a deterministic NaN log-variance proposal to test rejection.
+    class(invalid_mcmc_proposal), intent(inout) :: this
+        !! Test proposal object.
+    class(mcmc_target), intent(inout) :: tgt
+        !! Target, unused by this deterministic proposal.
+    real(real64), intent(in), dimension(:) :: xc
+        !! Current model parameters.
+    real(real64), intent(out), dimension(:) :: xp
+        !! Proposed parameters, unchanged from xc.
+    real(real64), intent(in) :: vc
+        !! Current log variance, unused.
+    real(real64), intent(out) :: vp
+        !! NaN proposed log variance.
+
+    xp = xc
+    vp = ieee_value(0.0d0, ieee_quiet_nan)
+end subroutine
+
+function test_mcmc_numerical_robustness() result(rst)
+    !! Checks log-variance extremes, the transformed prior, and invalid proposals.
+    logical :: rst
+        !! True when all deterministic MCMC numerical contracts hold.
+    real(real64), dimension(2) :: params, xdata, ydata
+    real(real64), allocatable, dimension(:,:) :: chain
+    real(real64) :: actual, expected, log_variance, constant
+    type(test_mcmc_target) :: target
+    type(normal_distribution) :: prior
+    type(invalid_mcmc_proposal) :: proposal
+    type(mcmc_sampler) :: sampler
+
+    rst = .true.
+    call prior%standardize()
+    call target%add_parameter(prior)
+    call target%add_parameter(prior)
+    params = 0.0d0
+    xdata = 0.0d0
+    ydata = 0.0d0
+    constant = log(4.0d0 * acos(0.0d0))
+    log_variance = 1000.0d0
+    actual = target%likelihood_log_variance(xdata, ydata, params, log_variance)
+    expected = -constant - log_variance
+    rst = rst .and. abs(actual - expected) < 1.0d-12
+    actual = target%likelihood_log_variance(xdata, ydata, params, -log_variance)
+    expected = -constant + log_variance
+    rst = rst .and. abs(actual - expected) < 1.0d-12
+    log_variance = 2.0d0
+    actual = target%log_posterior(xdata(:0), ydata(:0), params, log_variance)
+    expected = target%evaluate_prior(params) + target%evaluate_variance_prior(exp(log_variance)) + log_variance
+    rst = rst .and. abs(actual - expected) < 1.0d-13
+    ydata = huge(1.0d0)
+    params(2) = -huge(1.0d0)
+    log_variance = 2.0d0 * log(huge(1.0d0))
+    actual = target%likelihood_log_variance(xdata, ydata, params, log_variance)
+    expected = -4.0d0 - constant - log_variance
+    rst = rst .and. ieee_is_finite(actual)
+    rst = rst .and. abs(actual - expected) < 1.0d-10
+    params = 0.0d0
+    ydata = 1.0d0
+    actual = target%likelihood_log_variance(xdata, ydata, params, -1000.0d0)
+    rst = rst .and. .not.ieee_is_finite(actual) .and. actual < 0.0d0
+    params = 40.0d0
+    rst = rst .and. ieee_is_finite(target%evaluate_prior(params))
+    ydata = 0.0d0
+    call sampler%sample(xdata, ydata, proposal, target, 3_int32)
+    rst = rst .and. sampler%get_accepted_count() == 0
+    chain = sampler%get_chain()
+    rst = rst .and. all(chain == 0.0d0)
+    if (.not.rst) print '(A)', 'TEST FAILED: MCMC numerical robustness'
+end function
+
 ! ******************************************************************************
 ! TEST_MCMC_TARGET
 ! ------------------------------------------------------------------------------
@@ -219,6 +296,124 @@ function test_mh_push() result(rst)
         rst = .false.
         print "(A)", "TEST FAILED: test_mh_push -3"
     end if
+end function
+
+! ------------------------------------------------------------------------------
+function test_mcmc_parallel_likelihood() result(rst)
+    logical :: rst
+    integer(int32), parameter :: ndata = 20001
+    integer(int32) :: i, mode, variance_index
+    real(real64) :: params(2), variances(3), effective_variance, expected, actual
+    real(real64) :: xdata(ndata), ydata(ndata), ymod(ndata)
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+    type(normal_distribution) :: prior
+    type(test_mcmc_target) :: target
+
+    rst = .true.
+    params = [2.0d0, 1.0d0]
+    variances = [0.25d0, 0.0d0, -1.0d0]
+    call target%add_parameter(prior)
+    call target%add_parameter(prior)
+    do i = 1, ndata
+        xdata(i) = real(i - 1, real64) / real(ndata - 1, real64)
+    end do
+    call target%model(xdata, params, ymod)
+    ydata = ymod + 0.125d0 * sin(xdata)
+
+    do mode = 1, 3
+        select case (mode)
+        case (1)
+            target%likelihood_parallel_threshold = 10000
+        case (2)
+            target%likelihood_parallel_threshold = huge(1_int32)
+        case (3)
+            target%likelihood_parallel_threshold = 0
+        end select
+        do variance_index = 1, size(variances)
+            effective_variance = variances(variance_index)
+            if (effective_variance <= 0.0d0) then
+                actual = target%likelihood(xdata, ydata, params, effective_variance)
+                if (.not.ieee_is_nan(actual)) rst = .false.
+                cycle
+            end if
+            expected = sum(-(ydata - ymod)**2 / (2.0d0 * effective_variance) &
+                - log(sqrt(2.0d0 * pi * effective_variance)))
+            actual = target%likelihood(xdata, ydata, params, variances(variance_index))
+            if (.not.ieee_is_finite(actual) .or. &
+                abs(actual - expected) > 1.0d-10 * max(1.0d0, abs(expected))) rst = .false.
+        end do
+    end do
+
+    actual = target%likelihood(xdata(:0), ydata(:0), params, 1.0d0)
+    if (actual /= 0.0d0) rst = .false.
+    actual = target%likelihood(xdata(:21), ydata(:21), params, 0.25d0)
+    expected = sum(-(ydata(:21) - ymod(:21))**2 / 0.5d0 - log(sqrt(0.5d0 * pi)))
+    if (.not.assert(actual, expected, 1.0d-10)) rst = .false.
+
+    ydata = 1.0d153
+    expected = sum(-(ydata - ymod)**2 / 2.0d300 - log(sqrt(2.0d300 * pi)))
+    do mode = 1, 2
+        target%likelihood_parallel_threshold = 0
+        if (mode == 2) target%likelihood_parallel_threshold = huge(1_int32)
+        actual = target%likelihood(xdata, ydata, params, 1.0d300)
+        if (.not.ieee_is_finite(actual) .or. &
+            abs(actual - expected) > 1.0d-10 * abs(expected)) rst = .false.
+    end do
+    if (.not.rst) print '(A)', 'TEST FAILED: test_mcmc_parallel_likelihood'
+end function
+
+! ------------------------------------------------------------------------------
+function test_mcmc_sample_chains() result(rst)
+    logical :: rst
+    integer(int32), parameter :: nchains = 4, niter = 205, ndata = 21
+    integer(int32) :: chain_index, i
+    real(real64) :: xdata(ndata), ydata(ndata)
+    real(real64), allocatable :: chain(:,:)
+    type(normal_distribution) :: prior
+    type(test_mcmc_target) :: targets(nchains)
+    type(mcmc_proposal) :: proposals(nchains)
+    type(mcmc_sampler) :: samplers(nchains)
+
+    rst = .true.
+    do i = 1, ndata
+        xdata(i) = real(i - 1, real64) / real(ndata - 1, real64)
+    end do
+    ydata = 2.0d0 * xdata + 1.0d0
+    prior%standard_deviation = 1.0d0
+    do chain_index = 1, nchains
+        prior%mean_value = real(chain_index, real64)
+        call targets(chain_index)%add_parameter(prior)
+        prior%mean_value = -real(chain_index, real64)
+        call targets(chain_index)%add_parameter(prior)
+        targets(chain_index)%likelihood_parallel_threshold = 0
+        call proposals(chain_index)%set_scale(0.01d0 * real(chain_index, real64))
+    end do
+
+    call sample_chains(samplers, xdata, ydata, proposals, targets, niter)
+    do chain_index = 1, nchains
+        if (samplers(chain_index)%get_chain_length() /= niter) rst = .false.
+        if (samplers(chain_index)%get_state_variable_count() /= 3) rst = .false.
+        if (samplers(chain_index)%get_accepted_count() < 0 .or. &
+            samplers(chain_index)%get_accepted_count() >= niter) rst = .false.
+        chain = samplers(chain_index)%get_chain()
+        if (.not.all(ieee_is_finite(chain))) rst = .false.
+        if (.not.assert(chain(1,:), &
+            [real(chain_index, real64), -real(chain_index, real64), 0.0d0])) rst = .false.
+    end do
+
+    call sample_chains(samplers, xdata, ydata, proposals, targets, 1_int32)
+    do chain_index = 1, nchains
+        if (samplers(chain_index)%get_chain_length() /= niter + 1) rst = .false.
+        if (samplers(chain_index)%get_accepted_count() /= 0) rst = .false.
+        chain = samplers(chain_index)%get_chain()
+        if (.not.assert(chain(1,:), chain(niter + 1,:))) rst = .false.
+    end do
+
+    targets(1)%likelihood_parallel_threshold = 10000
+    call sample_chains(samplers(:1), xdata, ydata, proposals(:1), targets(:1))
+    if (samplers(1)%get_chain_length() /= niter + 1 + 10000) rst = .false.
+    call sample_chains(samplers(:0), xdata, ydata, proposals(:0), targets(:0))
+    if (.not.rst) print '(A)', 'TEST FAILED: test_mcmc_sample_chains'
 end function
 
 ! ------------------------------------------------------------------------------

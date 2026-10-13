@@ -36,15 +36,114 @@ program tests
     use fstats_bootstrap_tests
     use fstats_missing_data_tests
     use fstats_msa_tests
+    use fstats_glm_tests
+    use fstats_data_column_tests
+    use fstats_data_table_tests
+    use fstats_data_table_io_tests
     implicit none
 
     ! Variables
     logical :: local, overall
+    character(32) :: test_group
+    character(32) :: column_type, invalid_case
 
     ! Initialization
     overall = .true.
 
+    call get_command_argument(1, test_group)
+    if (trim(test_group) == 'table-invalid') then
+        call get_command_argument(2, invalid_case)
+        call test_data_table_invalid_input(trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'table') then
+        local = test_data_table()
+        if (.not.local) stop 1
+        stop
+    end if
+    if (trim(test_group) == 'table-io-invalid') then
+        call get_command_argument(2, invalid_case)
+        call test_data_table_io_invalid_input(trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'table-io') then
+        local = test_data_table_io()
+        if (.not.local) stop 1
+        stop
+    end if
+    if (trim(test_group) == 'statistics-columns-invalid') then
+        call get_command_argument(2, invalid_case)
+        call test_statistics_column_invalid_input(trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'statistics-columns') then
+        local = test_statistics_columns()
+        if (.not.local) stop 1
+        local = test_statistics_numerical_robustness()
+        if (.not.local) stop 1
+        stop
+    end if
+    if (trim(test_group) == 'columns-invalid') then
+        call get_command_argument(2, column_type)
+        call get_command_argument(3, invalid_case)
+        call test_data_column_invalid_input(trim(column_type), trim(invalid_case))
+        stop 0
+    end if
+    if (trim(test_group) == 'columns') then
+        local = test_data_columns()
+        if (.not.local) stop 1
+        stop
+    end if
+    if (index(test_group, 'glm-invalid-') == 1) then
+        call test_glm_invalid_input(trim(test_group(13:)))
+        stop 0
+    end if
+    if (trim(test_group) == 'glm') then
+        local = test_glm_irls()
+        if (.not.local) stop 1
+        stop
+    end if
+    if (trim(test_group) == 'mcmc') then
+        local = test_mcmc_numerical_robustness()
+        if (.not.local) overall = .false.
+        local = test_mh_push()
+        if (.not.local) overall = .false.
+        local = test_mcmc_target_distributions()
+        if (.not.local) overall = .false.
+        local = test_mcmc_target_likelihood()
+        if (.not.local) overall = .false.
+        local = test_mcmc_parallel_likelihood()
+        if (.not.local) overall = .false.
+        local = test_mcmc_sample_chains()
+        if (.not.local) overall = .false.
+        if (.not.overall) stop 1
+        stop
+    end if
+
     ! Distribution Tests
+    local = test_data_table()
+    if (.not.local) overall = .false.
+
+    local = test_data_table_io()
+    if (.not.local) overall = .false.
+
+    local = test_data_columns()
+    if (.not.local) overall = .false.
+
+    local = test_glm_irls()
+    if (.not.local) overall = .false.
+
+    local = test_distribution_dispatch()
+    if (.not.local) overall = .false.
+    local = test_distribution_numerical_robustness()
+    if (.not.local) overall = .false.
+    local = test_multivariate_normal_numerical_robustness()
+    if (.not.local) overall = .false.
+    local = test_special_function_numerical_robustness()
+    if (.not.local) overall = .false.
+    local = test_regression_covariance_numerical_robustness()
+    if (.not.local) overall = .false.
+
     local = t_distribution_test_1()
     if (.not.local) overall = .false.
 
@@ -64,6 +163,15 @@ program tests
     if (.not.local) overall = .false.
 
     ! Statistics Tests
+    local = test_statistics_columns()
+    if (.not.local) overall = .false.
+
+    local = test_statistics_numerical_robustness()
+    if (.not.local) overall = .false.
+
+    local = tukey_biweight_test()
+    if (.not.local) overall = .false.
+
     local = mean_test_1()
     if (.not.local) overall = .false.
 
@@ -275,7 +383,16 @@ program tests
     local = test_mcmc_target_distributions()
     if (.not.local) overall = .false.
 
+    local = test_mcmc_numerical_robustness()
+    if (.not.local) overall = .false.
+
     local = test_mcmc_target_likelihood()
+    if (.not.local) overall = .false.
+
+    local = test_mcmc_parallel_likelihood()
+    if (.not.local) overall = .false.
+
+    local = test_mcmc_sample_chains()
     if (.not.local) overall = .false.
 
     local = test_linear_interp()

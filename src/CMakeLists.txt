@@ -4,24 +4,46 @@ set(dir ${CMAKE_CURRENT_SOURCE_DIR})
 # Define the source files
 set(FSTATS_SOURCES
     ${dir}/fstats.f90
-    ${dir}/fstats_special_functions.f90
-    ${dir}/fstats_descriptive_statistics.f90
-    ${dir}/fstats_hypothesis.f90
-    ${dir}/fstats_anova.f90
-    ${dir}/fstats_distributions.f90
-    ${dir}/fstats_helper_routines.f90
-    ${dir}/fstats_regression.f90
-    ${dir}/fstats_experimental_design.f90
-    ${dir}/fstats_allan.f90
-    ${dir}/fstats_errors.f90
-    ${dir}/fstats_bootstrap.f90
-    ${dir}/fstats_sampling.f90
-    ${dir}/fstats_smoothing.f90
-    ${dir}/fstats_types.f90
-    ${dir}/fstats_mcmc.f90
-    ${dir}/fstats_interp.f90
-    ${dir}/fstats_missing_data.f90
-    ${dir}/fstats_msa.f90
+    ${dir}/utilities/fstats_special_functions.f90
+    ${dir}/utilities/fstats_types.f90
+    ${dir}/utilities/fstats_errors.f90
+    ${dir}/utilities/fstats_helper_routines.f90
+    ${dir}/statistics/fstats_descriptive_statistics.f90
+    ${dir}/statistics/fstats_robust_statistics.f90
+    ${dir}/tests/fstats_hypothesis.f90
+    ${dir}/statistics/fstats_anova.f90
+    ${dir}/distributions/fstats_distributions.f90
+    ${dir}/distributions/fstats_t_distribution.f90
+    ${dir}/distributions/fstats_normal_distribution.f90
+    ${dir}/distributions/fstats_f_distribution.f90
+    ${dir}/distributions/fstats_chi_squared_distribution.f90
+    ${dir}/distributions/fstats_binomial_distribution.f90
+    ${dir}/distributions/fstats_log_normal_distribution.f90
+    ${dir}/distributions/fstats_poisson_distribution.f90
+    ${dir}/distributions/fstats_multivariate_normal_distribution.f90
+    ${dir}/regression/fstats_regression.f90
+    ${dir}/regression/fstats_linear_regression.f90
+    ${dir}/regression/fstats_levenberg_marquardt.f90
+    ${dir}/design/fstats_experimental_design.f90
+    ${dir}/design/fstats_doe_designs.f90
+    ${dir}/design/fstats_doe_coding.f90
+    ${dir}/design/fstats_doe_models.f90
+    ${dir}/design/fstats_doe_diagnostics.f90
+    ${dir}/design/fstats_doe_prediction.f90
+    ${dir}/design/fstats_doe_response_surface.f90
+    ${dir}/measurement/fstats_allan.f90
+    ${dir}/measurement/fstats_missing_data.f90
+    ${dir}/measurement/fstats_msa.f90
+    ${dir}/sampling/fstats_bootstrap.f90
+    ${dir}/sampling/fstats_sampling.f90
+    ${dir}/interpolation/fstats_smoothing.f90
+    ${dir}/interpolation/fstats_interp.f90
+    ${dir}/monte_carlo/fstats_mcmc.f90
+    ${dir}/glm/fstats_glm_types.f90
+    ${dir}/glm/fstats_glm_irls.f90
+    ${dir}/containers/fstats_data_columns.f90
+    ${dir}/containers/fstats_data_table.f90
+    ${dir}/containers/fstats_data_table_io.f90
 )
 set(FSTATS_SOURCES ${FSTATS_SOURCES} PARENT_SCOPE)
 
@@ -35,7 +57,8 @@ set_source_files_properties(
 include(FetchContent)
 find_package(OpenMP REQUIRED COMPONENTS Fortran)
 find_package(linalg 2.3.0 QUIET)
-find_package(collections 1.2.0 QUIET)
+find_package(collections 1.2.1 QUIET)
+find_package(fstring 1.1.0 QUIET)
 
 if (NOT linalg_FOUND)
     message(STATUS "LINALG could not be found.  A reference version will be employed.")
@@ -66,6 +89,21 @@ else()
     set(BUILD_COLLECTIONS FALSE)
 endif()
 
+if (NOT fstring_FOUND)
+    message(STATUS "FSTRING could not be found.  A reference version will be employed.")
+    FetchContent_Declare(
+        fstring
+        GIT_REPOSITORY "https://github.com/jchristopherson/fstring"
+        GIT_TAG main
+    )
+    FetchContent_MakeAvailable(fstring)
+    set(FSTRING_LIBRARIES fstring)
+    set(BUILD_FSTRING TRUE)
+else()
+    set(FSTRING_LIBRARIES fstring::fstring)
+    set(BUILD_FSTRING FALSE)
+endif()
+
 # Build
 add_library(${PROJECT_NAME} ${FSTATS_SOURCES})
 target_link_libraries(
@@ -73,6 +111,7 @@ target_link_libraries(
     PUBLIC
     ${COLLECTIONS_LIBRARIES}
     ${LINALG_LIBRARIES}
+    ${FSTRING_LIBRARIES}
 )
 if (OpenMP_Fortran_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_Fortran)
@@ -135,6 +174,12 @@ if (${BUILD_SHARED_LIBS})
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
     endif()
+    if (${BUILD_FSTRING})
+        install(TARGETS ${FSTRING_LIBRARIES}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        )
+    endif()
 else()
     if (${BUILD_LINALG})
         install(TARGETS ${LINALG_LIBRARIES}
@@ -144,6 +189,12 @@ else()
     endif()
     if (${BUILD_COLLECTIONS})
         install(TARGETS ${COLLECTIONS_LIBRARIES}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        )
+    endif()
+    if (${BUILD_FSTRING})
+        install(TARGETS ${FSTRING_LIBRARIES}
             RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )

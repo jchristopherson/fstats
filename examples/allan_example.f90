@@ -27,36 +27,29 @@ program example
     use iso_fortran_env
     use fstats
     use fplot_core
-    use csv_module
     implicit none
 
     ! Local Variables
     real(real64) :: dt
-    real(real64), allocatable, dimension(:) :: t, x
     real(real64), allocatable, dimension(:,:) :: v
-    logical :: ok
-    type(csv_file) :: file
+    type(data_table) :: tbl
+
     type(plot_2d) :: plt
     type(plot_data_2d) :: pd
     class(plot_axis), pointer :: xAxis, yAxis
+    class(data_column), pointer :: t, x
 
     ! Read in the data
-    call file%read("examples/data/noise_data.csv", header_row = 1, status_ok = ok)
-    if (.not.ok) then
-        print "(A)", "Could not open the data file."
-        stop
-    end if
-    call file%get(1, t, ok)
-    if (.not.ok) then
-        print "(A)", "Could not extract the time data."
-        stop
-    end if
-    call file%get(2, x, ok)
-    if (.not.ok) then
-        print "(A)", "Could not extract the signal data."
-        stop
-    end if
-    dt = t(2) - t(1)
+    call read_delimited_table("examples/data/noise_data.csv", tbl, header_row = 1)
+    t => tbl%get_column(1)
+    x => tbl%get_column(2)
+    select type (t)
+    class is (real_column)
+        dt = t%get(2) - t%get(1)
+    class default
+        dt = 0.0d0
+    end select
+    print "(A, F0.4)", "dt = ", dt
 
     ! Compute the Allan variance
     v = allan_variance(x, dt)

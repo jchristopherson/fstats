@@ -12,29 +12,14 @@
 
     <title>fstats_experimental_design &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -62,6 +47,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -87,8 +75,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="13.7% of total for modules and submodules.">753 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 1.1% of total for modules and submodules.">100 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -108,11 +97,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -129,18 +116,7 @@
   
   
   
-      <div class="card mb-4">
-      <a data-bs-toggle="collapse" href="#inters-0"
-         aria-expanded="false" aria-controls="inters-0">
-         <h4 class="card-header bg-primary text-white">Interfaces</h4>
-      </a>
-      <div id="inters-0" class="collapse">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#interface-doe_evaluate_model">doe_evaluate_model</a>
-        </div>
-      </div>
-    </div>
-
+  
   
       <div class="card mb-4">
       <a data-bs-toggle="collapse" href="#types-0"
@@ -162,46 +138,8 @@
       </div>
     </div>
 
-      <div class="card mb-4">
-      <a data-bs-toggle="collapse" href="#funcs-0"
-         aria-expanded="false" aria-controls="funcs-0">
-         <h4 class="card-header bg-primary text-white">Functions</h4>
-      </a>
-      <div id="funcs-0" class="collapse">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_compare_models">doe_compare_models</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_design_efficiency">doe_design_efficiency</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_fit_model">doe_fit_model</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_model_anova">doe_model_anova</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_model_diagnostics">doe_model_diagnostics</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_optimize_rsm">doe_optimize_rsm</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_predict">doe_predict</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_predict_enhanced">doe_predict_enhanced</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-doe_residuals_analysis">doe_residuals_analysis</a>
-        </div>
-      </div>
-    </div>
-
-      <div class="card mb-4">
-      <a data-bs-toggle="collapse" href="#subs-0"
-         aria-expanded="false" aria-controls="subs-0">
-         <h4 class="card-header bg-primary text-white">Subroutines</h4>
-      </a>
-      <div id="subs-0" class="collapse">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-central_composite_design">central_composite_design</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-central_composite_design_size">central_composite_design_size</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-decode_variables">decode_variables</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-encode_variables">encode_variables</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-fractional_factorial">fractional_factorial</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-fractional_factorial_size">fractional_factorial_size</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-full_factorial">full_factorial</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-get_full_factorial_matrix_size">get_full_factorial_matrix_size</a>
-            <a class="list-group-item" href="../module/fstats_experimental_design.html#proc-latin_hypercube_design">latin_hypercube_design</a>
-        </div>
-      </div>
-    </div>
-
+  
+  
   
   
   
@@ -216,7 +154,7 @@
     </div>
 
     <div class="col-md-9" id='text'>
-      
+      <p>Shared types for experimental design generation, modeling, and analysis.</p>
 <br>          <div class="card mb-4">
       <h3 class="card-header card-title bg-light">Uses</h3>
       <div class="card-body">
@@ -224,7 +162,6 @@
             <li class="list-group-item">
               <ul class="list-inline">
                   <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
               </ul>
             </li>
@@ -238,185 +175,6 @@
 
 
 
-        <section>
-          <h2>Interfaces</h2>
-              <div class="card">
-    <div class="card-header bg-light codesum">
-      <span class="anchor" id="interface-doe_evaluate_model"></span>
-      <h3>public        interface <a href='..\interface\doe_evaluate_model.html'>doe_evaluate_model</a> 
-      </h3>
-    </div>
-    <ul class="list-group">
-          <li class="list-group-item">
-                <h3>
-    private  function doe_evaluate_model_1(nway, beta, x, map) result(rst)  
-
-    </h3>
-  <p>Evaluates the model of the following form.</p>
-<p>
-<script type="math/tex; mode=display"> Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
-\sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
-\sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
-X_{j} X_{k} + ... </script>
-</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nway~4"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nway</strong></td>
-            <td>
-                <p>The number of interaction levels.  Currently, this algorithm supports
-a maximum of three-way interaction.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-beta"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>beta</strong></td>
-            <td>
-                <p>The model coefficients.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~6"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-                <p>The M-by-N matrix containing the M values of each of the N factors
-at which to evaluate the model.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-map~4"></span>
-              logical,
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              target, dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>map</strong></td>
-            <td>
-                <p>An optional array of the same size as beta that can be used to
-eliminate a parameter from the model (false), or keep a parameter
-in the model (true).  If not supplied, all parameters will be assumed
-to be part of the model as if the array were filled with all true
-values.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64), allocatable, dimension(:)</small>
-    </h4>
-    <p>The resulting M-element array.</p>
-
-          </li>
-          <li class="list-group-item">
-                <h3>
-    private  function doe_evaluate_model_2(mdl, x) result(rst)  
-
-    </h3>
-  <p>Evaluates the model of the following form.</p>
-<p>
-<script type="math/tex; mode=display"> Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
-\sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
-\sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
-X_{j} X_{k} + ... </script>
-</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-                <p>The model to evaluate.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~7"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-                <p>The M-by-N matrix containing the M values of each of the N factors
-at which to evaluate the model.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64), allocatable, dimension(:)</small>
-    </h4>
-    <p>The resulting M-element array.</p>
-
-          </li>
-    </ul>
-  </div>
-
-        </section>
-        <br>
 
 
         <section>
@@ -497,7 +255,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-f_statistic~4"></span>
+              <span class="anchor" id="variable-f_statistic~3"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -548,7 +306,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p_value~2"></span>
+              <span class="anchor" id="variable-p_value~3"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -582,7 +340,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ss_model"></span>
+              <span class="anchor" id="variable-ss_model~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -599,7 +357,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ss_residual"></span>
+              <span class="anchor" id="variable-ss_residual~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -616,7 +374,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ss_total"></span>
+              <span class="anchor" id="variable-ss_total~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -733,7 +491,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-f_statistic~3"></span>
+              <span class="anchor" id="variable-f_statistic~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -750,7 +508,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p_value"></span>
+              <span class="anchor" id="variable-p_value~2"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -867,7 +625,7 @@ at which to evaluate the model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-f_statistic~2"></span>
+              <span class="anchor" id="variable-f_statistic"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1222,7 +980,7 @@ is of the following form.</p><a href="../type/doe_model.html" class="pull-right"
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-map"></span>
+              <span class="anchor" id="variable-map~8"></span>
               logical,
             </td>
               <td>public,</td>
@@ -1240,7 +998,7 @@ as part of the model (true), or neglected (false).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-nway"></span>
+              <span class="anchor" id="variable-nway~5"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -1257,7 +1015,7 @@ as part of the model (true), or neglected (false).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats"></span>
+              <span class="anchor" id="variable-stats~3"></span>
               type(<a href='..\type\regression_statistics.html'>regression_statistics</a>),
             </td>
               <td>public,</td>
@@ -1306,7 +1064,7 @@ as part of the model (true), or neglected (false).</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-converged"></span>
+              <span class="anchor" id="variable-converged~2"></span>
               logical,
             </td>
               <td>public</td>
@@ -1340,7 +1098,7 @@ as part of the model (true), or neglected (false).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-iteration_count"></span>
+              <span class="anchor" id="variable-iteration_count~3"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -1357,7 +1115,7 @@ as part of the model (true), or neglected (false).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method"></span>
+              <span class="anchor" id="variable-method~2"></span>
               character(len=256),
             </td>
               <td>public</td>
@@ -1659,7 +1417,7 @@ as part of the model (true), or neglected (false).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-residuals"></span>
+              <span class="anchor" id="variable-residuals~2"></span>
               real(kind=real64),
             </td>
               <td>public,</td>
@@ -1759,7 +1517,7 @@ as part of the model (true), or neglected (false).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-intercept"></span>
+              <span class="anchor" id="variable-intercept~3"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1854,1456 +1612,7 @@ as part of the model (true), or neglected (false).</p>
         </section>
         <br>
 
-        <section>
-          <h2>Functions</h2>
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_compare_models"></span> <h3>public  function <a href='..\proc\doe_compare_models.html'>doe_compare_models</a>(mdl1, mdl2, x, y) result(comp)  
-</h3></div>
-    <div class="card-body">
-          
-  
 
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl1"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl1</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl2"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl2</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~17"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~8"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_comparison_result.html'>doe_comparison_result</a>)</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_design_efficiency"></span> <h3>public pure function <a href='..\proc\doe_design_efficiency.html'>doe_design_efficiency</a>(x) result(metrics)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~16"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_efficiency_metrics.html'>doe_efficiency_metrics</a>)</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_fit_model"></span> <h3>public  function <a href='..\proc\doe_fit_model.html'>doe_fit_model</a>(nway, x, y, map, alpha) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Fits a Taylor series model to the provided data.</p><a href="../proc/doe_fit_model.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nway~2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nway</strong></td>
-            <td>
-<p>The number of interaction levels.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The M-by-N matrix containing the M values of each of the N factors
-used to produce the results.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-<p>An M-element array containing the results from the M experiments.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-map~2"></span>
-              logical,
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              target, dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>map</strong></td>
-            <td>
-<p>An optional array of the same size as beta that can be used to
-eliminate a parameter from the model (false), or keep a parameter
-in the model (true).  If not supplied, all parameters will be assumed
-to be part of the model as if the array were filled with all true
-values.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha</strong></td>
-            <td>
-<p>The significance level at which to evaluate the confidence 
-intervals.  The default value is 0.05 such that a 95% 
-confidence interval is calculated.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_model.html'>doe_model</a>)</small>
-    </h4>
-    <p>The resulting model.</p>
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_model_anova"></span> <h3>public  function <a href='..\proc\doe_model_anova.html'>doe_model_anova</a>(mdl, x, y) result(anova)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~7"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~18"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~9"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_anova_table.html'>doe_anova_table</a>)</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_model_diagnostics"></span> <h3>public  function <a href='..\proc\doe_model_diagnostics.html'>doe_model_diagnostics</a>(mdl, x, y) result(diag)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes model diagnostics and goodness-of-fit metrics.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~2"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-<p>The fitted DOE model.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~12"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The M-by-N matrix of factor values used in model fitting.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~6"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-<p>The M-element array of observed responses.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_diagnostics.html'>doe_diagnostics</a>)</small>
-    </h4>
-    <p>The resulting diagnostics.</p>
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_optimize_rsm"></span> <h3>public pure function <a href='..\proc\doe_optimize_rsm.html'>doe_optimize_rsm</a>(mdl, x_low, x_high, method, tol) result(opt)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~6"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_low~3"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x_low</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_high~3"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x_high</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-method~2"></span>
-              character(len=*),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>method</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-tol"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>tol</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_optimization_result.html'>doe_optimization_result</a>)</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_predict"></span> <h3>public  function <a href='..\proc\doe_predict.html'>doe_predict</a>(mdl, x, alpha) result(pred)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes predictions with confidence and prediction intervals.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~3"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-<p>The fitted DOE model.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~13"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The M-by-N matrix at which to evaluate the model.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha~2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha</strong></td>
-            <td>
-<p>Significance level (default 0.05 for 95% CI).</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_prediction.html'>doe_prediction</a>)</small>
-    </h4>
-    <p>The predictions with intervals.</p>
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_predict_enhanced"></span> <h3>public  function <a href='..\proc\doe_predict_enhanced.html'>doe_predict_enhanced</a>(mdl, x, alpha, residual_mse) result(pred)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~5"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~15"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-residual_mse"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>residual_mse</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_prediction.html'>doe_prediction</a>)</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_residuals_analysis"></span> <h3>public  function <a href='..\proc\doe_residuals_analysis.html'>doe_residuals_analysis</a>(mdl, x, y) result(resid)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes residual analysis data for model diagnostics.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~4"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-<p>The fitted DOE model.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~14"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-<p>The M-by-N matrix of factor values.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~7"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-<p>The M-element array of observed responses.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_residuals.html'>doe_residuals</a>)</small>
-    </h4>
-    <p>The residual analysis results.</p>
-
-    </div>
-  </div>
-
-        </section>
-        <br>
-
-        <section>
-          <h2>Subroutines</h2>
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-central_composite_design"></span> <h3>public  subroutine <a href='..\proc\central_composite_design.html'>central_composite_design</a>(nfactors, alpha_type, tbl)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Generates a central composite design in coded variables.</p><a href="../proc/central_composite_design.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nfactors~5"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nfactors</strong></td>
-            <td>
-<p>Number of factors.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha_type~2"></span>
-              character(len=*),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha_type</strong></td>
-            <td>
-<p>Type: "orthogonal" (default), "rotatable", "uniform".</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-tbl~3"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>tbl</strong>(:,:)</td>
-            <td>
-<p>Design table (coded variables in [-1, +1] range).</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-central_composite_design_size"></span> <h3>public pure subroutine <a href='..\proc\central_composite_design_size.html'>central_composite_design_size</a>(nfactors, alpha_type, m, n)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the size of a central composite design.</p><a href="../proc/central_composite_design_size.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nfactors~4"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nfactors</strong></td>
-            <td>
-<p>Number of factors.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha_type"></span>
-              character(len=*),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha_type</strong></td>
-            <td>
-<p>Type of CCD: "orthogonal" (default), "rotatable", or "uniform".</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-m~14"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>m</strong></td>
-            <td>
-<p>Number of runs (rows).</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-n~21"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>n</strong></td>
-            <td>
-<p>Number of factors (columns).</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-decode_variables"></span> <h3>public pure subroutine <a href='..\proc\decode_variables.html'>decode_variables</a>(x_coded, x_low, x_high, x_natural)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Converts coded variable values (-1, +1) to natural scale.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_coded~2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x_coded</strong></td>
-            <td>
-<p>M-by-N matrix of coded values in range [-1, +1].</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_low~2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x_low</strong></td>
-            <td>
-<p>N-element array of low values for each factor.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_high~2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x_high</strong></td>
-            <td>
-<p>N-element array of high values for each factor.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_natural~2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x_natural</strong></td>
-            <td>
-<p>M-by-N matrix of natural (physical) variable values.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-encode_variables"></span> <h3>public pure subroutine <a href='..\proc\encode_variables.html'>encode_variables</a>(x_natural, x_low, x_high, x_coded)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Converts natural variable values to coded (-1, +1) scale.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_natural"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x_natural</strong></td>
-            <td>
-<p>M-by-N matrix of natural (physical) variable values.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_low"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x_low</strong></td>
-            <td>
-<p>N-element array of low values for each factor.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_high"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>x_high</strong></td>
-            <td>
-<p>N-element array of high values for each factor.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x_coded"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x_coded</strong></td>
-            <td>
-<p>M-by-N matrix of coded values in range [-1, +1].</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-fractional_factorial"></span> <h3>public  subroutine <a href='..\proc\fractional_factorial.html'>fractional_factorial</a>(nfactors, fraction, tbl)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Generates a 2-level fractional factorial design.</p><a href="../proc/fractional_factorial.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nfactors~3"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nfactors</strong></td>
-            <td>
-<p>Number of factors.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fraction~2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>fraction</strong></td>
-            <td>
-<p>Fraction level (1 for 1/2, 2 for 1/4, etc.).</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-tbl~2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>tbl</strong>(:,:)</td>
-            <td>
-<p>Design table (runs Ã— factors), coded as 1 and 2.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-fractional_factorial_size"></span> <h3>public  subroutine <a href='..\proc\fractional_factorial_size.html'>fractional_factorial_size</a>(nfactors, fraction, m, n)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the size of a fractional factorial design.</p><a href="../proc/fractional_factorial_size.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nfactors~2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nfactors</strong></td>
-            <td>
-<p>Number of factors (k).</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fraction"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>fraction</strong></td>
-            <td>
-<p>Fraction level (p): 1 for 1/2, 2 for 1/4, 3 for 1/8, etc.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-m~10"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>m</strong></td>
-            <td>
-<p>Number of runs (rows).</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-n~17"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>n</strong></td>
-            <td>
-<p>Number of factors (columns), same as nfactors.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-full_factorial"></span> <h3>public  subroutine <a href='..\proc\full_factorial.html'>full_factorial</a>(vars, tbl)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes a table with values scaled from 1 to N describing a 
-full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-vars~2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>vars</strong>(:)</td>
-            <td>
-<p>An M-element array containing the M factors to study.<br>
-Each of the M entries to the array is expected to contain 
-the number of options for that particular factor to explore. 
-This value must be greater than or equal to 1.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-tbl"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>tbl</strong>(:,:)</td>
-            <td>
-<p>A table where the design will be written.  Use 
-get_full_factorial_matrix_size to determine the appropriate 
-table size.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_full_factorial_matrix_size"></span> <h3>public  subroutine <a href='..\proc\get_full_factorial_matrix_size.html'>get_full_factorial_matrix_size</a>(vars, m, n)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the appropriate size for a full-factorial design table.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-vars"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>vars</strong>(:)</td>
-            <td>
-<p>An M-element array containing the M factors to study.  Each 
-of the M entries to the array is expected to contain the 
-number of options for that particular factor to explore.<br>
-This value must be greater than or equal to 1.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-m~2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>m</strong></td>
-            <td>
-<p>The number of rows for the table.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-n~8"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>n</strong></td>
-            <td>
-<p>The number of columns for the table.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-latin_hypercube_design"></span> <h3>public  subroutine <a href='..\proc\latin_hypercube_design.html'>latin_hypercube_design</a>(nfactors, nsamples, seed, tbl)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Generates a Latin hypercube design for factor space exploration.</p><a href="../proc/latin_hypercube_design.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nfactors~6"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nfactors</strong></td>
-            <td>
-<p>Number of factors.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-nsamples"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>nsamples</strong></td>
-            <td>
-<p>Number of samples (runs).</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-seed"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(inout),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>seed</strong></td>
-            <td>
-<p>Random seed for reproducibility.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-tbl~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>tbl</strong>(:,:)</td>
-            <td>
-<p>Latin hypercube design (nsamples Ã— nfactors).</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-        </section>
-        <br>
 
 
 
@@ -3315,21 +1624,40 @@ This value must be greater than or equal to 1.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

@@ -13,6 +13,10 @@ set(fstats_test_sources
     fstats_bootstrap_tests.f90
     fstats_missing_data_tests.f90
     fstats_msa_tests.f90
+    fstats_glm_tests.f90
+    fstats_data_column_tests.f90
+    fstats_data_table_tests.f90
+    fstats_data_table_io_tests.f90
 )
 
 # Dependencies
@@ -44,6 +48,77 @@ add_test(
     COMMAND $<TARGET_FILE:fstats_tests>
 )
 
+add_test(NAME fstats_columns COMMAND $<TARGET_FILE:fstats_tests> columns)
+add_test(NAME fstats_table COMMAND $<TARGET_FILE:fstats_tests> table)
+foreach(invalid_case IN ITEMS
+    get-empty get-low get-high remove-low remove-high
+    insert-low insert-high insert-empty-low insert-empty-high
+    add-short add-long insert-short insert-long add-zero insert-zero
+    zero-add-nonempty zero-insert-nonempty
+)
+    add_test(NAME fstats_table_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> table-invalid ${invalid_case})
+    set_tests_properties(fstats_table_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
+add_test(NAME fstats_table_io COMMAND $<TARGET_FILE:fstats_tests> table-io)
+foreach(invalid_case IN ITEMS
+    missing-file quote-delimiter negative-header header-past-end blank-header
+    empty-file extra-fields unterminated-quote malformed-quote
+    write-quote-delimiter write-bad-path
+)
+    add_test(NAME fstats_table_io_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> table-io-invalid ${invalid_case})
+    set_tests_properties(fstats_table_io_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
+add_test(NAME fstats_statistics_columns COMMAND $<TARGET_FILE:fstats_tests> statistics-columns)
+foreach(invalid_case IN ITEMS columns column-array array-column pooled)
+    add_test(NAME fstats_statistics_columns_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> statistics-columns-invalid ${invalid_case})
+    set_tests_properties(fstats_statistics_columns_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
+foreach(column_type IN ITEMS integer real logical string)
+    foreach(invalid_case IN ITEMS
+        append-type insert-type copy-type insert-low insert-high remove-empty
+        remove-low remove-high negative-size get-low get-high get-unallocated
+        set-low set-high set-unallocated format-low format-high format-unallocated
+        copy-small copy-large
+    )
+        add_test(NAME fstats_columns_invalid_${column_type}_${invalid_case}
+            COMMAND $<TARGET_FILE:fstats_tests> columns-invalid ${column_type} ${invalid_case})
+        set_tests_properties(fstats_columns_invalid_${column_type}_${invalid_case}
+            PROPERTIES WILL_FAIL TRUE)
+    endforeach()
+endforeach()
+
+add_test(NAME fstats_glm COMMAND $<TARGET_FILE:fstats_tests> glm)
+foreach(invalid_case IN ITEMS add-size subtract-size multiply-size divide-size)
+    add_test(NAME fstats_columns_invalid_real_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> columns-invalid real ${invalid_case})
+    set_tests_properties(fstats_columns_invalid_real_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
+foreach(invalid_case IN ITEMS
+    rows columns empty no-columns underdetermined family nan-x inf-y nan-beta
+    binomial-range poisson-range gamma-range iterations tolerance nan-tolerance
+    cutoff inf-cutoff singular zero-column gamma-domain poisson-overflow
+    poisson-underflow binomial-boundary predictor-overflow sum-overflow
+    negative nan infinite size empty-weights zero stats-size covariance-size
+    alpha-zero alpha-one alpha-nan gamma-inference-dof robust-inference-dof covariance-overflow
+)
+    add_test(NAME fstats_glm_invalid_${invalid_case}
+        COMMAND $<TARGET_FILE:fstats_tests> glm-invalid-${invalid_case})
+    set_tests_properties(fstats_glm_invalid_${invalid_case} PROPERTIES WILL_FAIL TRUE)
+endforeach()
+
+foreach(thread_count IN ITEMS 1 4)
+    add_test(
+        NAME fstats_mcmc_${thread_count}_threads
+        COMMAND $<TARGET_FILE:fstats_tests> mcmc
+    )
+    set_tests_properties(fstats_mcmc_${thread_count}_threads PROPERTIES
+        ENVIRONMENT "OMP_NUM_THREADS=${thread_count};OMP_MAX_ACTIVE_LEVELS=2"
+    )
+endforeach()
+
 if (${BUILD_SHARED_LIBS} AND WIN32)
     add_custom_command(
         TARGET fstats_tests
@@ -54,4 +129,3 @@ if (${BUILD_SHARED_LIBS} AND WIN32)
         COMMAND_EXPAND_LISTS
     )
 endif()
-

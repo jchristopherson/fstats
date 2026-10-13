@@ -1,7 +1,5 @@
-# Include Dependencies
-add_subdirectory(fortran_csv_module)
-
-find_package(fplot)
+# Dependencies
+find_package(fplot QUIET)
 if (NOT fplot_FOUND)
     include(FetchContent)
     set(BUILD_TESTING OFF)
@@ -11,7 +9,7 @@ if (NOT fplot_FOUND)
         GIT_REPOSITORY https://github.com/jchristopherson/fplot
     )
     FetchContent_MakeAvailable(fplot)
-    set(fplot_LIBRARY fplot forcolormap)
+    set(fplot_LIBRARY fplot)
 else()
     set(fplot_LIBRARY fplot::fplot)
 endif()
@@ -39,8 +37,7 @@ configure_file(
     COPYONLY
 )
 add_executable(allan_example allan_example.f90)
-target_link_libraries(allan_example PRIVATE fstats ${fplot_LIBRARY} ${fortran-csv-module_LIBRARY})
-target_include_directories(allan_example PRIVATE ${fortran-csv-module_INCLUDE_DIR})
+target_link_libraries(allan_example PRIVATE fstats ${fplot_LIBRARY})
 
 # Box-Muller Example
 add_executable(box_muller_example box_muller_example.f90)
@@ -95,13 +92,17 @@ target_link_libraries(doe_model_comparison_example PRIVATE fstats)
 add_executable(doe_rsm_optimization_example doe_rsm_optimization_example.f90)
 target_link_libraries(doe_rsm_optimization_example PRIVATE fstats)
 
+# GLM Example
+add_executable(glm_irls_example glm_irls_example.f90)
+target_link_libraries(glm_irls_example PRIVATE fstats ${fplot_LIBRARY})
+
 if (${BUILD_SHARED_LIBS} AND WIN32)
     add_custom_command(
-        TARGET full_factorial_example
+        TARGET glm_irls_example
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy 
-        $<TARGET_RUNTIME_DLLS:full_factorial_example> 
-        $<TARGET_FILE_DIR:full_factorial_example>
+        COMMAND ${CMAKE_COMMAND} -E copy
+        $<TARGET_RUNTIME_DLLS:glm_irls_example>
+        $<TARGET_FILE_DIR:glm_irls_example>
         COMMAND_EXPAND_LISTS
     )
 endif()

@@ -1,0 +1,3378 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="FSTATS is a modern Fortran statistical library containing routines for computing basic statistical properties, hypothesis testing, regression, special functions, and experimental design.">
+    <meta name="author" content="Jason Christopherson" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>fstats_data_columns &ndash; FSTATS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">FSTATS </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>fstats_data_columns
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="10.5% of total for modules and submodules.">983 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/fstats_data_columns.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_data_columns.f90.html'>fstats_data_columns.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">fstats_data_columns</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_data_columns.html#variable-fs_column_integer">FS_COLUMN_INTEGER</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#variable-fs_column_logical">FS_COLUMN_LOGICAL</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#variable-fs_column_real">FS_COLUMN_REAL</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#variable-fs_column_string">FS_COLUMN_STRING</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-abs">abs</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-acos">acos</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-asin">asin</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-atan">atan</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-cos">cos</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-exp">exp</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-ieee_is_finite">ieee_is_finite</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-ieee_is_nan">ieee_is_nan</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-ieee_is_negative">ieee_is_negative</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-ieee_is_normal">ieee_is_normal</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-integer_column">integer_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-log">log</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-log10">log10</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-logical_column">logical_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-maxval">maxval</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-minval">minval</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-operator%28ASTERISK%29">operator(*)</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-operator%28%2B%29">operator(+)</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-operator%28-%29">operator(-)</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-operator%28SLASH%29">operator(/)</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-product">product</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-real_column">real_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-sin">sin</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-size">size</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-sqrt">sqrt</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-string_column">string_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-sum">sum</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#interface-tan">tan</a>
+        </div>
+      </div>
+    </div>
+
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#types-0"
+         aria-expanded="false" aria-controls="types-0">
+         <h4 class="card-header bg-primary text-white">Derived Types</h4>
+      </a>
+      <div id="types-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_data_columns.html#type-data_column">data_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#type-integer_column">integer_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#type-logical_column">logical_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#type-real_column">real_column</a>
+            <a class="list-group-item" href="../module/fstats_data_columns.html#type-string_column">string_column</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item">strings</li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      
+      <br>
+
+
+        <section>
+          <h2>Variables</h2>
+            <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fs_column_integer"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_COLUMN_INTEGER</strong></td>
+<td> =</td>
+                <td>1</td>
+            <td>
+                <p>Denotes a column of integer values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fs_column_logical"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_COLUMN_LOGICAL</strong></td>
+<td> =</td>
+                <td>3</td>
+            <td>
+                <p>Denotes a column of logical values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fs_column_real"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_COLUMN_REAL</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+                <p>Denotes a column of real (floating-point) values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fs_column_string"></span>
+              integer(kind=int32),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>FS_COLUMN_STRING</strong></td>
+<td> =</td>
+                <td>4</td>
+            <td>
+                <p>Denotes a column of text strings.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+        </section>
+        <br>
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-abs"></span>
+      <h3>public        interface <a href='..\interface\abs.html'>abs</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_abs(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>abs</code> to compute the absolute value of each column element.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~159"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column with the same count as x.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-acos"></span>
+      <h3>public        interface <a href='..\interface\acos.html'>acos</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_acos(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>acos</code> to compute the inverse cosine of each column element.
+Values outside [-1, 1] follow intrinsic domain-error behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~164"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of angles in radians, with x's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-asin"></span>
+      <h3>public        interface <a href='..\interface\asin.html'>asin</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_asin(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>asin</code> to compute the inverse sine of each column element.
+Values outside [-1, 1] follow intrinsic domain-error behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~163"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of angles in radians, with x's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-atan"></span>
+      <h3>public        interface <a href='..\interface\atan.html'>atan</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_atan(x) result(rst)  
+
+    </h3>
+  <p>Overloads the one-argument <code>atan</code> to compute each element's inverse tangent.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~165"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of angles in radians, with x's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-cos"></span>
+      <h3>public        interface <a href='..\interface\cos.html'>cos</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_cos(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>cos</code> to compute the cosine of each column element.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~161"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input angles in radians; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of cosine values with the same count as x.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-exp"></span>
+      <h3>public        interface <a href='..\interface\exp.html'>exp</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_exp(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>exp</code> to compute the natural exponential of each column element.
+Overflow and underflow follow intrinsic <code>exp</code> behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~166"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of exponential values, with x's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-ieee_is_finite"></span>
+      <h3>public        interface <a href='..\interface\ieee_is_finite.html'>ieee_is_finite</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_ieee_is_finite(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>ieee_is_finite</code> to test whether every column value is finite.
+An allocated empty column returns true; unallocated storage returns false.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~158"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The <a href="..\type\real_column.html">real_column</a> object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    <p>True if every value in the column is finite; else, false.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-ieee_is_nan"></span>
+      <h3>public        interface <a href='..\interface\ieee_is_nan.html'>ieee_is_nan</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_ieee_is_nan(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>ieee_is_nan</code> to test whether every column value is NaN.
+This is an all-elements query, not a test for the presence of any NaN.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~174"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The <a href="..\type\real_column.html">real_column</a> to inspect, without copying its array.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    <p>True if all values are NaN, including an allocated empty array;
+false for unallocated storage.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-ieee_is_negative"></span>
+      <h3>public        interface <a href='..\interface\ieee_is_negative.html'>ieee_is_negative</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_ieee_is_negative(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>ieee_is_negative</code> to test the sign of every column value.
+Uses IEEE sign classification, including negative zero, rather than x &lt; 0.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~175"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The <a href="..\type\real_column.html">real_column</a> to inspect, without copying its array.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    <p>True if all values satisfy intrinsic <code>ieee_is_negative</code>, including
+an allocated empty array; false for unallocated storage.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-ieee_is_normal"></span>
+      <h3>public        interface <a href='..\interface\ieee_is_normal.html'>ieee_is_normal</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_ieee_is_normal(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>ieee_is_normal</code> to classify every column value.
+Zero, subnormal, infinite, and NaN values follow intrinsic classification.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~176"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The <a href="..\type\real_column.html">real_column</a> to inspect, without copying its array.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    <p>True if all values satisfy intrinsic <code>ieee_is_normal</code>, including
+an allocated empty array; false for unallocated storage.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-integer_column"></span>
+      <h3>public        interface <a href='..\interface\integer_column.html'>integer_column</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function ic_init_empty(n) result(rst)  
+
+    </h3>
+  <p>Constructs an empty <a href="..\type\integer_column.html">integer_column</a> of the requested size.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~91"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>The number of rows to create.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\integer_column.html'>integer_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\integer_column.html">integer_column</a> object.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function ic_init_array(x) result(rst)  
+
+    </h3>
+  <p>Constructs a new <a href="..\type\integer_column.html">integer_column</a> by copying the contents of the
+supplied array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~142"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The array to copy.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\integer_column.html'>integer_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\integer_column.html">integer_column</a> object.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-log"></span>
+      <h3>public        interface <a href='..\interface\log.html'>log</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_log(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>log</code> to compute the natural logarithm of each column element.
+Nonpositive values follow intrinsic domain-error behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~167"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of logarithms with the same count as x.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-log10"></span>
+      <h3>public        interface <a href='..\interface\log10.html'>log10</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_log10(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>log10</code> to compute the base-10 logarithm of each column element.
+Nonpositive values follow intrinsic domain-error behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~168"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of logarithms with the same count as x.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-logical_column"></span>
+      <h3>public        interface <a href='..\interface\logical_column.html'>logical_column</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function lc_init_empty(n) result(rst)  
+
+    </h3>
+  <p>Constructs an empty <a href="..\type\logical_column.html">logical_column</a> of the requested size.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~97"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>The number of rows to create.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\logical_column.html'>logical_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\logical_column.html">logical_column</a> object.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function lc_init_array(x) result(rst)  
+
+    </h3>
+  <p>Constructs a new <a href="..\type\logical_column.html">logical_column</a> by copying the contents of the
+supplied array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~150"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The array to copy.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\logical_column.html'>logical_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\logical_column.html">logical_column</a> object.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-maxval"></span>
+      <h3>public        interface <a href='..\interface\maxval.html'>maxval</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_maxval(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>maxval</code> to find the largest column value without copying the array.
+Nonfinite values follow intrinsic <code>maxval</code> behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~172"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The maximum, or -huge(0.0d0) for an empty column.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-minval"></span>
+      <h3>public        interface <a href='..\interface\minval.html'>minval</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_minval(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>minval</code> to find the smallest column value without copying the array.
+Nonfinite values follow intrinsic <code>minval</code> behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~173"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The minimum, or huge(0.0d0) for an empty column.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-operator%28ASTERISK%29"></span>
+      <h3>public        interface <a href='..\interface\operator(ASTERISK).html'>operator(*)</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_multiply(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>*</code> to multiply corresponding elements, not compute a dot product.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~181"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The left and right operands; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~31"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The left and right operands; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x * y, with the operands' count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_multiply_scalar(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>*</code> to multiply each column value by a scalar.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~187"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The left operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~37"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The scalar right operand, broadcast to every row.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x * y, with x's count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function scalar_multiply_rc(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>*</code> to multiply a scalar by each column value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~188"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The scalar left operand, broadcast to every row.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~38"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The right operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x * y, with y's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-operator%28%2B%29"></span>
+      <h3>public        interface <a href='..\interface\operator(+).html'>operator(+)</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_add(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>+</code> to add corresponding elements of two columns.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~179"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The left and right operands; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~29"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The left and right operands; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x + y, with the operands' count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_add_scalar(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>+</code> to add a scalar to each column value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~183"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The left operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~33"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The scalar right operand, broadcast to every row.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x + y, with x's count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function scalar_add_rc(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>+</code> to add each column value to a scalar.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~184"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The scalar left operand, broadcast to every row.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~34"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The right operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x + y, with y's count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_positive(x) result(rst)  
+
+    </h3>
+  <p>Overloads unary <code>+</code> to create a copy of the column's values.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~177"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column with the same values and count as x.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-operator%28-%29"></span>
+      <h3>public        interface <a href='..\interface\operator(-).html'>operator(-)</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_subtract(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>-</code> to subtract corresponding elements of two columns.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~180"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The left and right operands; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~30"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The left and right operands; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x - y, with the operands' count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_subtract_scalar(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>-</code> to subtract a scalar from each column value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~185"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The left operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~35"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The scalar right operand, broadcast to every row.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x - y, with x's count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function scalar_subtract_rc(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>-</code> to subtract each column value from a scalar.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~186"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The scalar left operand, broadcast to every row.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~36"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The right operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x - y, with y's count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_negative(x) result(rst)  
+
+    </h3>
+  <p>Overloads unary <code>-</code> to negate each column value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~178"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The operand <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column with negated values and x's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-operator%28SLASH%29"></span>
+      <h3>public        interface <a href='..\interface\operator(SLASH).html'>operator(/)</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_divide(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>/</code> to divide corresponding elements of two columns.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.
+Zero divisors and nonfinite values follow intrinsic division behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~182"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The numerator and denominator columns; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~32"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The numerator and denominator columns; unallocated storage is empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x / y, with the operands' count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_divide_scalar(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>/</code> to divide each column value by a scalar.
+Zero divisors and nonfinite values follow intrinsic division behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~189"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The numerator <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~39"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The scalar denominator, broadcast to every row.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x / y, with x's count.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function scalar_divide_rc(x, y) result(rst)  
+
+    </h3>
+  <p>Overloads <code>/</code> to divide a scalar by each column value.
+Zero divisors and nonfinite values follow intrinsic division behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~190"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The scalar numerator, broadcast to every row.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~40"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The denominator <a href="..\type\real_column.html">real_column</a>; unallocated storage is empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of x / y, with y's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-product"></span>
+      <h3>public        interface <a href='..\interface\product.html'>product</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_product(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>product</code> to multiply all column values, without copying the array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~171"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The product, or one for an empty column. Uses intrinsic product semantics.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-real_column"></span>
+      <h3>public        interface <a href='..\interface\real_column.html'>real_column</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_init_empty(n) result(rst)  
+
+    </h3>
+  <p>Constructs an empty <a href="..\type\real_column.html">real_column</a> of the requested size.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~94"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>The number of rows to create.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\real_column.html">real_column</a> object.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_init_array(x) result(rst)  
+
+    </h3>
+  <p>Constructs a new <a href="..\type\real_column.html">real_column</a> by copying the contents of the
+supplied array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~146"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The array to copy.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\real_column.html">real_column</a> object.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-sin"></span>
+      <h3>public        interface <a href='..\interface\sin.html'>sin</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_sin(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>sin</code> to compute the sine of each column element.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~160"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input angles in radians; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of sine values with the same count as x.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-size"></span>
+      <h3>public        interface <a href='..\interface\size.html'>size</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function dc_size(col) result(rst)  
+
+    </h3>
+  <p>Returns the number of items in the column.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-col~10"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>col</strong></td>
+            <td>
+                <p>The <a href="..\type\data_column.html">data_column</a> object.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer</small>
+    </h4>
+    <p>The size of the column.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-sqrt"></span>
+      <h3>public        interface <a href='..\interface\sqrt.html'>sqrt</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_sqrt(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>sqrt</code> to compute the square root of each column element.
+Negative values follow intrinsic domain-error behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~169"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of square roots with x's count.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-string_column"></span>
+      <h3>public        interface <a href='..\interface\string_column.html'>string_column</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function sc_init_empty(n) result(rst)  
+
+    </h3>
+  <p>Constructs an empty <a href="..\type\integer_column.html">integer_column</a> of the requested size.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~100"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>The number of rows to create.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\string_column.html'>string_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\string_column.html">string_column</a> object.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function sc_init_array(x) result(rst)  
+
+    </h3>
+  <p>Constructs a new <a href="..\type\string_column.html">string_column</a> by copying the contents of the
+supplied array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~154"></span>
+              type(string),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The array to copy.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\string_column.html'>string_column</a>)</small>
+    </h4>
+    <p>The newly constructed <a href="..\type\string_column.html">string_column</a> object.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-sum"></span>
+      <h3>public        interface <a href='..\interface\sum.html'>sum</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_sum(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>sum</code> to add all column values, without copying the array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~170"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input <a href="..\type\real_column.html">real_column</a>; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>The sum, or zero for an empty column. Uses intrinsic summation semantics.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-tan"></span>
+      <h3>public        interface <a href='..\interface\tan.html'>tan</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function rc_tan(x) result(rst)  
+
+    </h3>
+  <p>Overloads <code>tan</code> to compute the tangent of each column element.
+Singularities and nonfinite inputs follow intrinsic <code>tan</code> behavior.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~162"></span>
+              class(<a href='..\type\real_column.html'>real_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input angles in radians; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\real_column.html'>real_column</a>)</small>
+    </h4>
+    <p>An independent, unnamed column of tangent values with the same count as x.</p>
+
+          </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+        <section>
+          <h2>Derived Types</h2>
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-data_column"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='..\type\data_column.html'>data_column</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a column of data within a <a href="..\type\data_table.html">data_table</a> object.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m_name"></span>
+              character(len=:),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>m_name</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>A header, or column name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure(data_column_append), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-append~2'>append</a></strong></td>
+                <td>..\..\<p>Appends one value, initializing an unallocated column if needed.
+Discard existing views before this operation.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_array_copy), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-copy~2'>copy</a></strong></td>
+                <td>..\..\<p>Copies the contents of the column to an array.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_integer_query), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-count~7'>count</a></strong></td>
+                <td>..\..\<p>Gets the number of items stored in the column.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_integer_query), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-get_data_type'>get_data_type</a></strong></td>
+                <td><p>Gets the data type stored by the column:</p><a href="../type/data_column.html#boundprocedure-get_data_type" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-get_name'>get_name</a></strong> => dc_get_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_insert), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-insert~2'>insert</a></strong></td>
+                <td>..\..\<p>Inserts one value before row, in the range 1 through count() + 1.
+Discard existing views before this operation.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_remove), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-remove~2'>remove</a></strong></td>
+                <td>..\..\<p>Removes one row, in the range 1 through count().
+Discard existing views before this operation.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-set_name'>set_name</a></strong> => dc_set_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_slice), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-slice~2'>slice</a></strong></td>
+                <td>..\..\<p>Borrows a mutable array pointer to a slice of the column without
+copying the column.  The actual column must have TARGET or be an 
+associated pointer.  The caller must not deallocate the returned 
+pointer.  Reallocation of the array or destruction of the column 
+invalidates the view; discard it before either operation and 
+reacquire afterward.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_to_string), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-to_string'>to_string</a></strong></td>
+                <td>..\..\<p>Converts the requested value to a string.<\p></td>
+              </tr>
+              <tr>
+                <td>  procedure(data_column_array_view), public, deferred, pass ::
+  <strong><a href='..\type\data_column.html#boundprocedure-view~2'>view</a></strong></td>
+                <td>..\..\<p>Borrows a mutable array pointer without copying the column.
+The actual column must have TARGET or be an associated pointer.
+The caller must not deallocate the returned pointer.
+Reallocation of the array or destruction of the column invalidates
+the view; discard it before either operation and reacquire afterward.<\p></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-integer_column"></span>
+      <h3>
+        type, public, extends(<a href='..\type\data_column.html'>data_column</a>)&nbsp;::&nbsp;
+        <a href='..\type\integer_column.html'>integer_column</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a column of integer values.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m_name"></span>
+              character(len=:),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>m_name</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>A header, or column name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        <h4>Constructor</h4>
+          
+        <table class="table table-striped varlist">
+          <tbody>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>ic_init_empty</strong>
+                    (n)
+                  </td>
+                  <td><p>Constructs an empty <a href="..\type\integer_column.html">integer_column</a> of the requested size.</p></td>
+                </tr>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>ic_init_array</strong>
+                    (x)
+                  </td>
+                  <td><p>Constructs a new <a href="..\type\integer_column.html">integer_column</a> by copying the contents of the
+supplied array.</p></td>
+                </tr>
+          </tbody>
+        </table>
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-append~3'>append</a></strong> => ic_append</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-copy~3'>copy</a></strong> => ic_copy</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-count~8'>count</a></strong> => ic_count</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-get~2'>get</a></strong> => ic_get</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-get_data_type~2'>get_data_type</a></strong> => ic_get_type</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-get_name'>get_name</a></strong> => dc_get_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-insert~3'>insert</a></strong> => ic_insert</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-remove~3'>remove</a></strong> => ic_remove</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-set'>set</a></strong> => ic_set</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-set_name'>set_name</a></strong> => dc_set_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-slice~3'>slice</a></strong> => ic_slice</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-to_string~2'>to_string</a></strong> => ic_to_string</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\integer_column.html#boundprocedure-view~3'>view</a></strong> => ic_view</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-logical_column"></span>
+      <h3>
+        type, public, extends(<a href='..\type\data_column.html'>data_column</a>)&nbsp;::&nbsp;
+        <a href='..\type\logical_column.html'>logical_column</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a column of logical values.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m_name"></span>
+              character(len=:),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>m_name</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>A header, or column name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        <h4>Constructor</h4>
+          
+        <table class="table table-striped varlist">
+          <tbody>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>lc_init_empty</strong>
+                    (n)
+                  </td>
+                  <td><p>Constructs an empty <a href="..\type\logical_column.html">logical_column</a> of the requested size.</p></td>
+                </tr>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>lc_init_array</strong>
+                    (x)
+                  </td>
+                  <td><p>Constructs a new <a href="..\type\logical_column.html">logical_column</a> by copying the contents of the
+supplied array.</p></td>
+                </tr>
+          </tbody>
+        </table>
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-append~5'>append</a></strong> => lc_append</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-copy~5'>copy</a></strong> => lc_copy</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-count~10'>count</a></strong> => lc_count</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-get~4'>get</a></strong> => lc_get</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-get_data_type~4'>get_data_type</a></strong> => lc_get_type</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-get_name'>get_name</a></strong> => dc_get_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-insert~5'>insert</a></strong> => lc_insert</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-remove~5'>remove</a></strong> => lc_remove</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-set~3'>set</a></strong> => lc_set</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-set_name'>set_name</a></strong> => dc_set_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-slice~5'>slice</a></strong> => lc_slice</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-to_string~4'>to_string</a></strong> => lc_to_string</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\logical_column.html#boundprocedure-view~5'>view</a></strong> => lc_view</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-real_column"></span>
+      <h3>
+        type, public, extends(<a href='..\type\data_column.html'>data_column</a>)&nbsp;::&nbsp;
+        <a href='..\type\real_column.html'>real_column</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a column of double-precision, floating-point values.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m_name"></span>
+              character(len=:),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>m_name</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>A header, or column name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        <h4>Constructor</h4>
+          
+        <table class="table table-striped varlist">
+          <tbody>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>rc_init_empty</strong>
+                    (n)
+                  </td>
+                  <td><p>Constructs an empty <a href="..\type\real_column.html">real_column</a> of the requested size.</p></td>
+                </tr>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>rc_init_array</strong>
+                    (x)
+                  </td>
+                  <td><p>Constructs a new <a href="..\type\real_column.html">real_column</a> by copying the contents of the
+supplied array.</p></td>
+                </tr>
+          </tbody>
+        </table>
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-append~4'>append</a></strong> => rc_append</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-copy~4'>copy</a></strong> => rc_copy</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-count~9'>count</a></strong> => rc_count</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-get~3'>get</a></strong> => rc_get</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-get_data_type~3'>get_data_type</a></strong> => rc_get_type</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-get_name'>get_name</a></strong> => dc_get_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-insert~4'>insert</a></strong> => rc_insert</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-remove~4'>remove</a></strong> => rc_remove</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-set~2'>set</a></strong> => rc_set</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-set_name'>set_name</a></strong> => dc_set_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-slice~4'>slice</a></strong> => rc_slice</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-to_string~3'>to_string</a></strong> => rc_to_string</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\real_column.html#boundprocedure-view~4'>view</a></strong> => rc_view</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-string_column"></span>
+      <h3>
+        type, public, extends(<a href='..\type\data_column.html'>data_column</a>)&nbsp;::&nbsp;
+        <a href='..\type\string_column.html'>string_column</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Defines a column of string values.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m_name"></span>
+              character(len=:),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>m_name</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>A header, or column name.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        <h4>Constructor</h4>
+          
+        <table class="table table-striped varlist">
+          <tbody>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>sc_init_empty</strong>
+                    (n)
+                  </td>
+                  <td><p>Constructs an empty <a href="..\type\integer_column.html">integer_column</a> of the requested size.</p></td>
+                </tr>
+                <tr>
+                  <td>
+                        private
+
+                    pure
+                    function
+                    <strong>sc_init_array</strong>
+                    (x)
+                  </td>
+                  <td><p>Constructs a new <a href="..\type\string_column.html">string_column</a> by copying the contents of the
+supplied array.</p></td>
+                </tr>
+          </tbody>
+        </table>
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-append~6'>append</a></strong> => sc_append</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-copy~6'>copy</a></strong> => sc_copy</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-count~11'>count</a></strong> => sc_count</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-get~5'>get</a></strong> => sc_get</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-get_data_type~5'>get_data_type</a></strong> => sc_get_type</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-get_name'>get_name</a></strong> => dc_get_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-insert~6'>insert</a></strong> => sc_insert</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-remove~6'>remove</a></strong> => sc_remove</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-set~4'>set</a></strong> => sc_set</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\data_column.html#boundprocedure-set_name'>set_name</a></strong> => dc_set_name</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-slice~6'>slice</a></strong> => sc_slice</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-to_string~5'>to_string</a></strong> => sc_to_string</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='..\type\string_column.html#boundprocedure-view~6'>view</a></strong> => sc_view</td>
+                <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-10-12 19:19              </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>

@@ -12,29 +12,14 @@
 
     <title>fstats_bootstrap.f90 &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -62,6 +47,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -87,8 +75,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 3.7% of total for source files.">201 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 2.1% of total for source files.">196 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -107,11 +96,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -492,41 +479,28 @@
 <a id="ln-323" name="ln-323" href="#ln-323"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">statistic_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">stat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <a id="ln-324" name="ln-324" href="#ln-324"></a>
 <a id="ln-325" name="ln-325" href="#ln-325"></a><span class="w">    </span><span class="c">! Resampling Process</span>
-<a id="ln-326" name="ln-326" href="#ln-326"></a><span class="cp">#ifdef USEOPENMP</span>
-<a id="ln-327" name="ln-327" href="#ln-327"></a><span class="w">    </span><span class="c">! Use OpenMP to run operations in parallel</span>
-<a id="ln-328" name="ln-328" href="#ln-328"></a><span class="c">!$OMP PARALLEL DO PRIVATE(xn) SHARED(rst)</span>
-<a id="ln-329" name="ln-329" href="#ln-329"></a><span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ns</span>
-<a id="ln-330" name="ln-330" href="#ln-330"></a><span class="w">        </span><span class="c">! Per-thread memory allocation</span>
-<a id="ln-331" name="ln-331" href="#ln-331"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">allocated</span><span class="p">(</span><span class="n">xn</span><span class="p">))</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">xn</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<a id="ln-332" name="ln-332" href="#ln-332"></a>
-<a id="ln-333" name="ln-333" href="#ln-333"></a><span class="w">        </span><span class="c">! Resample the data</span>
-<a id="ln-334" name="ln-334" href="#ln-334"></a><span class="w">        </span><span class="k">call </span><span class="n">resample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">xn</span><span class="p">)</span>
-<a id="ln-335" name="ln-335" href="#ln-335"></a>
-<a id="ln-336" name="ln-336" href="#ln-336"></a><span class="w">        </span><span class="c">! Compute the statistic</span>
-<a id="ln-337" name="ln-337" href="#ln-337"></a><span class="w">        </span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">stat</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span>
-<a id="ln-338" name="ln-338" href="#ln-338"></a><span class="w">    </span><span class="k">end do</span>
-<a id="ln-339" name="ln-339" href="#ln-339"></a><span class="c">!$OMP END PARALLEL DO</span>
-<a id="ln-340" name="ln-340" href="#ln-340"></a><span class="cp">#else</span>
-<a id="ln-341" name="ln-341" href="#ln-341"></a><span class="w">    </span><span class="c">! OpenMP is not available - run in a serial manner</span>
-<a id="ln-342" name="ln-342" href="#ln-342"></a><span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">xn</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<a id="ln-343" name="ln-343" href="#ln-343"></a><span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ns</span>
-<a id="ln-344" name="ln-344" href="#ln-344"></a><span class="w">        </span><span class="c">! Resample the data</span>
-<a id="ln-345" name="ln-345" href="#ln-345"></a><span class="w">        </span><span class="k">call </span><span class="n">resample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">xn</span><span class="p">)</span>
-<a id="ln-346" name="ln-346" href="#ln-346"></a>
-<a id="ln-347" name="ln-347" href="#ln-347"></a><span class="w">        </span><span class="c">! Compute the statistic for the resampled data</span>
-<a id="ln-348" name="ln-348" href="#ln-348"></a><span class="w">        </span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">stat</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span>
-<a id="ln-349" name="ln-349" href="#ln-349"></a><span class="w">    </span><span class="k">end do</span>
-<a id="ln-350" name="ln-350" href="#ln-350"></a><span class="cp">#endif</span>
-<a id="ln-351" name="ln-351" href="#ln-351"></a>
-<a id="ln-352" name="ln-352" href="#ln-352"></a><span class="w">    </span><span class="c">! Compute the relevant quantities on the resampled statistic</span>
-<a id="ln-353" name="ln-353" href="#ln-353"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">upper_confidence_interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantile</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">half</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">)</span>
-<a id="ln-354" name="ln-354" href="#ln-354"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">lower_confidence_interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantile</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">,</span><span class="w"> </span><span class="n">half</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">)</span>
-<a id="ln-355" name="ln-355" href="#ln-355"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">bias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">rst</span><span class="p">%</span><span class="n">statistic_value</span>
-<a id="ln-356" name="ln-356" href="#ln-356"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">standard_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">)</span>
-<a id="ln-357" name="ln-357" href="#ln-357"></a><span class="k">end function</span>
-<a id="ln-358" name="ln-358" href="#ln-358"></a>
-<a id="ln-359" name="ln-359" href="#ln-359"></a><span class="c">! ------------------------------------------------------------------------------</span>
-<a id="ln-360" name="ln-360" href="#ln-360"></a><span class="k">end module</span>
+<a id="ln-326" name="ln-326" href="#ln-326"></a><span class="c">!$OMP PARALLEL DO PRIVATE(xn) SHARED(rst)</span>
+<a id="ln-327" name="ln-327" href="#ln-327"></a><span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ns</span>
+<a id="ln-328" name="ln-328" href="#ln-328"></a><span class="w">        </span><span class="c">! Per-thread memory allocation</span>
+<a id="ln-329" name="ln-329" href="#ln-329"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">allocated</span><span class="p">(</span><span class="n">xn</span><span class="p">))</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">xn</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<a id="ln-330" name="ln-330" href="#ln-330"></a>
+<a id="ln-331" name="ln-331" href="#ln-331"></a><span class="w">        </span><span class="c">! Resample the data</span>
+<a id="ln-332" name="ln-332" href="#ln-332"></a><span class="w">        </span><span class="k">call </span><span class="n">resample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">xn</span><span class="p">)</span>
+<a id="ln-333" name="ln-333" href="#ln-333"></a>
+<a id="ln-334" name="ln-334" href="#ln-334"></a><span class="w">        </span><span class="c">! Compute the statistic</span>
+<a id="ln-335" name="ln-335" href="#ln-335"></a><span class="w">        </span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">stat</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span>
+<a id="ln-336" name="ln-336" href="#ln-336"></a><span class="w">    </span><span class="k">end do</span>
+<a id="ln-337" name="ln-337" href="#ln-337"></a><span class="c">!$OMP END PARALLEL DO</span>
+<a id="ln-338" name="ln-338" href="#ln-338"></a>
+<a id="ln-339" name="ln-339" href="#ln-339"></a><span class="w">    </span><span class="c">! Compute the relevant quantities on the resampled statistic</span>
+<a id="ln-340" name="ln-340" href="#ln-340"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">upper_confidence_interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantile</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">half</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">)</span>
+<a id="ln-341" name="ln-341" href="#ln-341"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">lower_confidence_interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantile</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">,</span><span class="w"> </span><span class="n">half</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">)</span>
+<a id="ln-342" name="ln-342" href="#ln-342"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">bias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">rst</span><span class="p">%</span><span class="n">statistic_value</span>
+<a id="ln-343" name="ln-343" href="#ln-343"></a><span class="w">    </span><span class="n">rst</span><span class="p">%</span><span class="n">standard_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">rst</span><span class="p">%</span><span class="n">population</span><span class="p">)</span>
+<a id="ln-344" name="ln-344" href="#ln-344"></a><span class="k">end function</span>
+<a id="ln-345" name="ln-345" href="#ln-345"></a>
+<a id="ln-346" name="ln-346" href="#ln-346"></a><span class="c">! ------------------------------------------------------------------------------</span>
+<a id="ln-347" name="ln-347" href="#ln-347"></a><span class="k">end module</span>
 </pre></div>
 
       </section>
@@ -538,21 +512,40 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

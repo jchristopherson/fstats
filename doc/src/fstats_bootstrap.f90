@@ -323,8 +323,6 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
     rst%statistic_value = stat(x)
 
     ! Resampling Process
-#ifdef USEOPENMP
-    ! Use OpenMP to run operations in parallel
 !$OMP PARALLEL DO PRIVATE(xn) SHARED(rst)
     do i = 1, ns
         ! Per-thread memory allocation
@@ -337,17 +335,6 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
         rst%population(i) = stat(xn)
     end do
 !$OMP END PARALLEL DO
-#else
-    ! OpenMP is not available - run in a serial manner
-    allocate(xn(n))
-    do i = 1, ns
-        ! Resample the data
-        call resample(x, xn)
-
-        ! Compute the statistic for the resampled data
-        rst%population(i) = stat(xn)
-    end do
-#endif
 
     ! Compute the relevant quantities on the resampled statistic
     rst%upper_confidence_interval = quantile(rst%population, 1.0d0 - half * a)

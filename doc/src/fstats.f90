@@ -32,10 +32,26 @@ module fstats
     use fstats_descriptive_statistics
     use fstats_hypothesis
     use fstats_distributions
+    use fstats_t_distribution
+    use fstats_normal_distribution
+    use fstats_f_distribution
+    use fstats_chi_squared_distribution
+    use fstats_binomial_distribution
+    use fstats_log_normal_distribution
+    use fstats_poisson_distribution
+    use fstats_multivariate_normal_distribution
     use fstats_anova
     use fstats_helper_routines
     use fstats_regression
+    use fstats_linear_regression
+    use fstats_levenberg_marquardt
     use fstats_experimental_design
+    use fstats_doe_designs
+    use fstats_doe_coding
+    use fstats_doe_models
+    use fstats_doe_diagnostics
+    use fstats_doe_prediction
+    use fstats_doe_response_surface
     use fstats_allan
     use fstats_bootstrap
     use fstats_sampling
@@ -44,4 +60,10 @@ module fstats
     use fstats_interp
     use fstats_missing_data
     use fstats_msa
+    use fstats_robust_statistics
+    use fstats_glm_types
+    use fstats_glm_irls
+    use fstats_data_columns
+    use fstats_data_table
+    use fstats_data_table_io
 end module

@@ -25,10 +25,13 @@
 
 module fstats_helper_routines
     use iso_fortran_env
+    use ieee_arithmetic
+    use fstats_data_columns
     implicit none
     private
     public :: difference
     public :: factorial
+    public :: column_values
 contains
 
 ! ------------------------------------------------------------------------------
@@ -59,6 +62,25 @@ pure elemental function factorial(x) result(rst)
     real(real64) :: rst
         !! The result.
     rst = gamma(x + 1.0d0)
+end function
+
+! ------------------------------------------------------------------------------
+pure function column_values(x) result(rst)
+    !! Copies a column to a work array for the existing array algorithms.
+    class(data_column), intent(in) :: x
+        !! The input column; unallocated storage is treated as empty.
+    real(real64), allocatable, dimension(:) :: rst
+        !! An independent array with the same count and values as x.  If x is
+        !! not a real-valued column, an array of NaN's is returned the same
+        !! size as x.
+
+    allocate(rst(x%count()))
+    select type (x)
+    class is (real_column)
+        call x%copy(rst)
+    class default
+        rst = ieee_value(0.0d0, ieee_quiet_nan)
+    end select
 end function
 
 ! ------------------------------------------------------------------------------

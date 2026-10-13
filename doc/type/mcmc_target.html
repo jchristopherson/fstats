@@ -12,29 +12,14 @@
 
     <title>mcmc_target &ndash; FSTATS </title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -62,6 +47,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -87,8 +75,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p> 3.4% of total for derived types.</p>Including implementation: 125 statements,  7.0% of total for derived types.">14 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="<p> 3.1% of total for derived types.</p>Including implementation: 180 statements,  5.8% of total for derived types.">18 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -109,11 +98,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -131,6 +118,7 @@
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../type/mcmc_target.html#variable-data_noise">data_noise</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#variable-likelihood_parallel_threshold">likelihood_parallel_threshold</a>
         </div>
       </div>
     </div>
@@ -158,11 +146,14 @@
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-add_parameter">add_parameter</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-evaluate_log_variance_prior">evaluate_log_variance_prior</a>
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-evaluate_prior">evaluate_prior</a>
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-evaluate_variance_prior">evaluate_variance_prior</a>
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-get_parameter">get_parameter</a>
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-get_parameter_count">get_parameter_count</a>
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-likelihood">likelihood</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-likelihood_log_variance">likelihood_log_variance</a>
+            <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-log_posterior">log_posterior</a>
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-model">model</a>
             <a class="list-group-item" href="../type/mcmc_target.html#boundprocedure-sample_variance_prior">sample_variance_prior</a>
         </div>
@@ -178,8 +169,8 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2 id="type-def-statement">
-        type, public, abstract :: mcmc_target</h2>
+      <h2>
+        type, public :: mcmc_target</h2>
     <p>Defines a model of the target distribution(s).</p>
     <br>
 
@@ -212,6 +203,24 @@
                 <p>A parameter representing the noise in the data.</p>
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-likelihood_parallel_threshold"></span>
+              integer(kind=int32),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>likelihood_parallel_threshold</strong></td>
+<td> =</td>
+                <td>10000</td>
+            <td>
+                <p>Minimum observation count for a threaded likelihood reduction.
+Adjust for the workload; nested worker teams are not created.</p>
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -232,9 +241,9 @@
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private  subroutine mt_add_param(this, x)  
 </h3>
 
@@ -285,8 +294,88 @@
   </table>
 
 
-          </li>
-      </ul>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-evaluate_log_variance_prior"></span>
+      <h3>
+          procedure, public ::
+  <strong>evaluate_log_variance_prior</strong> => mt_eval_log_var_prior
+        
+      </h3>
+    </div>
+      <div class="card-body">
+        
+        <p>Prior density in log-variance coordinates, including the Jacobian.</p>
+      </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure function mt_eval_log_var_prior(this, log_variance) result(rst)  
+</h3>
+
+  <p>Log density of log variance, including the variance-transform Jacobian.
+The default variance-space prior is log-normal, so its transformed density
+is normal with mean zero and standard deviation data_noise. Override this
+binding when changing the variance prior used by the sampler.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>Target with finite, positive data_noise.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>log_variance</strong></td>
+            <td>
+                <p>Natural logarithm of the variance.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log transformed prior; invalid prior parameters or NaN input give NaN.</p>
+
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -300,9 +389,9 @@
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private  function mt_eval_prior(this, x) result(rst)  
 </h3>
 
@@ -359,8 +448,8 @@ the N parameter PDF's.</p>
     </h4>
     <p>The resulting probability.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -374,13 +463,14 @@ the N parameter PDF's.</p>
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure function mt_eval_var_prior(this, x) result(rst)  
 </h3>
 
-  <p>Evalautes the model variance prior PDF.</p>
+  <p>Computes the log prior density with respect to variance, without its
+log-coordinate Jacobian. Sampling uses evaluate_log_variance_prior instead.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -430,10 +520,10 @@ the N parameter PDF's.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The value of the variance prior distribution's PDF.</p>
+    <p>Log prior density; outside support gives -infinity, invalid inputs NaN.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -447,9 +537,9 @@ the N parameter PDF's.</p>
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private  function mt_get_param(this, i) result(rst)  
 </h3>
 
@@ -506,8 +596,8 @@ collection of parameters a null pointer is returned.</p>
     </h4>
     <p>A pointer to the requested parameter distribution.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -521,9 +611,9 @@ collection of parameters a null pointer is returned.</p>
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure function mt_get_param_count(this) result(rst)  
 </h3>
 
@@ -564,8 +654,8 @@ collection of parameters a null pointer is returned.</p>
     </h4>
     <p>The parameter count.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -579,13 +669,13 @@ collection of parameters a null pointer is returned.</p>
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private  function mt_likelihood(this, xdata, ydata, xc, var) result(rst)  
 </h3>
 
-  <p>Computes the target likelihood.</p>
+  <p>Computes the Gaussian log likelihood. Invalid variance gives NaN.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -670,7 +760,7 @@ collection of parameters a null pointer is returned.</p>
             <td>::</td>
             <td><strong>var</strong></td>
             <td>
-                <p>An estimate of the model variance.</p>
+                <p>Finite, strictly positive model variance; it is not silently clamped.</p>
             </td>
         </tr>
     </tbody>
@@ -680,10 +770,260 @@ collection of parameters a null pointer is returned.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The likelihood value.</p>
+    <p>Log likelihood, or NaN for invalid/nonfinite inputs.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-likelihood_log_variance"></span>
+      <h3>
+          procedure, public ::
+  <strong>likelihood_log_variance</strong> => mt_log_likelihood
+        
+      </h3>
+    </div>
+      <div class="card-body">
+        
+        <p>Gaussian log likelihood accepting log variance directly.</p>
+      </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function mt_log_likelihood(this, xdata, ydata, xc, log_variance) result(rst)  
+</h3>
+
+  <p>Computes the Gaussian log likelihood without exponentiating the variance.
+Residual magnitudes are scaled in log space before their squared reduction.
+Override this binding for custom likelihoods used by the sampler; overriding
+only likelihood changes calls to that variance-space entry point, not sampling.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>Target; its model workspace is resized as necessary.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xdata</strong></td>
+            <td>
+                <p>M finite independent observations.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>ydata</strong></td>
+            <td>
+                <p>M finite dependent observations.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>Finite parameters, one per registered parameter distribution.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>log_variance</strong></td>
+            <td>
+                <p>Finite natural logarithm of the model variance.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log likelihood; empty data give zero, invalid inputs/models give NaN,
+and an unrepresentably large residual penalty gives negative infinity.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-log_posterior"></span>
+      <h3>
+          procedure, public ::
+  <strong>log_posterior</strong> => mt_log_posterior
+        
+      </h3>
+    </div>
+      <div class="card-body">
+        
+        <p>Posterior density in parameter/log-variance coordinates.</p>
+      </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private  function mt_log_posterior(this, xdata, ydata, xc, log_variance) result(rst)  
+</h3>
+
+  <p>Evaluates the posterior density with respect to parameters and log variance.
+Includes the variance-transform Jacobian through evaluate_log_variance_prior.
+Impossible parameter states are rejected before model evaluation.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='mcmc_target.html'>mcmc_target</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>Target whose prior and log-likelihood bindings are evaluated.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xdata</strong></td>
+            <td>
+                <p>Independent observations.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>ydata</strong></td>
+            <td>
+                <p>Dependent observations, the same size as xdata.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>xc</strong></td>
+            <td>
+                <p>Model parameters, one per registered distribution.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>log_variance</strong></td>
+            <td>
+                <p>Natural logarithm of the model variance.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log posterior; impossible states give -infinity, invalid inputs give NaN.</p>
+
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -697,9 +1037,9 @@ collection of parameters a null pointer is returned.</p>
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
      subroutine evaluate_model(this, xdata, xc, y)  
 <small>Prototype</small></h3>
 
@@ -782,8 +1122,8 @@ be written.</p>
   </table>
 
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -797,9 +1137,9 @@ be written.</p>
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private  function mt_sample_var_prior(this, vc, n) result(rst)  
 </h3>
 
@@ -871,8 +1211,8 @@ samples.</p>
     </h4>
     <p>The requested samples.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -887,21 +1227,40 @@ samples.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

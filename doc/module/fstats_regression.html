@@ -12,29 +12,14 @@
 
     <title>fstats_regression &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -62,6 +47,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -87,8 +75,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="12.6% of total for modules and submodules.">692 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 3.4% of total for modules and submodules.">321 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -108,11 +97,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -122,20 +109,7 @@
         <div id="sidebar">
       <h3>Contents</h3>
   
-      <div class="card mb-4">
-      <a data-bs-toggle="collapse" href="#vars-0"
-         aria-expanded="false" aria-controls="vars-0">
-         <h4 class="card-header bg-primary text-white">Variables</h4>
-      </a>
-      <div id="vars-0" class="collapse">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/fstats_regression.html#variable-fs_levenberg_marquardt_update">FS_LEVENBERG_MARQUARDT_UPDATE</a>
-            <a class="list-group-item" href="../module/fstats_regression.html#variable-fs_nielsen_update">FS_NIELSEN_UPDATE</a>
-            <a class="list-group-item" href="../module/fstats_regression.html#variable-fs_quadratic_update">FS_QUADRATIC_UPDATE</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -165,7 +139,6 @@
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../module/fstats_regression.html#type-convergence_info">convergence_info</a>
             <a class="list-group-item" href="../module/fstats_regression.html#type-iteration_controls">iteration_controls</a>
-            <a class="list-group-item" href="../module/fstats_regression.html#type-lm_solver_options">lm_solver_options</a>
             <a class="list-group-item" href="../module/fstats_regression.html#type-regression_statistics">regression_statistics</a>
         </div>
       </div>
@@ -196,8 +169,7 @@
       <div id="subs-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../module/fstats_regression.html#proc-jacobian">jacobian</a>
-            <a class="list-group-item" href="../module/fstats_regression.html#proc-linear_least_squares">linear_least_squares</a>
-            <a class="list-group-item" href="../module/fstats_regression.html#proc-nonlinear_least_squares">nonlinear_least_squares</a>
+            <a class="list-group-item" href="../module/fstats_regression.html#proc-regression_covariance">regression_covariance</a>
         </div>
       </div>
     </div>
@@ -224,14 +196,15 @@
             <li class="list-group-item">
               <ul class="list-inline">
                   <li class="list-inline-item">blas</li>
-                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
+                  <li class="list-inline-item"><a href='fstats_t_distribution.html'>fstats_t_distribution</a></li>
                   <li class="list-inline-item">linalg</li>
                   <li class="list-inline-item"><a href='fstats_special_functions.html'>fstats_special_functions</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
-                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
                   <li class="list-inline-item"><a href='fstats_distributions.html'>fstats_distributions</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></li>
+                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
               </ul>
             </li>
         </ul>
@@ -242,74 +215,6 @@
       <br>
 
 
-        <section>
-          <h2>Variables</h2>
-            <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-<th></th><th scope="col">Initial</th>        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fs_levenberg_marquardt_update"></span>
-              integer(kind=int32),
-            </td>
-              <td>public,</td>
-            <td>
-parameter               
-            </td>
-            <td>::</td>
-            <td><strong>FS_LEVENBERG_MARQUARDT_UPDATE</strong></td>
-<td> =</td>
-                <td>1</td>
-            <td>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fs_nielsen_update"></span>
-              integer(kind=int32),
-            </td>
-              <td>public,</td>
-            <td>
-parameter               
-            </td>
-            <td>::</td>
-            <td><strong>FS_NIELSEN_UPDATE</strong></td>
-<td> =</td>
-                <td>3</td>
-            <td>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fs_quadratic_update"></span>
-              integer(kind=int32),
-            </td>
-              <td>public,</td>
-            <td>
-parameter               
-            </td>
-            <td>::</td>
-            <td><strong>FS_QUADRATIC_UPDATE</strong></td>
-<td> =</td>
-                <td>2</td>
-            <td>
-                
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-        </section>
-        <br>
 
 
         <section>
@@ -342,7 +247,7 @@ process.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-iter~2"></span>
+              <span class="anchor" id="variable-iter"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -372,7 +277,7 @@ process.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~3"></span>
+              <span class="anchor" id="variable-resid"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -482,7 +387,7 @@ analysis.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-f~5"></span>
+              <span class="anchor" id="variable-f"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -621,6 +526,40 @@ false.</p>
         </tr>
         <tr>
             <td>
+              <span class="anchor" id="variable-covariance_condition_number"></span>
+              real(kind=real64),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>covariance_condition_number</strong></td>
+<td> =</td>
+                <td>0.0d0</td>
+            <td>
+<p>Condition number of that Jacobian; infinity indicates rank deficiency.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-covariance_rank"></span>
+              integer(kind=int32),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>covariance_rank</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+<p>Numerical rank of the final weighted Jacobian when covariance is requested.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
               <span class="anchor" id="variable-function_evaluation_count"></span>
               integer(kind=int32),
             </td>
@@ -655,7 +594,7 @@ false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-iteration_count~2"></span>
+              <span class="anchor" id="variable-iteration_count"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -923,121 +862,7 @@ error.</p>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='..\type\iteration_controls.html#boundprocedure-set_to_default'>set_to_default</a></strong> => lm_set_default_tolerances</td>
-                  <td></td>
-              </tr>
-          </tbody>
-        </table>
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum">
-      <span class="anchor" id="type-lm_solver_options"></span>
-      <h3>
-        type, public&nbsp;::&nbsp;
-        <a href='..\type\lm_solver_options.html'>lm_solver_options</a>
-        
-      </h3>
-    </div>
-    <div class="card-body">
-      <p>Options to control the Levenberg-Marquardt solver.</p>
-
-        <h4>Components</h4>
-          <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-<th></th><th scope="col">Initial</th>        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-damping_decrease_factor"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>damping_decrease_factor</strong></td>
                 <td></td>
-                <td></td>
-            <td>
-<p>The factor to use when decreasing the damping parameter.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-damping_increase_factor"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>damping_increase_factor</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-<p>The factor to use when increasing the damping parameter.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-finite_difference_step_size"></span>
-              real(kind=real64),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>finite_difference_step_size</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-<p>The step size used for the finite difference calculations of the
-Jacobian matrix.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-method~4"></span>
-              integer(kind=int32),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>method</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-<p>The solver method to utilize.
-- FS_LEVENBERG_MARQUARDT_UPDATE:
-- FS_QUADRATIC_UPDATE:
-- FS_NIELSEN_UDPATE:</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-
-        <h4>Type-Bound Procedures</h4>
-        <table class="table table-striped varlist">
-          <tbody>
-              <tr>
-                <td>  procedure, public ::
-  <strong><a href='..\type\lm_solver_options.html#boundprocedure-set_to_default~2'>set_to_default</a></strong> => lm_set_default_settings</td>
-                  <td></td>
               </tr>
           </tbody>
         </table>
@@ -1087,7 +912,7 @@ determined by the regression process.</p><a href="../type/regression_statistics.
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-probability~2"></span>
+              <span class="anchor" id="variable-probability"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1104,12 +929,12 @@ important.  A statistically important coefficient will have a
 low probability (p-value), typically 0.05 or lower; however, a 
 p-value of up to ~0.2 may be acceptable dependent upon the 
 problem.  Typically any p-value larger than ~0.2 indicates the 
-parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+parameter is not statistically important for the model.</p><a href="../type/regression_statistics.html#variable-probability" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_error~2"></span>
+              <span class="anchor" id="variable-standard_error"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -1121,7 +946,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
                 <td></td>
                 <td></td>
             <td>
-<p>The standard error for the model coefficient.</p><a href="../type/regression_statistics.html#variable-standard_error~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>The standard error for the model coefficient.</p><a href="../type/regression_statistics.html#variable-standard_error" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -1175,7 +1000,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~11"></span>
+              <span class="anchor" id="variable-p"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -1190,7 +1015,7 @@ parameter is not statistically important for the model.</p><a href="../type/regr
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~71"></span>
+              <span class="anchor" id="variable-x~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1253,7 +1078,7 @@ model.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~5"></span>
+              <span class="anchor" id="variable-resid~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1283,7 +1108,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~9"></span>
+              <span class="anchor" id="variable-c~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1298,7 +1123,7 @@ model.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~10"></span>
+              <span class="anchor" id="variable-alpha"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1346,7 +1171,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~72"></span>
+              <span class="anchor" id="variable-x~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1361,7 +1186,7 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~10"></span>
+              <span class="anchor" id="variable-y"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -1381,7 +1206,8 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The correlation coefficient.</p>
+    <p>Correlation coefficient on [-1, 1]; constant, nonfinite, or
+undersized data give NaN. Scaled centering avoids overflowing moments.</p>
 
     </div>
   </div>
@@ -1393,7 +1219,9 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
           
   <p>Computes the covariance matrix <script type="math/tex"> C </script> where 
 <script type="math/tex"> C = \left( X^{T} X \right)^{-1} </script> and <script type="math/tex"> X </script> is computed
-by design_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+by design_matrix.
+Uses an SVD of X, without forming X**T * X. Rank-deficient inputs give
+the Moore-Penrose covariance; use regression_covariance for rank diagnostics.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -1408,7 +1236,7 @@ by design_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~74"></span>
+              <span class="anchor" id="variable-x~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1474,7 +1302,7 @@ at least one (linear equation), but can be higher as desired.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-intercept~2"></span>
+              <span class="anchor" id="variable-intercept"></span>
               logical,
             </td>
 <td>intent(in)</td>
@@ -1490,7 +1318,7 @@ as part of the regression; else, false.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~73"></span>
+              <span class="anchor" id="variable-x~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1538,7 +1366,7 @@ however, if intercept is false, K must equal order.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~70"></span>
+              <span class="anchor" id="variable-x"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -1753,11 +1581,15 @@ root of machine precision.</p>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-linear_least_squares"></span> <h3>public  subroutine <a href='..\proc\linear_least_squares.html'>linear_least_squares</a>(order, intercept, x, y, coeffs, ymod, resid, stats, alpha)  
+    <div class="card-header codesum"><span class="anchor" id="proc-regression_covariance"></span> <h3>public pure subroutine <a href='..\proc\regression_covariance.html'>regression_covariance</a>(x, c, rank, condition_number)  
 </h3></div>
     <div class="card-body">
           
-  <p>Computes a linear least-squares regression to fit a set of data.</p><a href="../proc/linear_least_squares.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+  <p>Computes the unscaled regression covariance using an SVD of X itself.
+Singular directions below MAX(M, N) * EPSILON * largest singular value
+are discarded, giving the Moore-Penrose covariance on identifiable directions.
+Rank-deficient fits require care: a zero pseudocovariance along a discarded
+direction does not imply that the corresponding parameter is known exactly.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -1772,447 +1604,62 @@ root of machine precision.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-order~2"></span>
-              integer(kind=int32),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>order</strong></td>
-            <td>
-<p>The order of the equation to fit.  This value must be at 
-least one (linear equation), but can be higher as desired, 
-as long as there is sufficient data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-intercept~3"></span>
-              logical,
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>intercept</strong></td>
-            <td>
-<p>Set to true if the intercept is being computed as part of 
-the regression; else, false.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~75"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong>(:)</td>
-            <td>
-<p>An N-element array containing the independent variable
-measurement points.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~11"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>y</strong>(:)</td>
-            <td>
-<p>An N-element array containing the dependent variable
-measurement points.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-coeffs~2"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>coeffs</strong>(:)</td>
-            <td>
-<p>An ORDER+1 element array where the coefficients will be written.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-ymod~3"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>ymod</strong>(:)</td>
-            <td>
-<p>An N-element array where the modeled data will be written.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-resid~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>resid</strong>(:)</td>
-            <td>
-<p>An N-element array where the residual error data will be 
-written (modeled - actual).</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-stats~3"></span>
-              type(<a href='..\type\regression_statistics.html'>regression_statistics</a>),
-            </td>
-<td>intent(out),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>stats</strong>(:)</td>
-            <td>
-<p>An M-element array of regression_statistics items where 
-M = ORDER + 1 when intercept is set to true; however, if 
-intercept is set to false, M = ORDER.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha~9"></span>
+              <span class="anchor" id="variable-x~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha</strong></td>
-            <td>
-<p>The significance level at which to evaluate the confidence 
-intervals.  The default value is 0.05 such that a 95% 
-confidence interval is calculated.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-nonlinear_least_squares"></span> <h3>public  subroutine <a href='..\proc\nonlinear_least_squares.html'>nonlinear_least_squares</a>(fun, x, y, params, ymod, resid, weights, maxp, minp, stats, alpha, controls, settings, info, status, cov, args)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Performs a nonlinear regression to fit a model using a version
-of the Levenberg-Marquardt algorithm.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-fun~2"></span>
-              procedure(<a href='..\interface\regression_function.html'>regression_function</a>),
-            </td>
-<td>intent(in),</td>
               <td></td>            <td>
-              pointer
-            </td>
-            <td>::</td>
-            <td><strong>fun</strong></td>
-            <td>
-<p>A pointer to the regression_function to evaluate.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~76"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong>(:)</td>
-            <td>
-<p>The M-element array containing independent data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~12"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>y</strong>(:)</td>
-            <td>
-<p>The M-element array containing dependent data.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-params~5"></span>
-              real(kind=real64),
-            </td>
-<td>intent(inout)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>params</strong>(:)</td>
-            <td>
-<p>On input, the N-element array containing the initial estimate
-of the model parameters.  On output, the computed model 
-parameters.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-ymod~4"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>ymod</strong>(:)</td>
-            <td>
-<p>An M-element array where the modeled dependent data will
-be written.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-resid~6"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>resid</strong>(:)</td>
-            <td>
-<p>An M-element array where the model residuals will be
-written.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-weights"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              target
-            </td>
-            <td>::</td>
-            <td><strong>weights</strong>(:)</td>
-            <td>
-<p>An optional M-element array allowing the weighting of
-individual points.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-maxp"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              target
-            </td>
-            <td>::</td>
-            <td><strong>maxp</strong>(:)</td>
-            <td>
-<p>An optional N-element array that can be used as upper limits 
-on the parameter values.  If no upper limit is requested for
-a particular parameter, utilize a very large value.  The 
-internal default is to utilize huge() as a value.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-minp"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              target
-            </td>
-            <td>::</td>
-            <td><strong>minp</strong>(:)</td>
-            <td>
-<p>An optional N-element array that can be used as lower limits 
-on the parameter values.  If no lower limit is requested for
-a particalar parameter, utilize a very large magnitude, but 
-negative, value.  The internal default is to utilize -huge() 
-as a value.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-stats~4"></span>
-              type(<a href='..\type\regression_statistics.html'>regression_statistics</a>),
-            </td>
-<td>intent(out),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>stats</strong>(:)</td>
-            <td>
-<p>An optional N-element array that, if supplied, will be used 
-to return statistics about the fit for each parameter.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha~11"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha</strong></td>
-            <td>
-<p>The significance level at which to evaluate the confidence 
-intervals.  The default value is 0.05 such that a 95% 
-confidence interval is calculated.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-controls"></span>
-              type(<a href='..\type\iteration_controls.html'>iteration_controls</a>),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>controls</strong></td>
-            <td>
-<p>An optional input providing custom iteration controls.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-settings"></span>
-              type(<a href='..\type\lm_solver_options.html'>lm_solver_options</a>),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>settings</strong></td>
-            <td>
-<p>An optional input providing custom settings for the solver.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-info"></span>
-              type(<a href='..\type\convergence_info.html'>convergence_info</a>),
-            </td>
-<td>intent(out),</td>
-              <td>optional,</td>            <td>
-              target
-            </td>
-            <td>::</td>
-            <td><strong>info</strong></td>
-            <td>
-<p>An optional output that can be used to gain information about
-the iterative solution and the nature of the convergence.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-status"></span>
-              procedure(<a href='..\interface\iteration_update.html'>iteration_update</a>),
-            </td>
-<td>intent(in),</td>
-              <td>optional,</td>            <td>
-              pointer
-            </td>
-            <td>::</td>
-            <td><strong>status</strong></td>
-            <td>
-<p>An optional pointer to a routine that can be used to extract
-iteration information.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-cov"></span>
-              real(kind=real64),
-            </td>
-<td>intent(out),</td>
-              <td>optional,</td>            <td>
               dimension(:,:)
             </td>
             <td>::</td>
-            <td><strong>cov</strong></td>
+            <td><strong>x</strong></td>
             <td>
-<p>An optional N-by-N matrix that, if supplied, will be used to return
-the covariance matrix.</p>
+<p>M-by-N design matrix, or a Jacobian whose rows include sqrt(weights).</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-args~3"></span>
-              class(*),
+              <span class="anchor" id="variable-c~3"></span>
+              real(kind=real64),
             </td>
-<td>intent(inout),</td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable, dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>c</strong></td>
+            <td>
+<p>N-by-N covariance before residual-variance scaling. Nonfinite X gives NaNs.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-rank"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(out),</td>
               <td>optional</td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>args</strong></td>
+            <td><strong>rank</strong></td>
             <td>
-<p>An optional argument allowing the passing in/out of data for the
-<a href="..\proc\nonlinear_least_squares.html#variable-fun~2">fun</a> routine.</p>
+<p>Number of retained singular directions; zero for empty/invalid input.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-condition_number"></span>
+              real(kind=real64),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>condition_number</strong></td>
+            <td>
+<p>Condition number of X; +infinity for rank deficiency, NaN for invalid X.</p>
             </td>
         </tr>
     </tbody>
@@ -2235,21 +1682,40 @@ the covariance matrix.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

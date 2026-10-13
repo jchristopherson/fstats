@@ -52,7 +52,7 @@ program example
     call plt%draw()
 
     ! Compute the mean via bootstrapping
-    fun => mean
+    fun => mean_array
     rst = bootstrap(fun, x)
 
     ! Display the results
@@ -68,4 +68,11 @@ program example
     call plt%push(pd)
     call plt%set_title("Statistic Distribution")
     call plt%draw()
+
+contains
+    pure function mean_array(x_) result(rst_)
+        real(real64), intent(in), dimension(:) :: x_
+        real(real64) :: rst_
+        rst_ = mean(x_)
+    end function
 end program

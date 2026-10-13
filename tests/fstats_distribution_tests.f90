@@ -27,8 +27,235 @@ module fstats_distribution_tests
     use iso_fortran_env
     use fstats
     use fstats_test_helper
+    use ieee_arithmetic
     implicit none
+
+    type, extends(distribution) :: fallback_distribution
+    contains
+        procedure :: pdf => fallback_probability
+        procedure :: cdf => fallback_probability
+        procedure :: mean => fallback_property
+        procedure :: median => fallback_property
+        procedure :: mode => fallback_property
+        procedure :: variance => fallback_property
+        procedure :: recenter => fallback_recenter
+    end type
+
+    type, extends(multivariate_distribution) :: fallback_multivariate_distribution
+    contains
+        procedure :: pdf => fallback_multivariate_pdf
+    end type
 contains
+    function test_distribution_dispatch() result(rst)
+        use fstats_t_distribution, only : t_distribution
+        use fstats_normal_distribution, only : normal_distribution
+        use fstats_f_distribution, only : f_distribution
+        use fstats_chi_squared_distribution, only : chi_squared_distribution
+        use fstats_binomial_distribution, only : binomial_distribution
+        use fstats_log_normal_distribution, only : log_normal_distribution
+        use fstats_poisson_distribution, only : poisson_distribution
+        use fstats_multivariate_normal_distribution, only : multivariate_normal_distribution
+        logical :: rst
+        class(distribution), allocatable :: law
+        class(multivariate_distribution), allocatable :: multivariate_law
+        type(multivariate_normal_distribution) :: multivariate_normal
+        type(fallback_multivariate_distribution) :: multivariate_fallback
+        real(real64) :: nan, infinity, density, value
+
+        nan = ieee_value(0.0d0, ieee_quiet_nan)
+        infinity = ieee_value(0.0d0, ieee_positive_inf)
+        law = t_distribution(dof=1.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, 1.0d0 / (4.0d0 * acos(0.0d0)), 0.75d0, 0.25d0)
+        law = normal_distribution(standard_deviation=1.0d0, mean_value=0.0d0)
+        density = 1.0d0 / sqrt(4.0d0 * acos(0.0d0))
+        rst = check_distribution_bindings(law, 0.0d0, density, 0.5d0, 0.5d0) .and. rst
+        law = f_distribution(d1=2.0d0, d2=2.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, 0.25d0, 0.5d0, 0.5d0) .and. rst
+        law = chi_squared_distribution(dof=2)
+        rst = check_distribution_bindings(law, 2.0d0, 0.5d0 / exp(1.0d0), &
+            1.0d0 - exp(-1.0d0), exp(-1.0d0)) .and. rst
+        rst = abs(law%log_survival(2000.0d0) + 1000.0d0) < 1.0d-12 .and. rst
+        law = binomial_distribution(n=2, p=0.5d0)
+        rst = check_distribution_bindings(law, 1.0d0, 0.5d0, 0.75d0, 0.25d0) .and. rst
+        law = log_normal_distribution(standard_deviation=1.0d0, mean_value=0.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, density, 0.5d0, 0.5d0) .and. rst
+        law = poisson_distribution(occrence_rate=2.0d0)
+        rst = check_distribution_bindings(law, 1.0d0, 2.0d0 * exp(-2.0d0), &
+            3.0d0 * exp(-2.0d0), 1.0d0 - 3.0d0 * exp(-2.0d0)) .and. rst
+        law = fallback_distribution()
+        rst = check_distribution_bindings(law, 0.25d0, 0.25d0, 0.25d0, 0.75d0) .and. rst
+        rst = law%log_pdf(0.0d0) == -infinity .and. rst
+        rst = law%log_cdf(0.0d0) == -infinity .and. rst
+        rst = law%log_survival(1.0d0) == -infinity .and. rst
+        rst = ieee_is_nan(law%log_pdf(-1.0d0)) .and. rst
+        rst = ieee_is_nan(law%log_cdf(-1.0d0)) .and. rst
+        rst = ieee_is_nan(law%log_survival(2.0d0)) .and. rst
+        rst = ieee_is_nan(law%log_pdf(nan)) .and. rst
+        rst = ieee_is_nan(law%survival(nan)) .and. rst
+        rst = ieee_is_nan(law%log_cdf(nan)) .and. rst
+        rst = ieee_is_nan(law%log_survival(nan)) .and. rst
+        call multivariate_normal%initialize([0.0d0], reshape([1.0d0], [1, 1]))
+        multivariate_law = multivariate_normal
+        value = multivariate_law%log_pdf([40.0d0])
+        rst = abs(value + 800.0d0 + 0.5d0 * log(4.0d0 * acos(0.0d0))) < 1.0d-12 .and. rst
+        multivariate_law = multivariate_fallback
+        rst = abs(multivariate_law%log_pdf([0.25d0]) - log(0.25d0)) < 1.0d-14 .and. rst
+        rst = multivariate_law%log_pdf([0.0d0]) == -infinity .and. rst
+        rst = ieee_is_nan(multivariate_law%log_pdf([-1.0d0])) .and. rst
+        rst = ieee_is_nan(multivariate_law%log_pdf([nan])) .and. rst
+        if (.not.rst) print '(A)', 'TEST FAILED: distribution dispatch and fallbacks'
+    end function
+
+    function check_distribution_bindings(law, point, density, lower_tail, upper_tail) result(rst)
+        class(distribution), intent(in) :: law
+        real(real64), intent(in) :: point, density, lower_tail, upper_tail
+        logical :: rst
+        real(real64), parameter :: tolerance = 1.0d-12
+
+        rst = abs(law%log_pdf(point) - log(density)) < tolerance
+        rst = abs(law%survival(point) - upper_tail) < tolerance .and. rst
+        rst = abs(law%log_cdf(point) - log(lower_tail)) < tolerance .and. rst
+        rst = abs(law%log_survival(point) - log(upper_tail)) < tolerance .and. rst
+    end function
+
+    pure elemental function fallback_probability(this, x) result(rst)
+        class(fallback_distribution), intent(in) :: this
+        real(real64), intent(in) :: x
+        real(real64) :: rst
+
+        rst = x
+    end function
+
+    pure function fallback_property(this) result(rst)
+        class(fallback_distribution), intent(in) :: this
+        real(real64) :: rst
+
+        rst = 0.0d0
+    end function
+
+    subroutine fallback_recenter(this, x)
+        class(fallback_distribution), intent(inout) :: this
+        real(real64), intent(in) :: x
+    end subroutine
+
+    pure function fallback_multivariate_pdf(this, x) result(rst)
+        class(fallback_multivariate_distribution), intent(in) :: this
+        real(real64), intent(in) :: x(:)
+        real(real64) :: rst
+
+        rst = x(1)
+    end function
+
+    function test_distribution_numerical_robustness() result(rst)
+        !! Checks extreme tails, log densities, discrete boundaries, and invalid inputs.
+        logical :: rst
+            !! True when every numerical stress case passes.
+        type(normal_distribution) :: normal
+        type(log_normal_distribution) :: lognormal
+        type(t_distribution) :: student
+        type(binomial_distribution) :: binomial
+        type(poisson_distribution) :: poisson
+        type(chi_squared_distribution) :: chisq
+        type(f_distribution) :: fisher
+        real(real64) :: value, nan
+
+        rst = .true.
+        nan = ieee_value(0.0d0, ieee_quiet_nan)
+        call normal%standardize()
+        rst = rst .and. normal%pdf(40.0d0) == 0.0d0
+        rst = rst .and. ieee_is_finite(normal%log_pdf(40.0d0))
+        value = 7.619853024160526d-24
+        rst = rst .and. abs(normal%survival(10.0d0) / value - 1.0d0) < 1.0d-13
+        rst = rst .and. abs(normal%cdf(-10.0d0) / value - 1.0d0) < 1.0d-13
+        rst = rst .and. abs(normal%log_survival(40.0d0) + 804.6084420137538d0) < 1.0d-11
+        rst = rst .and. normal%log_cdf(-40.0d0) == normal%log_survival(40.0d0)
+        normal%mean_value = -1.0d308
+        normal%standard_deviation = 1.0d308
+        rst = rst .and. abs(normal%log_pdf(1.0d308) + 2.0d0 + log(1.0d308) &
+            + 0.5d0 * log(4.0d0 * acos(0.0d0))) < 1.0d-12
+        call normal%standardize()
+        lognormal%mean_value = 2.0d0
+        lognormal%standard_deviation = 0.5d0
+        rst = rst .and. abs(lognormal%cdf(exp(2.0d0)) - 0.5d0) < 1.0d-14
+        rst = rst .and. lognormal%pdf(0.0d0) == 0.0d0
+        rst = rst .and. lognormal%survival(-1.0d0) == 1.0d0
+        rst = rst .and. ieee_is_nan(lognormal%log_pdf(nan))
+        lognormal%mean_value = 0.0d0
+        lognormal%standard_deviation = 1.0d-10
+        rst = rst .and. abs(lognormal%variance() / 1.0d-20 - 1.0d0) < 1.0d-14
+        student%dof = 1000.0d0
+        rst = rst .and. abs(student%pdf(0.0d0) - 0.3988425573138582d0) < 1.0d-12
+        rst = rst .and. student%cdf(-20.0d0) > 0.0d0
+        binomial%n = 1000
+        binomial%p = 0.5d0
+        rst = rst .and. abs(binomial%pdf(500.0d0) - 0.02522501817836080d0) < 1.0d-12
+        rst = rst .and. binomial%pdf(500.5d0) == 0.0d0
+        rst = rst .and. binomial%cdf(1000.0d0) == 1.0d0
+        binomial%p = 0.0d0
+        rst = rst .and. binomial%pdf(0.0d0) == 1.0d0
+        poisson%occrence_rate = 1000.0d0
+        rst = rst .and. abs(poisson%pdf(1000.0d0) - 0.01261461134872150d0) < 1.0d-12
+        rst = rst .and. abs(poisson%cdf(1000.0d0) + poisson%survival(1000.0d0) - 1.0d0) < 1.0d-13
+        poisson%occrence_rate = 0.0d0
+        rst = rst .and. poisson%pdf(0.0d0) == 1.0d0
+        chisq%dof = 2
+        rst = rst .and. abs(chisq%survival(100.0d0) / exp(-50.0d0) - 1.0d0) < 1.0d-13
+        fisher%d1 = 2.0d0
+        fisher%d2 = 2.0d0
+        rst = rst .and. abs(fisher%survival(1.0d20) / 1.0d-20 - 1.0d0) < 1.0d-13
+        normal%standard_deviation = 0.0d0
+        rst = rst .and. ieee_is_nan(normal%pdf(0.0d0))
+        chisq%dof = 2
+        rst = rst .and. chisq%survival(2000.0d0) == 0.0d0
+        rst = rst .and. abs(chisq%log_survival(2000.0d0) + 1000.0d0) < 1.0d-12
+        poisson%occrence_rate = 1000.0d0
+        rst = rst .and. abs(poisson%log_cdf(0.0d0) + 1000.0d0) < 1.0d-12
+        if (.not.rst) print '(A)', 'TEST FAILED: distribution numerical robustness'
+    end function
+
+    function test_multivariate_normal_numerical_robustness() result(rst)
+        !! Checks Cholesky log densities with overflowing/underflowing determinants.
+        logical :: rst
+            !! True when both covariance scales give the analytic density.
+        type(multivariate_normal_distribution) :: normal
+        real(real64), dimension(2,2) :: covariance_values
+        real(real64), dimension(2) :: point
+        real(real64) :: expected
+
+        rst = .true.
+        covariance_values = 0.0d0
+        covariance_values(1,1) = 1.0d200
+        covariance_values(2,2) = 1.0d200
+        point = 1.0d100
+        call normal%initialize([0.0d0, 0.0d0], covariance_values)
+        expected = -1.0d0 - log(4.0d0 * acos(0.0d0)) - log(1.0d200)
+        rst = rst .and. abs(normal%log_pdf(point) - expected) < 1.0d-12
+        covariance_values(1,1) = 1.0d-200
+        covariance_values(2,2) = 1.0d-200
+        point = 1.0d-100
+        call normal%initialize([0.0d0, 0.0d0], covariance_values)
+        expected = -1.0d0 - log(4.0d0 * acos(0.0d0)) - log(1.0d-200)
+        rst = rst .and. abs(normal%log_pdf(point) - expected) < 1.0d-12
+        if (.not.rst) print '(A)', 'TEST FAILED: multivariate-normal numerical robustness'
+    end function
+
+    function test_special_function_numerical_robustness() result(rst)
+        !! Checks log tails, small-argument helpers, invalid domains, and iteration limits.
+        logical :: rst
+            !! True when all special-function numerical contracts hold.
+
+        rst = abs(log_regularized_gamma_upper(1.0d0, 1000.0d0) + 1000.0d0) < 1.0d-12
+        rst = rst .and. abs(log_regularized_beta(1000.0d0, 1.0d0, 0.1d0) &
+            - 1000.0d0 * log(0.1d0)) < 1.0d-10
+        rst = rst .and. abs(stable_log1p(1.0d-20) / 1.0d-20 - 1.0d0) < 1.0d-14
+        rst = rst .and. abs(stable_expm1(1.0d-20) / 1.0d-20 - 1.0d0) < 1.0d-14
+        rst = rst .and. ieee_is_nan(regularized_beta(2.0d0, 3.0d0, 0.4d0, 0_int32))
+        rst = rst .and. ieee_is_nan(regularized_gamma_lower(2.0d0, 1.0d0, 0_int32))
+        rst = rst .and. ieee_is_nan(regularized_gamma_upper(2.0d0, 4.0d0, 0_int32))
+        rst = rst .and. ieee_is_nan(regularized_beta(-1.0d0, 1.0d0, 0.5d0))
+        if (.not.rst) print '(A)', 'TEST FAILED: special-function numerical robustness'
+    end function
+
 ! ------------------------------------------------------------------------------
     function t_distribution_test_1() result(rst)
         ! Arguments
