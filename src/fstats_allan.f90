@@ -25,9 +25,17 @@
 
 module fstats_allan
     use iso_fortran_env
+    use fstats_data_columns, only : data_column
+    use fstats_helper_routines, only : column_values
     implicit none
     private
     public :: allan_variance
+
+    interface allan_variance
+        module procedure :: allan_variance_array
+        module procedure :: allan_variance_column
+    end interface
+
 contains
 ! ------------------------------------------------------------------------------
 ! REF: Yadav, Shrikanth & Shastri, Saurav & Chakravarthi, Ghanashyam & Kumar, 
@@ -39,7 +47,7 @@ contains
 ! https://www.researchgate.net/publication/324738301_A_Fast_Parallel_Algorithm_for_Fully_Overlapped_Allan_Variance_and_Total_Variance_for_Analysis_and_Modeling_of_Noise_in_Inertial_Sensors
 ! https://github.com/shrikanth95/Fast-Parallel-Fully-Overlapped-Allan-Variance-and-Total-Variance/blob/master/fast_FOAV.m
 
-function allan_variance(x, dt) result(rst)
+pure function allan_variance_array(x, dt) result(rst)
     !! Computes the Allan variance of a data set.
     !!
     !! Remarks
@@ -95,6 +103,34 @@ function allan_variance(x, dt) result(rst)
         rst(m,1) = deltaT * m
         rst(m,2) = temp / (2.0d0 * (n - 2 * m + 1) * m**2)
     end do
+end function
+
+! ------------------------------------------------------------------------------
+pure function allan_variance_column(x, dt) result(rst)
+    !! Computes the Allan variance of a data set.
+    !!
+    !! Remarks
+    !!
+    !! This implementation computes the fully overlapped Allan variance 
+    !! using the method presented by Yadav et. al.
+    !! 
+    !! Yadav, Shrikanth & Shastri, Saurav & Chakravarthi, Ghanashyam & Kumar, 
+    !! Viraj & Rao, Divya & Agrawal, Vinod. (2018). A Fast, Parallel Algorithm 
+    !! for Fully Overlapped Allan Variance and Total Variance for Analysis and 
+    !! Modeling of Noise in Inertial Sensors. IEEE Sensors Letters. PP. 1-1. 
+    !! 10.1109/LSENS.2018.2829799.
+    class(data_column), intent(in) :: x
+        !! The N-element data set to analyze.
+    real(real64), intent(in), optional :: dt
+        !! An optional input specifying the time increment between 
+        !! samples in x.  If not specified, this value is set to 1.
+    real(real64), allocatable, dimension(:,:) :: rst
+        !! An M-by-2 array containing the results where M is N / 2 - 1
+        !! if N is even; else, M is (N - 1) / 2 - 1 if N is odd.  The 
+        !! first column contains the averaging times associated with 
+        !! the M results stored in the second column.
+
+    rst = allan_variance_array(column_values(x), dt)
 end function
 
 ! ------------------------------------------------------------------------------
