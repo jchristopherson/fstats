@@ -10,12 +10,14 @@ contains
     function test_data_table() result(rst)
         !! Exercises all table bindings, heterogeneous storage, and owned copies.
         logical :: rst
-        type(data_table) :: table, empty_rows
+        type(data_table) :: table, empty_rows, view_source, copied_table, replacement_table
+        type(data_table_view) :: live_view, single_row_view, detached_view
         type(integer_column) :: integers
         type(real_column) :: reals
         type(logical_column) :: logicals
         type(string_column) :: texts
         class(data_column), pointer :: column, second
+        class(*), pointer, dimension(:) :: values
         integer(int32) :: column_index
 
         rst = .true.
@@ -145,6 +147,122 @@ contains
         column => empty_rows%get_column(1)
         call check(column%count() == 0, rst, 'get zero-row column')
         nullify(column)
+
+        call view_source%add_column(integer_column([10, 20, 30, 40]))
+        call view_source%add_column(real_column([1.0d0, 2.0d0, 3.0d0, 4.0d0]))
+        live_view = view_source%view(2, 3, 2, 2)
+        call check(live_view%row_count() == 2, rst, 'view initial row count')
+        call check(live_view%column_count() == 1, rst, 'view initial column count')
+        values => live_view%column_slice(1)
+        select type (values)
+        type is (real(real64))
+            call check(values(1) == 2.0d0 .and. values(2) == 3.0d0, &
+                rst, 'view selects requested rows')
+            values(1) = 25.0d0
+        class default
+            call check(.false., rst, 'view real slice dynamic type')
+        end select
+        nullify(values)
+        column => view_source%get_column(2)
+        select type (column)
+        type is (real_column)
+            call check(column%get(2) == 25.0d0, rst, 'view writes shared source data')
+        class default
+            call check(.false., rst, 'view real source dynamic type')
+        end select
+        nullify(column)
+
+        call view_source%insert_column(1, integer_column([5, 6, 7, 8]))
+        values => live_view%column_slice(1)
+        select type (values)
+        type is (integer(int32))
+            call check(values(1) == 20 .and. values(2) == 30, &
+                rst, 'view follows current positional columns after insertion')
+        class default
+            call check(.false., rst, 'view inserted integer slice dynamic type')
+        end select
+        nullify(values)
+
+        single_row_view = view_source%slice(2, 2)
+        call check(single_row_view%row_count() == 1, rst, 'single-row slice count')
+        values => single_row_view%column_slice(1)
+        select type (values)
+        type is (integer(int32))
+            call check(size(values) == 1 .and. values(1) == 6, &
+                rst, 'single-row slice value')
+        class default
+            call check(.false., rst, 'single-row slice dynamic type')
+        end select
+        nullify(values)
+
+        call view_source%remove_column(2)
+        values => live_view%column_slice(1)
+        select type (values)
+        type is (real(real64))
+            call check(values(1) == 25.0d0 .and. values(2) == 3.0d0, &
+                rst, 'view follows current positional columns after removal')
+        class default
+            call check(.false., rst, 'view removed real slice dynamic type')
+        end select
+        nullify(values)
+        call view_source%remove_column(2)
+        call check(live_view%column_count() == 0, rst, 'view remains valid when selection disappears')
+        call view_source%add_column(real_column([9.0d0, 10.0d0, 11.0d0, 12.0d0]))
+        call check(live_view%column_count() == 1, rst, 'view reflects later positional insertion')
+
+        call replacement_table%add_column(integer_column([100, 200, 300, 400]))
+        call replacement_table%add_column(real_column([110.0d0, 210.0d0, 310.0d0, 410.0d0]))
+        view_source = replacement_table
+        values => live_view%column_slice(1)
+        select type (values)
+        type is (real(real64))
+            call check(values(1) == 210.0d0 .and. values(2) == 310.0d0, &
+                rst, 'view remains attached across table assignment')
+        class default
+            call check(.false., rst, 'assigned view slice dynamic type')
+        end select
+        nullify(values)
+
+        detached_view = make_detached_view()
+        call check(detached_view%row_count() == 2, rst, 'view retains state after table destruction')
+        values => detached_view%column_slice(1)
+        select type (values)
+        type is (integer(int32))
+            call check(values(1) == 12 .and. values(2) == 13, &
+                rst, 'detached view retains values')
+        class default
+            call check(.false., rst, 'detached view slice dynamic type')
+        end select
+        nullify(values)
+
+        copied_table = view_source
+        column => copied_table%get_column(1)
+        select type (column)
+        type is (integer_column)
+            call column%set(1, -1)
+        class default
+            call check(.false., rst, 'copied table dynamic type')
+        end select
+        nullify(column)
+        column => view_source%get_column(1)
+        select type (column)
+        type is (integer_column)
+            call check(column%get(1) == 100, rst, 'original table dynamic type after copy')
+        class default
+            call check(.false., rst, 'original table dynamic type after copy')
+        end select
+        nullify(column)
+    end function
+
+    function make_detached_view() result(rst)
+        !! Creates a view whose source table is finalized before the caller uses it.
+        type(data_table_view) :: rst
+            !! The view retaining the local table's shared state.
+
+        type(data_table) :: source
+
+        call source%add_column(integer_column([11, 12, 13]))
+        rst = source%view(2, 3, 1, 1)
     end function
 
     subroutine add_local_column(table)

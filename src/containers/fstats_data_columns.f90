@@ -492,7 +492,7 @@ contains
             !! The array pointer, or null if unallocated.
 
         nullify(rst)
-        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first > last) error stop FS_INVALID_ARGUMENT_ERROR
         if (first < 1) error stop FS_INVALID_INPUT_ERROR
         if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
         if (allocated(this%m_values)) rst => this%m_values(first:last)
@@ -695,7 +695,7 @@ contains
             !! The array pointer, or null if unallocated.
 
         nullify(rst)
-        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first > last) error stop FS_INVALID_ARGUMENT_ERROR
         if (first < 1) error stop FS_INVALID_INPUT_ERROR
         if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
         if (allocated(this%m_values)) rst => this%m_values(first:last)
@@ -904,7 +904,7 @@ contains
             !! The array pointer, or null if unallocated.
 
         nullify(rst)
-        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first > last) error stop FS_INVALID_ARGUMENT_ERROR
         if (first < 1) error stop FS_INVALID_INPUT_ERROR
         if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
         if (allocated(this%m_values)) rst => this%m_values(first:last)
@@ -1107,7 +1107,7 @@ contains
             !! The array pointer, or null if unallocated.
 
         nullify(rst)
-        if (first >= last) error stop FS_INVALID_ARGUMENT_ERROR
+        if (first > last) error stop FS_INVALID_ARGUMENT_ERROR
         if (first < 1) error stop FS_INVALID_INPUT_ERROR
         if (last > this%count()) error stop FS_INVALID_INPUT_ERROR
         if (allocated(this%m_values)) rst => this%m_values(first:last)
