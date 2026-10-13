@@ -134,7 +134,7 @@ jobs:
           CC: ${{ steps.setup-fortran.outputs.cc }}
           FPM_FC: ${{ steps.setup-fortran.outputs.fc }}
           FPM_CC: ${{ steps.setup-fortran.outputs.cc }}
-          FPM_FLAGS: ${{ matrix.shared && '--flag=-fPIC' || '' }}
+          FPM_FLAGS: ${{ matrix.shared && '--flag=-fPIC' || '' }}${{ matrix.compiler == 'intel' && ' --flag=-fp-model --flag=strict --flag=-no-ftz' || '' }}
         run: |
           if [[ -n "$FPM_FLAGS" ]]; then
             fpm build $FPM_FLAGS
@@ -149,7 +149,7 @@ jobs:
           CC: ${{ steps.setup-fortran.outputs.cc }}
           FPM_FC: ${{ steps.setup-fortran.outputs.fc }}
           FPM_CC: ${{ steps.setup-fortran.outputs.cc }}
-          FPM_FLAGS: ${{ matrix.shared && '--flag=-fPIC' || '' }}
+          FPM_FLAGS: ${{ matrix.shared && '--flag=-fPIC' || '' }}${{ matrix.compiler == 'intel' && ' --flag=-fp-model --flag=strict --flag=-no-ftz' || '' }}
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
             export PATH="$PATH:${MSYS2_MINGW_BIN}"
