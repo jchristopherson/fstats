@@ -12,29 +12,14 @@
 
     <title>fstats_special_functions &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -62,6 +47,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -87,8 +75,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 4.0% of total for modules and submodules.">220 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 3.5% of total for modules and submodules.">327 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -108,11 +97,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -144,9 +131,14 @@
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_beta">incomplete_beta</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_lower">incomplete_gamma_lower</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-incomplete_gamma_upper">incomplete_gamma_upper</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-log_regularized_beta">log_regularized_beta</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-log_regularized_gamma_lower">log_regularized_gamma_lower</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-log_regularized_gamma_upper">log_regularized_gamma_upper</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_beta">regularized_beta</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_gamma_lower">regularized_gamma_lower</a>
             <a class="list-group-item" href="../module/fstats_special_functions.html#proc-regularized_gamma_upper">regularized_gamma_upper</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-stable_expm1">stable_expm1</a>
+            <a class="list-group-item" href="../module/fstats_special_functions.html#proc-stable_log1p">stable_log1p</a>
         </div>
       </div>
     </div>
@@ -212,7 +204,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~16"></span>
+              <span class="anchor" id="variable-a~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -227,7 +219,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~9"></span>
+              <span class="anchor" id="variable-b~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -272,7 +264,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~124"></span>
+              <span class="anchor" id="variable-x~56"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -317,7 +309,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~19"></span>
+              <span class="anchor" id="variable-a~8"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -332,7 +324,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~12"></span>
+              <span class="anchor" id="variable-b~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -347,7 +339,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~117"></span>
+              <span class="anchor" id="variable-x~49"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -392,7 +384,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~25"></span>
+              <span class="anchor" id="variable-a~14"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -407,7 +399,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~123"></span>
+              <span class="anchor" id="variable-x~55"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -452,7 +444,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~24"></span>
+              <span class="anchor" id="variable-a~13"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -467,7 +459,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~122"></span>
+              <span class="anchor" id="variable-x~54"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -493,7 +485,248 @@
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-regularized_beta"></span> <h3>public pure elemental function <a href='..\proc\regularized_beta.html'>regularized_beta</a>(a, b, x) result(rst)  
+    <div class="card-header codesum"><span class="anchor" id="proc-log_regularized_beta"></span> <h3>public pure elemental function <a href='..\proc\log_regularized_beta.html'>log_regularized_beta</a>(a, b, x, max_iterations) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Log regularized beta; invalid inputs or nonconvergence return NaN.
+The leading factor and complementary branch are evaluated in log space.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>Finite, positive beta shape parameters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-b"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>b</strong></td>
+            <td>
+<p>Finite, positive beta shape parameters.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~43"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>Integration limit on [0, 1].</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iterations"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iterations</strong></td>
+            <td>
+<p>Continued-fraction iteration limit; default 1000.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log ratio; x = 0 gives -infinity, x = 1 gives zero.</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-log_regularized_gamma_lower"></span> <h3>public pure elemental function <a href='..\proc\log_regularized_gamma_lower.html'>log_regularized_gamma_lower</a>(a, x, max_iterations) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Log lower gamma ratio; invalid inputs or nonconvergence return NaN.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~3"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>Finite, positive gamma shape parameter.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~44"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>Nonnegative integration limit; +infinity is accepted.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iterations~2"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iterations</strong></td>
+            <td>
+<p>Series/continued-fraction iteration limit; default 10000.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log P(a, x); x = 0 gives -infinity, x = +infinity gives zero.</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-log_regularized_gamma_upper"></span> <h3>public pure elemental function <a href='..\proc\log_regularized_gamma_upper.html'>log_regularized_gamma_upper</a>(a, x, max_iterations) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Log upper gamma ratio; invalid inputs or nonconvergence return NaN.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~4"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>Finite, positive gamma shape parameter.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~45"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>Nonnegative integration limit; +infinity is accepted.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iterations~3"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iterations</strong></td>
+            <td>
+<p>Series/continued-fraction iteration limit; default 10000.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log Q(a, x); x = 0 gives zero, x = +infinity gives -infinity.</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-regularized_beta"></span> <h3>public pure elemental function <a href='..\proc\regularized_beta.html'>regularized_beta</a>(a, b, x, max_iterations) result(rst)  
 </h3></div>
     <div class="card-body">
           
@@ -512,7 +745,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~17"></span>
+              <span class="anchor" id="variable-a~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -527,7 +760,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b~10"></span>
+              <span class="anchor" id="variable-b~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -542,7 +775,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~115"></span>
+              <span class="anchor" id="variable-x~47"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -553,6 +786,21 @@
             <td><strong>x</strong></td>
             <td>
 <p>The upper limit of the integration.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iterations~4"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iterations</strong></td>
+            <td>
+<p>Iteration limit; nonconvergence returns NaN.</p>
             </td>
         </tr>
     </tbody>
@@ -568,7 +816,7 @@
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_lower"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_lower.html'>regularized_gamma_lower</a>(a, x) result(rst)  
+    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_lower"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_lower.html'>regularized_gamma_lower</a>(a, x, max_iterations) result(rst)  
 </h3></div>
     <div class="card-body">
           
@@ -587,7 +835,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~20"></span>
+              <span class="anchor" id="variable-a~9"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -602,7 +850,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~118"></span>
+              <span class="anchor" id="variable-x~50"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -614,6 +862,21 @@
             <td>
 <p>The value at which to evaluate the function.  The value must be
 non-negative.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iterations~6"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iterations</strong></td>
+            <td>
+<p>Iteration limit; nonconvergence returns NaN.</p>
             </td>
         </tr>
     </tbody>
@@ -629,7 +892,7 @@ non-negative.</p>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_upper"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_upper.html'>regularized_gamma_upper</a>(a, x) result(rst)  
+    <div class="card-header codesum"><span class="anchor" id="proc-regularized_gamma_upper"></span> <h3>public pure elemental function <a href='..\proc\regularized_gamma_upper.html'>regularized_gamma_upper</a>(a, x, max_iterations) result(rst)  
 </h3></div>
     <div class="card-body">
           
@@ -648,7 +911,7 @@ non-negative.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~21"></span>
+              <span class="anchor" id="variable-a~10"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -663,7 +926,7 @@ non-negative.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~119"></span>
+              <span class="anchor" id="variable-x~51"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -677,6 +940,21 @@ non-negative.</p>
 non-negative.</p>
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iterations~7"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iterations</strong></td>
+            <td>
+<p>Iteration limit; nonconvergence returns NaN.</p>
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -685,6 +963,96 @@ non-negative.</p>
     <small>real(kind=real64)</small>
     </h4>
     <p>The function value, which lies on the interval [0, 1].</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-stable_expm1"></span> <h3>public pure elemental function <a href='..\proc\stable_expm1.html'>stable_expm1</a>(x) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes exp(x) - 1 without subtractive cancellation near zero.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~42"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>Exponent argument.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Difference; overflow gives +infinity and NaN inputs propagate.</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-stable_log1p"></span> <h3>public pure elemental function <a href='..\proc\stable_log1p.html'>stable_log1p</a>(x) result(rst)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes log(1 + x) accurately when x is near zero.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~41"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>Argument on [-1, infinity); NaN inputs propagate.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Logarithm; x = -1 gives -infinity, x &lt; -1 gives NaN.</p>
 
     </div>
   </div>
@@ -703,21 +1071,40 @@ non-negative.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

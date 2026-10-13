@@ -12,29 +12,14 @@
 
     <title>fstats_descriptive_statistics &ndash; FSTATS</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -62,6 +47,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -87,8 +75,9 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 3.1% of total for modules and submodules.">168 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 4.0% of total for modules and submodules.">370 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -108,11 +97,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -136,31 +123,21 @@
       </a>
       <div id="inters-0" class="collapse">
         <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-covariance">covariance</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-mean">mean</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-median">median</a>
             <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-pooled_variance">pooled_variance</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-quantile">quantile</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-standard_deviation">standard_deviation</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-trimmed_mean">trimmed_mean</a>
+            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#interface-variance">variance</a>
         </div>
       </div>
     </div>
 
   
   
-      <div class="card mb-4">
-      <a data-bs-toggle="collapse" href="#funcs-0"
-         aria-expanded="false" aria-controls="funcs-0">
-         <h4 class="card-header bg-primary text-white">Functions</h4>
-      </a>
-      <div id="funcs-0" class="collapse">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-covariance">covariance</a>
-            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-mean">mean</a>
-            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-median">median</a>
-            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-quantile">quantile</a>
-            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-standard_deviation">standard_deviation</a>
-            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-trimmed_mean">trimmed_mean</a>
-            <a class="list-group-item" href="../module/fstats_descriptive_statistics.html#proc-variance">variance</a>
-        </div>
-      </div>
-    </div>
-
+  
   
   
   
@@ -183,8 +160,11 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='fstats_types.html'>fstats_types</a></li>
+                  <li class="list-inline-item"><a href='fstats_data_columns.html'>fstats_data_columns</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
                   <li class="list-inline-item">linalg</li>
+                  <li class="list-inline-item"><a href='fstats_helper_routines.html'>fstats_helper_routines</a></li>
+                  <li class="list-inline-item"><a href='fstats_types.html'>fstats_types</a></li>
                   <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
               </ul>
@@ -201,6 +181,454 @@
 
         <section>
           <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-covariance"></span>
+      <h3>public        interface <a href='..\interface\covariance.html'>covariance</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function covariance_array(x, y) result(rst)  
+
+    </h3>
+  <p>Computes the sample covariance of two data sets.</p>
+<p>The covariance computed is the sample covariance such that 
+<script type="math/tex; mode=display"> q_{jk} = \frac{\Sigma \left( x_{i} - \bar{x} \right) 
+\left( y_{i} - \bar{y} \right)}{n - 1} </script>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~74"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The first N-element data set.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~13"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(size(x))
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The second N-element data set.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Sample covariance; fewer than two observations or nonfinite inputs
+give NaN. An unrepresentable result gives signed infinity.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function covariance_columns(x, y) result(rst)  
+
+    </h3>
+  <p>Computes sample covariance using independent copies of two columns.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~81"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>Paired observation columns, unchanged; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~14"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>Paired observation columns, unchanged; unallocated storage is empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Sample covariance; fewer than two pairs or nonfinite values give NaN.
+Unrepresentable results give signed infinity.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function covariance_column_array(x, y) result(rst)  
+
+    </h3>
+  <p>Computes sample covariance between a column and an array, copying the column.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~82"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The first observation column, unchanged; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~15"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The paired observations; must have x's count.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Sample covariance; undersized/nonfinite data give NaN;
+unrepresentable results give signed infinity.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function covariance_array_column(x, y) result(rst)  
+
+    </h3>
+  <p>Computes sample covariance between an array and a column, copying the column.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~83"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The first observation array.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~16"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                <p>The paired observation column, unchanged; must have size(x) values.
+Unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Sample covariance; undersized/nonfinite data give NaN;
+unrepresentable results give signed infinity.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-mean"></span>
+      <h3>public        interface <a href='..\interface\mean.html'>mean</a> 
+      </h3>
+    </div>
+      <div class="card-body">
+        <p>Computes the mean of a set of data.</p>
+      </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function mean_array(x) result(rst)  
+
+    </h3>
+  <p>Computes the mean using a scaled, compensated sum.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~67"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+                <p>The array of values to analyze.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Mean; empty arrays or nonfinite observations give NaN.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function mean_column(x) result(rst)  
+
+    </h3>
+  <p>Computes a column mean using a scaled, compensated sum without copying data.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~68"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input column; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Mean; empty arrays or nonfinite observations give NaN.</p>
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-median"></span>
+      <h3>public        interface <a href='..\interface\median.html'>median</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function median_array(x) result(rst)  
+
+    </h3>
+  <p>Computes the median of the values in an array.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~71"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+                <p>The array of values to analyze.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Median; empty arrays or nonfinite observations give NaN.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function median_column(x) result(rst)  
+
+    </h3>
+  <p>Computes the median by sorting a copy, leaving the column unchanged.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~78"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input column; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Median; empty or nonfinite data give NaN.</p>
+
+          </li>
+    </ul>
+  </div>
+
               <div class="card">
     <div class="card-header bg-light codesum">
       <span class="anchor" id="interface-pooled_variance"></span>
@@ -268,7 +696,8 @@ of the data sets used to compute the variances in si.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The pooled variance.</p>
+    <p>Pooled variance; empty inputs, nonfinite/negative variances, or
+groups with fewer than two observations give NaN.</p>
 
           </li>
           <li class="list-group-item">
@@ -291,7 +720,7 @@ of the data sets used to compute the variances in si.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~106"></span>
+              <span class="anchor" id="variable-x~75"></span>
               type(<a href='..\type\array_container.html'>array_container</a>),
             </td>
 <td>intent(in),</td>
@@ -311,25 +740,17 @@ of the data sets used to compute the variances in si.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The pooled variance.</p>
+    <p>Pooled variance; empty/unallocated groups or groups with fewer than
+two finite observations give NaN.</p>
 
           </li>
-    </ul>
-  </div>
+          <li class="list-group-item">
+                <h3>
+    private pure function pooled_variance_column(si, ni) result(rst)  
 
-        </section>
-        <br>
-
-
-
-        <section>
-          <h2>Functions</h2>
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-covariance"></span> <h3>public pure function <a href='..\proc\covariance.html'>covariance</a>(x, y) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the sample covariance of two data sets.</p><a href="../proc/covariance.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    </h3>
+  <p>Pools variance estimates using the array implementation on a column copy.
+Unequal counts cause ERROR STOP with <a>FS_ARRAY_SIZE_ERROR</a>.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -344,8 +765,67 @@ of the data sets used to compute the variances in si.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~105"></span>
-              real(kind=real64),
+              <span class="anchor" id="variable-si~2"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>si</strong></td>
+            <td>
+                <p>Group variance estimates, unchanged; unallocated storage is empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ni~2"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>ni</strong></td>
+            <td>
+                <p>Group observation counts; must have si's count and each be at least two.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Pooled variance; empty data, negative/nonfinite estimates, or invalid
+group sizes give NaN.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function pooled_variance_columns(x) result(rst)  
+
+    </h3>
+  <p>Pools sample variances from an array of columns, copying each group's data.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~84"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
             </td>
 <td>intent(in),</td>
               <td></td>            <td>
@@ -354,22 +834,7 @@ of the data sets used to compute the variances in si.</p>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-<p>The first N-element data set.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~24"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(size(x))
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-<p>The second N-element data set.</p>
+                <p>Observation columns; groups may have different row counts.</p>
             </td>
         </tr>
     </tbody>
@@ -379,108 +844,31 @@ of the data sets used to compute the variances in si.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The covariance.</p>
+    <p>Pooled variance; no groups, undersized/unallocated groups, or
+nonfinite observations give NaN, as in the array-container overload.</p>
 
-    </div>
+          </li>
+    </ul>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-mean"></span> <h3>public pure function <a href='..\proc\mean.html'>mean</a>(x) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the mean of the values in an array.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~99"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong>(:)</td>
-            <td>
-<p>The array of values to analyze.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The result.</p>
-
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-quantile"></span>
+      <h3>public        interface <a href='..\interface\quantile.html'>quantile</a> 
+      </h3>
     </div>
-  </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function quantile_array(x, q) result(rst)  
 
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-median"></span> <h3>public pure function <a href='..\proc\median.html'>median</a>(x) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the median of the values in an array.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~102"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>x</strong>(:)</td>
-            <td>
-<p>The array of values to analyze.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>real(kind=real64)</small>
-    </h4>
-    <p>The result.</p>
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-quantile"></span> <h3>public pure function <a href='..\proc\quantile.html'>quantile</a>(x, q) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
+    </h3>
   <p>Computes the specified quantile of a data set using the SAS 
-Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+Method 4.</p>
+<p>See Also</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Quantile" target="_blank">Wikipedia</a></li>
+</ul>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -495,7 +883,7 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~103"></span>
+              <span class="anchor" id="variable-x~72"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -505,7 +893,65 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
             <td>::</td>
             <td><strong>x</strong>(:)</td>
             <td>
-<p>An N-element array containing the data.</p>
+                <p>An N-element array containing the data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-q"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>q</strong></td>
+            <td>
+                <p>The quantile to compute (e.g. 0.25 computes the 25% quantile).</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Quantile; empty/nonfinite data or q outside [0, 1] give NaN.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function quantile_column(x, q) result(rst)  
+
+    </h3>
+  <p>Computes a quantile using the array implementation on a copy.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~79"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input column, unchanged; unallocated storage is treated as empty.</p>
             </td>
         </tr>
         <tr>
@@ -520,7 +966,7 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
             <td>::</td>
             <td><strong>q</strong></td>
             <td>
-<p>The quantile to compute (e.g. 0.25 computes the 25% quantile).</p>
+                <p>The quantile probability in [0, 1], using the array routine's interpolation.</p>
             </td>
         </tr>
     </tbody>
@@ -530,17 +976,28 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The result.</p>
+    <p>Quantile; empty/nonfinite data or invalid/nonfinite q give NaN.</p>
 
-    </div>
+          </li>
+    </ul>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-standard_deviation"></span> <h3>public pure function <a href='..\proc\standard_deviation.html'>standard_deviation</a>(x) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the sample standard deviation of the values in an array.</p><a href="../proc/standard_deviation.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-standard_deviation"></span>
+      <h3>public        interface <a href='..\interface\standard_deviation.html'>standard_deviation</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function standard_deviation_array(x) result(rst)  
+
+    </h3>
+  <p>Computes the sample standard deviation of the values in an array.</p>
+<p>The value computed is the sample standard deviation.
+<script type="math/tex; mode=display"> s = \sqrt{ \frac{\Sigma \left( x_{i} - \bar{x} \right)^2}{n - 1} } </script>
+</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -555,7 +1012,7 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~101"></span>
+              <span class="anchor" id="variable-x~70"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -565,7 +1022,7 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
             <td>::</td>
             <td><strong>x</strong>(:)</td>
             <td>
-<p>The array of values to analyze.</p>
+                <p>The array of values to analyze.</p>
             </td>
         </tr>
     </tbody>
@@ -575,16 +1032,69 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The result.</p>
+    <p>Sample standard deviation; invalid/undersized data give NaN.
+It can remain finite even when the variance would overflow.</p>
 
-    </div>
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function standard_deviation_column(x) result(rst)  
+
+    </h3>
+  <p>Computes sample standard deviation using the array implementation on a copy.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~77"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input column, unchanged; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Sample standard deviation; fewer than two values or nonfinite data
+give NaN. Unrepresentable results give positive infinity.</p>
+
+          </li>
+    </ul>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-trimmed_mean"></span> <h3>public  function <a href='..\proc\trimmed_mean.html'>trimmed_mean</a>(x, p) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-trimmed_mean"></span>
+      <h3>public        interface <a href='..\interface\trimmed_mean.html'>trimmed_mean</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private  function trimmed_mean_array(x, p) result(rst)  
+
+    </h3>
   <p>Computes the trimmed mean of a data set.</p>
 
   <h4>Arguments</h4>
@@ -600,7 +1110,7 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~104"></span>
+              <span class="anchor" id="variable-x~73"></span>
               real(kind=real64),
             </td>
 <td>intent(inout),</td>
@@ -610,13 +1120,13 @@ Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-<p>An N-element array containing the data.  On output, the
+                <p>An N-element array containing the data.  On output, the
 array is sorted into ascending order.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~18"></span>
+              <span class="anchor" id="variable-p~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -626,7 +1136,7 @@ array is sorted into ascending order.</p>
             <td>::</td>
             <td><strong>p</strong></td>
             <td>
-<p>An optional parameter specifying the percentage of values
+                <p>An optional parameter specifying the percentage of values
 from either end of the distribution to remove.  The default
 is 0.05 such that the bottom 5% and top 5% are removed.</p>
             </td>
@@ -638,17 +1148,16 @@ is 0.05 such that the bottom 5% and top 5% are removed.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    <p>The trimmed mean.</p>
+    <p>Trimmed mean; invalid p or empty/nonfinite data give NaN.</p>
 
-    </div>
-  </div>
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private  function trimmed_mean_column(x, p) result(rst)  
 
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-variance"></span> <h3>public pure function <a href='..\proc\variance.html'>variance</a>(x) result(rst)  
-</h3></div>
-    <div class="card-body">
-          
-  <p>Computes the sample variance of the values in an array.</p><a href="../proc/variance.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    </h3>
+  <p>Computes the trimmed mean and sorts the column's values in ascending order.
+Uses a borrowed view without reallocating the underlying array.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -663,17 +1172,33 @@ is 0.05 such that the bottom 5% and top 5% are removed.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~100"></span>
+              <span class="anchor" id="variable-x~80"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input column; sorted on success, unchanged for invalid inputs.
+Unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~5"></span>
               real(kind=real64),
             </td>
-<td>intent(in)</td>
-              <td></td>            <td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>x</strong>(:)</td>
+            <td><strong>p</strong></td>
             <td>
-<p>The array of values to analyze.</p>
+                <p>Fraction to remove from each end, in [0, 0.5); defaults to 0.05.</p>
             </td>
         </tr>
     </tbody>
@@ -683,13 +1208,117 @@ is 0.05 such that the bottom 5% and top 5% are removed.</p>
     Return Value
     <small>real(kind=real64)</small>
     </h4>
-    
+    <p>Trimmed mean; empty/nonfinite data or invalid/nonfinite p give NaN.</p>
 
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-variance"></span>
+      <h3>public        interface <a href='..\interface\variance.html'>variance</a> 
+      </h3>
     </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private pure function variance_array(x) result(rst)  
+
+    </h3>
+  <p>Computes the sample variance of the values in an array.</p>
+<p>The variance computed is the sample variance such that 
+<script type="math/tex; mode=display"> s^2 = \frac{\Sigma \left( x_{i} - \bar{x} \right)^2}{n - 1} </script>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~69"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong>(:)</td>
+            <td>
+                <p>The array of values to analyze.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Sample variance; fewer than two observations or nonfinite inputs
+give NaN. An unrepresentable variance gives positive infinity.</p>
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private pure function variance_column(x) result(rst)  
+
+    </h3>
+  <p>Computes sample variance using the array implementation on a copy.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~76"></span>
+              class(<a href='..\type\data_column.html'>data_column</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>The input column, unchanged; unallocated storage is treated as empty.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Sample variance; fewer than two values or nonfinite data give NaN.
+Unrepresentable results give positive infinity.</p>
+
+          </li>
+    </ul>
   </div>
 
         </section>
         <br>
+
+
+
 
 
 
@@ -702,21 +1331,40 @@ is 0.05 such that the bottom 5% and top 5% are removed.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

@@ -13,29 +13,14 @@
     <title>All Procedures &ndash; FSTATS
 </title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -63,6 +48,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -84,16 +72,28 @@
 			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
 			 <tbody>
 			   <tr>
+                 <td><a href='..\interface\abs.html'>abs</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\acos.html'>acos</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
                  <td><a href='..\proc\adjusted_r_squared.html'>adjusted_r_squared</a></td>
                  <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
                  <td>Function</td>
                  <td><p>Computes the adjusted R-squared value for a data set.</p><a href="../proc/adjusted_r_squared.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\allan_variance.html'>allan_variance</a></td>
+                 <td><a href='..\interface\allan_variance.html'>allan_variance</a></td>
                  <td><a href='..\module\fstats_allan.html'>fstats_allan</a></td>
-                 <td>Function</td>
-                 <td><p>Computes the Allan variance of a data set.</p><a href="../proc/allan_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\anova.html'>anova</a></td>
@@ -101,6 +101,30 @@
                  <td>Interface</td>
                  <td><p>Performs an analysis of variance (ANOVA) on the supplied data 
 set.</p><a href="../interface/anova.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\asin.html'>asin</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\assignment(=).html'>assignment(=)</a></td>
+                 <td><a href='..\module\fstats_data_table.html'>fstats_data_table</a></td>
+                 <td>Interface</td>
+                 <td><p>Defines deep-copy table assignment and shared view assignment.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\assignment(=)~2.html'>assignment(=)</a></td>
+                 <td><a href='..\module\fstats_glm_types.html'>fstats_glm_types</a></td>
+                 <td>Interface</td>
+                 <td><p>Copy every component of a glm_options object.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\atan.html'>atan</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\bartletts_test.html'>bartletts_test</a></td>
@@ -156,15 +180,21 @@ model.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\central_composite_design.html'>central_composite_design</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Subroutine</td>
                  <td><p>Generates a central composite design in coded variables.</p><a href="../proc/central_composite_design.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\central_composite_design_size.html'>central_composite_design_size</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Subroutine</td>
                  <td><p>Computes the size of a central composite design.</p><a href="../proc/central_composite_design_size.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\column_values.html'>column_values</a></td>
+                 <td><a href='..\module\fstats_helper_routines.html'>fstats_helper_routines</a></td>
+                 <td>Function</td>
+                 <td><p>Copies a column to a work array for the existing array algorithms.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\confidence_interval.html'>confidence_interval</a></td>
@@ -180,10 +210,16 @@ model.</p></td>
 population Pearson correlation) as follows.</p><a href="../proc/correlation.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\covariance.html'>covariance</a></td>
+                 <td><a href='..\interface\cos.html'>cos</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\covariance.html'>covariance</a></td>
                  <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
-                 <td>Function</td>
-                 <td><p>Computes the sample covariance of two data sets.</p><a href="../proc/covariance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\covariance_matrix.html'>covariance_matrix</a></td>
@@ -191,11 +227,13 @@ population Pearson correlation) as follows.</p><a href="../proc/correlation.html
                  <td>Function</td>
                  <td><p>Computes the covariance matrix <script type="math/tex"> C </script> where 
 <script type="math/tex"> C = \left( X^{T} X \right)^{-1} </script> and <script type="math/tex"> X </script> is computed
-by design_matrix.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+by design_matrix.
+Uses an SVD of X, without forming X**T * X. Rank-deficient inputs give
+the Moore-Penrose covariance; use regression_covariance for rank diagnostics.</p><a href="../proc/covariance_matrix.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\decode_variables.html'>decode_variables</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_coding.html'>fstats_doe_coding</a></td>
                  <td>Subroutine</td>
                  <td><p>Converts coded variable values (-1, +1) to natural scale.</p></td>
                </tr>
@@ -241,61 +279,64 @@ vector of measured dependent variables.</p><a href="../proc/design_matrix.html" 
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_compare_models.html'>doe_compare_models</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
                  <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_design_efficiency.html'>doe_design_efficiency</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Function</td>
                  <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\doe_evaluate_model.html'>doe_evaluate_model</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_models.html'>fstats_doe_models</a></td>
                  <td>Interface</td>
                  <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_fit_model.html'>doe_fit_model</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_models.html'>fstats_doe_models</a></td>
                  <td>Function</td>
                  <td><p>Fits a Taylor series model to the provided data.</p><a href="../proc/doe_fit_model.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_model_anova.html'>doe_model_anova</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
                  <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_model_diagnostics.html'>doe_model_diagnostics</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
                  <td><p>Computes model diagnostics and goodness-of-fit metrics.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_optimize_rsm.html'>doe_optimize_rsm</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_response_surface.html'>fstats_doe_response_surface</a></td>
                  <td>Function</td>
-                 <td></td>
+                 <td><p>Returns the center point of the supplied factor bounds as an RSM
+optimization result. This routine is currently a placeholder: it does
+not evaluate <code>mdl</code> or perform an optimization. The result is marked as
+converged with an iteration count of 50 and a predicted response of 0.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_predict.html'>doe_predict</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_prediction.html'>fstats_doe_prediction</a></td>
                  <td>Function</td>
                  <td><p>Computes predictions with confidence and prediction intervals.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_predict_enhanced.html'>doe_predict_enhanced</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_prediction.html'>fstats_doe_prediction</a></td>
                  <td>Function</td>
                  <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_residuals_analysis.html'>doe_residuals_analysis</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
                  <td><p>Computes residual analysis data for model diagnostics.</p></td>
                </tr>
@@ -312,13 +353,19 @@ estimates.</p><a href="../proc/em_impute.html" class="pull-right"><emph>Read mor
                </tr>
 			   <tr>
                  <td><a href='..\proc\encode_variables.html'>encode_variables</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_coding.html'>fstats_doe_coding</a></td>
                  <td>Subroutine</td>
                  <td><p>Converts natural variable values to coded (-1, +1) scale.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\evaluate_model.html'>evaluate_model</a></td>
                  <td><a href='..\module\fstats_mcmc.html'>fstats_mcmc</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\exp.html'>exp</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
                  <td>Interface</td>
                  <td></td>
                </tr>
@@ -337,19 +384,19 @@ the variances of two data sets are not significantly different.</p><a href="../p
                </tr>
 			   <tr>
                  <td><a href='..\proc\fractional_factorial.html'>fractional_factorial</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Subroutine</td>
                  <td><p>Generates a 2-level fractional factorial design.</p><a href="../proc/fractional_factorial.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\fractional_factorial_size.html'>fractional_factorial_size</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Subroutine</td>
                  <td><p>Computes the size of a fractional factorial design.</p><a href="../proc/fractional_factorial_size.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\full_factorial.html'>full_factorial</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Subroutine</td>
                  <td><p>Computes a table with values scaled from 1 to N describing a 
 full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
@@ -363,9 +410,51 @@ study by means of the analysis of variance (ANOVA) method.</p><a href="../interf
                </tr>
 			   <tr>
                  <td><a href='..\proc\get_full_factorial_matrix_size.html'>get_full_factorial_matrix_size</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Subroutine</td>
                  <td><p>Computes the appropriate size for a full-factorial design table.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\glm_binomial_link_inv.html'>glm_binomial_link_inv</a></td>
+                 <td><a href='..\module\fstats_glm_irls.html'>fstats_glm_irls</a></td>
+                 <td>Function</td>
+                 <td><p>Evaluate the logistic inverse link without exponent overflow.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\glm_gamma_link_inv.html'>glm_gamma_link_inv</a></td>
+                 <td><a href='..\module\fstats_glm_irls.html'>fstats_glm_irls</a></td>
+                 <td>Function</td>
+                 <td><p>Invert the reciprocal Gamma link g(mu) = 1 / mu.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\glm_poisson_link_inv.html'>glm_poisson_link_inv</a></td>
+                 <td><a href='..\module\fstats_glm_irls.html'>fstats_glm_irls</a></td>
+                 <td>Function</td>
+                 <td><p>Invert the Poisson log link with bounded exponentiation.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\ieee_is_finite.html'>ieee_is_finite</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\ieee_is_nan.html'>ieee_is_nan</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\ieee_is_negative.html'>ieee_is_negative</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\ieee_is_normal.html'>ieee_is_normal</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\incomplete_beta.html'>incomplete_beta</a></td>
@@ -386,10 +475,27 @@ study by means of the analysis of variance (ANOVA) method.</p><a href="../interf
                  <td><p>Computes the upper incomplete gamma function.</p><a href="../proc/incomplete_gamma_upper.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
+                 <td><a href='..\interface\integer_column.html'>integer_column</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
                  <td><a href='..\interface\interp_routine.html'>interp_routine</a></td>
                  <td><a href='..\module\fstats_interp.html'>fstats_interp</a></td>
                  <td>Interface</td>
                  <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\irls.html'>irls</a></td>
+                 <td><a href='..\module\fstats_glm_irls.html'>fstats_glm_irls</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Fit a GLM from initial coefficients. The working response and
+weights are z = eta + (y - mu) * g'(mu) and
+W = 1 / (g'(mu)**2 * V(mu)). The implementation solves the equivalent
+increment problem sqrt(W) X delta = sqrt(W) (z - eta), using
+column-scaled, pivoted QR rather than normal equations. Weights and
+right-hand sides are normalized in log space to avoid overflow.</p><a href="../proc/irls.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\is_missing.html'>is_missing</a></td>
@@ -417,7 +523,7 @@ study by means of the analysis of variance (ANOVA) method.</p><a href="../interf
                </tr>
 			   <tr>
                  <td><a href='..\proc\latin_hypercube_design.html'>latin_hypercube_design</a></td>
-                 <td><a href='..\module\fstats_experimental_design.html'>fstats_experimental_design</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Subroutine</td>
                  <td><p>Generates a Latin hypercube design for factor space exploration.</p><a href="../proc/latin_hypercube_design.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
@@ -429,9 +535,46 @@ study by means of the analysis of variance (ANOVA) method.</p><a href="../interf
                </tr>
 			   <tr>
                  <td><a href='..\proc\linear_least_squares.html'>linear_least_squares</a></td>
-                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td><a href='..\module\fstats_linear_regression.html'>fstats_linear_regression</a></td>
                  <td>Subroutine</td>
                  <td><p>Computes a linear least-squares regression to fit a set of data.</p><a href="../proc/linear_least_squares.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\log.html'>log</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\log10.html'>log10</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\log_regularized_beta.html'>log_regularized_beta</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Log regularized beta; invalid inputs or nonconvergence return NaN.
+The leading factor and complementary branch are evaluated in log space.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\log_regularized_gamma_lower.html'>log_regularized_gamma_lower</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Log lower gamma ratio; invalid inputs or nonconvergence return NaN.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\log_regularized_gamma_upper.html'>log_regularized_gamma_upper</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Log upper gamma ratio; invalid inputs or nonconvergence return NaN.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\logical_column.html'>logical_column</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\lowess.html'>lowess</a></td>
@@ -442,16 +585,34 @@ scatterplot smoothing (LOWESS) algorithm.  Fitted values are computed at
 each of the supplied x values.</p><a href="../proc/lowess.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\mean.html'>mean</a></td>
-                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
-                 <td>Function</td>
-                 <td><p>Computes the mean of the values in an array.</p></td>
+                 <td><a href='..\interface\maxval.html'>maxval</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\median.html'>median</a></td>
+                 <td><a href='..\interface\mean.html'>mean</a></td>
                  <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
-                 <td>Function</td>
-                 <td><p>Computes the median of the values in an array.</p></td>
+                 <td>Interface</td>
+                 <td><p>Computes the mean of a set of data.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\median.html'>median</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\median_absolute_deviation.html'>median_absolute_deviation</a></td>
+                 <td><a href='..\module\fstats_robust_statistics.html'>fstats_robust_statistics</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\minval.html'>minval</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\missing_value.html'>missing_value</a></td>
@@ -476,10 +637,34 @@ normal model with the noninformative Jeffreys prior.</p><a href="../proc/multipl
                </tr>
 			   <tr>
                  <td><a href='..\proc\nonlinear_least_squares.html'>nonlinear_least_squares</a></td>
-                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td><a href='..\module\fstats_levenberg_marquardt.html'>fstats_levenberg_marquardt</a></td>
                  <td>Subroutine</td>
                  <td><p>Performs a nonlinear regression to fit a model using a version
 of the Levenberg-Marquardt algorithm.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\operator(ASTERISK).html'>operator(*)</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\operator(+).html'>operator(+)</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\operator(-).html'>operator(-)</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\operator(SLASH).html'>operator(/)</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\pool_imputations.html'>pool_imputations</a></td>
@@ -495,11 +680,22 @@ means of Rubin's rules.</p></td>
                  <td><p>Computes the pooled estimate of variance.</p></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\quantile.html'>quantile</a></td>
-                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td><a href='..\proc\probability_log.html'>probability_log</a></td>
+                 <td><a href='..\module\fstats_distributions.html'>fstats_distributions</a></td>
                  <td>Function</td>
-                 <td><p>Computes the specified quantile of a data set using the SAS 
-Method 4.</p><a href="../proc/quantile.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+                 <td><p>Computes a log density or probability with explicit zero handling.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\product.html'>product</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\quantile.html'>quantile</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\r_squared.html'>r_squared</a></td>
@@ -546,6 +742,28 @@ The input stores each pair as adjacent values: [x1, y1, x2, y2, ...].</p></td>
                  <td><p>Random resampling with replacement from the supplied sample.</p></td>
                </tr>
 			   <tr>
+                 <td><a href='..\proc\read_delimited_table.html'>read_delimited_table</a></td>
+                 <td><a href='..\module\fstats_data_table_io.html'>fstats_data_table_io</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reads a delimited text file into a <a href="..\type\data_table.html">data_table</a>.</p><a href="../proc/read_delimited_table.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\real_column.html'>real_column</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\regression_covariance.html'>regression_covariance</a></td>
+                 <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the unscaled regression covariance using an SVD of X itself.
+Singular directions below MAX(M, N) * EPSILON * largest singular value
+are discarded, giving the Moore-Penrose covariance on identifiable directions.
+Rank-deficient fits require care: a zero pseudocovariance along a discarded
+direction does not imply that the corresponding parameter is known exactly.</p></td>
+               </tr>
+			   <tr>
                  <td><a href='..\interface\regression_function.html'>regression_function</a></td>
                  <td><a href='..\module\fstats_regression.html'>fstats_regression</a></td>
                  <td>Interface</td>
@@ -576,6 +794,17 @@ The input stores each pair as adjacent values: [x1, y1, x2, y2, ...].</p></td>
                  <td><p>Uses rejection sampling to randomly sample a target distribution.</p></td>
                </tr>
 			   <tr>
+                 <td><a href='..\proc\sample_chains.html'>sample_chains</a></td>
+                 <td><a href='..\module\fstats_mcmc.html'>fstats_mcmc</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Samples independent chains concurrently using OpenMP.
+Initialize each target independently, with no shared mutable state in
+distributions, models, proposals, or sampler callbacks.  The compiler
+runtime must provide thread-safe RANDOM_NUMBER (as GNU Fortran does).
+Random streams and reproducibility depend on the compiler runtime and
+thread scheduling; no per-chain seed guarantee is provided.</p></td>
+               </tr>
+			   <tr>
                  <td><a href='..\proc\sample_normal_multivariate.html'>sample_normal_multivariate</a></td>
                  <td><a href='..\module\fstats_sampling.html'>fstats_sampling</a></td>
                  <td>Function</td>
@@ -594,10 +823,58 @@ desired power and significance levels to ascertain the desired
 difference in parameter.</p><a href="../proc/sample_size.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\standard_deviation.html'>standard_deviation</a></td>
-                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td><a href='..\interface\sin.html'>sin</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\size.html'>size</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\softplus.html'>softplus</a></td>
+                 <td><a href='..\module\fstats_distributions.html'>fstats_distributions</a></td>
                  <td>Function</td>
-                 <td><p>Computes the sample standard deviation of the values in an array.</p><a href="../proc/standard_deviation.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+                 <td><p>Computes log(1 + exp(value)) without overflowing the exponential.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\sqrt.html'>sqrt</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\stable_expm1.html'>stable_expm1</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes exp(x) - 1 without subtractive cancellation near zero.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\stable_log1p.html'>stable_log1p</a></td>
+                 <td><a href='..\module\fstats_special_functions.html'>fstats_special_functions</a></td>
+                 <td>Function</td>
+                 <td><p>Computes log(1 + x) accurately when x is near zero.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\standard_deviation.html'>standard_deviation</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\string_column.html'>string_column</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\sum.html'>sum</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\t_test_equal_variance.html'>t_test_equal_variance</a></td>
@@ -620,16 +897,75 @@ assumed equivalent variances.</p><a href="../proc/t_test_equal_variance.html" cl
 assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\trimmed_mean.html'>trimmed_mean</a></td>
-                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
-                 <td>Function</td>
-                 <td><p>Computes the trimmed mean of a data set.</p></td>
+                 <td><a href='..\interface\tan.html'>tan</a></td>
+                 <td><a href='..\module\fstats_data_columns.html'>fstats_data_columns</a></td>
+                 <td>Interface</td>
+                 <td></td>
                </tr>
 			   <tr>
-                 <td><a href='..\proc\variance.html'>variance</a></td>
+                 <td><a href='..\interface\trimmed_mean.html'>trimmed_mean</a></td>
                  <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\tukey_biweight_irls_weight.html'>tukey_biweight_irls_weight</a></td>
+                 <td><a href='..\module\fstats_robust_statistics.html'>fstats_robust_statistics</a></td>
                  <td>Function</td>
-                 <td><p>Computes the sample variance of the values in an array.</p><a href="../proc/variance.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+                 <td><p>Computes Tukey's biweight IRLS weight for a standardized residual.
+The positive tuning constant k defaults to 4.685.
+<script type="math/tex; mode=display">
+w(u) =
+\begin{cases}
+\left[1 - \left(\frac{u}{k}\right)^2\right]^2, & |u| \le k, \\
+0, & |u| > k.
+\end{cases}
+</script>
+</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\tukey_biweight_psi.html'>tukey_biweight_psi</a></td>
+                 <td><a href='..\module\fstats_robust_statistics.html'>fstats_robust_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes Tukey's biweight score function for a standardized residual.
+The positive tuning constant k defaults to 4.685.
+<script type="math/tex; mode=display">
+\psi(u) =
+\begin{cases}
+u \left[1 - \left(\frac{u}{k}\right)^2\right]^2, & |u| \le k, \\
+0, & |u| > k.
+\end{cases}
+</script>
+</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\tukey_biweight_rho.html'>tukey_biweight_rho</a></td>
+                 <td><a href='..\module\fstats_robust_statistics.html'>fstats_robust_statistics</a></td>
+                 <td>Function</td>
+                 <td><p>Computes Tukey's biweight rho loss for a standardized residual.
+The positive tuning constant k defaults to 4.685.
+<script type="math/tex; mode=display">
+\rho(u) =
+\begin{cases}
+\frac{k^2}{6} \left\{1 - \left[1 - \left(\frac{u}{k}\right)^2\right]^3\right\},
+    & |u| \le k, \\
+\frac{k^2}{6}, & |u| > k.
+\end{cases}
+</script>
+</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\variance.html'>variance</a></td>
+                 <td><a href='..\module\fstats_descriptive_statistics.html'>fstats_descriptive_statistics</a></td>
+                 <td>Interface</td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\write_delimited_table.html'>write_delimited_table</a></td>
+                 <td><a href='..\module\fstats_data_table_io.html'>fstats_data_table_io</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Writes a <a href="..\type\data_table.html">data_table</a> to a delimited text file, replacing any
+existing file.</p><a href="../proc/write_delimited_table.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			 </tbody></table>
              
@@ -640,21 +976,40 @@ assumed non-equivalent variances.</p><a href="../proc/t_test_unequal_variance.ht
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>

@@ -12,29 +12,14 @@
 
     <title>log_normal_distribution &ndash; FSTATS </title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Font Awesome -->
-    <link href="../css/fontawesome.min.css" rel="stylesheet">
-    <link href="../css/brands.min.css" rel="stylesheet">
-    <link href="../css/regular.min.css" rel="stylesheet">
-    <link href="../css/solid.min.css" rel="stylesheet">
-    <link href="../css/v4-font-face.min.css" rel="stylesheet">
-    <link href="../css/v4-shims.min.css" rel="stylesheet">
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { equationNumbers: { autoNumber: "AMS" } }
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
-            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
-    <!-- Other scripts and stylesheets -->
-    <link href="../css/local.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -62,6 +47,9 @@
                   <a class="nav-link" href="../lists/procedures.html">Procedures</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="../lists/types.html">Derived Types</a>
                 </li>
             </ul>
@@ -87,21 +75,22 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p> 3.2% of total for derived types.</p>Including implementation: 74 statements,  4.2% of total for derived types.">13 statements</a>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title="<p> 2.9% of total for derived types.</p>Including implementation: 134 statements,  4.4% of total for derived types.">17 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_distributions.f90"> Source File</a>
+              <a href="../src/fstats_log_normal_distribution.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_distributions.f90.html'>fstats_distributions.f90</a></li>
-                <li class="breadcrumb-item"><a href='..\module\fstats_distributions.html'>fstats_distributions</a></li>
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_log_normal_distribution.f90.html'>fstats_log_normal_distribution.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_log_normal_distribution.html'>fstats_log_normal_distribution</a></li>
             <li class="breadcrumb-item active" aria-current="page">log_normal_distribution</li>
           </ol>
         </nav>
@@ -109,11 +98,9 @@
     </div>
   </div>
   <script>
-    // Enable Bootstrap tooltips
-    (function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    })();
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
   </script>
 
   </div>
@@ -130,8 +117,8 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-mean_value~2">mean_value</a>
-            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-standard_deviation~2">standard_deviation</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-mean_value">mean_value</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#variable-standard_deviation">standard_deviation</a>
         </div>
       </div>
     </div>
@@ -158,15 +145,19 @@
       </a>
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-cdf~7">cdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-cdf~5">cdf</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-defined_range~5">defined_range</a>
-            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mean~7">mean</a>
-            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-median~7">median</a>
-            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mode~7">mode</a>
-            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-pdf~7">pdf</a>
-            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-recenter~7">recenter</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-log_cdf~5">log_cdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-log_pdf~6">log_pdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-log_survival~5">log_survival</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mean~5">mean</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-median~5">median</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-mode~5">mode</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-pdf~6">pdf</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-recenter~5">recenter</a>
             <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-standardized_variable">standardized_variable</a>
-            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-variance~8">variance</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-survival~5">survival</a>
+            <a class="list-group-item" href="../type/log_normal_distribution.html#boundprocedure-variance~5">variance</a>
         </div>
       </div>
     </div>
@@ -180,7 +171,7 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2 id="type-def-statement">
+      <h2>
         type, public, extends(<a href='distribution.html'>distribution</a>) :: log_normal_distribution</h2>
     <p>Defines a normal distribution.</p>
     <br>
@@ -199,7 +190,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-mean_value~2"></span>
+              <span class="anchor" id="variable-mean_value"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -216,7 +207,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-standard_deviation~2"></span>
+              <span class="anchor" id="variable-standard_deviation"></span>
               real(kind=real64),
             </td>
               <td>public</td>
@@ -244,16 +235,16 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-cdf~7"></span>
+      <span class="anchor" id="boundprocedure-cdf~5"></span>
       <h3>
           procedure, public ::
   <strong>cdf</strong> => lnd_cdf
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure elemental function lnd_cdf(this, x) result(rst)  
 </h3>
 
@@ -313,8 +304,8 @@
     </h4>
     <p>The value of the function.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -328,9 +319,9 @@
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure function lnd_range(this) result(rst)  
 </h3>
 
@@ -373,24 +364,243 @@
 using a value of infinity may cause issue, this routine returns
 huge(0.0d0) instead.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-mean~7"></span>
+      <span class="anchor" id="boundprocedure-log_cdf~5"></span>
+      <h3>
+          procedure, public ::
+  <strong>log_cdf</strong> => lnd_log_cdf
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function lnd_log_cdf(this, x) result(rst)  
+</h3>
+
+  <p>Computes the log-normal log lower tail using the normal log-CDF.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>Law with finite log-mean and finite, positive log-standard deviation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>Evaluation point in observation space.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log CDF; x &lt;= 0 gives -infinity, invalid inputs give NaN.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-log_pdf~6"></span>
+      <h3>
+          procedure, public ::
+  <strong>log_pdf</strong> => lnd_log_pdf
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function lnd_log_pdf(this, x) result(rst)  
+</h3>
+
+  <p>Computes a log-normal log density from the underlying normal log density.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>Law with finite log-mean and finite, positive log-standard deviation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>Evaluation point in observation space, not log space.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log density; x &lt;= 0 gives -infinity, invalid parameters or NaN x NaN.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-log_survival~5"></span>
+      <h3>
+          procedure, public ::
+  <strong>log_survival</strong> => lnd_log_survival
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function lnd_log_survival(this, x) result(rst)  
+</h3>
+
+  <p>Computes the log-normal log upper tail using the normal log-survival.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>Law with finite log-mean and finite, positive log-standard deviation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>Evaluation point in observation space.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Log survival probability; x &lt;= 0 gives zero, invalid inputs give NaN.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-mean~5"></span>
       <h3>
           procedure, public ::
   <strong>mean</strong> => lnd_mean
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure function lnd_mean(this) result(rst)  
 </h3>
 
@@ -431,24 +641,24 @@ huge(0.0d0) instead.</p>
     </h4>
     <p>The mean</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-median~7"></span>
+      <span class="anchor" id="boundprocedure-median~5"></span>
       <h3>
           procedure, public ::
   <strong>median</strong> => lnd_median
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure function lnd_median(this) result(rst)  
 </h3>
 
@@ -489,24 +699,24 @@ huge(0.0d0) instead.</p>
     </h4>
     <p>The median</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-mode~7"></span>
+      <span class="anchor" id="boundprocedure-mode~5"></span>
       <h3>
           procedure, public ::
   <strong>mode</strong> => lnd_mode
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure function lnd_mode(this) result(rst)  
 </h3>
 
@@ -547,24 +757,24 @@ huge(0.0d0) instead.</p>
     </h4>
     <p>The mode</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-pdf~7"></span>
+      <span class="anchor" id="boundprocedure-pdf~6"></span>
       <h3>
           procedure, public ::
   <strong>pdf</strong> => lnd_pdf
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure elemental function lnd_pdf(this, x) result(rst)  
 </h3>
 
@@ -624,24 +834,24 @@ huge(0.0d0) instead.</p>
     </h4>
     <p>The value of the function.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-recenter~7"></span>
+      <span class="anchor" id="boundprocedure-recenter~5"></span>
       <h3>
           procedure, public ::
   <strong>recenter</strong> => lnd_recenter
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private  subroutine lnd_recenter(this, x)  
 </h3>
 
@@ -692,8 +902,8 @@ huge(0.0d0) instead.</p>
   </table>
 
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -707,9 +917,9 @@ huge(0.0d0) instead.</p>
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure elemental function dist_std_var(this, x) result(rst)  
 </h3>
 
@@ -765,24 +975,97 @@ huge(0.0d0) instead.</p>
     </h4>
     <p>The result.</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-variance~8"></span>
+      <span class="anchor" id="boundprocedure-survival~5"></span>
+      <h3>
+          procedure, public ::
+  <strong>survival</strong> => lnd_survival
+        
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
+    private pure elemental function lnd_survival(this, x) result(rst)  
+</h3>
+
+  <p>Computes the log-normal upper-tail probability P(X &gt; x).</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='log_normal_distribution.html'>log_normal_distribution</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+                <p>Law with finite log-mean and finite, positive log-standard deviation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=real64),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>Evaluation point in observation space.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=real64)</small>
+    </h4>
+    <p>Survival probability; x &lt;= 0 gives one, invalid inputs give NaN.</p>
+
+        </li>
+    </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-variance~5"></span>
       <h3>
           procedure, public ::
   <strong>variance</strong> => lnd_variance
         
       </h3>
     </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-                    <h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+                  <h3>
     private pure function lnd_variance(this) result(rst)  
 </h3>
 
@@ -823,8 +1106,8 @@ huge(0.0d0) instead.</p>
     </h4>
     <p>The variance</p>
 
-          </li>
-      </ul>
+        </li>
+    </ul>
   </div>
 
           </div>
@@ -839,21 +1122,40 @@ huge(0.0d0) instead.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col">
-            <p>
-              FSTATS
- was developed by Jason Christopherson<br>              &copy; 2026 
+          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-05 13:44 -0500             </p>
+ on 2026-10-12 19:19              </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>
