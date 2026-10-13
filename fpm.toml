@@ -13,6 +13,7 @@ source-dir = "src"
 [dependencies]
 linalg = { git = "https://github.com/jchristopherson/linalg" }
 collections = { git = "https://github.com/jchristopherson/collections" }
+fstring = { git = "https://github.com/jchristopherson/fstring" }
 openmp = "*"
 
 [dev-dependencies]

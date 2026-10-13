@@ -89,7 +89,7 @@ else()
     set(BUILD_COLLECTIONS FALSE)
 endif()
 
-if (NOT collections_FOUND)
+if (NOT fstring_FOUND)
     message(STATUS "FSTRING could not be found.  A reference version will be employed.")
     FetchContent_Declare(
         fstring
