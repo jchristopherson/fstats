@@ -1,5 +1,5 @@
 # fstats
-FSTATS is a modern Fortran 2018 statistical library. The public API is collected in the `fstats` module, so applications can generally start with `use fstats`.
+FSTATS is a modern Fortran statistical library. The public API is collected in the `fstats` module, so applications can generally start with `use fstats`.
 
 ## Status
 [![CMake](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml/badge.svg)](https://github.com/jchristopherson/fstats/actions/workflows/cmake.yml)
@@ -30,7 +30,7 @@ Documentation links to the [Fortran API reference](https://jchristopherson.githu
 The generated API documentation is available [here](https://jchristopherson.github.io/fstats/).
 
 ## Building with CMake
-[CMake](https://cmake.org/) 3.24 or newer, a Fortran 2018 compiler, Git, and OpenMP support are required. CMake looks for [LINALG](https://github.com/jchristopherson/linalg) and [COLLECTIONS](https://github.com/jchristopherson/collections); if compatible installations are not found, it fetches reference versions automatically.
+[CMake](https://cmake.org/) 3.24 or newer, a Fortran 2018 compiler, Git, and an OpenMP-capable Fortran compiler/runtime are required. CMake searches for compatible installations of LINALG, COLLECTIONS, and FSTRING; if they are not found, it fetches them automatically. See [External Libraries](#external-libraries) for details.
 
 Configure and build the library:
 
@@ -59,7 +59,7 @@ fpm build --profile release
 fpm test --profile release
 ```
 
-FPM resolves the `linalg`, `collections`, and OpenMP dependencies declared by this project. To use FSTATS as a dependency in another FPM project, add the following to that project's `fpm.toml`:
+FPM resolves the `linalg`, `collections`, `fstring`, and `openmp` dependencies declared by this project. The test suite also uses the `fortran_test_helper` development dependency. To use FSTATS as a dependency in another FPM project, add the following to that project's `fpm.toml`:
 ```toml
 [dependencies]
 fstats = { git = "https://github.com/jchristopherson/fstats", tag = "v1.7.0" }
@@ -206,4 +206,13 @@ procedure modules. This organization does not change numerical behavior;
 existing approximations and placeholder calculations remain unchanged.
 
 ## External Libraries
-FSTATS uses [LINALG](https://github.com/jchristopherson/linalg) for linear algebra and [COLLECTIONS](https://github.com/jchristopherson/collections) for collection types. An optimized BLAS and LAPACK installation is recommended for best performance when using LINALG.
+FSTATS has the following direct dependencies:
+
+| Dependency | Purpose | Build integration |
+|------------|---------|-------------------|
+| [LINALG](https://github.com/jchristopherson/linalg) | Linear algebra operations | CMake uses an installed compatible package or fetches it; FPM resolves it from `fpm.toml`. |
+| [COLLECTIONS](https://github.com/jchristopherson/collections) | Collection types used by the library | CMake uses an installed compatible package or fetches it; FPM resolves it from `fpm.toml`. |
+| [FSTRING](https://github.com/jchristopherson/fstring) | String support | CMake uses an installed compatible package or fetches it; FPM resolves it from `fpm.toml`. |
+| OpenMP | Fortran parallel runtime, including parallel MCMC | Required by CMake and declared as an FPM dependency. |
+
+The test suite has an additional development dependency, [fortran_test_helper](https://github.com/jchristopherson/fortran_test_helper), which CMake can also fetch when tests are enabled. An optimized BLAS/LAPACK implementation is recommended for performance with LINALG; it is not a direct FSTATS dependency.
