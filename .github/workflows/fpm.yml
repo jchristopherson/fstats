@@ -81,11 +81,12 @@ jobs:
             mingw-w64-x86_64-openblas
             mingw-w64-x86_64-arpack
 
-      - name: Add MinGW64 toolchain to PATH (Windows)
+      - name: Add MinGW64 libraries to PATH (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Add-Content $env:GITHUB_PATH "${{ steps.msys2.outputs.msys2-location }}\mingw64\bin"
+          $mingwBin = "${{ steps.msys2.outputs.msys2-location }}\mingw64\bin"
+          Add-Content $env:GITHUB_ENV "PATH=$env:PATH;$mingwBin"
 
       - name: Provide BLAS/LAPACK linker aliases (Windows)
         if: runner.os == 'Windows'
@@ -151,9 +152,6 @@ jobs:
           FPM_CC: ${{ steps.setup-fortran.outputs.cc }}
           FPM_FLAGS: ${{ matrix.shared && '--flag=-fPIC' || '' }}${{ matrix.compiler == 'intel' && ' --flag=-fp-model --flag=strict --flag=-no-ftz' || '' }}
         run: |
-          if [[ "${{ runner.os }}" == "Windows" ]]; then
-            export PATH="$PATH:${MSYS2_MINGW_BIN}"
-          fi
           if [[ -n "$FPM_FLAGS" ]]; then
             fpm test $FPM_FLAGS
           else
