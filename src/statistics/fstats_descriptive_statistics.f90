@@ -540,7 +540,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function covariance_columns(x, y) result(rst)
     !! Computes sample covariance using independent copies of two columns.
-    !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+    !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
     class(data_column), intent(in) :: x, y
         !! Paired observation columns, unchanged; unallocated storage is empty.
     real(real64) :: rst
@@ -554,7 +554,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function covariance_column_array(x, y) result(rst)
     !! Computes sample covariance between a column and an array, copying the column.
-    !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+    !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
     class(data_column), intent(in) :: x
         !! The first observation column, unchanged; unallocated storage is empty.
     real(real64), intent(in), dimension(:) :: y
@@ -570,7 +570,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function covariance_array_column(x, y) result(rst)
     !! Computes sample covariance between an array and a column, copying the column.
-    !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+    !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
     real(real64), intent(in), dimension(:) :: x
         !! The first observation array.
     class(data_column), intent(in) :: y
@@ -587,7 +587,7 @@ end function
 ! ------------------------------------------------------------------------------
 pure function pooled_variance_column(si, ni) result(rst)
     !! Pools variance estimates using the array implementation on a column copy.
-    !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+    !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
     class(data_column), intent(in) :: si
         !! Group variance estimates, unchanged; unallocated storage is empty.
     integer(int32), intent(in), dimension(:) :: ni
