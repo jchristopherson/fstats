@@ -178,16 +178,16 @@ reciprocal-Gamma generalized linear models.</p>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='fstats_normal_distribution.html'>fstats_normal_distribution</a></li>
-                  <li class="list-inline-item"><a href='fstats_robust_statistics.html'>fstats_robust_statistics</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
-                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
-                  <li class="list-inline-item"><a href='fstats_glm_types.html'>fstats_glm_types</a></li>
-                  <li class="list-inline-item">linalg</li>
-                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_t_distribution.html'>fstats_t_distribution</a></li>
+                  <li class="list-inline-item"><a href='fstats_robust_statistics.html'>fstats_robust_statistics</a></li>
+                  <li class="list-inline-item"><a href='fstats_glm_types.html'>fstats_glm_types</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
+                  <li class="list-inline-item"><a href='fstats_normal_distribution.html'>fstats_normal_distribution</a></li>
+                  <li class="list-inline-item">linalg</li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
               </ul>
             </li>
         </ul>
@@ -228,7 +228,7 @@ reciprocal-Gamma generalized linear models.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-iter"></span>
+              <span class="anchor" id="variable-iter~3"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -243,7 +243,7 @@ reciprocal-Gamma generalized linear models.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid"></span>
+              <span class="anchor" id="variable-resid~8"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -450,7 +450,7 @@ right-hand sides are normalized in log space to avoid overflow.</p><a href="../p
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-method"></span>
+              <span class="anchor" id="variable-method~3"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -466,7 +466,7 @@ FS_GLM_GAMMA (reciprocal).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~79"></span>
+              <span class="anchor" id="variable-x~108"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -482,7 +482,7 @@ numerically independent at epsilon * max(N,P) relative scale.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~14"></span>
+              <span class="anchor" id="variable-y~23"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -492,7 +492,7 @@ numerically independent at epsilon * max(N,P) relative scale.</p>
             <td>::</td>
             <td><strong>y</strong></td>
             <td>
-<p>N finite responses: [0,1] for binomial, &gt;= 0 for Poisson,</p><a href="../proc/irls.html#variable-y~14" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>N finite responses: [0,1] for binomial, &gt;= 0 for Poisson,</p><a href="../proc/irls.html#variable-y~23" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -513,7 +513,7 @@ Zero is valid for binomial/Poisson, but Gamma requires X beta &gt; 0.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-weights"></span>
+              <span class="anchor" id="variable-weights~6"></span>
               procedure(<a href='..\interface\robust_weight_function.html'>robust_weight_function</a>),
             </td>
 <td>intent(in),</td>
@@ -544,7 +544,7 @@ pointers select Tukey's biweight on raw response residuals.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info"></span>
+              <span class="anchor" id="variable-info~4"></span>
               type(<a href='..\type\glm_convergence_info.html'>glm_convergence_info</a>),
             </td>
 <td>intent(out),</td>
@@ -560,7 +560,7 @@ absolute coefficient change (not the response residual).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-status"></span>
+              <span class="anchor" id="variable-status~4"></span>
               procedure(<a href='..\interface\glm_iteration_update.html'>glm_iteration_update</a>),
             </td>
 <td>intent(in),</td>
@@ -576,7 +576,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~2"></span>
+              <span class="anchor" id="variable-resid~9"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -591,7 +591,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats"></span>
+              <span class="anchor" id="variable-stats~4"></span>
               type(<a href='..\type\glm_coefficient_statistics.html'>glm_coefficient_statistics</a>),
             </td>
 <td>intent(out),</td>
@@ -615,7 +615,7 @@ do not automatically enable overdispersion estimation.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha"></span>
+              <span class="anchor" id="variable-alpha~10"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -631,7 +631,7 @@ confidence level 1-alpha. Validated even when stats is omitted.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cov"></span>
+              <span class="anchor" id="variable-cov~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -676,7 +676,7 @@ with FS_INVALID_INPUT_ERROR. Not a response covariance matrix.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:33              </p>
+ on 2026-11-01 06:39              </p>
           </div>
         </div>
         <br>

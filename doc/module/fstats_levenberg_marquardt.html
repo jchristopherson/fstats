@@ -177,11 +177,11 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
-                  <li class="list-inline-item">linalg</li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item">linalg</li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
               </ul>
             </li>
         </ul>
@@ -343,7 +343,7 @@ Jacobian matrix.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~6"></span>
+              <span class="anchor" id="variable-method"></span>
               integer(kind=int32),
             </td>
               <td>public</td>
@@ -372,7 +372,7 @@ Jacobian matrix.</p>
           <tbody>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='..\type\lm_solver_options.html#boundprocedure-set_to_default'>set_to_default</a></strong> => lm_set_default_settings</td>
+  <strong><a href='..\type\lm_solver_options.html#boundprocedure-set_to_default~2'>set_to_default</a></strong> => lm_set_default_settings</td>
                 <td></td>
               </tr>
           </tbody>
@@ -407,7 +407,7 @@ of the Levenberg-Marquardt algorithm.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-fun"></span>
+              <span class="anchor" id="variable-fun~3"></span>
               procedure(<a href='..\interface\regression_function.html'>regression_function</a>),
             </td>
 <td>intent(in),</td>
@@ -422,7 +422,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~83"></span>
+              <span class="anchor" id="variable-x~43"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -437,7 +437,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~18"></span>
+              <span class="anchor" id="variable-y~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in)</td>
@@ -452,7 +452,7 @@ of the Levenberg-Marquardt algorithm.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-params"></span>
+              <span class="anchor" id="variable-params~6"></span>
               real(kind=real64),
             </td>
 <td>intent(inout)</td>
@@ -501,7 +501,7 @@ written.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-weights~5"></span>
+              <span class="anchor" id="variable-weights"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -554,7 +554,7 @@ as a value.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats~3"></span>
+              <span class="anchor" id="variable-stats"></span>
               type(<a href='..\type\regression_statistics.html'>regression_statistics</a>),
             </td>
 <td>intent(out),</td>
@@ -570,7 +570,7 @@ to return statistics about the fit for each parameter.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~3"></span>
+              <span class="anchor" id="variable-alpha~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -617,7 +617,7 @@ confidence interval is calculated.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~3"></span>
+              <span class="anchor" id="variable-info"></span>
               type(<a href='..\type\convergence_info.html'>convergence_info</a>),
             </td>
 <td>intent(out),</td>
@@ -633,7 +633,7 @@ the iterative solution and the nature of the convergence.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-status~3"></span>
+              <span class="anchor" id="variable-status"></span>
               procedure(<a href='..\interface\iteration_update.html'>iteration_update</a>),
             </td>
 <td>intent(in),</td>
@@ -649,7 +649,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cov~3"></span>
+              <span class="anchor" id="variable-cov"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -666,7 +666,7 @@ Jacobian. Rank diagnostics are available in info when requested.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-args"></span>
+              <span class="anchor" id="variable-args~4"></span>
               class(*),
             </td>
 <td>intent(inout),</td>
@@ -677,7 +677,7 @@ Jacobian. Rank diagnostics are available in info when requested.</p>
             <td><strong>args</strong></td>
             <td>
 <p>An optional argument allowing the passing in/out of data for the
-<a href="..\proc\nonlinear_least_squares.html#variable-fun">fun</a> routine.</p>
+<a href="..\proc\nonlinear_least_squares.html#variable-fun~3">fun</a> routine.</p>
             </td>
         </tr>
     </tbody>
@@ -707,7 +707,7 @@ Jacobian. Rank diagnostics are available in info when requested.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:33              </p>
+ on 2026-11-01 06:39              </p>
           </div>
         </div>
         <br>
