@@ -118,15 +118,15 @@ contains
         !!
         !! The following errors terminate the program via error stop:
         !!
-        !! - [[FS_INVALID_INPUT_ERROR]]: the file cannot be opened or read,
+        !! - FS_INVALID_INPUT_ERROR: the file cannot be opened or read,
         !!   the delimiter is invalid, header_row is negative, the header row
         !!   is blank or beyond the end of the file, or a quoted field is
         !!   unterminated or followed by text other than a delimiter.
         !!
-        !! - [[FS_ARRAY_SIZE_ERROR]]: a data row holds more fields than the
+        !! - FS_ARRAY_SIZE_ERROR: a data row holds more fields than the
         !!   header row.
         !!
-        !! - [[FS_MEMORY_ERROR]]: the file exceeds 2^31 - 1 bytes.
+        !! - FS_MEMORY_ERROR: the file exceeds 2^31 - 1 bytes.
         character(len = *), intent(in) :: fname
             !! The name of the file to read.
         type(data_table), intent(out) :: table
@@ -577,8 +577,8 @@ contains
             !! The parsed value: 1 or 0 for logical fields, the numeric value
             !! for numeric fields, and 0 for text.
         integer(int32) :: rst
-            !! [[FIELD_LOGICAL]], [[FIELD_INTEGER]], [[FIELD_REAL]], or
-            !! [[FIELD_TEXT]].
+            !! FIELD_LOGICAL, FIELD_INTEGER, FIELD_REAL, or
+            !! FIELD_TEXT.
 
         character(len = 9) :: lower
         integer(int64) :: ival
@@ -700,7 +700,7 @@ contains
         !!
         !! The following errors terminate the program via error stop:
         !!
-        !! - [[FS_INVALID_INPUT_ERROR]]: the delimiter is invalid, or the file
+        !! - FS_INVALID_INPUT_ERROR: the delimiter is invalid, or the file
         !!   cannot be opened or written.
         character(len = *), intent(in) :: fname
             !! The name of the file to write.

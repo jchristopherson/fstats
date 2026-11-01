@@ -33,6 +33,7 @@ module fstats_doe_designs
 
     public :: get_full_factorial_matrix_size
     public :: full_factorial
+    public :: full_factorial_coded
     public :: fractional_factorial
     public :: fractional_factorial_size
     public :: central_composite_design
@@ -157,6 +158,43 @@ subroutine full_factorial(vars, tbl)
 end subroutine
 
 ! ------------------------------------------------------------------------------
+subroutine full_factorial_coded(vars, tbl)
+    !! Computes a full-factorial design in coded variables on the range 
+    !! [-1, +1].  Each factor with L levels is assigned L evenly spaced values 
+    !! from -1 to +1 (inclusive).  A factor with a single level is assigned a 
+    !! value of 0.  For a 2-level factor, the levels are -1 and +1.
+    integer(int32), intent(in) :: vars(:)
+        !! An M-element array containing the M factors to study.  Each of the 
+        !! M entries to the array is expected to contain the number of levels 
+        !! for that particular factor to explore.  This value must be greater 
+        !! than or equal to 1.
+    real(real64), intent(out) :: tbl(:,:)
+        !! A table where the design will be written.  Use 
+        !! get_full_factorial_matrix_size to determine the appropriate 
+        !! table size.
+
+    ! Local Variables
+    integer(int32) :: j, m, n
+    integer(int32), allocatable :: itbl(:,:)
+
+    ! Verify the size of the input table
+    call get_full_factorial_matrix_size(vars, m, n)
+    if (size(tbl, 1) /= m .or. size(tbl, 2) /= n) error stop FS_MATRIX_SIZE_ERROR
+
+    ! Process
+    allocate(itbl(m, n))
+    call full_factorial(vars, itbl)
+    do j = 1, n
+        if (vars(j) == 1) then
+            tbl(:,j) = 0.0d0
+        else
+            tbl(:,j) = -1.0d0 + 2.0d0 * real(itbl(:,j) - 1, real64) / &
+                real(vars(j) - 1, real64)
+        end if
+    end do
+end subroutine
+
+! ------------------------------------------------------------------------------
 subroutine fractional_factorial_size(nfactors, fraction, m, n)
     !! Computes the size of a fractional factorial design.
     !!
@@ -179,20 +217,24 @@ end subroutine
 subroutine fractional_factorial(nfactors, fraction, tbl)
     !! Generates a 2-level fractional factorial design.
     !!
-    !! Uses standard defining relations for common fractions.
+    !! Uses standard defining relations for common fractions.  The result is
+    !! expressed in coded variables where the low and high levels are -1 and
+    !! +1, respectively.
     integer(int32), intent(in) :: nfactors
         !! Number of factors.
     integer(int32), intent(in) :: fraction
         !! Fraction level (1 for 1/2, 2 for 1/4, etc.).
-    integer(int32), intent(out) :: tbl(:,:)
-        !! Design table (runs Ã— factors), coded as 1 and 2.
+    real(real64), intent(out) :: tbl(:,:)
+        !! Design table (runs x factors) in coded variables, where each value is
+        !! either -1 or +1.
 
     ! Local Variables
     integer(int32) :: m, n, i, j, k, l, base_runs
-    integer(int32), allocatable :: base_design(:,:)
+    integer(int32), allocatable :: base_design(:,:), itbl(:,:)
 
     n = nfactors
     m = size(tbl, 1)
+    allocate(itbl(m, n))
 
     ! For 1/2 fraction
     if (fraction == 1) then
@@ -202,14 +244,14 @@ subroutine fractional_factorial(nfactors, fraction, tbl)
         call full_factorial([(2, i=1,nfactors-1)], base_design)
 
         ! Assign first k-1 factors
-        tbl(1:base_runs, 1:nfactors-1) = base_design
+        itbl(1:base_runs, 1:nfactors-1) = base_design
 
         ! Last factor from product of first factors
         if (nfactors > 1) then
             do i = 1, base_runs
-                tbl(i, nfactors) = 1
+                itbl(i, nfactors) = 1
                 do j = 1, nfactors - 1
-                    if (tbl(i, j) == 2) tbl(i, nfactors) = 3 - tbl(i, nfactors)
+                    if (itbl(i, j) == 2) itbl(i, nfactors) = 3 - itbl(i, nfactors)
                 end do
             end do
         end if
@@ -221,29 +263,32 @@ subroutine fractional_factorial(nfactors, fraction, tbl)
         allocate(base_design(base_runs, nfactors - 2))
         call full_factorial([(2, i=1,nfactors-2)], base_design)
 
-        tbl(1:base_runs, 1:nfactors-2) = base_design
+        itbl(1:base_runs, 1:nfactors-2) = base_design
 
         ! Third factor from first two
         if (nfactors > 2) then
             do i = 1, base_runs
-                tbl(i, nfactors-1) = 1
+                itbl(i, nfactors-1) = 1
                 do j = 1, nfactors - 2
-                    if (tbl(i, j) == 2) tbl(i, nfactors-1) = 3 - tbl(i, nfactors-1)
+                    if (itbl(i, j) == 2) itbl(i, nfactors-1) = 3 - itbl(i, nfactors-1)
                 end do
             end do
 
             ! Fourth factor from first and second
             do i = 1, base_runs
-                tbl(i, nfactors) = 1
-                if (tbl(i, 1) == 2) tbl(i, nfactors) = 3 - tbl(i, nfactors)
-                if (tbl(i, 2) == 2) tbl(i, nfactors) = 3 - tbl(i, nfactors)
+                itbl(i, nfactors) = 1
+                if (itbl(i, 1) == 2) itbl(i, nfactors) = 3 - itbl(i, nfactors)
+                if (itbl(i, 2) == 2) itbl(i, nfactors) = 3 - itbl(i, nfactors)
             end do
         end if
 
     else
         ! For other fractions, fall back to full factorial
-        call full_factorial([(2, i=1,nfactors)], tbl)
+        call full_factorial([(2, i=1,nfactors)], itbl)
     end if
+
+    ! Convert from level indices (1, 2) to coded variables (-1, +1)
+    tbl = 2.0d0 * real(itbl, real64) - 3.0d0
 
 end subroutine
 
@@ -289,7 +334,6 @@ subroutine central_composite_design(nfactors, alpha_type, tbl)
     ! Local Variables
     integer(int32) :: m, n, i, j, n_factorial, n_axial, row
     real(real64) :: alpha
-    integer(int32), allocatable :: fact_design(:,:)
 
     m = size(tbl, 1)
     n = size(tbl, 2)
@@ -310,11 +354,7 @@ subroutine central_composite_design(nfactors, alpha_type, tbl)
 
     ! Generate factorial part
     n_factorial = 2**nfactors
-    allocate(fact_design(n_factorial, nfactors))
-    call full_factorial([(2, i=1,nfactors)], fact_design)
-
-    ! Convert to coded scale (1,2 â†’ -1,+1)
-    tbl(1:n_factorial, :) = real(fact_design, real64) * 2.0d0 - 3.0d0
+    call full_factorial_coded([(2, i=1,nfactors)], tbl(1:n_factorial, :))
 
     ! Axial points
     n_axial = 2 * nfactors

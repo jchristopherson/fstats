@@ -32,7 +32,7 @@ program doe_model_comparison_example
     integer(int32) :: i, j, k
     integer(int32), parameter :: npts = 9
     real(real64) :: x(npts, 2), y(npts)
-    real(real64) :: beta_simple(3), beta_full(5)
+    real(real64) :: beta_simple(3), beta_full(6)
     type(doe_model) :: mdl_simple, mdl_full
     type(doe_comparison_result) :: comp
     type(doe_anova_table) :: tbl_simple, tbl_full
@@ -76,17 +76,17 @@ program doe_model_comparison_example
     print '(A,F12.4)', "    SS_residual  = ", tbl_simple%ss_residual
     print '(A,I0)', "    df_model     = ", tbl_simple%df_model
     print '(A,I0)', "    df_residual  = ", tbl_simple%df_residual
-    print '(A,F12.6)', "    F-statistic  = ", tbl_simple%f_statistic
+    print '(A,ES12.4)', "    F-statistic  = ", tbl_simple%f_statistic
     print '(A,F8.6)', "    R-squared    = ", tbl_simple%r_squared
     print '(A)', ""
 
     ! =====================================================================
     ! Model 2: Full Model (With Interaction)
     ! =====================================================================
-    beta_full = [1.0d0, 2.0d0, 1.5d0, 0.3d0, 0.0d0]
-    allocate(mdl_full%coefficients(5), source=beta_full)
-    allocate(mdl_full%stats(5))
-    allocate(mdl_full%map(5), source=[.true., .true., .true., .true., .false.])
+    beta_full = [1.0d0, 2.0d0, 1.5d0, 0.3d0, 0.0d0, 0.0d0]
+    allocate(mdl_full%coefficients(6), source=beta_full)
+    allocate(mdl_full%stats(6))
+    allocate(mdl_full%map(6), source=[.true., .true., .true., .true., .false., .false.])
     mdl_full%nway = 2
 
     print '(A)', "MODEL 2: Full Model (With Interaction)"
@@ -103,21 +103,21 @@ program doe_model_comparison_example
     print '(A,F12.4)', "    SS_residual  = ", tbl_full%ss_residual
     print '(A,I0)', "    df_model     = ", tbl_full%df_model
     print '(A,I0)', "    df_residual  = ", tbl_full%df_residual
-    print '(A,F12.6)', "    F-statistic  = ", tbl_full%f_statistic
+    print '(A,ES12.4)', "    F-statistic  = ", tbl_full%f_statistic
     print '(A,F8.6)', "    R-squared    = ", tbl_full%r_squared
     print '(A)', ""
 
     ! =====================================================================
     ! Compare Models Using F-Test
     ! =====================================================================
-    comp = doe_compare_models(mdl_simple, mdl_full, x, y)
+    comp = doe_compare_models(mdl_full, mdl_simple, x, y)
 
     print '(A)', "MODEL COMPARISON (F-Test for Nested Models)"
     print '(A)', "=" // repeat("=", 50)
     print '(A)', "H0: Simple model is adequate"
     print '(A)', "H1: Full model with interaction is needed"
     print '(A)', ""
-    print '(A,F12.6)', "  F-statistic     = ", comp%f_statistic
+    print '(A,ES12.4)', "  F-statistic     = ", comp%f_statistic
     print '(A,F8.6)', "  p-value         = ", comp%p_value
     print '(A,I0)', "  DF (difference) = ", comp%df_diff
     print '(A,F12.4)', "  RSS (Full)      = ", comp%rss_full

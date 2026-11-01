@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 1.3% of total for modules and submodules.">121 statements</a>
+                 title=" 1.8% of total for modules and submodules.">174 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -150,15 +150,24 @@
 
     <div class="col-md-9" id='text'>
       <p>DOE goodness of fit, residual analysis, comparison, and ANOVA.</p>
+<p>The routines in this module operate on a fitted (or user-defined) 
+doe_model and the data used to evaluate it.  In each case, the model is
+evaluated at the M-by-N factor matrix X using doe_evaluate_model, and 
+the result is compared with the M observed responses Y.  The factor 
+values must be supplied in the same scale (e.g. coded on [-1, 1]) used 
+when the model was fit.</p>
+<p>The number of model parameters, <script type="math/tex">p</script>, is taken as the number of 
+coefficients enabled in the model's usage map (i.e. <code>count(mdl%map)</code>).</p>
 <br>          <div class="card mb-4">
       <h3 class="card-header card-title bg-light">Uses</h3>
       <div class="card-body">
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='fstats_experimental_design.html'>fstats_experimental_design</a></li>
-                  <li class="list-inline-item"><a href='fstats_doe_models.html'>fstats_doe_models</a></li>
+                  <li class="list-inline-item"><a href='fstats_f_distribution.html'>fstats_f_distribution</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_doe_models.html'>fstats_doe_models</a></li>
+                  <li class="list-inline-item"><a href='fstats_experimental_design.html'>fstats_experimental_design</a></li>
               </ul>
             </li>
         </ul>
@@ -181,7 +190,7 @@
 </h3></div>
     <div class="card-body">
           
-  
+  <p>Compares two DOE models using the same data set.</p><a href="../proc/doe_compare_models.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -206,7 +215,7 @@
             <td>::</td>
             <td><strong>mdl1</strong></td>
             <td>
-
+<p>The full model.</p>
             </td>
         </tr>
         <tr>
@@ -221,82 +230,7 @@
             <td>::</td>
             <td><strong>mdl2</strong></td>
             <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-x~18"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:,:)
-            </td>
-            <td>::</td>
-            <td><strong>x</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-y~9"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td></td>            <td>
-              dimension(:)
-            </td>
-            <td>::</td>
-            <td><strong>y</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_comparison_result.html'>doe_comparison_result</a>)</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_model_anova"></span> <h3>public  function <a href='..\proc\doe_model_anova.html'>doe_model_anova</a>(mdl, x, y) result(anova)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~4"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-
+<p>The reduced model.</p>
             </td>
         </tr>
         <tr>
@@ -311,12 +245,13 @@
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>The M-by-N matrix containing the M values of each of the N factors
+at which to evaluate both models.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~10"></span>
+              <span class="anchor" id="variable-y~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -326,7 +261,8 @@
             <td>::</td>
             <td><strong>y</strong></td>
             <td>
-
+<p>The M-element array containing the observed responses.  This array
+must have the same number of rows as x.</p>
             </td>
         </tr>
     </tbody>
@@ -334,19 +270,19 @@
 
     <h4>
     Return Value
-    <small>type(<a href='..\type\doe_anova_table.html'>doe_anova_table</a>)</small>
+    <small>type(<a href='..\type\doe_comparison_result.html'>doe_comparison_result</a>)</small>
     </h4>
-    
+    <p>A doe_comparison_result object containing the comparison results.</p>
 
     </div>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_model_diagnostics"></span> <h3>public  function <a href='..\proc\doe_model_diagnostics.html'>doe_model_diagnostics</a>(mdl, x, y) result(diag)  
+    <div class="card-header codesum"><span class="anchor" id="proc-doe_model_anova"></span> <h3>public  function <a href='..\proc\doe_model_anova.html'>doe_model_anova</a>(mdl, x, y) result(anova)  
 </h3></div>
     <div class="card-body">
           
-  <p>Computes model diagnostics and goodness-of-fit metrics.</p>
+  <p>Computes an analysis of variance (ANOVA) table for a DOE model.</p><a href="../proc/doe_model_anova.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -361,7 +297,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-mdl~2"></span>
+              <span class="anchor" id="variable-mdl~5"></span>
               class(<a href='..\type\doe_model.html'>doe_model</a>),
             </td>
 <td>intent(in)</td>
@@ -371,12 +307,12 @@
             <td>::</td>
             <td><strong>mdl</strong></td>
             <td>
-<p>The fitted DOE model.</p>
+<p>The DOE model to analyze.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~16"></span>
+              <span class="anchor" id="variable-x~20"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -386,12 +322,13 @@
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-<p>The M-by-N matrix of factor values used in model fitting.</p>
+<p>The M-by-N matrix containing the M values of each of the N factors
+at which to evaluate the model.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~7"></span>
+              <span class="anchor" id="variable-y~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -401,7 +338,8 @@
             <td>::</td>
             <td><strong>y</strong></td>
             <td>
-<p>The M-element array of observed responses.</p>
+<p>The M-element array containing the observed responses.  This array
+must have the same number of rows as x.</p>
             </td>
         </tr>
     </tbody>
@@ -409,19 +347,19 @@
 
     <h4>
     Return Value
-    <small>type(<a href='..\type\doe_diagnostics.html'>doe_diagnostics</a>)</small>
+    <small>type(<a href='..\type\doe_anova_table.html'>doe_anova_table</a>)</small>
     </h4>
-    <p>The resulting diagnostics.</p>
+    <p>A doe_anova_table object containing the ANOVA table.</p>
 
     </div>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_residuals_analysis"></span> <h3>public  function <a href='..\proc\doe_residuals_analysis.html'>doe_residuals_analysis</a>(mdl, x, y) result(resid)  
+    <div class="card-header codesum"><span class="anchor" id="proc-doe_model_diagnostics"></span> <h3>public  function <a href='..\proc\doe_model_diagnostics.html'>doe_model_diagnostics</a>(mdl, x, y) result(diag)  
 </h3></div>
     <div class="card-body">
           
-  <p>Computes residual analysis data for model diagnostics.</p>
+  <p>Computes model diagnostics and goodness-of-fit metrics.</p><a href="../proc/doe_model_diagnostics.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -461,12 +399,13 @@
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-<p>The M-by-N matrix of factor values.</p>
+<p>The M-by-N matrix containing the M values of each of the N factors
+used in model fitting.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~8"></span>
+              <span class="anchor" id="variable-y~2"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -476,7 +415,87 @@
             <td>::</td>
             <td><strong>y</strong></td>
             <td>
-<p>The M-element array of observed responses.</p>
+<p>The M-element array containing the observed responses.  This array
+must have the same number of rows as x.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\doe_diagnostics.html'>doe_diagnostics</a>)</small>
+    </h4>
+    <p>A doe_diagnostics object containing the R-squared, adjusted
+R-squared, RMSE, residual standard error, F-statistic, mean
+response, observation count, and parameter count.</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-doe_residuals_analysis"></span> <h3>public  function <a href='..\proc\doe_residuals_analysis.html'>doe_residuals_analysis</a>(mdl, x, y) result(resid)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes residual analysis data for model diagnostics.</p><a href="../proc/doe_residuals_analysis.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-mdl~4"></span>
+              class(<a href='..\type\doe_model.html'>doe_model</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>mdl</strong></td>
+            <td>
+<p>The fitted DOE model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~18"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>The M-by-N matrix containing the M values of each of the N factors
+at which to evaluate the model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~3"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+<p>The M-element array containing the observed responses.  This array
+must have the same number of rows as x.</p>
             </td>
         </tr>
     </tbody>
@@ -486,7 +505,9 @@
     Return Value
     <small>type(<a href='..\type\doe_residuals.html'>doe_residuals</a>)</small>
     </h4>
-    <p>The residual analysis results.</p>
+    <p>A doe_residuals object containing the observed values, predicted
+values, residuals, standardized residuals, and the residual mean
+and standard deviation.</p>
 
     </div>
   </div>
@@ -512,7 +533,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-12 19:19              </p>
+ on 2026-11-01 06:39              </p>
           </div>
         </div>
         <br>

@@ -110,15 +110,15 @@ set.</p><a href="../interface/anova.html" class="pull-right"><emph>Read more&hel
                </tr>
 			   <tr>
                  <td><a href='..\interface\assignment(=).html'>assignment(=)</a></td>
-                 <td><a href='..\module\fstats_data_table.html'>fstats_data_table</a></td>
-                 <td>Interface</td>
-                 <td><p>Defines deep-copy table assignment and shared view assignment.</p></td>
-               </tr>
-			   <tr>
-                 <td><a href='..\interface\assignment(=)~2.html'>assignment(=)</a></td>
                  <td><a href='..\module\fstats_glm_types.html'>fstats_glm_types</a></td>
                  <td>Interface</td>
                  <td><p>Copy every component of a glm_options object.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\interface\assignment(=)~2.html'>assignment(=)</a></td>
+                 <td><a href='..\module\fstats_data_table.html'>fstats_data_table</a></td>
+                 <td>Interface</td>
+                 <td><p>Defines deep-copy table assignment and shared view assignment.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\atan.html'>atan</a></td>
@@ -281,13 +281,20 @@ vector of measured dependent variables.</p><a href="../proc/design_matrix.html" 
                  <td><a href='..\proc\doe_compare_models.html'>doe_compare_models</a></td>
                  <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
-                 <td></td>
+                 <td><p>Compares two DOE models using the same data set.</p><a href="../proc/doe_compare_models.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_design_efficiency.html'>doe_design_efficiency</a></td>
                  <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
                  <td>Function</td>
                  <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\doe_design_terms.html'>doe_design_terms</a></td>
+                 <td><a href='..\module\fstats_doe_models.html'>fstats_doe_models</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Evaluates the model terms (columns of the design matrix) included in
+a model at each of the supplied factor values.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\doe_evaluate_model.html'>doe_evaluate_model</a></td>
@@ -305,40 +312,56 @@ vector of measured dependent variables.</p><a href="../proc/design_matrix.html" 
                  <td><a href='..\proc\doe_model_anova.html'>doe_model_anova</a></td>
                  <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
-                 <td></td>
+                 <td><p>Computes an analysis of variance (ANOVA) table for a DOE model.</p><a href="../proc/doe_model_anova.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\doe_model_covariance.html'>doe_model_covariance</a></td>
+                 <td><a href='..\module\fstats_doe_models.html'>fstats_doe_models</a></td>
+                 <td>Function</td>
+                 <td><p>Computes the unscaled parameter covariance matrix 
+<script type="math/tex"> \left( X^{T} X \right)^{-1} </script> for a model, where <script type="math/tex"> X </script> is the 
+design matrix constructed from the supplied factor values.  Only the 
+parameters included in the model (map = true) are represented.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_model_diagnostics.html'>doe_model_diagnostics</a></td>
                  <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
-                 <td><p>Computes model diagnostics and goodness-of-fit metrics.</p></td>
+                 <td><p>Computes model diagnostics and goodness-of-fit metrics.</p><a href="../proc/doe_model_diagnostics.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_optimize_rsm.html'>doe_optimize_rsm</a></td>
                  <td><a href='..\module\fstats_doe_response_surface.html'>fstats_doe_response_surface</a></td>
                  <td>Function</td>
-                 <td><p>Returns the center point of the supplied factor bounds as an RSM
-optimization result. This routine is currently a placeholder: it does
-not evaluate <code>mdl</code> or perform an optimization. The result is marked as
-converged with an iteration count of 50 and a predicted response of 0.</p></td>
+                 <td><p>Optimizes a fitted response surface within a box of factor bounds.</p><a href="../proc/doe_optimize_rsm.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_predict.html'>doe_predict</a></td>
                  <td><a href='..\module\fstats_doe_prediction.html'>fstats_doe_prediction</a></td>
                  <td>Function</td>
-                 <td><p>Computes predictions with confidence and prediction intervals.</p></td>
+                 <td><p>Computes predictions with confidence and prediction intervals.</p><a href="../proc/doe_predict.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_predict_enhanced.html'>doe_predict_enhanced</a></td>
                  <td><a href='..\module\fstats_doe_prediction.html'>fstats_doe_prediction</a></td>
                  <td>Function</td>
-                 <td></td>
+                 <td><p>Computes predictions with confidence and prediction intervals using a 
+user-supplied residual mean squared error.  This is equivalent to
+doe_predict, and is retained for convenience when the residual mean 
+squared error is computed by the caller.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\doe_residuals_analysis.html'>doe_residuals_analysis</a></td>
                  <td><a href='..\module\fstats_doe_diagnostics.html'>fstats_doe_diagnostics</a></td>
                  <td>Function</td>
-                 <td><p>Computes residual analysis data for model diagnostics.</p></td>
+                 <td><p>Computes residual analysis data for model diagnostics.</p><a href="../proc/doe_residuals_analysis.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\doe_stationary_point.html'>doe_stationary_point</a></td>
+                 <td><a href='..\module\fstats_doe_response_surface.html'>fstats_doe_response_surface</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes the stationary point of a quadratic (nway &lt;= 2) response 
+surface in coded variables and classifies its nature.</p><a href="../proc/doe_stationary_point.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
                </tr>
 			   <tr>
                  <td><a href='..\proc\em_impute.html'>em_impute</a></td>
@@ -400,6 +423,15 @@ the variances of two data sets are not significantly different.</p><a href="../p
                  <td>Subroutine</td>
                  <td><p>Computes a table with values scaled from 1 to N describing a 
 full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='..\proc\full_factorial_coded.html'>full_factorial_coded</a></td>
+                 <td><a href='..\module\fstats_doe_designs.html'>fstats_doe_designs</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Computes a full-factorial design in coded variables on the range 
+[-1, +1].  Each factor with L levels is assigned L evenly spaced values 
+from -1 to +1 (inclusive).  A factor with a single level is assigned a 
+value of 0.  For a 2-level factor, the levels are -1 and +1.</p></td>
                </tr>
 			   <tr>
                  <td><a href='..\interface\gauge_rr.html'>gauge_rr</a></td>
@@ -983,7 +1015,7 @@ existing file.</p><a href="../proc/write_delimited_table.html" class="pull-right
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-12 19:19              </p>
+ on 2026-11-01 06:39              </p>
           </div>
         </div>
         <br>

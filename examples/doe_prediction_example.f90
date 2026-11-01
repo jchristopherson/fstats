@@ -82,7 +82,7 @@ program doe_prediction_example
     end do
     
     alpha = 0.05d0  ! 95% confidence level
-    pred_result = doe_predict_enhanced(model, xpred, alpha, mse)
+    pred_result = doe_predict_enhanced(model, xpred, alpha, mse, x)
     
     ! Display prediction results
     print '(A)', "Prediction Results (sample):"
