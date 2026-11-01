@@ -77,20 +77,20 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p> 0.2% of total for procedures.</p>Including implementation: 40 statements,  1.7% of total for procedures.">4 statements</a>
+                 title="<p> 0.1% of total for procedures.</p>Including implementation: 11 statements,  0.4% of total for procedures.">3 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/fstats_data_table.f90"> Source File</a>
+              <a href="../src/fstats_glm_types.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_data_table.f90.html'>fstats_data_table.f90</a></li>
-                <li class="breadcrumb-item"><a href='..\module\fstats_data_table.html'>fstats_data_table</a></li>
+                <li class="breadcrumb-item"><a href='..\sourcefile\fstats_glm_types.f90.html'>fstats_glm_types.f90</a></li>
+                <li class="breadcrumb-item"><a href='..\module\fstats_glm_types.html'>fstats_glm_types</a></li>
             <li class="breadcrumb-item active" aria-current="page">assignment(=)</li>
           </ol>
         </nav>
@@ -134,8 +134,7 @@
       </a>
       <div id="modprocs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../interface/assignment(=).html#moduleprocedure-dt_assign">dt_assign</a>
-            <a class="list-group-item" href="../interface/assignment(=).html#moduleprocedure-dtv_assign">dtv_assign</a>
+            <a class="list-group-item" href="../interface/assignment(=).html#moduleprocedure-go_assign">go_assign</a>
         </div>
       </div>
     </div>
@@ -149,16 +148,16 @@
 
     <div class="col-md-9" id='text'>
       <h2>public interface assignment(=)</h2>
-      <p>Defines deep-copy table assignment and shared view assignment.</p>
+      <p>Copy every component of a glm_options object.</p>
 <br>
 
 
         <h2>Module Procedures</h2>
             <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-dt_assign"></span> <h3>private  subroutine dt_assign(lhs, rhs)  
+    <div class="card-header codesum"><span class="anchor" id="proc-go_assign"></span> <h3>private  subroutine go_assign(lhs, rhs)  
 </h3></div>
     <div class="card-body">
-        <p>Deep-copies table contents while preserving state identity for attached views.</p>
+        <p>Assigns the contents of one <a href="..\type\glm_options.html">glm_options</a> object to another.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -174,7 +173,7 @@
         <tr>
             <td>
               <span class="anchor" id="variable-lhs"></span>
-              type(<a href='..\type\data_table.html'>data_table</a>),
+              type(<a href='..\type\glm_options.html'>glm_options</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -183,13 +182,13 @@
             <td>::</td>
             <td><strong>lhs</strong></td>
             <td>
-                <p>The table receiving the copied contents.</p>
+                <p>The <a href="..\type\glm_options.html">glm_options</a> object to receive the contents of rhs.</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-rhs"></span>
-              type(<a href='..\type\data_table.html'>data_table</a>),
+              type(<a href='..\type\glm_options.html'>glm_options</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -198,61 +197,7 @@
             <td>::</td>
             <td><strong>rhs</strong></td>
             <td>
-                <p>The table whose contents are copied.</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-            <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-dtv_assign"></span> <h3>private  subroutine dtv_assign(lhs, rhs)  
-</h3></div>
-    <div class="card-body">
-        <p>Assigns a view by sharing its state and copying its positional bounds.</p>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-lhs~2"></span>
-              type(<a href='..\type\data_table_view.html'>data_table_view</a>),
-            </td>
-<td>intent(inout)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>lhs</strong></td>
-            <td>
-                <p>The view receiving the shared state and selector.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-rhs~2"></span>
-              type(<a href='..\type\data_table_view.html'>data_table_view</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>rhs</strong></td>
-            <td>
-                <p>The view whose state and selector are copied.</p>
+                <p>The <a href="..\type\glm_options.html">glm_options</a> object to copy.</p>
             </td>
         </tr>
     </tbody>
@@ -276,7 +221,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-12 19:19              </p>
+ on 2026-11-01 06:27              </p>
           </div>
         </div>
         <br>

@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 2.1% of total for modules and submodules.">199 statements</a>
+                 title=" 2.2% of total for modules and submodules.">216 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -143,6 +143,7 @@
             <a class="list-group-item" href="../module/fstats_doe_designs.html#proc-fractional_factorial">fractional_factorial</a>
             <a class="list-group-item" href="../module/fstats_doe_designs.html#proc-fractional_factorial_size">fractional_factorial_size</a>
             <a class="list-group-item" href="../module/fstats_doe_designs.html#proc-full_factorial">full_factorial</a>
+            <a class="list-group-item" href="../module/fstats_doe_designs.html#proc-full_factorial_coded">full_factorial_coded</a>
             <a class="list-group-item" href="../module/fstats_doe_designs.html#proc-get_full_factorial_matrix_size">get_full_factorial_matrix_size</a>
             <a class="list-group-item" href="../module/fstats_doe_designs.html#proc-latin_hypercube_design">latin_hypercube_design</a>
         </div>
@@ -210,7 +211,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~64"></span>
+              <span class="anchor" id="variable-x~214"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -290,7 +291,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-tbl~3"></span>
+              <span class="anchor" id="variable-tbl~7"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -360,7 +361,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-m~16"></span>
+              <span class="anchor" id="variable-m~33"></span>
               integer(kind=int32),
             </td>
 <td>intent(out)</td>
@@ -375,7 +376,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~26"></span>
+              <span class="anchor" id="variable-n~100"></span>
               integer(kind=int32),
             </td>
 <td>intent(out)</td>
@@ -445,8 +446,8 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-tbl~2"></span>
-              integer(kind=int32),
+              <span class="anchor" id="variable-tbl~6"></span>
+              real(kind=real64),
             </td>
 <td>intent(out)</td>
               <td></td>            <td>
@@ -455,7 +456,8 @@
             <td>::</td>
             <td><strong>tbl</strong>(:,:)</td>
             <td>
-<p>Design table (runs Ã— factors), coded as 1 and 2.</p>
+<p>Design table (runs x factors) in coded variables, where each value is
+either -1 or +1.</p>
             </td>
         </tr>
     </tbody>
@@ -515,7 +517,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-m~14"></span>
+              <span class="anchor" id="variable-m~31"></span>
               integer(kind=int32),
             </td>
 <td>intent(out)</td>
@@ -530,7 +532,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~24"></span>
+              <span class="anchor" id="variable-n~98"></span>
               integer(kind=int32),
             </td>
 <td>intent(out)</td>
@@ -571,7 +573,7 @@ full-factorial design.</p><a href="../proc/full_factorial.html" class="pull-righ
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-vars~2"></span>
+              <span class="anchor" id="variable-vars~3"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -589,8 +591,71 @@ This value must be greater than or equal to 1.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-tbl"></span>
+              <span class="anchor" id="variable-tbl~4"></span>
               integer(kind=int32),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tbl</strong>(:,:)</td>
+            <td>
+<p>A table where the design will be written.  Use 
+get_full_factorial_matrix_size to determine the appropriate 
+table size.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-full_factorial_coded"></span> <h3>public  subroutine <a href='..\proc\full_factorial_coded.html'>full_factorial_coded</a>(vars, tbl)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes a full-factorial design in coded variables on the range 
+[-1, +1].  Each factor with L levels is assigned L evenly spaced values 
+from -1 to +1 (inclusive).  A factor with a single level is assigned a 
+value of 0.  For a 2-level factor, the levels are -1 and +1.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-vars~4"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>vars</strong>(:)</td>
+            <td>
+<p>An M-element array containing the M factors to study.  Each of the 
+M entries to the array is expected to contain the number of levels 
+for that particular factor to explore.  This value must be greater 
+than or equal to 1.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tbl~5"></span>
+              real(kind=real64),
             </td>
 <td>intent(out)</td>
               <td></td>            <td>
@@ -631,7 +696,7 @@ table size.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-vars"></span>
+              <span class="anchor" id="variable-vars~2"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -649,7 +714,7 @@ This value must be greater than or equal to 1.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-m~12"></span>
+              <span class="anchor" id="variable-m~28"></span>
               integer(kind=int32),
             </td>
 <td>intent(out)</td>
@@ -664,7 +729,7 @@ This value must be greater than or equal to 1.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~22"></span>
+              <span class="anchor" id="variable-n~95"></span>
               integer(kind=int32),
             </td>
 <td>intent(out)</td>
@@ -719,7 +784,7 @@ This value must be greater than or equal to 1.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-nsamples~2"></span>
+              <span class="anchor" id="variable-nsamples~3"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -749,7 +814,7 @@ This value must be greater than or equal to 1.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-tbl~4"></span>
+              <span class="anchor" id="variable-tbl~8"></span>
               real(kind=real64),
             </td>
 <td>intent(out)</td>
@@ -789,7 +854,7 @@ This value must be greater than or equal to 1.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-12 19:19              </p>
+ on 2026-11-01 06:27              </p>
           </div>
         </div>
         <br>

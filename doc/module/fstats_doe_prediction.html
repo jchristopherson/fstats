@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.7% of total for modules and submodules.">65 statements</a>
+                 title=" 0.7% of total for modules and submodules.">72 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -148,15 +148,37 @@
 
     <div class="col-md-9" id='text'>
       <p>DOE predictions with confidence and prediction intervals.</p>
+<p>This module evaluates a doe_model at a set of factor values and returns
+the predicted responses along with confidence and prediction intervals.
+With <script type="math/tex">\mathbf{x}_{0}</script> the design-matrix row (model terms) for a 
+prediction point, <script type="math/tex">C = \left( X^{T} X \right)^{-1}</script> the unscaled 
+parameter covariance of the fit, <script type="math/tex">MSE</script> the residual mean squared 
+error, and <script type="math/tex">t</script> the critical value of Student's t distribution with
+<script type="math/tex">\nu = m - p</script> degrees of freedom at probability <script type="math/tex">1 - \alpha / 2</script>, 
+the intervals are</p>
+<p>
+<script type="math/tex; mode=display"> \hat{y} \pm t \sqrt{MSE \cdot \mathbf{x}_{0}^{T} C \mathbf{x}_{0}} </script>
+<script type="math/tex; mode=display"> \hat{y} \pm t \sqrt{MSE \left( 1 + \mathbf{x}_{0}^{T} C 
+\mathbf{x}_{0} \right)} </script>
+</p>
+<p>for the mean response (confidence interval) and for a new observation
+(prediction interval), respectively.  The factor values must be in the 
+same scale (e.g. coded on [-1, 1]) used when the model was fit.</p>
+<p>The covariance matrix and the residual statistics are stored in the 
+model by doe_fit_model.  For a model that was not created by 
+doe_fit_model, supply the factor values used to fit the model (x_fit) 
+and the residual mean squared error (residual_mse) to the routines.</p>
 <br>          <div class="card mb-4">
       <h3 class="card-header card-title bg-light">Uses</h3>
       <div class="card-body">
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='fstats_experimental_design.html'>fstats_experimental_design</a></li>
-                  <li class="list-inline-item"><a href='fstats_doe_models.html'>fstats_doe_models</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_doe_models.html'>fstats_doe_models</a></li>
+                  <li class="list-inline-item"><a href='fstats_experimental_design.html'>fstats_experimental_design</a></li>
+                  <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
+                  <li class="list-inline-item"><a href='fstats_t_distribution.html'>fstats_t_distribution</a></li>
               </ul>
             </li>
         </ul>
@@ -175,11 +197,11 @@
         <section>
           <h2>Functions</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_predict"></span> <h3>public  function <a href='..\proc\doe_predict.html'>doe_predict</a>(mdl, x, alpha) result(pred)  
+    <div class="card-header codesum"><span class="anchor" id="proc-doe_predict"></span> <h3>public  function <a href='..\proc\doe_predict.html'>doe_predict</a>(mdl, x, alpha, x_fit, residual_mse) result(pred)  
 </h3></div>
     <div class="card-body">
           
-  <p>Computes predictions with confidence and prediction intervals.</p>
+  <p>Computes predictions with confidence and prediction intervals.</p><a href="../proc/doe_predict.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -194,7 +216,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-mdl~6"></span>
+              <span class="anchor" id="variable-mdl"></span>
               class(<a href='..\type\doe_model.html'>doe_model</a>),
             </td>
 <td>intent(in)</td>
@@ -204,12 +226,12 @@
             <td>::</td>
             <td><strong>mdl</strong></td>
             <td>
-<p>The fitted DOE model.</p>
+<p>The DOE model.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~210"></span>
+              <span class="anchor" id="variable-x~31"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -219,12 +241,13 @@
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-<p>The M-by-N matrix at which to evaluate the model.</p>
+<p>The M-by-N matrix containing the M values of each of the N factors
+at which to evaluate the model.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~14"></span>
+              <span class="anchor" id="variable-alpha~3"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -234,82 +257,25 @@
             <td>::</td>
             <td><strong>alpha</strong></td>
             <td>
-<p>Significance level (default 0.05 for 95% CI).</p>
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>type(<a href='..\type\doe_prediction.html'>doe_prediction</a>)</small>
-    </h4>
-    <p>The predictions with intervals.</p>
-
-    </div>
-  </div>
-
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-doe_predict_enhanced"></span> <h3>public  function <a href='..\proc\doe_predict_enhanced.html'>doe_predict_enhanced</a>(mdl, x, alpha, residual_mse) result(pred)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-mdl~7"></span>
-              class(<a href='..\type\doe_model.html'>doe_model</a>),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>mdl</strong></td>
-            <td>
-
+<p>The significance level, in the range (0, 1).  The default is 0.05
+(95% intervals).</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~211"></span>
+              <span class="anchor" id="variable-x_fit"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
-              <td></td>            <td>
+              <td>optional,</td>            <td>
               dimension(:,:)
             </td>
             <td>::</td>
-            <td><strong>x</strong></td>
+            <td><strong>x_fit</strong></td>
             <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-alpha~15"></span>
-              real(kind=real64),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>alpha</strong></td>
-            <td>
-
+<p>An optional K-by-N matrix containing the factor values used to fit
+the model.  This is used to compute the parameter covariance and 
+the residual degrees of freedom <script type="math/tex">K - p</script>.</p>
             </td>
         </tr>
         <tr>
@@ -324,7 +290,7 @@
             <td>::</td>
             <td><strong>residual_mse</strong></td>
             <td>
-
+<p>An optional residual mean squared error of the fit.</p>
             </td>
         </tr>
     </tbody>
@@ -334,7 +300,124 @@
     Return Value
     <small>type(<a href='..\type\doe_prediction.html'>doe_prediction</a>)</small>
     </h4>
-    
+    <p>A doe_prediction object containing the M predicted values, the 
+lower and upper confidence bounds, the lower and upper prediction 
+bounds, and the confidence level.</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-doe_predict_enhanced"></span> <h3>public  function <a href='..\proc\doe_predict_enhanced.html'>doe_predict_enhanced</a>(mdl, x, alpha, residual_mse, x_fit) result(pred)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Computes predictions with confidence and prediction intervals using a 
+user-supplied residual mean squared error.  This is equivalent to
+doe_predict, and is retained for convenience when the residual mean 
+squared error is computed by the caller.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-mdl~2"></span>
+              class(<a href='..\type\doe_model.html'>doe_model</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>mdl</strong></td>
+            <td>
+<p>The DOE model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~32"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>The M-by-N matrix containing the M values of each of the N factors
+at which to evaluate the model.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~4"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+<p>The significance level, in the range (0, 1).  The default is 0.05
+(95% intervals).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-residual_mse~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>residual_mse</strong></td>
+            <td>
+<p>An optional residual mean squared error of the fit.  If omitted, 
+the value stored in the model by doe_fit_model is used.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x_fit~2"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>x_fit</strong></td>
+            <td>
+<p>An optional K-by-N matrix containing the factor values used to fit
+the model.  This is required if the model was not created by 
+doe_fit_model.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='..\type\doe_prediction.html'>doe_prediction</a>)</small>
+    </h4>
+    <p>A doe_prediction object containing the M predicted values, the 
+lower and upper confidence bounds, the lower and upper prediction 
+bounds, and the confidence level.</p>
 
     </div>
   </div>
@@ -360,7 +443,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-12 19:19              </p>
+ on 2026-11-01 06:27              </p>
           </div>
         </div>
         <br>

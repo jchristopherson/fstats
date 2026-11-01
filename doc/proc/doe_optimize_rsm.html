@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.9% of total for procedures.">21 statements</a>
+                 title=" 3.7% of total for procedures.">96 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -136,14 +136,45 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public pure function doe_optimize_rsm(mdl, x_low, x_high, method, tol) result(opt)  
+    <h2>public  function doe_optimize_rsm(mdl, x_low, x_high, goal, target, tol, max_iter) result(opt)  
 </h2>
     
 
-    <p>Returns the center point of the supplied factor bounds as an RSM
-optimization result. This routine is currently a placeholder: it does
-not evaluate <code>mdl</code> or perform an optimization. The result is marked as
-converged with an iteration count of 50 and a predicted response of 0.</p>
+    <p>Optimizes a fitted response surface within a box of factor bounds.</p>
+<p>The model is assumed to be defined in coded variables 
+<script type="math/tex">z_{i} \in [-1, 1]</script>, which are related to the natural variables by</p>
+<p>
+<script type="math/tex; mode=display"> x_{i} = \frac{x_{high,i} + x_{low,i}}{2} + 
+\frac{x_{high,i} - x_{low,i}}{2} z_{i} </script>
+</p>
+<p>The problem solved depends on the goal:</p>
+<ul>
+<li><code>max</code>: maximize <script type="math/tex">\hat{y}(z)</script>
+</li>
+<li><code>min</code>: minimize <script type="math/tex">\hat{y}(z)</script>
+</li>
+<li><code>target</code>: minimize <script type="math/tex">(\hat{y}(z) - y_{target})^{2}</script>
+</li>
+</ul>
+<p>subject to <script type="math/tex">-1 \le z_{i} \le 1</script>.  A projected gradient method with 
+an Armijo backtracking line search is used.  Gradients are computed 
+using central differences, which are essentially exact for the 
+polynomial models used here.  The search is repeated from the design 
+center and from points near the corners of the coded region (up to 
+64 corner patterns), and the best result is returned.  A run is 
+considered converged when the norm of the projected gradient step, 
+<script type="math/tex">\| z - P(z - \nabla f) \|</script>, falls below the tolerance.</p>
+<p>For quadratic models (nway &lt;= 2) and the <code>max</code> or <code>min</code> goals, the 
+stationary point is first computed analytically (see 
+doe_stationary_point).  If it lies within the bounds and is of the 
+matching type (a maximum for <code>max</code>, a minimum for <code>min</code>), it is the 
+global optimum and is returned directly.  Otherwise the iterative 
+search is used.</p>
+<p>Note, the result is a local optimum of the fitted model, found from 
+multiple starting points; it is not a guarantee of a global optimum.
+The optimum may lie on the boundary of the factor region, and 
+extrapolation beyond the region of the experimental data should be
+confirmed experimentally.</p>
 
 
     <h3>Arguments</h3>
@@ -159,7 +190,7 @@ converged with an iteration count of 50 and a predicted response of 0.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-mdl~5"></span>
+              <span class="anchor" id="variable-mdl~4"></span>
               class(<a href='..\type\doe_model.html'>doe_model</a>),
             </td>
 <td>intent(in)</td>
@@ -169,12 +200,12 @@ converged with an iteration count of 50 and a predicted response of 0.</p>
             <td>::</td>
             <td><strong>mdl</strong></td>
             <td>
-                <p>The fitted DOE model. Currently unused.</p>
+                <p>The fitted DOE model, defined in coded variables.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x_low~3"></span>
+              <span class="anchor" id="variable-x_low"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -184,12 +215,12 @@ converged with an iteration count of 50 and a predicted response of 0.</p>
             <td>::</td>
             <td><strong>x_low</strong></td>
             <td>
-                <p>Lower natural-scale bound for each factor.</p>
+                <p>The lower natural-scale bound for each factor.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x_high~3"></span>
+              <span class="anchor" id="variable-x_high"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -199,13 +230,14 @@ converged with an iteration count of 50 and a predicted response of 0.</p>
             <td>::</td>
             <td><strong>x_high</strong></td>
             <td>
-                <p>Upper natural-scale bound for each factor. Its size must
-match <code>x_low</code>.</p>
+                <p>The upper natural-scale bound for each factor.  This array must be
+the same size as x_low, and each element must exceed the 
+corresponding element of x_low.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~5"></span>
+              <span class="anchor" id="variable-goal"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -213,15 +245,30 @@ match <code>x_low</code>.</p>
               
             </td>
             <td>::</td>
-            <td><strong>method</strong></td>
+            <td><strong>goal</strong></td>
             <td>
-                <p>Optional method name to store in the result. Defaults to <code>gradient</code>; 
-the method is not used to select an algorithm.</p>
+                <p>The optimization goal: <code>max</code> (the default), <code>min</code>, or <code>target</code>.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-tol~4"></span>
+              <span class="anchor" id="variable-target"></span>
+              real(kind=real64),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>target</strong></td>
+            <td>
+                <p>The target response value.  This is required if goal is <code>target</code>,
+and is ignored otherwise.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tol"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -231,8 +278,24 @@ the method is not used to select an algorithm.</p>
             <td>::</td>
             <td><strong>tol</strong></td>
             <td>
-                <p>Optional convergence tolerance to store in the result.  Defaults to 
-1.0d-6; it does not affect computation.</p>
+                <p>The convergence tolerance on the projected gradient step.  The 
+default is 1.0d-8.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iter"></span>
+              integer(kind=int32),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iter</strong></td>
+            <td>
+                <p>The maximum number of iterations allowed for each starting point.
+The default is 1000.</p>
             </td>
         </tr>
     </tbody>
@@ -240,13 +303,14 @@ the method is not used to select an algorithm.</p>
 
       <h3>Return Value
         <small>
-          <span class="anchor" id="variable-opt~4"></span>
+          <span class="anchor" id="variable-opt"></span>
           type(<a href='..\type\doe_optimization_result.html'>doe_optimization_result</a>)
         </small>
       </h3>
-      <p>An optimization result whose coded factors are zero, natural
-factors are the bounds' midpoints, method and tolerance hold the
-supplied or default values, and convergence is reported as successful.</p>
+      <p>A doe_optimization_result containing the optimal factors in both 
+coded and natural scale, the predicted response at the optimum, 
+the iteration count and convergence flag of the best run, the 
+method name, and the tolerance used.</p>
     <br>
 
 
@@ -275,7 +339,7 @@ supplied or default values, and convergence is reported as successful.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-12 19:19              </p>
+ on 2026-11-01 06:27              </p>
           </div>
         </div>
         <br>
