@@ -290,11 +290,20 @@ program tests
     local = test_doe_fit_1()
     if (.not.local) overall = .false.
 
+    local = test_doe_fit_two_way()
+    if (.not.local) overall = .false.
+
+    local = test_doe_fit_three_way()
+    if (.not.local) overall = .false.
+
     ! New Feature Tests
     local = test_model_diagnostics_1()
     if (.not.local) overall = .false.
 
     local = test_fractional_factorial_1()
+    if (.not.local) overall = .false.
+
+    local = test_full_factorial_coded_1()
     if (.not.local) overall = .false.
 
     local = test_encode_decode_1()
@@ -322,7 +331,13 @@ program tests
     local = test_rsm_optimization_1()
     if (.not.local) overall = .false.
 
+    local = test_rsm_optimization_2()
+    if (.not.local) overall = .false.
+
     local = test_enhanced_prediction_1()
+    if (.not.local) overall = .false.
+
+    local = test_doe_prediction_intervals_1()
     if (.not.local) overall = .false.
 
     ! Nonlinear Regression

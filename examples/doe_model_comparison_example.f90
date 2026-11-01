@@ -32,7 +32,7 @@ program doe_model_comparison_example
     integer(int32) :: i, j, k
     integer(int32), parameter :: npts = 9
     real(real64) :: x(npts, 2), y(npts)
-    real(real64) :: beta_simple(3), beta_full(5)
+    real(real64) :: beta_simple(3), beta_full(6)
     type(doe_model) :: mdl_simple, mdl_full
     type(doe_comparison_result) :: comp
     type(doe_anova_table) :: tbl_simple, tbl_full
@@ -83,10 +83,10 @@ program doe_model_comparison_example
     ! =====================================================================
     ! Model 2: Full Model (With Interaction)
     ! =====================================================================
-    beta_full = [1.0d0, 2.0d0, 1.5d0, 0.3d0, 0.0d0]
-    allocate(mdl_full%coefficients(5), source=beta_full)
-    allocate(mdl_full%stats(5))
-    allocate(mdl_full%map(5), source=[.true., .true., .true., .true., .false.])
+    beta_full = [1.0d0, 2.0d0, 1.5d0, 0.3d0, 0.0d0, 0.0d0]
+    allocate(mdl_full%coefficients(6), source=beta_full)
+    allocate(mdl_full%stats(6))
+    allocate(mdl_full%map(6), source=[.true., .true., .true., .true., .false., .false.])
     mdl_full%nway = 2
 
     print '(A)', "MODEL 2: Full Model (With Interaction)"

@@ -73,8 +73,8 @@ program doe_rsm_optimization_example
     end do
     
     ! Fit quadratic RSM model
-    ! y = beta0 + beta1*x1 + beta2*x2 + beta3*x1^2 + beta4*x2^2 + beta5*x1*x2
-    coeffs = [4.8d0, 0.2d0, 0.3d0, -0.95d0, -0.95d0, 0.05d0]
+    ! y = beta0 + beta1*x1 + beta2*x2 + beta12*x1*x2 + beta11*x1^2 + beta22*x2^2
+    coeffs = [4.8d0, 0.2d0, 0.3d0, 0.05d0, -0.95d0, -0.95d0]
     allocate(mdl%coefficients(nparams), source=coeffs)
     allocate(mdl%stats(nparams))
     allocate(mdl%map(nparams), source=[.true., .true., .true., .true., .true., .true.])
@@ -97,9 +97,9 @@ program doe_rsm_optimization_example
     print '(A)', "=" // repeat("=", 50)
     print '(A)', ""
     
-    ! Gradient-based optimization
-    opt_grad = doe_optimize_rsm(mdl, lower_bounds, upper_bounds, "gradient")
-    print '(A)', "Method 1: Gradient-Based Optimization"
+    ! Maximize the response
+    opt_grad = doe_optimize_rsm(mdl, lower_bounds, upper_bounds, "max")
+    print '(A)', "Goal 1: Maximize the response"
     print '(A)', "-" // repeat("-", 50)
     print '(A,F10.6,A,F10.6)', "  Optimal x1 (coded):       ", opt_grad%optimal_coded_factors(1)
     print '(A,F10.6,A,F10.6)', "  Optimal x2 (coded):       ", opt_grad%optimal_coded_factors(2)
@@ -108,9 +108,9 @@ program doe_rsm_optimization_example
     print '(A,I0)', "  Iterations:               ", opt_grad%iteration_count
     print '(A)', ""
     
-    ! Random search optimization
-    opt_random = doe_optimize_rsm(mdl, lower_bounds, upper_bounds, "random")
-    print '(A)', "Method 2: Random Search Optimization"
+    ! Minimize the response
+    opt_random = doe_optimize_rsm(mdl, lower_bounds, upper_bounds, "min")
+    print '(A)', "Goal 2: Minimize the response"
     print '(A)', "-" // repeat("-", 50)
     print '(A,F10.6,A,F10.6)', "  Optimal x1 (coded):       ", opt_random%optimal_coded_factors(1)
     print '(A,F10.6,A,F10.6)', "  Optimal x2 (coded):       ", opt_random%optimal_coded_factors(2)
@@ -119,9 +119,9 @@ program doe_rsm_optimization_example
     print '(A,I0)', "  Iterations:               ", opt_random%iteration_count
     print '(A)', ""
     
-    ! Grid search optimization
-    opt_grid = doe_optimize_rsm(mdl, lower_bounds, upper_bounds, "grid_search")
-    print '(A)', "Method 3: Grid Search Optimization"
+    ! Achieve a target response
+    opt_grid = doe_optimize_rsm(mdl, lower_bounds, upper_bounds, "target", 4.0d0)
+    print '(A)', "Goal 3: Achieve a target response of 4.0"
     print '(A)', "-" // repeat("-", 50)
     print '(A,F10.6,A,F10.6)', "  Optimal x1 (coded):       ", opt_grid%optimal_coded_factors(1)
     print '(A,F10.6,A,F10.6)', "  Optimal x2 (coded):       ", opt_grid%optimal_coded_factors(2)
@@ -137,11 +137,11 @@ program doe_rsm_optimization_example
     print '(A)', ""
     print '(A)', "INTERPRETATION & RECOMMENDATIONS:"
     print '(A)', "=" // repeat("=", 50)
-    print '(A)', "• True optimum at x1≈0.3, x2≈0.4 with y≈5.0"
-    print '(A)', "• All three methods should find similar optima"
-    print '(A)', "• Gradient method: Fast, good for smooth surfaces"
-    print '(A)', "• Random search: Robust, good for non-convex surfaces"
-    print '(A)', "• Grid search: Exhaustive, guaranteed to find best on grid"
+    print '(A)', "• The fitted surface peaks near x1≈0.11, x2≈0.16 (coded) with y≈4.84"
+    print '(A)', "• Maximize and minimize use a multi-start projected gradient search"
+    print '(A)', "• The optimum may lie on a factor bound"
+    print '(A)', "• The target goal finds settings that achieve a requested response"
+    print '(A)', "• Results are local optima of the fitted model"
     print '(A)', ""
     print '(A)', "Next steps:"
     print '(A)', "  1. Verify optimal settings in confirmatory experiment"

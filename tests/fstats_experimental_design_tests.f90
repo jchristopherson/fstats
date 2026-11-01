@@ -124,7 +124,8 @@ contains
         ! Parameters
         integer(int32), parameter :: nfactor = 3
         integer(int32), parameter :: npts = 50
-        integer(int32), parameter :: nparams = 1 + nfactor + nfactor * (nfactor - 1)
+        integer(int32), parameter :: nparams = 1 + nfactor + &
+            nfactor * (nfactor - 1) / 2 + nfactor
 
         ! Local Variables
         real(real64) :: x(npts,nfactor), mdl(nparams), y(npts), ans(npts)
@@ -137,8 +138,8 @@ contains
         ! Define the answer
         ans = mdl(1) + mdl(2) * x(:,1) + mdl(3) * x(:,2) + mdl(4) * x(:,3) + &
             mdl(5) * x(:,1) * x(:,2) + mdl(6) * x(:,1) * x(:,3) + &
-            mdl(7) * x(:,2) * x(:,1) + mdl(8) * x(:,2) * x(:,3) + &
-            mdl(9) * x(:,3) * x(:,1) + mdl(10) * x(:,3) * x(:,2)
+            mdl(7) * x(:,2) * x(:,3) + mdl(8) * x(:,1)**2 + &
+            mdl(9) * x(:,2)**2 + mdl(10) * x(:,3)**2
 
         ! Perform the calculation
         y = doe_evaluate_model(2, mdl, x)
@@ -159,7 +160,8 @@ contains
         integer(int32), parameter :: nfactor = 3
         integer(int32), parameter :: npts = 50
         integer(int32), parameter :: nparams = 1 + nfactor + &
-            nfactor * (nfactor - 1) + nfactor * (nfactor**2 - 1)
+            nfactor * (nfactor + 1) / 2 + &
+            nfactor * (nfactor + 1) * (nfactor + 2) / 6
 
         ! Local Variables
         real(real64) :: x(npts,nfactor), mdl(nparams), y(npts), ans(npts)
@@ -172,34 +174,13 @@ contains
         ! Define the answer
         ans = mdl(1) + mdl(2) * x(:,1) + mdl(3) * x(:,2) + mdl(4) * x(:,3) + &
             mdl(5) * x(:,1) * x(:,2) + mdl(6) * x(:,1) * x(:,3) + &
-            mdl(7) * x(:,2) * x(:,1) + mdl(8) * x(:,2) * x(:,3) + &
-            mdl(9) * x(:,3) * x(:,1) + mdl(10) * x(:,3) * x(:,2) + &
-            mdl(11) * x(:,1) * x(:,1) * x(:,2) + &
-            mdl(12) * x(:,1) * x(:,1) * x(:,3) + &
-            mdl(13) * x(:,1) * x(:,2) * x(:,1) + &
-            mdl(14) * x(:,1) * x(:,2) * x(:,2) + &
-            mdl(15) * x(:,1) * x(:,2) * x(:,3) + &
-            mdl(16) * x(:,1) * x(:,3) * x(:,1) + &
-            mdl(17) * x(:,1) * x(:,3) * x(:,2) + &
-            mdl(18) * x(:,1) * x(:,3) * x(:,3) + &
-            mdl(19) * x(:,2) * x(:,1) * x(:,1) + &
-            mdl(20) * x(:,2) * x(:,1) * x(:,2) + &
-            mdl(21) * x(:,2) * x(:,1) * x(:,3) + &
-            mdl(22) * x(:,2) * x(:,2) * x(:,1) + &
-            mdl(23) * x(:,2) * x(:,2) * x(:,3) + &
-            mdl(24) * x(:,2) * x(:,3) * x(:,1) + &
-            mdl(25) * x(:,2) * x(:,3) * x(:,2) + &
-            mdl(26) * x(:,2) * x(:,3) * x(:,3) + &
-            mdl(27) * x(:,3) * x(:,1) * x(:,1) + &
-            mdl(28) * x(:,3) * x(:,1) * x(:,2) + &
-            mdl(29) * x(:,3) * x(:,1) * x(:,3) + &
-            mdl(30) * x(:,3) * x(:,2) * x(:,1) + &
-            mdl(31) * x(:,3) * x(:,2) * x(:,2) + &
-            mdl(32) * x(:,3) * x(:,2) * x(:,3) + &
-            mdl(33) * x(:,3) * x(:,3) * x(:,1) + &
-            mdl(34) * x(:,3) * x(:,3) * x(:,2)
-
-
+            mdl(7) * x(:,2) * x(:,3) + mdl(8) * x(:,1)**2 + &
+            mdl(9) * x(:,2)**2 + mdl(10) * x(:,3)**2 + &
+            mdl(11) * x(:,1) * x(:,2) * x(:,3) + &
+            mdl(12) * x(:,1)**2 * x(:,2) + mdl(13) * x(:,1)**2 * x(:,3) + &
+            mdl(14) * x(:,2)**2 * x(:,1) + mdl(15) * x(:,2)**2 * x(:,3) + &
+            mdl(16) * x(:,3)**2 * x(:,1) + mdl(17) * x(:,3)**2 * x(:,2) + &
+            mdl(18) * x(:,1)**3 + mdl(19) * x(:,2)**3 + mdl(20) * x(:,3)**3
         ! Perform the calculation
         y = doe_evaluate_model(3, mdl, x)
 
@@ -207,6 +188,105 @@ contains
         if (.not.is_equal(y, ans)) then
             rst = .false.
             print "(A)", "TEST FAILED: test_eval_model_three_way -1"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_doe_fit_two_way() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        real(real64), parameter :: tol = 1.0d-6
+        integer(int32), parameter :: n = 5
+        integer(int32), parameter :: npts = n * n
+        integer(int32), parameter :: nparams = 6
+
+        ! Local Variables
+        integer(int32) :: i, j, k
+        real(real64) :: x(npts,2), y(npts), beta(nparams)
+        type(doe_model) :: mdl
+
+        ! Initialization
+        rst = .true.
+        beta = [1.0d0, 2.0d0, -1.0d0, 0.5d0, 0.3d0, -0.7d0]
+        k = 0
+        do i = 1, n
+            do j = 1, n
+                k = k + 1
+                x(k,1) = -1.0d0 + 0.5d0 * (i - 1)
+                x(k,2) = -1.0d0 + 0.5d0 * (j - 1)
+            end do
+        end do
+
+        ! Y = b0 + b1 x1 + b2 x2 + b12 x1 x2 + b11 x1**2 + b22 x2**2
+        y = beta(1) + beta(2) * x(:,1) + beta(3) * x(:,2) + &
+            beta(4) * x(:,1) * x(:,2) + beta(5) * x(:,1)**2 + &
+            beta(6) * x(:,2)**2
+
+        ! Fit the model
+        mdl = doe_fit_model(2, x, y)
+
+        ! Test
+        if (size(mdl%coefficients) /= nparams) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_doe_fit_two_way -1"
+            return
+        end if
+        if (.not.is_equal(mdl%coefficients, beta, tol)) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_doe_fit_two_way -2"
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_doe_fit_three_way() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        real(real64), parameter :: tol = 1.0d-6
+        integer(int32), parameter :: n = 4
+        integer(int32), parameter :: npts = n * n * n
+        integer(int32), parameter :: nparams = 20
+
+        ! Local Variables
+        integer(int32) :: i, j, k, l
+        real(real64) :: x(npts,3), y(npts), beta(nparams)
+        type(doe_model) :: mdl
+
+        ! Initialization
+        rst = .true.
+        do i = 1, nparams
+            beta(i) = 0.1d0 * i * (-1.0d0)**i
+        end do
+        l = 0
+        do i = 1, n
+            do j = 1, n
+                do k = 1, n
+                    l = l + 1
+                    x(l,1) = -1.0d0 + (2.0d0 / (n - 1)) * (i - 1)
+                    x(l,2) = -1.0d0 + (2.0d0 / (n - 1)) * (j - 1)
+                    x(l,3) = -1.0d0 + (2.0d0 / (n - 1)) * (k - 1)
+                end do
+            end do
+        end do
+
+        ! Generate the response using the model
+        y = doe_evaluate_model(3, beta, x)
+
+        ! Fit the model
+        mdl = doe_fit_model(3, x, y)
+
+        ! Test
+        if (size(mdl%coefficients) /= nparams) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_doe_fit_three_way -1"
+            return
+        end if
+        if (.not.is_equal(mdl%coefficients, beta, tol)) then
+            rst = .false.
+            print "(A)", "TEST FAILED: test_doe_fit_three_way -2"
         end if
     end function
 
@@ -391,6 +471,28 @@ contains
 
 ! ==============================================================================
 
+    function test_full_factorial_coded_1() result(rst)
+        !! Tests the coded full factorial design.
+        logical :: rst
+
+        ! Local Variables
+        integer(int32), parameter :: vars(2) = [2, 3]
+        real(real64) :: tbl(6, 2), ans(6, 2)
+
+        ! Initialization
+        rst = .true.
+        ans(:,1) = [-1.0d0, -1.0d0, -1.0d0, 1.0d0, 1.0d0, 1.0d0]
+        ans(:,2) = [-1.0d0, 0.0d0, 1.0d0, -1.0d0, 0.0d0, 1.0d0]
+
+        ! Test
+        call full_factorial_coded(vars, tbl)
+        if (.not.is_equal(tbl, ans)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_full_factorial_coded_1"
+        end if
+    end function
+
+! ==============================================================================
     function test_fractional_factorial_1() result(rst)
         !! Tests 2^(3-1) fractional factorial design.
         logical :: rst
@@ -401,7 +503,7 @@ contains
         
         ! Local Variables
         integer(int32) :: m, n
-        integer(int32) :: tbl(4, 3)
+        real(real64) :: tbl(4, 3)
         
         ! Initialization
         rst = .true.
@@ -417,8 +519,8 @@ contains
         ! Generate design
         call fractional_factorial(nfactors, fraction, tbl)
         
-        ! Check all values are 1 or 2
-        if (any(tbl < 1) .or. any(tbl > 2)) then
+        ! Check all values are -1 or +1
+        if (any(abs(abs(tbl) - 1.0d0) > 1.0d-12) .or. any(abs(sum(tbl, 1)) > 1.0d-12)) then
             rst = .false.
             print '(A)', "TEST FAILED: test_fractional_factorial_1 - values"
         end if
@@ -646,7 +748,7 @@ contains
         ! Parameters
         integer(int32), parameter :: npts = 9
         integer(int32), parameter :: nfactors = 2
-        integer(int32), parameter :: nparams_full = 5  ! 1 intercept + 2 main + 2 interactions
+        integer(int32), parameter :: nparams_full = 6  ! 1 intercept + 2 main + 1 interaction + 2 squared
         integer(int32), parameter :: nparams_reduced = 3  ! 1 intercept + 2 main
         
         ! Local Variables
@@ -669,10 +771,11 @@ contains
             end do
         end do
         
-        ! Full model: y = 1 + 2*x1 + 1*x2 + 0.5*x1*x2 + 0.1*x2*x1
-        beta_full = [1.0d0, 2.0d0, 1.0d0, 0.5d0, 0.1d0]
+        ! Full model: y = 1 + 2*x1 + 1*x2 + 0.5*x1*x2 + 0.1*x1**2 + 0.2*x2**2
+        beta_full = [1.0d0, 2.0d0, 1.0d0, 0.5d0, 0.1d0, 0.2d0]
         y = beta_full(1) + beta_full(2)*x(:,1) + beta_full(3)*x(:,2) + &
-            beta_full(4)*x(:,1)*x(:,2) + beta_full(5)*x(:,2)*x(:,1)
+            beta_full(4)*x(:,1)*x(:,2) + beta_full(5)*x(:,1)**2 + &
+            beta_full(6)*x(:,2)**2
         
         ! Reduced model: y = 1 + 2*x1 + 1*x2 (no interaction)
         beta_reduced = [1.0d0, 2.0d0, 1.0d0]
@@ -680,7 +783,7 @@ contains
         ! Set up full model (with interactions)
         allocate(mdl_full%coefficients(nparams_full), source=beta_full)
         allocate(mdl_full%stats(nparams_full))
-        allocate(mdl_full%map(nparams_full), source=[.true., .true., .true., .true., .true.])
+        allocate(mdl_full%map(nparams_full), source=[.true., .true., .true., .true., .true., .true.])
         mdl_full%nway = 2
         
         ! Set up reduced model (main effects only)
@@ -811,6 +914,127 @@ contains
         
     end function
 
+! ------------------------------------------------------------------------------
+    function test_rsm_optimization_2() result(rst)
+        !! Tests the response-surface optimizer against known optima.
+        logical :: rst
+
+        ! Parameters
+        real(real64), parameter :: tol = 1.0d-5
+
+        ! Local Variables
+        type(doe_model) :: quad, lin, saddle
+        type(doe_optimization_result) :: opt
+
+        rst = .true.
+
+        ! Interior maximum: y = 5 - (z1 - 0.3)**2 - (z2 - 0.4)**2
+        call build_model(2, [4.75d0, 0.6d0, 0.8d0, 0.0d0, -1.0d0, -1.0d0], quad)
+        opt = doe_optimize_rsm(quad, [-2.0d0, -2.0d0], [2.0d0, 2.0d0])
+        if (.not.opt%converged .or. &
+            abs(opt%optimal_coded_factors(1) - 0.3d0) > tol .or. &
+            abs(opt%optimal_coded_factors(2) - 0.4d0) > tol .or. &
+            abs(opt%optimal_response - 5.0d0) > tol .or. &
+            abs(opt%optimal_natural_factors(1) - 0.6d0) > tol .or. &
+            abs(opt%optimal_natural_factors(2) - 0.8d0) > tol) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_rsm_optimization_2 -1"
+        end if
+
+        ! Interior minimum of the negated surface
+        call build_model(2, [-4.75d0, -0.6d0, -0.8d0, 0.0d0, 1.0d0, 1.0d0], quad)
+        opt = doe_optimize_rsm(quad, [-2.0d0, -2.0d0], [2.0d0, 2.0d0], "min")
+        if (abs(opt%optimal_coded_factors(1) - 0.3d0) > tol .or. &
+            abs(opt%optimal_coded_factors(2) - 0.4d0) > tol .or. &
+            abs(opt%optimal_response + 5.0d0) > tol) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_rsm_optimization_2 -2"
+        end if
+
+        ! Active bounds: y = 10 + 0.1 z1 - z2 on [0, 100]
+        call build_model(1, [10.0d0, 0.1d0, -1.0d0], lin)
+        opt = doe_optimize_rsm(lin, [0.0d0, 0.0d0], [100.0d0, 100.0d0])
+        if (abs(opt%optimal_natural_factors(1) - 100.0d0) > tol .or. &
+            abs(opt%optimal_natural_factors(2)) > tol .or. &
+            abs(opt%optimal_response - 11.1d0) > tol) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_rsm_optimization_2 -3"
+        end if
+        opt = doe_optimize_rsm(lin, [0.0d0, 0.0d0], [100.0d0, 100.0d0], "min")
+        if (abs(opt%optimal_natural_factors(1)) > tol .or. &
+            abs(opt%optimal_natural_factors(2) - 100.0d0) > tol .or. &
+            abs(opt%optimal_response - 8.9d0) > tol) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_rsm_optimization_2 -4"
+        end if
+
+        ! Target: response of 4 on the interior surface
+        call build_model(2, [4.75d0, 0.6d0, 0.8d0, 0.0d0, -1.0d0, -1.0d0], quad)
+        opt = doe_optimize_rsm(quad, [-2.0d0, -2.0d0], [2.0d0, 2.0d0], &
+            "target", 4.0d0)
+        if (abs(opt%optimal_response - 4.0d0) > tol) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_rsm_optimization_2 -5"
+        end if
+
+        ! Saddle: y = z1**2 - z2**2 + 0.1 z1, maximum of 1.1 at (1, 0)
+        call build_model(2, [0.0d0, 0.1d0, 0.0d0, 0.0d0, 1.0d0, -1.0d0], saddle)
+        opt = doe_optimize_rsm(saddle, [-1.0d0, -1.0d0], [1.0d0, 1.0d0])
+        if (abs(opt%optimal_coded_factors(1) - 1.0d0) > tol .or. &
+            abs(opt%optimal_coded_factors(2)) > tol .or. &
+            abs(opt%optimal_response - 1.1d0) > tol) then
+            rst = .false.
+        end if
+
+        ! Analytic stationary point: maximum, saddle, and singular cases
+        block
+            real(real64), allocatable :: zs(:), ev(:)
+            character(len=:), allocatable :: nat
+            logical :: ok
+
+            call build_model(2, [4.75d0, 0.6d0, 0.8d0, 0.0d0, -1.0d0, -1.0d0], quad)
+            call doe_stationary_point(quad, 2, zs, nat, ok, ev)
+            if (.not.ok .or. nat /= "maximum" .or. &
+                abs(zs(1) - 0.3d0) > 1.0d-10 .or. &
+                abs(zs(2) - 0.4d0) > 1.0d-10 .or. &
+                any(abs(ev + 2.0d0) > 1.0d-10)) then
+                rst = .false.
+                print '(A)', "TEST FAILED: test_rsm_optimization_2 -7"
+            end if
+            opt = doe_optimize_rsm(quad, [-2.0d0, -2.0d0], [2.0d0, 2.0d0])
+            if (opt%iteration_count /= 0 .or. &
+                opt%method /= "analytic stationary point") then
+                rst = .false.
+                print '(A)', "TEST FAILED: test_rsm_optimization_2 -8"
+            end if
+
+            call doe_stationary_point(saddle, 2, zs, nat, ok)
+            if (.not.ok .or. nat /= "saddle" .or. &
+                abs(zs(1) + 0.05d0) > 1.0d-10 .or. abs(zs(2)) > 1.0d-10) then
+                rst = .false.
+                print '(A)', "TEST FAILED: test_rsm_optimization_2 -9"
+            end if
+
+            call doe_stationary_point(lin, 2, zs, nat, ok)
+            if (ok .or. nat /= "singular") then
+                rst = .false.
+                print '(A)', "TEST FAILED: test_rsm_optimization_2 -10"
+            end if
+        end block
+
+    contains
+        subroutine build_model(nway, beta, mdl)
+            integer(int32), intent(in) :: nway
+            real(real64), intent(in) :: beta(:)
+            type(doe_model), intent(out) :: mdl
+
+            mdl%nway = nway
+            allocate(mdl%coefficients, source = beta)
+            allocate(mdl%stats(size(beta)))
+            allocate(mdl%map(size(beta)), source = .true.)
+        end subroutine
+    end function
+
 ! ==============================================================================
 
     function test_enhanced_prediction_1() result(rst)
@@ -842,7 +1066,7 @@ contains
         
         ! Compute predictions with MSE
         mse = 0.01d0
-        pred = doe_predict_enhanced(mdl, x, 0.05d0, mse)
+        pred = doe_predict_enhanced(mdl, x, 0.05d0, mse, x)
         
         ! Check prediction intervals
         if (.not.allocated(pred%predicted_values)) then
@@ -861,6 +1085,63 @@ contains
             ! Warning, not failure - could be due to approximation
         end if
         
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_doe_prediction_intervals_1() result(rst)
+        !! Compares the intervals for a straight-line fit with the closed-form
+        !! simple linear regression result.
+        logical :: rst
+
+        ! Parameters
+        integer(int32), parameter :: npts = 10
+        real(real64), parameter :: tcrit = 2.306004135204166d0 ! t(0.975, 8)
+        real(real64), parameter :: tol = 1.0d-8
+
+        ! Local Variables
+        integer(int32) :: i
+        real(real64) :: x(npts, 1), y(npts), xp(3, 1), xbar, sxx, mse, q, hw
+        real(real64) :: b1, b0
+        type(doe_model) :: mdl
+        type(doe_prediction) :: pred
+
+        ! Initialization
+        rst = .true.
+        x(:, 1) = [(real(i, real64), i = 1, npts)]
+        y = [1.2d0, 2.9d0, 5.3d0, 6.8d0, 9.4d0, 10.9d0, 13.3d0, 14.6d0, &
+            17.4d0, 18.7d0]
+        xp(:, 1) = [0.0d0, 5.5d0, 12.0d0]
+
+        ! Closed-form solution
+        xbar = sum(x(:,1)) / npts
+        sxx = sum((x(:,1) - xbar)**2)
+        b1 = sum((x(:,1) - xbar) * (y - sum(y) / npts)) / sxx
+        b0 = sum(y) / npts - b1 * xbar
+        mse = sum((y - b0 - b1 * x(:,1))**2) / (npts - 2)
+
+        ! Fit and predict
+        mdl = doe_fit_model(1, x, y)
+        pred = doe_predict(mdl, xp)
+
+        do i = 1, 3
+            q = 1.0d0 / npts + (xp(i,1) - xbar)**2 / sxx
+            hw = tcrit * sqrt(mse * q)
+            if (abs(pred%confidence_upper(i) - pred%predicted_values(i) - hw) &
+                > tol) then
+                rst = .false.
+                print '(A,I0)', "TEST FAILED: test_doe_prediction_intervals_1 -1: ", i
+            end if
+            hw = tcrit * sqrt(mse * (1.0d0 + q))
+            if (abs(pred%predicted_values(i) - pred%prediction_lower(i) - hw) &
+                > tol) then
+                rst = .false.
+                print '(A,I0)', "TEST FAILED: test_doe_prediction_intervals_1 -2: ", i
+            end if
+        end do
+        if (abs(pred%confidence_level - 0.95d0) > tol) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_doe_prediction_intervals_1 -3"
+        end if
     end function
 
 ! ==============================================================================
