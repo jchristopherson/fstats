@@ -113,6 +113,22 @@ jobs:
           mkdir -p "$ALIAS_DIR"
           cp "$OPENBLAS_LIB" "$ALIAS_DIR/libblas.a"
           cp "$OPENBLAS_LIB" "$ALIAS_DIR/liblapack.a"
+
+          ARPACK_LIB=""
+          for CANDIDATE in "$LIB_DIR/libarpack.dll.a" "$LIB_DIR/libarpack.a"; do
+            if [[ -f "$CANDIDATE" ]]; then
+              ARPACK_LIB="$CANDIDATE"
+              break
+            fi
+          done
+
+          if [[ -z "$ARPACK_LIB" ]]; then
+            echo "Unable to locate ARPACK library in $LIB_DIR"
+            ls -la "$LIB_DIR"/libarpack* || true
+            exit 1
+          fi
+
+          cp "$ARPACK_LIB" "$ALIAS_DIR/libarpack.a"
           echo "LIBRARY_PATH=$ALIAS_DIR${LIBRARY_PATH:+:$LIBRARY_PATH}" >> "$GITHUB_ENV"
 
       - name: Show compiler version
