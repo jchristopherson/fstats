@@ -178,16 +178,16 @@ reciprocal-Gamma generalized linear models.</p>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_normal_distribution.html'>fstats_normal_distribution</a></li>
                   <li class="list-inline-item"><a href='fstats_robust_statistics.html'>fstats_robust_statistics</a></li>
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/ieee_arithmetic'>ieee_arithmetic</a></li>
-                  <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
-                  <li class="list-inline-item"><a href='fstats_normal_distribution.html'>fstats_normal_distribution</a></li>
                   <li class="list-inline-item"><a href='fstats_hypothesis.html'>fstats_hypothesis</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='fstats_regression.html'>fstats_regression</a></li>
+                  <li class="list-inline-item"><a href='fstats_glm_types.html'>fstats_glm_types</a></li>
                   <li class="list-inline-item">linalg</li>
                   <li class="list-inline-item"><a href='fstats_errors.html'>fstats_errors</a></li>
                   <li class="list-inline-item"><a href='fstats_t_distribution.html'>fstats_t_distribution</a></li>
-                  <li class="list-inline-item"><a href='fstats_glm_types.html'>fstats_glm_types</a></li>
               </ul>
             </li>
         </ul>
@@ -228,7 +228,7 @@ reciprocal-Gamma generalized linear models.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-iter~6"></span>
+              <span class="anchor" id="variable-iter"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -243,7 +243,7 @@ reciprocal-Gamma generalized linear models.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~10"></span>
+              <span class="anchor" id="variable-resid"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -258,7 +258,7 @@ reciprocal-Gamma generalized linear models.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-beta~6"></span>
+              <span class="anchor" id="variable-beta"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -305,7 +305,7 @@ reciprocal-Gamma generalized linear models.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-eta~5"></span>
+              <span class="anchor" id="variable-eta~4"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -350,7 +350,7 @@ reciprocal-Gamma generalized linear models.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-eta~7"></span>
+              <span class="anchor" id="variable-eta~6"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -395,7 +395,7 @@ reciprocal-Gamma generalized linear models.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-eta~6"></span>
+              <span class="anchor" id="variable-eta~5"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -450,7 +450,7 @@ right-hand sides are normalized in log space to avoid overflow.</p><a href="../p
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-method~5"></span>
+              <span class="anchor" id="variable-method"></span>
               integer(kind=int32),
             </td>
 <td>intent(in)</td>
@@ -466,7 +466,7 @@ FS_GLM_GAMMA (reciprocal).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~236"></span>
+              <span class="anchor" id="variable-x~79"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -482,7 +482,7 @@ numerically independent at epsilon * max(N,P) relative scale.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~43"></span>
+              <span class="anchor" id="variable-y~14"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -492,12 +492,12 @@ numerically independent at epsilon * max(N,P) relative scale.</p>
             <td>::</td>
             <td><strong>y</strong></td>
             <td>
-<p>N finite responses: [0,1] for binomial, &gt;= 0 for Poisson,</p><a href="../proc/irls.html#variable-y~43" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>N finite responses: [0,1] for binomial, &gt;= 0 for Poisson,</p><a href="../proc/irls.html#variable-y~14" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-beta~7"></span>
+              <span class="anchor" id="variable-beta~2"></span>
               real(kind=real64),
             </td>
 <td>intent(inout),</td>
@@ -513,7 +513,7 @@ Zero is valid for binomial/Poisson, but Gamma requires X beta &gt; 0.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-weights~6"></span>
+              <span class="anchor" id="variable-weights"></span>
               procedure(<a href='..\interface\robust_weight_function.html'>robust_weight_function</a>),
             </td>
 <td>intent(in),</td>
@@ -544,7 +544,7 @@ pointers select Tukey's biweight on raw response residuals.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~4"></span>
+              <span class="anchor" id="variable-info"></span>
               type(<a href='..\type\glm_convergence_info.html'>glm_convergence_info</a>),
             </td>
 <td>intent(out),</td>
@@ -560,7 +560,7 @@ absolute coefficient change (not the response residual).</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-status~4"></span>
+              <span class="anchor" id="variable-status"></span>
               procedure(<a href='..\interface\glm_iteration_update.html'>glm_iteration_update</a>),
             </td>
 <td>intent(in),</td>
@@ -576,7 +576,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-resid~11"></span>
+              <span class="anchor" id="variable-resid~2"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -591,7 +591,7 @@ iteration information.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-stats~5"></span>
+              <span class="anchor" id="variable-stats"></span>
               type(<a href='..\type\glm_coefficient_statistics.html'>glm_coefficient_statistics</a>),
             </td>
 <td>intent(out),</td>
@@ -615,7 +615,7 @@ do not automatically enable overdispersion estimation.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alpha~22"></span>
+              <span class="anchor" id="variable-alpha"></span>
               real(kind=real64),
             </td>
 <td>intent(in),</td>
@@ -631,7 +631,7 @@ confidence level 1-alpha. Validated even when stats is omitted.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cov~3"></span>
+              <span class="anchor" id="variable-cov"></span>
               real(kind=real64),
             </td>
 <td>intent(out),</td>
@@ -676,7 +676,7 @@ with FS_INVALID_INPUT_ERROR. Not a response covariance matrix.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:27              </p>
+ on 2026-11-01 06:33              </p>
           </div>
         </div>
         <br>

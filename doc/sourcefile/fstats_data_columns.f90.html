@@ -221,13 +221,13 @@
 <a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">        </span><span class="k">procedure</span><span class="p">(</span><span class="n">data_column_integer_query</span><span class="p">),</span><span class="w"> </span><span class="k">deferred</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">get_data_type</span>
 <a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">            </span><span class="c">!! Gets the data type stored by the column:</span>
 <a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">            </span><span class="c">!!</span>
-<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">            </span><span class="c">!! - [[FS_COLUMN_INTEGER]]</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">            </span><span class="c">!! - FS_COLUMN_INTEGER</span>
 <a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">            </span><span class="c">!!</span>
-<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">            </span><span class="c">!! - [[FS_COLUMN_REAL]]</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">            </span><span class="c">!! - FS_COLUMN_REAL</span>
 <a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">            </span><span class="c">!!</span>
-<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">            </span><span class="c">!! - [[FS_COLUMN_LOGICAL]]</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">            </span><span class="c">!! - FS_COLUMN_LOGICAL</span>
 <a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">            </span><span class="c">!!</span>
-<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">            </span><span class="c">!! - [[FS_COLUMN_STRING]]</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">            </span><span class="c">!! - FS_COLUMN_STRING</span>
 <a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">        </span><span class="k">procedure</span><span class="p">(</span><span class="n">data_column_array_copy</span><span class="p">),</span><span class="w"> </span><span class="k">deferred</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">copy</span>
 <a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">            </span><span class="c">!! Copies the contents of the column to an array.</span>
 <a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">        </span><span class="k">procedure</span><span class="p">(</span><span class="n">data_column_array_view</span><span class="p">),</span><span class="w"> </span><span class="k">deferred</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">view</span>
@@ -1637,7 +1637,7 @@
 <a id="ln-1481" name="ln-1481" href="#ln-1481"></a><span class="c">! ------------------------------------------------------------------------------</span>
 <a id="ln-1482" name="ln-1482" href="#ln-1482"></a><span class="w">    </span><span class="k">pure function </span><span class="n">rc_add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
 <a id="ln-1483" name="ln-1483" href="#ln-1483"></a><span class="w">        </span><span class="c">!! Overloads `+` to add corresponding elements of two columns.</span>
-<a id="ln-1484" name="ln-1484" href="#ln-1484"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].</span>
+<a id="ln-1484" name="ln-1484" href="#ln-1484"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.</span>
 <a id="ln-1485" name="ln-1485" href="#ln-1485"></a><span class="w">        </span><span class="k">class</span><span class="p">(</span><span class="n">real_column</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>
 <a id="ln-1486" name="ln-1486" href="#ln-1486"></a><span class="w">            </span><span class="c">!! The left and right operands; unallocated storage is treated as empty.</span>
 <a id="ln-1487" name="ln-1487" href="#ln-1487"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">real_column</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
@@ -1650,7 +1650,7 @@
 <a id="ln-1494" name="ln-1494" href="#ln-1494"></a><span class="c">! ------------------------------------------------------------------------------</span>
 <a id="ln-1495" name="ln-1495" href="#ln-1495"></a><span class="w">    </span><span class="k">pure function </span><span class="n">rc_subtract</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
 <a id="ln-1496" name="ln-1496" href="#ln-1496"></a><span class="w">        </span><span class="c">!! Overloads `-` to subtract corresponding elements of two columns.</span>
-<a id="ln-1497" name="ln-1497" href="#ln-1497"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].</span>
+<a id="ln-1497" name="ln-1497" href="#ln-1497"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.</span>
 <a id="ln-1498" name="ln-1498" href="#ln-1498"></a><span class="w">        </span><span class="k">class</span><span class="p">(</span><span class="n">real_column</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>
 <a id="ln-1499" name="ln-1499" href="#ln-1499"></a><span class="w">            </span><span class="c">!! The left and right operands; unallocated storage is treated as empty.</span>
 <a id="ln-1500" name="ln-1500" href="#ln-1500"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">real_column</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
@@ -1663,7 +1663,7 @@
 <a id="ln-1507" name="ln-1507" href="#ln-1507"></a><span class="c">! ------------------------------------------------------------------------------</span>
 <a id="ln-1508" name="ln-1508" href="#ln-1508"></a><span class="w">    </span><span class="k">pure function </span><span class="n">rc_multiply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
 <a id="ln-1509" name="ln-1509" href="#ln-1509"></a><span class="w">        </span><span class="c">!! Overloads `*` to multiply corresponding elements, not compute a dot product.</span>
-<a id="ln-1510" name="ln-1510" href="#ln-1510"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].</span>
+<a id="ln-1510" name="ln-1510" href="#ln-1510"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.</span>
 <a id="ln-1511" name="ln-1511" href="#ln-1511"></a><span class="w">        </span><span class="k">class</span><span class="p">(</span><span class="n">real_column</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>
 <a id="ln-1512" name="ln-1512" href="#ln-1512"></a><span class="w">            </span><span class="c">!! The left and right operands; unallocated storage is treated as empty.</span>
 <a id="ln-1513" name="ln-1513" href="#ln-1513"></a><span class="w">        </span><span class="k">type</span><span class="p">(</span><span class="n">real_column</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
@@ -1676,7 +1676,7 @@
 <a id="ln-1520" name="ln-1520" href="#ln-1520"></a><span class="c">! ------------------------------------------------------------------------------</span>
 <a id="ln-1521" name="ln-1521" href="#ln-1521"></a><span class="w">    </span><span class="k">pure function </span><span class="n">rc_divide</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
 <a id="ln-1522" name="ln-1522" href="#ln-1522"></a><span class="w">        </span><span class="c">!! Overloads `/` to divide corresponding elements of two columns.</span>
-<a id="ln-1523" name="ln-1523" href="#ln-1523"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].</span>
+<a id="ln-1523" name="ln-1523" href="#ln-1523"></a><span class="w">        </span><span class="c">!! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.</span>
 <a id="ln-1524" name="ln-1524" href="#ln-1524"></a><span class="w">        </span><span class="c">!! Zero divisors and nonfinite values follow intrinsic division behavior.</span>
 <a id="ln-1525" name="ln-1525" href="#ln-1525"></a><span class="w">        </span><span class="k">class</span><span class="p">(</span><span class="n">real_column</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>
 <a id="ln-1526" name="ln-1526" href="#ln-1526"></a><span class="w">            </span><span class="c">!! The numerator and denominator columns; unallocated storage is empty.</span>
@@ -1811,7 +1811,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:27              </p>
+ on 2026-11-01 06:33              </p>
           </div>
         </div>
         <br>
