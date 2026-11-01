@@ -30,11 +30,11 @@ program example
     implicit none
 
     ! Local Variables
-    integer(int32), parameter :: eval_size = 500, group_count = 5, &
+    integer, parameter :: eval_size = 500, group_count = 5, &
         replicates_per_group = 10
-    integer(int32), dimension(group_count), parameter :: success_count = &
+    integer, dimension(group_count), parameter :: success_count = &
         [1, 3, 5, 7, 9]
-    integer(int32) :: i, group_index, replicate_index, observation_index
+    integer :: i, group_index, replicate_index, observation_index
     real(real64) :: x(group_count * replicates_per_group,2), &
         y(group_count * replicates_per_group), beta_p(2), eta(eval_size), &
         f(eval_size), xi(eval_size,2), group_x(group_count), &

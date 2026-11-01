@@ -50,7 +50,7 @@ program example
     ! Local Variables
     character, parameter :: tab = achar(9)
     character, parameter :: nl = new_line('a')
-    integer(int32) :: i
+    integer :: i
     procedure(regression_function), pointer :: fun
     real(real64) :: xp(21), yp(21), params(4), ymod(21), resid(21), &
         ylmod(21), lresid(21), lparams(4)

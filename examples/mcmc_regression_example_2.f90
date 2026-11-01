@@ -181,7 +181,7 @@ program example
     implicit none
     
     ! Parameters
-    integer(int32), parameter :: ndata = 500
+    integer, parameter :: ndata = 500
     real(real64), parameter :: dt = 1.0d-3
 
     ! Model Parameters
@@ -193,7 +193,7 @@ program example
     real(real64), parameter :: noise_range = 2.0d-1
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: xdata(ndata), ydata(ndata), noise(ndata), f(ndata), &
         s1, s2, s3, sigma
     real(real64), allocatable, dimension(:,:) :: chain

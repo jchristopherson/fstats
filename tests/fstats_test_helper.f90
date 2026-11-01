@@ -50,7 +50,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32) :: i, n
+        integer :: i, n
         real(real64) :: t
 
         ! Process
@@ -78,7 +78,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32) :: i, n
+        integer :: i, n
         real(real32) :: t
 
         ! Process
@@ -140,7 +140,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32) :: i, j, m, n
+        integer :: i, j, m, n
         real(real64) :: t
 
         ! Process
@@ -171,7 +171,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32) :: i, j, m, n
+        integer :: i, j, m, n
         real(real32) :: t
 
         ! Process
@@ -197,11 +197,11 @@ contains
 ! ------------------------------------------------------------------------------
     pure function is_equal_mtx_int32(x, y) result(rst)
         ! Arguments
-        integer(int32), intent(in) :: x(:,:), y(:,:)
+        integer, intent(in) :: x(:,:), y(:,:)
         logical :: rst
 
         ! Process
-        integer(int32) :: i, j, m, n
+        integer :: i, j, m, n
 
         m = size(x, 1)
         n = size(x, 2)
@@ -223,7 +223,7 @@ contains
 ! ------------------------------------------------------------------------------
     function create_real64_array(n) result(rst)
         ! Arguments
-        integer(int32), intent(in) :: n
+        integer, intent(in) :: n
         real(real64), allocatable :: rst(:)
 
         ! Process
@@ -234,7 +234,7 @@ contains
 ! ------------------------------------------------------------------------------
     function create_real32_array(n) result(rst)
         ! Arguments
-        integer(int32), intent(in) :: n
+        integer, intent(in) :: n
         real(real32), allocatable :: rst(:)
 
         ! Process

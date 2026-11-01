@@ -64,11 +64,11 @@ function test_allan_variance_2() result(rst)
     logical :: rst
 
     ! Local Variables
-    integer(int32), parameter :: n = 201
+    integer, parameter :: n = 201
     real(real64), parameter :: dt = 2.5d-1
     real(real64), parameter :: slope = 3.0d0
     real(real64), parameter :: tol = 1.0d-10
-    integer(int32) :: i, m
+    integer :: i, m
     real(real64) :: x(n), ans
     real(real64), allocatable, dimension(:,:) :: v, w
 
@@ -119,7 +119,7 @@ end function
 function ref_allan_mean(x, m, j) result(rst)
     ! Arguments
     real(real64), intent(in), dimension(:) :: x
-    integer(int32), intent(in) :: m, j
+    integer, intent(in) :: m, j
     real(real64) :: rst
 
     ! Process
@@ -129,11 +129,11 @@ end function
 function ref_allan_core(x, m) result(rst)
     ! Arguments
     real(real64), intent(in), dimension(:) :: x
-    integer(int32), intent(in) :: m
+    integer, intent(in) :: m
     real(real64) :: rst
 
     ! Local Variables
-    integer(int32) :: j, n
+    integer :: j, n
     real(real64) :: temp, temp1, temp2
 
     ! Initialization
@@ -156,7 +156,7 @@ function ref_allan(x, dt) result(rst)
     real(real64), allocatable, dimension(:) :: rst
 
     ! Local Variables
-    integer(int32) :: n, nr, i
+    integer :: n, nr, i
 
     ! Initialization
     n = size(x)

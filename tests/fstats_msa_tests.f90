@@ -35,10 +35,10 @@ module fstats_msa_tests
     ! every interaction sum of squares vanishes, the within-cell mean square is
     ! exactly d**2, and each main effect variance reduces to the sample
     ! variance of its effects.
-    integer(int32), parameter :: nrep = 3
-    integer(int32), parameter :: nparts = 5
-    integer(int32), parameter :: nops = 3
-    integer(int32), parameter :: nlvls = 2
+    integer, parameter :: nrep = 3
+    integer, parameter :: nparts = 5
+    integer, parameter :: nops = 3
+    integer, parameter :: nlvls = 2
     real(real64), parameter :: dev = 5.0d-1
     real(real64), parameter :: parts(nparts) = [1.0d1, 1.2d1, 1.5d1, 1.1d1, &
         1.7d1]
@@ -56,7 +56,7 @@ contains
 function build_crossed() result(rst)
     real(real64) :: rst(nrep, nparts, nops)
 
-    integer(int32) :: j, k
+    integer :: j, k
 
     do k = 1, nops
         do j = 1, nparts
@@ -71,7 +71,7 @@ end function
 function build_expanded() result(rst)
     real(real64) :: rst(nrep, nparts, nops, nlvls)
 
-    integer(int32) :: j, k, m
+    integer :: j, k, m
 
     do m = 1, nlvls
         do k = 1, nops
@@ -181,7 +181,7 @@ function test_gauge_rr_nested() result(rst)
     real(real64), parameter :: tol = 1.0d-10
 
     ! Local Variables
-    integer(int32) :: j, k
+    integer :: j, k
     real(real64) :: x(nrep, nparts, nops), vpart, vop, cm(nparts, nops), &
         opmean(nops), gm, mspart
     type(gauge_rr_results) :: g

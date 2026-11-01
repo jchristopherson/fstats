@@ -31,15 +31,15 @@ program doe_design_efficiency_example
     implicit none
 
     ! Local Variables
-    integer(int32) :: i, j, k
+    integer :: i, j, k
     real(real64), allocatable :: x_full(:,:), x_frac(:,:), x_ccd(:,:)
     type(doe_efficiency_metrics) :: metrics_full, metrics_frac, metrics_ccd
     
     ! Full factorial for 3 factors with 2 levels: 2^3 = 8 runs
-    integer(int32), parameter :: nfull = 8
-    integer(int32), parameter :: nfrac = 4
-    integer(int32), parameter :: nccd = 9
-    integer(int32), parameter :: nfactors = 2
+    integer, parameter :: nfull = 8
+    integer, parameter :: nfrac = 4
+    integer, parameter :: nccd = 9
+    integer, parameter :: nfactors = 2
     
     print '(A)', "=================================================="
     print '(A)', "Design of Experiments - Design Efficiency Analysis"

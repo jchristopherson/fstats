@@ -46,8 +46,8 @@ contains
         real(real64), dimension(9) :: actual, expected
         real(real64), dimension(6) :: probabilities, fractions
         real(real64) :: nan_value, infinity
-        integer(int32) :: data_case, parameter_case, empty_case
-        integer(int32), allocatable, dimension(:) :: counts
+        integer :: data_case, parameter_case, empty_case
+        integer, allocatable, dimension(:) :: counts
 
         rst = .true.
         nan_value = ieee_value(0.0d0, ieee_quiet_nan)
@@ -112,7 +112,7 @@ contains
         end do
 
         values = [real(real64) ::]
-        counts = [integer(int32) ::]
+        counts = [integer ::]
         other = real_column(0)
         do empty_case = 1, 2
             deallocate(column)
@@ -157,7 +157,7 @@ contains
         character(len = *), intent(in) :: label
             !! Diagnostic label for the comparison.
         logical :: matches
-        integer(int32) :: observation
+        integer :: observation
 
         do observation = 1, size(actual)
             if (ieee_is_nan(expected(observation))) then
@@ -290,7 +290,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 50
+        integer, parameter :: n = 50
         real(real64) :: x(n), avg, ans
 
         ! Initialization
@@ -314,7 +314,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 50
+        integer, parameter :: n = 50
         real(real64) :: x(n), v, ans, avg
 
         ! Initialization
@@ -339,7 +339,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 50
+        integer, parameter :: n = 50
         real(real64) :: x(n), v, ans, avg
 
         ! Initialization
@@ -364,7 +364,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 7
+        integer, parameter :: n = 7
         real(real64) :: x(n), med, ans
 
         ! Initialization
@@ -387,7 +387,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 9
+        integer, parameter :: n = 9
         real(real64) :: x(n), q25, q50, q75, ans
         real(real64), allocatable :: xsort(:)
 
@@ -433,7 +433,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 7
+        integer, parameter :: n = 7
         real(real64) :: x(n), q25, ans
 
         ! Initialization
@@ -458,9 +458,9 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 10
+        integer, parameter :: n = 10
         real(real64) :: x(n), qmin, qmax, ans
-        integer(int32) :: i
+        integer :: i
 
         ! Initialization
         rst = .true.
@@ -496,8 +496,8 @@ contains
         ! Data and results computed using Excel
 
         ! Variables
-        integer(int32), parameter :: n = 41
-        integer(int32), parameter :: p = 2
+        integer, parameter :: n = 41
+        integer, parameter :: p = 2
         real(real64), parameter :: r2ans = 0.99964955179438d0
         real(real64), parameter :: r2adjans = 0.999631107152d0
         real(real64) :: x(n), xm(n), r2, r2adj
@@ -615,8 +615,8 @@ contains
         ! Data and results computed using Excel
 
         ! Variables
-        integer(int32), parameter :: n1 = 24
-        integer(int32), parameter :: n2 = 30
+        integer, parameter :: n1 = 24
+        integer, parameter :: n2 = 30
         real(real64), parameter :: p1ans = 0.400311271833311d0
         real(real64), parameter :: p2ans = 0.393261072269881d0
         real(real64), parameter :: p3ans = 0.336451697935195d0
@@ -711,8 +711,8 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n1 = 25
-        integer(int32), parameter :: n2 = 20
+        integer, parameter :: n1 = 25
+        integer, parameter :: n2 = 20
         real(real64), parameter :: p1ans = 0.917845200397729d0
         real(real64) :: x1(n1), x2(n2), f1, p1, d1a, d1b
 
@@ -787,10 +787,10 @@ contains
         ! where a truncated series expansion silently loses accuracy.
 
         ! Variables
-        integer(int32), parameter :: dofs(8) = [2, 10, 50, 200, 500, 2000, &
+        integer, parameter :: dofs(8) = [2, 10, 50, 200, 500, 2000, &
             10000, 100000]
         real(real64), parameter :: tol = 1.0d-9
-        integer(int32) :: i
+        integer :: i
         real(real64) :: c
         type(f_distribution) :: dist
 
@@ -818,7 +818,7 @@ contains
         ! must be unaffected by the order of the arguments.
 
         ! Variables
-        integer(int32), parameter :: n = 8
+        integer, parameter :: n = 8
         real(real64), parameter :: tol = 1.0d-12
         real(real64), parameter :: x1(n) = [2.0d2, 2.1d2, 1.9d2, 2.05d2, &
             2.15d2, 2.2d2, 1.95d2, 2.0d2]
@@ -866,7 +866,7 @@ contains
         ! reference values were computed using JASP.
 
         ! Variables
-        integer(int32), parameter :: n = 10
+        integer, parameter :: n = 10
         real(real64), parameter :: tol = 1.0d-3
         real(real64), parameter :: bvarans = 352.8d0
         real(real64), parameter :: ivarans = 164.344d0
@@ -915,9 +915,9 @@ contains
         ! reference values were computed using JASP.
 
         ! Variables
-        integer(int32), parameter :: ngroups = 2
-        integer(int32), parameter :: nshots = 5
-        integer(int32), parameter :: nshooters = 2
+        integer, parameter :: ngroups = 2
+        integer, parameter :: nshots = 5
+        integer, parameter :: nshooters = 2
         real(real64), parameter :: tol = 1.0d-3
         real(real64), parameter :: mf1var = 352.8d0
         real(real64), parameter :: mf1f = 2.003d0
@@ -1001,7 +1001,7 @@ contains
         ! The reference results were computed using JASP.
 
         ! Variables
-        integer(int32), parameter :: n = 31
+        integer, parameter :: n = 31
         real(real64), parameter :: tol = 1.0d-3
         real(real64), parameter :: mvar = 5.871d0
         real(real64), parameter :: mf = 10226.742d0
@@ -1110,13 +1110,13 @@ contains
         ! terms are accumulated.
 
         ! Variables
-        integer(int32), parameter :: n = 10
+        integer, parameter :: n = 10
         real(real64), parameter :: tol = 1.0d-6
         real(real64), parameter :: offsets(4) = [1.0d3, 1.0d5, 1.0d7, 1.0d9]
         real(real64), parameter :: bssq = 352.8d0
         real(real64), parameter :: essq = 2958.2d0
         real(real64), parameter :: tssq = 3311.0d0
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(n, 2)
         type(single_factor_anova_table) :: tbl
 
@@ -1154,7 +1154,7 @@ contains
         ! numerically integrating the F density.
 
         ! Variables
-        integer(int32), parameter :: n = 5
+        integer, parameter :: n = 5
         real(real64), parameter :: pans = 2.882865908493307d-9
         real(real64), parameter :: tol = 1.0d-6
         real(real64) :: x(n, 4), y(n, 2), p
@@ -1202,9 +1202,9 @@ contains
         real(real64), parameter :: t10 = 2.228d0
         real(real64), parameter :: t30 = 2.042d0
         real(real64), parameter :: sigma = 1.0d0
-        integer(int32), parameter :: n = 1
+        integer, parameter :: n = 1
         type(t_distribution) :: dist
-        integer(int32) :: flag
+        integer :: flag
         real(real64) :: c
 
         ! Initialization
@@ -1390,7 +1390,7 @@ contains
         ! retains any accuracy.
 
         ! Parameters
-        integer(int32), parameter :: nc = 5
+        integer, parameter :: nc = 5
         real(real64), parameter :: tol = 1.0d-12
         real(real64), parameter :: av(nc) = [1.2d2, 1.65d2, 5.0d2, 5.0d3, &
             1.0d5]
@@ -1411,7 +1411,7 @@ contains
         ]
 
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: p, q, x, t
 
         ! Initialization
@@ -1512,7 +1512,7 @@ contains
         real(real64), parameter :: gam = 0.5772156649015328606065121d0
 
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x
 
         ! Initialization
@@ -1594,7 +1594,7 @@ contains
         ! Test that std dev = sqrt(variance)
         logical :: rst
 
-        integer(int32), parameter :: n = 50
+        integer, parameter :: n = 50
         real(real64) :: x(n), sd, v
 
         rst = .true.
@@ -1635,14 +1635,14 @@ contains
 
         logical :: rst
         
-        integer(int32), parameter :: n = 50
-        integer(int32), parameter :: ntrm = floor(n * 0.1d0)
-        integer(int32), parameter :: i1 = ntrm + 1
-        integer(int32), parameter :: i2 = n - ntrm
+        integer, parameter :: n = 50
+        integer, parameter :: ntrm = floor(n * 0.1d0)
+        integer, parameter :: i1 = ntrm + 1
+        integer, parameter :: i2 = n - ntrm
         real(real64), parameter :: p = 0.1d0
         
         real(real64) :: x(n), tm, ans
-        integer(int32) :: i
+        integer :: i
 
         rst = .true.
         ! Create sequential array
@@ -1689,7 +1689,7 @@ contains
         ! Sample 1: variance 1.0, n = 10
         ! Sample 2: variance 2.0, n = 10
         real(real64), parameter :: si(2) = [1.0d0, 2.0d0]
-        integer(int32), parameter :: ni(2) = [10, 10]
+        integer, parameter :: ni(2) = [10, 10]
         real(real64) :: sp, ans
 
         rst = .true.
@@ -1712,10 +1712,10 @@ contains
         logical :: rst
 
         ! Parameters
-        integer(int32), parameter :: n = 100
-        integer(int32), parameter :: ntrm = floor(n * 0.05d0)
-        integer(int32), parameter :: i1 = ntrm + 1
-        integer(int32), parameter :: i2 = n - ntrm
+        integer, parameter :: n = 100
+        integer, parameter :: ntrm = floor(n * 0.05d0)
+        integer, parameter :: i1 = ntrm + 1
+        integer, parameter :: i2 = n - ntrm
         real(real64), parameter :: p = 0.05d0
 
         ! Local Variables
@@ -1741,7 +1741,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 500
+        integer, parameter :: n = 500
         real(real64) :: x(n), y(n), cov, ans, avgX, avgY
 
         ! Initialization
@@ -1768,7 +1768,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 500
+        integer, parameter :: n = 500
         real(real64) :: x(n), y(n), c, ans, avgX, avgY
 
         ! Initialization
@@ -1796,9 +1796,9 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: k = 20
-        integer(int32), parameter :: n = 1000
-        integer(int32) :: i, m, ni(k)
+        integer, parameter :: k = 20
+        integer, parameter :: n = 1000
+        integer :: i, m, ni(k)
         type(array_container) :: x(k)
         real(real64) :: ans, sp, sp2, si(k)
         
@@ -1836,7 +1836,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32), parameter :: npts = 25
+        integer, parameter :: npts = 25
         real(real64), parameter :: stat_ans = 1.52960933869d0
         real(real64), parameter :: p_ans = 0.21617108550d0
         type(array_container) :: x(2)
@@ -1884,7 +1884,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32), parameter :: npts = 25
+        integer, parameter :: npts = 25
         real(real64), parameter :: stat_ans = 4.85959468188d0
         real(real64), parameter :: p_ans = 0.03231972203d0
         type(array_container) :: x(2)

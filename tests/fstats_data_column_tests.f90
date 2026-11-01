@@ -39,16 +39,16 @@ contains
         class(*), intent(in), dimension(:) :: expected
         logical, intent(inout) :: rst
         character(len = *), intent(in) :: label
-        integer(int32), allocatable, dimension(:) :: integers
+        integer, allocatable, dimension(:) :: integers
         real(real64), allocatable, dimension(:) :: reals
         logical, allocatable, dimension(:) :: logicals
         type(string), allocatable, dimension(:) :: texts
-        integer(int32) :: row
+        integer :: row
 
         call check(column%count() == size(expected), rst, label // ' count')
         if (column%count() /= size(expected)) return
         select type (expected)
-        type is (integer(int32))
+        type is (integer)
             allocate(integers(size(expected)))
             call column%copy(integers)
             call check(assert(integers, expected), rst, label)
@@ -74,12 +74,12 @@ contains
     subroutine check_rows(column, values, rows, rst, label)
         class(data_column), intent(in) :: column
         class(*), intent(in), dimension(:) :: values
-        integer(int32), intent(in), dimension(:) :: rows
+        integer, intent(in), dimension(:) :: rows
         logical, intent(inout) :: rst
         character(len = *), intent(in) :: label
 
         select type (values)
-        type is (integer(int32))
+        type is (integer)
             call check_values(column, values(rows), rst, label)
         type is (real(real64))
             call check_values(column, values(rows), rst, label)
@@ -93,7 +93,7 @@ contains
     subroutine exercise_mutations(column, values, dtype, rst)
         class(data_column), target, intent(inout) :: column
         class(*), intent(in), dimension(:) :: values
-        integer(int32), intent(in) :: dtype
+        integer, intent(in) :: dtype
         logical, intent(inout) :: rst
         class(*), pointer, dimension(:) :: view
 
@@ -144,8 +144,8 @@ contains
     function test_integer_column() result(rst)
         logical :: rst
         type(integer_column), target :: column
-        integer(int32), dimension(4) :: values
-        integer(int32), dimension(2) :: copied
+        integer, dimension(4) :: values
+        integer, dimension(2) :: copied
         class(*), pointer, dimension(:) :: view
 
         rst = .true.
@@ -163,7 +163,7 @@ contains
         call check(column%get(1) == 1, rst, 'integer copy independence')
         view => column%view()
         select type (view)
-        type is (integer(int32))
+        type is (integer)
             call check(size(view) == 2, rst, 'integer view size')
             view(1) = 8
             call check(column%get(1) == 8, rst, 'integer view writes')
@@ -321,7 +321,7 @@ contains
         class(real_column), allocatable :: polymorphic
         real(real64), dimension(3) :: values, rhs, expected
         real(real64) :: nan_value, infinity, negative_zero, denormal
-        integer(int32) :: operation, empty_case
+        integer :: operation, empty_case
 
         rst = .true.
         values = [0.25d0, 0.5d0, 0.75d0]
@@ -463,13 +463,13 @@ contains
     subroutine test_data_column_invalid_input(dtype, invalid_case)
         character(len = *), intent(in) :: dtype, invalid_case
         class(data_column), allocatable :: column
-        integer(int32), dimension(0) :: wrong_type
-        integer(int32), dimension(2) :: integers
+        integer, dimension(0) :: wrong_type
+        integer, dimension(2) :: integers
         real(real64), dimension(2) :: reals
         logical, dimension(2) :: logicals
         type(string), dimension(2) :: texts
-        integer(int32) :: row
-        integer(int32), volatile :: int_value
+        integer :: row
+        integer, volatile :: int_value
         real(real64), volatile :: real_value
         logical, volatile :: logical_value
         character(len = :), allocatable :: text

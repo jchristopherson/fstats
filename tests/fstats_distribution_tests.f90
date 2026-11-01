@@ -262,7 +262,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 9
+        integer, parameter :: n = 9
         real(real64) :: x(n), pdf(n), cdf(n), pdfans(n), cdfans(n)
         type(t_distribution) :: dist
 
@@ -297,7 +297,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 9
+        integer, parameter :: n = 9
         real(real64) :: x(n), pdf(n), cdf(n), pdfans(n), cdfans(n)
         type(normal_distribution) :: dist
 
@@ -332,7 +332,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 9
+        integer, parameter :: n = 9
         real(real64) :: x(n), pdf(n), cdf(n), pdfans(n), cdfans(n)
         type(f_distribution) :: dist
 
@@ -368,8 +368,8 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: dof = 5
-        integer(int32), parameter :: n = 9
+        integer, parameter :: dof = 5
+        integer, parameter :: n = 9
         real(real64) :: x(n), pdf(n), cdf(n), pdfans(n), cdfans(n)
         type(chi_squared_distribution) :: dist
 
@@ -404,9 +404,9 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: n = 100
+        integer, parameter :: n = 100
         real(real64), parameter :: p = 0.25d0
-        integer(int32), parameter :: npts = 9
+        integer, parameter :: npts = 9
         real(real64) :: x(npts), pmf(npts), cdf(npts), pmfans(npts), cdfans(npts)
         type(binomial_distribution) :: dist
 

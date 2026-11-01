@@ -81,9 +81,9 @@ module fstats_regression
 
     type iteration_controls
         !! Provides a collection of iteration control parameters.
-        integer(int32) :: max_iteration_count
+        integer :: max_iteration_count
             !! Defines the maximum number of iterations allowed.
-        integer(int32) :: max_function_evaluations
+        integer :: max_function_evaluations
             !! Defines the maximum number of function evaluations allowed.
         real(real64) :: gradient_tolerance
             !! Defines a tolerance on the gradient of the fitted function.
@@ -95,7 +95,7 @@ module fstats_regression
         real(real64) :: iteration_improvement_tolerance
             !! Defines a tolerance to ensure adequate improvement on each 
             !! iteration.
-        integer(int32) :: max_iteration_between_updates
+        integer :: max_iteration_between_updates
             !! Defines how many iterations can pass before a re-evaluation of 
             !! the Jacobian matrix is forced.
     contains
@@ -121,16 +121,16 @@ module fstats_regression
         logical :: reach_iteration_limit
             !! True if the solution did not converge in the allowed number of 
             !! iterations.
-        integer(int32) :: iteration_count
+        integer :: iteration_count
             !! The iteration count.
         logical :: reach_function_evaluation_limit
             !! True if the solution did not converge in the allowed number of
             !! function evaluations.
-        integer(int32) :: function_evaluation_count
+        integer :: function_evaluation_count
             !! The function evaluation count.
         logical :: user_requested_stop
             !! True if the user requested the stop; else, false.
-        integer(int32) :: covariance_rank = 0
+        integer :: covariance_rank = 0
             !! Numerical rank of the final weighted Jacobian when covariance is requested.
         real(real64) :: covariance_condition_number = 0.0d0
             !! Condition number of that Jacobian; infinity indicates rank deficiency.
@@ -162,7 +162,7 @@ module fstats_regression
             !! Defines a routine for providing updates about an iteration
             !! process.
             use iso_fortran_env, only : int32, real64
-            integer(int32), intent(in) :: iter
+            integer, intent(in) :: iter
                 !! The current iteration number.
             real(real64), intent(in), dimension(:) :: funvals
                 !! The function values.
@@ -206,7 +206,7 @@ pure function r_squared(x, xm) result(rst)
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     real(real64) :: esum, vt
     
     ! Initialization
@@ -237,7 +237,7 @@ pure function adjusted_r_squared(p, x, xm) result(rst)
     !! See Also:
     !!
     !! - <a href="https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2" target="_blank">Wikipedia</a>
-    integer(int32), intent(in) :: p
+    integer, intent(in) :: p
         !! The number of variables.
     real(real64), intent(in) :: x(:)
         !! An N-element array containing the dependent variables from 
@@ -249,7 +249,7 @@ pure function adjusted_r_squared(p, x, xm) result(rst)
         !! The result.
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
     real(real64) :: r2
 
     ! Parameters
@@ -282,7 +282,7 @@ pure function correlation(x, y) result(rst)
 
     real(real64), allocatable, dimension(:) :: centeredX, centeredY
     real(real64) :: scaleX, scaleY, normX, normY
-    integer(int32) :: observation
+    integer :: observation
 
     rst = ieee_value(0.0d0, ieee_quiet_nan)
     if (size(x) < 2 .or. .not.all(ieee_is_finite(x)) .or. .not.all(ieee_is_finite(y))) return
@@ -325,7 +325,7 @@ pure function design_matrix(order, intercept, x) result(c)
     !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
     !! - <a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" target="_blank">Wikipedia - Vandermonde Matrix</a>
     !! - <a href="https://en.wikipedia.org/wiki/Design_matrix" target="_blank">Wikipedia - Design Matrix</a>
-    integer(int32), intent(in) :: order
+    integer, intent(in) :: order
         !! The order of the equation to fit.  This value must be
         !! at least one (linear equation), but can be higher as desired.
     logical, intent(in) :: intercept
@@ -343,7 +343,7 @@ pure function design_matrix(order, intercept, x) result(c)
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, start, npts, ncols
+    integer :: i, start, npts, ncols
     
     ! Initialization
     npts = size(x)
@@ -401,14 +401,14 @@ pure subroutine regression_covariance(x, c, rank, condition_number)
         !! M-by-N design matrix, or a Jacobian whose rows include sqrt(weights).
     real(real64), intent(out), allocatable, dimension(:,:) :: c
         !! N-by-N covariance before residual-variance scaling. Nonfinite X gives NaNs.
-    integer(int32), intent(out), optional :: rank
+    integer, intent(out), optional :: rank
         !! Number of retained singular directions; zero for empty/invalid input.
     real(real64), intent(out), optional :: condition_number
         !! Condition number of X; +infinity for rank deficiency, NaN for invalid X.
     real(real64), allocatable, dimension(:) :: singular_values
     real(real64), allocatable, dimension(:,:) :: vectors, scaled_vectors
     real(real64) :: relative_tolerance
-    integer(int32) :: ncols, direction, effective_rank
+    integer :: ncols, direction, effective_rank
 
     ncols = size(x, 2)
     allocate(c(ncols, ncols), source = 0.0d0)
@@ -463,7 +463,7 @@ function calculate_regression_statistics(resid, params, c, alpha) &
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, m, n, dof
+    integer :: i, m, n, dof
     real(real64) :: a, ssr, var, talpha
     type(t_distribution) :: dist
 
@@ -544,7 +544,7 @@ subroutine jacobian(fun, xdata, params, &
 
     ! Local Variables
     real(real64) :: h
-    integer(int32) :: m, n, expected, actual
+    integer :: m, n, expected, actual
     real(real64), pointer :: f1p(:), f0p(:)
     real(real64), allocatable, target :: f1a(:), f0a(:), work(:)
 
@@ -619,7 +619,7 @@ subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
     class(*), intent(inout), optional :: args
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
 
     ! Initialization
     n = size(params)

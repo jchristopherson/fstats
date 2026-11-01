@@ -165,10 +165,10 @@ end function
 pure function ref_poly(x, k) result(rst)
     !! Evaluates 1 + 2 x + 3 x**2 + ... + (k + 1) x**k.
     real(real64), intent(in) :: x
-    integer(int32), intent(in) :: k
+    integer, intent(in) :: k
     real(real64) :: rst
 
-    integer(int32) :: i
+    integer :: i
 
     rst = 0.0d0
     do i = 0, k
@@ -180,10 +180,10 @@ end function
 pure function ref_poly_derivative(x, k) result(rst)
     !! Evaluates the derivative of ref_poly.
     real(real64), intent(in) :: x
-    integer(int32), intent(in) :: k
+    integer, intent(in) :: k
     real(real64) :: rst
 
-    integer(int32) :: i
+    integer :: i
 
     rst = 0.0d0
     do i = 1, k
@@ -198,11 +198,11 @@ function test_polynomial_interp_orders() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: n = 12
+    integer, parameter :: n = 12
     real(real64), parameter :: tol = 1.0d-9
 
     ! Local Variables
-    integer(int32) :: i, k
+    integer :: i, k
     real(real64) :: x(n), y(n), xi, ans
     type(polynomial_interpolator) :: interp
 
@@ -251,11 +251,11 @@ function test_spline_interp() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: n = 11
+    integer, parameter :: n = 11
     real(real64), parameter :: tol = 1.0d-10
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: x(n), y(n), xi, ans
     type(spline_interpolator) :: interp
 
@@ -327,12 +327,12 @@ function test_hermite_interp() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: n = 4
-    integer(int32), parameter :: nq = 31
+    integer, parameter :: n = 4
+    integer, parameter :: nq = 31
     real(real64), parameter :: tol = 1.0d-10
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: x(n), y(n), yp(n), xq(nq), v(nq), d(nq), ans
     type(hermite_interpolator) :: interp
 

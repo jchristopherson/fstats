@@ -44,18 +44,18 @@ contains
 ! ------------------------------------------------------------------------------
 subroutine get_full_factorial_matrix_size(vars, m, n)
     !! Computes the appropriate size for a full-factorial design table.
-    integer(int32), intent(in) :: vars(:)
+    integer, intent(in) :: vars(:)
         !! An M-element array containing the M factors to study.  Each 
         !! of the M entries to the array is expected to contain the 
         !! number of options for that particular factor to explore.  
         !! This value must be greater than or equal to 1.
-    integer(int32), intent(out) :: m
+    integer, intent(out) :: m
         !! The number of rows for the table.
-    integer(int32), intent(out) :: n
+    integer, intent(out) :: n
         !! The number of columns for the table.
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     
     ! Initialization
     m = 0
@@ -85,7 +85,7 @@ subroutine full_factorial(vars, tbl)
     !!     implicit none
     !!
     !!     ! Local Variables
-    !!     integer(int32) :: i, vars(3), tbl(24, 3)
+    !!     integer :: i, vars(3), tbl(24, 3)
     !!
     !!     ! Define the number of design points for each of the 3 factors to study
     !!     vars = [2, 4, 3]
@@ -126,18 +126,18 @@ subroutine full_factorial(vars, tbl)
     !! 2           4           2
     !! 2           4           3
     !! ```
-    integer(int32), intent(in) :: vars(:)
+    integer, intent(in) :: vars(:)
         !! An M-element array containing the M factors to study.  
         !! Each of the M entries to the array is expected to contain 
         !! the number of options for that particular factor to explore. 
         !! This value must be greater than or equal to 1.
-    integer(int32), intent(out) :: tbl(:,:)
+    integer, intent(out) :: tbl(:,:)
         !! A table where the design will be written.  Use 
         !! get_full_factorial_matrix_size to determine the appropriate 
         !! table size.
 
     ! Local Variables
-    integer(int32) :: i, col, stride, last, val, m, n
+    integer :: i, col, stride, last, val, m, n
 
     ! Verify the size of the input table
     call get_full_factorial_matrix_size(vars, m, n)
@@ -163,7 +163,7 @@ subroutine full_factorial_coded(vars, tbl)
     !! [-1, +1].  Each factor with L levels is assigned L evenly spaced values 
     !! from -1 to +1 (inclusive).  A factor with a single level is assigned a 
     !! value of 0.  For a 2-level factor, the levels are -1 and +1.
-    integer(int32), intent(in) :: vars(:)
+    integer, intent(in) :: vars(:)
         !! An M-element array containing the M factors to study.  Each of the 
         !! M entries to the array is expected to contain the number of levels 
         !! for that particular factor to explore.  This value must be greater 
@@ -174,8 +174,8 @@ subroutine full_factorial_coded(vars, tbl)
         !! table size.
 
     ! Local Variables
-    integer(int32) :: j, m, n
-    integer(int32), allocatable :: itbl(:,:)
+    integer :: j, m, n
+    integer, allocatable :: itbl(:,:)
 
     ! Verify the size of the input table
     call get_full_factorial_matrix_size(vars, m, n)
@@ -200,13 +200,13 @@ subroutine fractional_factorial_size(nfactors, fraction, m, n)
     !!
     !! A 2^(k-p) fractional factorial design has 2^(k-p) runs.
     !! For example: 2^(3-1) has 4 runs for 3 factors (1/2 fraction).
-    integer(int32), intent(in) :: nfactors
+    integer, intent(in) :: nfactors
         !! Number of factors (k).
-    integer(int32), intent(in) :: fraction
+    integer, intent(in) :: fraction
         !! Fraction level (p): 1 for 1/2, 2 for 1/4, 3 for 1/8, etc.
-    integer(int32), intent(out) :: m
+    integer, intent(out) :: m
         !! Number of runs (rows).
-    integer(int32), intent(out) :: n
+    integer, intent(out) :: n
         !! Number of factors (columns), same as nfactors.
 
     m = 2**(nfactors - fraction)
@@ -220,17 +220,17 @@ subroutine fractional_factorial(nfactors, fraction, tbl)
     !! Uses standard defining relations for common fractions.  The result is
     !! expressed in coded variables where the low and high levels are -1 and
     !! +1, respectively.
-    integer(int32), intent(in) :: nfactors
+    integer, intent(in) :: nfactors
         !! Number of factors.
-    integer(int32), intent(in) :: fraction
+    integer, intent(in) :: fraction
         !! Fraction level (1 for 1/2, 2 for 1/4, etc.).
     real(real64), intent(out) :: tbl(:,:)
         !! Design table (runs x factors) in coded variables, where each value is
         !! either -1 or +1.
 
     ! Local Variables
-    integer(int32) :: m, n, i, j, k, l, base_runs
-    integer(int32), allocatable :: base_design(:,:), itbl(:,:)
+    integer :: m, n, i, j, k, l, base_runs
+    integer, allocatable :: base_design(:,:), itbl(:,:)
 
     n = nfactors
     m = size(tbl, 1)
@@ -300,16 +300,16 @@ pure subroutine central_composite_design_size(nfactors, alpha_type, m, n)
     !! - 2^k factorial points
     !! - 2*k axial (star) points
     !! - n_center center points
-    integer(int32), intent(in) :: nfactors
+    integer, intent(in) :: nfactors
         !! Number of factors.
     character(len=*), intent(in), optional :: alpha_type
         !! Type of CCD: "orthogonal" (default), "rotatable", or "uniform".
-    integer(int32), intent(out) :: m
+    integer, intent(out) :: m
         !! Number of runs (rows).
-    integer(int32), intent(out) :: n
+    integer, intent(out) :: n
         !! Number of factors (columns).
 
-    integer(int32) :: n_factorial, n_axial, n_center
+    integer :: n_factorial, n_axial, n_center
 
     n = nfactors
     n_factorial = 2**nfactors
@@ -324,7 +324,7 @@ subroutine central_composite_design(nfactors, alpha_type, tbl)
     !! Generates a central composite design in coded variables.
     !!
     !! Combines 2^k factorial, 2*k axial points, and center point.
-    integer(int32), intent(in) :: nfactors
+    integer, intent(in) :: nfactors
         !! Number of factors.
     character(len=*), intent(in), optional :: alpha_type
         !! Type: "orthogonal" (default), "rotatable", "uniform".
@@ -332,7 +332,7 @@ subroutine central_composite_design(nfactors, alpha_type, tbl)
         !! Design table (coded variables in [-1, +1] range).
 
     ! Local Variables
-    integer(int32) :: m, n, i, j, n_factorial, n_axial, row
+    integer :: m, n, i, j, n_factorial, n_axial, row
     real(real64) :: alpha
 
     m = size(tbl, 1)
@@ -383,18 +383,18 @@ subroutine latin_hypercube_design(nfactors, nsamples, seed, tbl)
     !!
     !! Creates a space-filling design with nsamples runs and nfactors factors.
     !! Design is in coded [-1, +1] scale.
-    integer(int32), intent(in) :: nfactors
+    integer, intent(in) :: nfactors
         !! Number of factors.
-    integer(int32), intent(in) :: nsamples
+    integer, intent(in) :: nsamples
         !! Number of samples (runs).
-    integer(int32), intent(inout), optional :: seed
+    integer, intent(inout), optional :: seed
         !! Random seed for reproducibility.
     real(real64), intent(out) :: tbl(:,:)
         !! Latin hypercube design (nsamples Ã— nfactors).
 
     ! Local Variables
-    integer(int32) :: m, n, i, j, k, idx, seed_val
-    integer(int32), allocatable :: perm(:)
+    integer :: m, n, i, j, k, idx, seed_val
+    integer, allocatable :: perm(:)
     real(real64) :: rand_val, segment_width
 
     m = size(tbl, 1)
@@ -443,7 +443,7 @@ end subroutine
 pure function doe_design_efficiency(x) result(metrics)
     real(real64), intent(in), dimension(:,:) :: x
     type(doe_efficiency_metrics) :: metrics
-    integer(int32) :: m, n
+    integer :: m, n
     
     m = size(x, 1)
     n = size(x, 2)

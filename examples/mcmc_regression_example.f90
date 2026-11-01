@@ -180,7 +180,7 @@ program example
     implicit none
     
     ! Parameters
-    integer(int32), parameter :: ndata = 21
+    integer, parameter :: ndata = 21
 
     ! Local Variables
     real(real64) :: xdata(ndata), ydata(ndata), f(ndata), s1, s2, s3, sigma

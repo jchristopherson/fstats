@@ -74,7 +74,7 @@ pure elemental function stable_expm1(x) result(rst)
     real(real64) :: rst
         !! Difference; overflow gives +infinity and NaN inputs propagate.
     real(real64) :: term
-    integer(int32) :: iteration
+    integer :: iteration
 
     if (abs(x) >= 0.5d0 .or. ieee_is_nan(x)) then
         if (x > log(huge(1.0d0))) then
@@ -118,7 +118,7 @@ pure elemental function log_regularized_beta(a, b, x, max_iterations) result(rst
         !! Finite, positive beta shape parameters.
     real(real64), intent(in) :: x
         !! Integration limit on [0, 1].
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Continued-fraction iteration limit; default 1000.
     real(real64) :: rst
         !! Log ratio; x = 0 gives -infinity, x = 1 gives zero.
@@ -153,7 +153,7 @@ pure elemental function log_regularized_gamma_lower(a, x, max_iterations) result
         !! Finite, positive gamma shape parameter.
     real(real64), intent(in) :: x
         !! Nonnegative integration limit; +infinity is accepted.
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Series/continued-fraction iteration limit; default 10000.
     real(real64) :: rst
         !! Log P(a, x); x = 0 gives -infinity, x = +infinity gives zero.
@@ -178,7 +178,7 @@ pure elemental function log_regularized_gamma_upper(a, x, max_iterations) result
         !! Finite, positive gamma shape parameter.
     real(real64), intent(in) :: x
         !! Nonnegative integration limit; +infinity is accepted.
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Series/continued-fraction iteration limit; default 10000.
     real(real64) :: rst
         !! Log Q(a, x); x = 0 gives zero, x = +infinity gives -infinity.
@@ -234,7 +234,7 @@ pure elemental function gamma_sign(x) result(rst)
         !! Either 1 or -1.
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
 
     if (x > 0.0d0) then
         rst = 1.0d0
@@ -275,7 +275,7 @@ pure elemental function regularized_beta(a, b, x, max_iterations) result(rst)
         !! The upper limit of the integration.
     real(real64) :: rst
         !! The value of the regularized beta function.
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Iteration limit; nonconvergence returns NaN.
 
     rst = exp(log_regularized_beta(a, b, x, max_iterations))
@@ -293,16 +293,16 @@ pure elemental function beta_continued_fraction(a, b, x, max_iterations) result(
         !! The upper limit of the integration.
     real(real64) :: rst
         !! The value of the continued fraction.
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Iteration limit, default 1000; exhaustion returns NaN.
 
     ! Parameters
-    integer(int32), parameter :: maxiter = 1000
+    integer, parameter :: maxiter = 1000
     real(real64), parameter :: one = 1.0d0
     real(real64), parameter :: two = 2.0d0
 
     ! Local Variables
-    integer(int32) :: m, m2, limit
+    integer :: m, m2, limit
     real(real64) :: aa, c, d, del, qab, qam, qap, eps, fpmin, rm
 
     ! Initialization
@@ -396,7 +396,7 @@ pure elemental function regularized_gamma_lower(a, x, max_iterations) result(rst
         !! non-negative.
     real(real64) :: rst
         !! The function value, which lies on the interval [0, 1].
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Iteration limit; nonconvergence returns NaN.
 
     rst = exp(log_regularized_gamma_lower(a, x, max_iterations))
@@ -425,7 +425,7 @@ pure elemental function regularized_gamma_upper(a, x, max_iterations) result(rst
         !! non-negative.
     real(real64) :: rst
         !! The function value, which lies on the interval [0, 1].
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Iteration limit; nonconvergence returns NaN.
 
     rst = exp(log_regularized_gamma_upper(a, x, max_iterations))
@@ -440,14 +440,14 @@ pure elemental function log_gamma_series(a, x, max_iterations) result(rst)
         !! The value at which to evaluate the function.
     real(real64) :: rst
         !! Log ratio; nonconvergence returns NaN.
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Iteration limit, default 10000.
 
     ! Parameters
-    integer(int32), parameter :: maxiter = 10000
+    integer, parameter :: maxiter = 10000
 
     ! Local Variables
-    integer(int32) :: i, limit
+    integer :: i, limit
     real(real64) :: ap, del, s, eps
 
     eps = epsilon(eps)
@@ -478,14 +478,14 @@ pure elemental function log_gamma_continued_fraction(a, x, max_iterations) resul
         !! The value at which to evaluate the function.
     real(real64) :: rst
         !! Log ratio; nonconvergence returns NaN.
-    integer(int32), intent(in), optional :: max_iterations
+    integer, intent(in), optional :: max_iterations
         !! Iteration limit, default 10000.
 
     ! Parameters
-    integer(int32), parameter :: maxiter = 10000
+    integer, parameter :: maxiter = 10000
 
     ! Local Variables
-    integer(int32) :: i, limit
+    integer :: i, limit
     real(real64) :: an, b, c, d, del, h, eps, fpmin
 
     eps = epsilon(eps)

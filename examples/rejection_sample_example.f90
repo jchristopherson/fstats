@@ -33,7 +33,7 @@ program example
     ! This example uses rejection sampling to sample an F distribution.
 
     ! Local Variables
-    integer(int32), parameter :: npts = 10000
+    integer, parameter :: npts = 10000
     real(real64), parameter :: mu = 0.0d0
     real(real64), parameter :: sigma = 1.0d0
     real(real64), parameter :: xmin = 1.0d-4

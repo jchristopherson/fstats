@@ -31,7 +31,7 @@ program example
     ! Local Variables
     character, parameter :: tab = achar(9)
     character, parameter :: nl = new_line('a')
-    integer(int32) :: i
+    integer :: i
     real(real64) :: x(31), y(31), coeffs(4), ymodeled(31), residuals(31)
     type(regression_statistics) :: stats(4)
 

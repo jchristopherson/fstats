@@ -29,7 +29,7 @@ program example
     implicit none
 
     ! Local Variables
-    integer(int32) :: i, vars(3), tbl(24, 3)
+    integer :: i, vars(3), tbl(24, 3)
 
     ! Define the number of design points for each of the 3 factors to study
     vars = [2, 4, 3]

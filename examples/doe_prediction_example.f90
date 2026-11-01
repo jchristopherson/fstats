@@ -32,12 +32,12 @@ program doe_prediction_example
     implicit none
 
     ! Parameters
-    integer(int32), parameter :: npts = 10
-    integer(int32), parameter :: nparams = 2
-    integer(int32), parameter :: npred = 50
+    integer, parameter :: npts = 10
+    integer, parameter :: nparams = 2
+    integer, parameter :: npred = 50
     
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: x(npts, 1), y(npts), b(nparams), res(npts), ym(npts)
     real(real64) :: mse, alpha, xpred(npred, 1)
     type(doe_model) :: model

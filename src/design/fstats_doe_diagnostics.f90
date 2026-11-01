@@ -83,7 +83,7 @@ function doe_model_diagnostics(mdl, x, y) result(diag)
         !! response, observation count, and parameter count.
 
     ! Local Variables
-    integer(int32) :: m, p, i
+    integer :: m, p, i
     real(real64) :: ss_total, ss_residual, y_pred, y_mean, mse
     real(real64), allocatable :: residuals(:)
     real(real64) :: f_stat, ss_model
@@ -172,7 +172,7 @@ function doe_residuals_analysis(mdl, x, y) result(resid)
         !! and standard deviation.
 
     ! Local Variables
-    integer(int32) :: m, i
+    integer :: m, i
     real(real64), allocatable :: y_pred(:)
 
     ! Initialization
@@ -356,7 +356,7 @@ end function
 function f_p_value(f, d1, d2) result(rst)
     !! Computes the upper-tail probability of the F-distribution.
     real(real64), intent(in) :: f
-    integer(int32), intent(in) :: d1, d2
+    integer, intent(in) :: d1, d2
     real(real64) :: rst
 
     type(f_distribution) :: dist

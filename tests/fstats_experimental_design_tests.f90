@@ -35,9 +35,9 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32), parameter :: rowcount = 24
-        integer(int32), parameter :: columncount = 3
-        integer(int32) :: vars(columncount), m, n
+        integer, parameter :: rowcount = 24
+        integer, parameter :: columncount = 3
+        integer :: vars(columncount), m, n
 
         ! Process
         rst = .true.
@@ -61,7 +61,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32) :: vars(3), tbl(24, 3), ans(24, 3)
+        integer :: vars(3), tbl(24, 3), ans(24, 3)
 
         ! Initialization
         rst = .true.
@@ -87,12 +87,12 @@ contains
         logical :: rst
 
         ! Parameters
-        integer(int32), parameter :: nfactor = 3
-        integer(int32), parameter :: npts = 50
-        integer(int32), parameter :: nparams = 1 + nfactor
+        integer, parameter :: nfactor = 3
+        integer, parameter :: npts = 50
+        integer, parameter :: nparams = 1 + nfactor
 
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(npts, nfactor), mdl(nparams), y(npts), ans(npts)
 
         ! Initialization
@@ -122,9 +122,9 @@ contains
         logical :: rst
 
         ! Parameters
-        integer(int32), parameter :: nfactor = 3
-        integer(int32), parameter :: npts = 50
-        integer(int32), parameter :: nparams = 1 + nfactor + &
+        integer, parameter :: nfactor = 3
+        integer, parameter :: npts = 50
+        integer, parameter :: nparams = 1 + nfactor + &
             nfactor * (nfactor - 1) / 2 + nfactor
 
         ! Local Variables
@@ -157,9 +157,9 @@ contains
         logical :: rst
 
         ! Parameters
-        integer(int32), parameter :: nfactor = 3
-        integer(int32), parameter :: npts = 50
-        integer(int32), parameter :: nparams = 1 + nfactor + &
+        integer, parameter :: nfactor = 3
+        integer, parameter :: npts = 50
+        integer, parameter :: nparams = 1 + nfactor + &
             nfactor * (nfactor + 1) / 2 + &
             nfactor * (nfactor + 1) * (nfactor + 2) / 6
 
@@ -198,12 +198,12 @@ contains
 
         ! Parameters
         real(real64), parameter :: tol = 1.0d-6
-        integer(int32), parameter :: n = 5
-        integer(int32), parameter :: npts = n * n
-        integer(int32), parameter :: nparams = 6
+        integer, parameter :: n = 5
+        integer, parameter :: npts = n * n
+        integer, parameter :: nparams = 6
 
         ! Local Variables
-        integer(int32) :: i, j, k
+        integer :: i, j, k
         real(real64) :: x(npts,2), y(npts), beta(nparams)
         type(doe_model) :: mdl
 
@@ -246,12 +246,12 @@ contains
 
         ! Parameters
         real(real64), parameter :: tol = 1.0d-6
-        integer(int32), parameter :: n = 4
-        integer(int32), parameter :: npts = n * n * n
-        integer(int32), parameter :: nparams = 20
+        integer, parameter :: n = 4
+        integer, parameter :: npts = n * n * n
+        integer, parameter :: nparams = 20
 
         ! Local Variables
-        integer(int32) :: i, j, k, l
+        integer :: i, j, k, l
         real(real64) :: x(npts,3), y(npts), beta(nparams)
         type(doe_model) :: mdl
 
@@ -297,8 +297,8 @@ contains
 
         ! Variables
         real(real64), parameter :: tol = 1.0d-6
-        integer(int32), parameter :: npts = 31
-        integer(int32) :: i
+        integer, parameter :: npts = 31
+        integer :: i
         real(real64) :: x(npts), y(npts), ymod(npts), resid(npts), lsmdl(2), &
             xd(npts,1)
         type(regression_statistics) :: lsstats(2)
@@ -431,11 +431,11 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: npts = 10
-        integer(int32), parameter :: nparams = 2
+        integer, parameter :: npts = 10
+        integer, parameter :: nparams = 2
         
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(npts, 1), y(npts), beta(nparams)
         type(doe_model) :: mdl
         type(doe_diagnostics) :: diag
@@ -476,7 +476,7 @@ contains
         logical :: rst
 
         ! Local Variables
-        integer(int32), parameter :: vars(2) = [2, 3]
+        integer, parameter :: vars(2) = [2, 3]
         real(real64) :: tbl(6, 2), ans(6, 2)
 
         ! Initialization
@@ -498,11 +498,11 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: nfactors = 3
-        integer(int32), parameter :: fraction = 1
+        integer, parameter :: nfactors = 3
+        integer, parameter :: fraction = 1
         
         ! Local Variables
-        integer(int32) :: m, n
+        integer :: m, n
         real(real64) :: tbl(4, 3)
         
         ! Initialization
@@ -576,10 +576,10 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: nfactors = 2
+        integer, parameter :: nfactors = 2
         
         ! Local Variables
-        integer(int32) :: m, n
+        integer :: m, n
         real(real64) :: tbl(9, 2)  ! 2^2 + 2*2 + 1 = 9
         
         ! Initialization
@@ -612,11 +612,11 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: npts = 10
-        integer(int32), parameter :: nparams = 2
+        integer, parameter :: npts = 10
+        integer, parameter :: nparams = 2
         
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(npts, 1), y(npts), beta(nparams)
         type(doe_model) :: mdl
         type(doe_residuals) :: resid
@@ -657,12 +657,12 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: nfactors = 3
-        integer(int32), parameter :: nsamples = 10
+        integer, parameter :: nfactors = 3
+        integer, parameter :: nsamples = 10
         
         ! Local Variables
         real(real64) :: tbl(nsamples, nfactors)
-        integer(int32) :: seed, i, j
+        integer :: seed, i, j
         
         ! Initialization
         rst = .true.
@@ -694,13 +694,13 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: npts = 8
-        integer(int32), parameter :: nfactors = 3
+        integer, parameter :: npts = 8
+        integer, parameter :: nfactors = 3
         
         ! Local Variables
         real(real64) :: x(npts, nfactors)
         type(doe_efficiency_metrics) :: metrics
-        integer(int32) :: i
+        integer :: i
         
         ! Initialization
         rst = .true.
@@ -746,13 +746,13 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: npts = 9
-        integer(int32), parameter :: nfactors = 2
-        integer(int32), parameter :: nparams_full = 6  ! 1 intercept + 2 main + 1 interaction + 2 squared
-        integer(int32), parameter :: nparams_reduced = 3  ! 1 intercept + 2 main
+        integer, parameter :: npts = 9
+        integer, parameter :: nfactors = 2
+        integer, parameter :: nparams_full = 6  ! 1 intercept + 2 main + 1 interaction + 2 squared
+        integer, parameter :: nparams_reduced = 3  ! 1 intercept + 2 main
         
         ! Local Variables
-        integer(int32) :: i, j, k
+        integer :: i, j, k
         real(real64) :: x(npts, nfactors), y(npts)
         real(real64) :: beta_full(nparams_full), beta_reduced(nparams_reduced)
         type(doe_model) :: mdl_full, mdl_reduced
@@ -827,11 +827,11 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: npts = 10
-        integer(int32), parameter :: nparams = 2
+        integer, parameter :: npts = 10
+        integer, parameter :: nparams = 2
         
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(npts, 1), y(npts), beta(nparams)
         type(doe_model) :: mdl
         type(doe_anova_table) :: anova
@@ -901,12 +901,12 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: npts = 9
-        integer(int32), parameter :: nparams = 3
-        integer(int32), parameter :: nfactors = 2
+        integer, parameter :: npts = 9
+        integer, parameter :: nparams = 3
+        integer, parameter :: nfactors = 2
         
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(npts, nfactors), y(npts), beta(nparams)
         real(real64) :: x_low(nfactors), x_high(nfactors)
         type(doe_model) :: mdl
@@ -1069,7 +1069,7 @@ contains
 
     contains
         subroutine build_model(nway, beta, mdl)
-            integer(int32), intent(in) :: nway
+            integer, intent(in) :: nway
             real(real64), intent(in) :: beta(:)
             type(doe_model), intent(out) :: mdl
 
@@ -1087,11 +1087,11 @@ contains
         logical :: rst
         
         ! Parameters
-        integer(int32), parameter :: npts = 10
-        integer(int32), parameter :: nparams = 2
+        integer, parameter :: npts = 10
+        integer, parameter :: nparams = 2
         
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(npts, 1), y(npts), beta(nparams)
         type(doe_model) :: mdl
         type(doe_prediction) :: pred
@@ -1139,12 +1139,12 @@ contains
         logical :: rst
 
         ! Parameters
-        integer(int32), parameter :: npts = 10
+        integer, parameter :: npts = 10
         real(real64), parameter :: tcrit = 2.306004135204166d0 ! t(0.975, 8)
         real(real64), parameter :: tol = 1.0d-8
 
         ! Local Variables
-        integer(int32) :: i
+        integer :: i
         real(real64) :: x(npts, 1), y(npts), xp(3, 1), xbar, sxx, mse, q, hw
         real(real64) :: b1, b0
         type(doe_model) :: mdl

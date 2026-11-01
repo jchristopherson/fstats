@@ -15,16 +15,16 @@ module fstats_levenberg_marquardt
 ! ******************************************************************************
 ! CONSTANTS
 ! ------------------------------------------------------------------------------
-    integer(int32), parameter :: FS_LEVENBERG_MARQUARDT_UPDATE = 1
-    integer(int32), parameter :: FS_QUADRATIC_UPDATE = 2
-    integer(int32), parameter :: FS_NIELSEN_UPDATE = 3
+    integer, parameter :: FS_LEVENBERG_MARQUARDT_UPDATE = 1
+    integer, parameter :: FS_QUADRATIC_UPDATE = 2
+    integer, parameter :: FS_NIELSEN_UPDATE = 3
 
 ! ******************************************************************************
 ! TYPES
 ! ------------------------------------------------------------------------------
     type lm_solver_options
         !! Options to control the Levenberg-Marquardt solver.
-        integer(int32) :: method
+        integer :: method
             !! The solver method to utilize.
             !! - FS_LEVENBERG_MARQUARDT_UPDATE:
             !! - FS_QUADRATIC_UPDATE:
@@ -104,13 +104,13 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
 
     ! Parameters
     real(real64), parameter :: too_small = 1.0d-14
-    integer(int32), parameter :: min_iter_count = 2
-    integer(int32), parameter :: min_fun_count = 10
-    integer(int32), parameter :: min_update_count = 1
+    integer, parameter :: min_iter_count = 2
+    integer, parameter :: min_fun_count = 10
+    integer, parameter :: min_update_count = 1
 
     ! Local Variables
     logical :: stop
-    integer(int32) :: m, n, actual, expected
+    integer :: m, n, actual, expected
     real(real64), pointer :: w(:), pmax(:), pmin(:)
     real(real64), allocatable, target :: defaultWeights(:), maxparam(:), &
         minparam(:), JtWJ(:,:)
@@ -293,7 +293,7 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
         p, weights
     real(real64), intent(in) :: dX2, step
     real(real64), intent(inout), dimension(:,:) :: jac
-    integer(int32), intent(inout) :: neval
+    integer, intent(inout) :: neval
     logical, intent(inout) :: update
     real(real64), intent(out), dimension(:,:) :: JtWJ
     real(real64), intent(out), dimension(:) :: JtWdy
@@ -305,7 +305,7 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     class(*), intent(inout), optional :: args
 
     ! Local Variables
-    integer(int32) :: m, n
+    integer :: m, n
     real(real64), pointer, dimension(:) :: w1, w2
 
     ! Initialization
@@ -383,8 +383,8 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     real(real64), intent(in) :: xdata(:), ydata(:), p(:), maxP(:), &
         minP(:), weights(:), JtWdy(:)
     real(real64), intent(in) :: lambda, X2Old
-    integer(int32), intent(inout) :: neval, niter
-    integer(int32), intent(in) :: update
+    integer, intent(inout) :: neval, niter
+    integer, intent(in) :: update
     real(real64), intent(in) :: JtWJ(:,:)
     real(real64), intent(out) :: h(:), pNew(:), deltaY(:), yNew(:)
     real(real64), intent(out) :: X2, alpha
@@ -393,8 +393,8 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     class(*), intent(inout), optional :: args
 
     ! Local Variables
-    integer(int32) :: i, n
-    integer(int32), allocatable, dimension(:) :: iwork
+    integer :: i, n
+    integer, allocatable, dimension(:) :: iwork
     real(real64) :: dpJh
     real(real64), allocatable, dimension(:,:) :: a, lu
 
@@ -500,7 +500,7 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
 
     ! Local Variables
     logical :: update
-    integer(int32) :: i, m, n, dof, flag, neval, niter, nupdate
+    integer :: i, m, n, dof, flag, neval, niter, nupdate
     real(real64) :: dX2, X2, X2Old, X2Try, lambda, alpha, nu, step
     real(real64), allocatable :: pOld(:), yOld(:), J(:,:), JtWdy(:), &
         work(:), mwork(:,:), pTry(:), yTemp(:), JtWJc(:,:), h(:)
@@ -605,8 +605,8 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
     real(real64), intent(inout) :: pOld(:), p(:), yOld(:), y(:), lambda, &
         JtWdy(:), dX2, X2, X2old, JtWJ(:,:), J(:,:), nu
     real(real64), intent(out) :: work(:), mwork(:,:)
-    integer(int32), intent(in) :: niter
-    integer(int32), intent(inout) :: neval
+    integer, intent(in) :: niter
+    integer, intent(inout) :: neval
     logical, intent(inout) :: update
     class(iteration_controls), intent(in) :: controls
     class(lm_solver_options), intent(in) :: opt
@@ -614,7 +614,7 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
     class(*), intent(inout), optional :: args
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
     real(real64) :: rho
 
     ! Initialization
@@ -698,7 +698,7 @@ function lm_check_convergence(controls, dof, resid, niter, neval, &
     ! Arguments
     class(iteration_controls), intent(in) :: controls
     real(real64), intent(in) :: resid(:), JtWdy(:), h(:), p(:), X2
-    integer(int32), intent(in) :: dof, niter, neval
+    integer, intent(in) :: dof, niter, neval
     class(convergence_info), intent(out) :: info
     logical :: rst
 

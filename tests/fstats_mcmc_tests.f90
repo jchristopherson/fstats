@@ -189,13 +189,13 @@ function test_mcmc_target_likelihood() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: ndata = 21
+    integer, parameter :: ndata = 21
     real(real64), parameter :: var = 1.0d-2
     real(real64), parameter :: tol = 1.0d-8
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: v, sm, l, xdata(ndata), ydata(ndata), ymod(ndata), params(2)
     type(normal_distribution) :: dist, param1, param2
     type(test_mcmc_target) :: target
@@ -260,11 +260,11 @@ function test_mh_push() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: nvars = 10
-    integer(int32), parameter :: npts = 100
+    integer, parameter :: nvars = 10
+    integer, parameter :: npts = 100
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: x(npts, nvars)
     real(real64), allocatable, dimension(:,:) :: chain
     type(mcmc_sampler) :: mcmc
@@ -301,8 +301,8 @@ end function
 ! ------------------------------------------------------------------------------
 function test_mcmc_parallel_likelihood() result(rst)
     logical :: rst
-    integer(int32), parameter :: ndata = 20001
-    integer(int32) :: i, mode, variance_index
+    integer, parameter :: ndata = 20001
+    integer :: i, mode, variance_index
     real(real64) :: params(2), variances(3), effective_variance, expected, actual
     real(real64) :: xdata(ndata), ydata(ndata), ymod(ndata)
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
@@ -365,8 +365,8 @@ end function
 ! ------------------------------------------------------------------------------
 function test_mcmc_sample_chains() result(rst)
     logical :: rst
-    integer(int32), parameter :: nchains = 4, niter = 205, ndata = 21
-    integer(int32) :: chain_index, i
+    integer, parameter :: nchains = 4, niter = 205, ndata = 21
+    integer :: chain_index, i
     real(real64) :: xdata(ndata), ydata(ndata)
     real(real64), allocatable :: chain(:,:)
     type(normal_distribution) :: prior
