@@ -800,6 +800,23 @@ contains
             rst = .false.
             print '(A)', "TEST FAILED: test_model_comparison_1 - f_statistic"
         end if
+
+        ! Degrees of freedom, and the exact full model must be significant
+        if (comp%df_full /= npts - nparams_full .or. &
+            comp%df_reduced /= npts - nparams_reduced .or. &
+            comp%df_diff /= nparams_full - nparams_reduced .or. &
+            .not.comp%significant_difference .or. comp%p_value > 0.05d0) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_model_comparison_1 - df/p"
+        end if
+
+        ! Reversed order is an invalid comparison
+        comp = doe_compare_models(mdl_reduced, mdl_full, x, y)
+        if (comp%significant_difference .or. comp%f_statistic /= 0.0d0 .or. &
+            comp%p_value /= 1.0d0) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_model_comparison_1 - invalid"
+        end if
         
     end function
 
@@ -846,6 +863,34 @@ contains
             rst = .false.
             print '(A)', "TEST FAILED: test_model_anova_1 - sum of squares"
         end if
+
+        ! Degrees of freedom and p-value of a perfect fit
+        if (anova%df_model /= 1 .or. anova%df_residual /= npts - 2 .or. &
+            anova%df_total /= npts - 1 .or. anova%p_value > 1.0d-10) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_model_anova_1 - perfect fit df/p"
+        end if
+
+        ! Noisy data: residuals of +/-0.5
+        y = y + [(0.5d0 * (-1.0d0)**i, i=1,npts)]
+        anova = doe_model_anova(mdl, x, y)
+        if (.not.is_equal(anova%ss_residual, 2.5d0, 1.0d-10) .or. &
+            .not.is_equal(anova%f_statistic, anova%ms_model / &
+                anova%ms_residual, 1.0d-10) .or. &
+            .not.is_equal(anova%ms_residual, 2.5d0 / 8.0d0, 1.0d-10)) then
+            rst = .false.
+            print '(A)', "TEST FAILED: test_model_anova_1 - noisy F"
+        end if
+        block
+            type(f_distribution) :: fd
+            fd = f_distribution(d1 = 1.0d0, d2 = 8.0d0)
+            if (.not.is_equal(anova%p_value, fd%survival(anova%f_statistic), &
+                1.0d-12) .or. anova%p_value <= 0.0d0 .or. &
+                anova%p_value >= 1.0d0) then
+                rst = .false.
+                print '(A)', "TEST FAILED: test_model_anova_1 - p-value"
+            end if
+        end block
         
     end function
 
