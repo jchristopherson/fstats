@@ -65,13 +65,13 @@ module fstats_data_columns
         procedure(data_column_integer_query), deferred, public, pass :: get_data_type
             !! Gets the data type stored by the column:
             !!
-            !! - [[FS_COLUMN_INTEGER]]
+            !! - FS_COLUMN_INTEGER
             !!
-            !! - [[FS_COLUMN_REAL]]
+            !! - FS_COLUMN_REAL
             !!
-            !! - [[FS_COLUMN_LOGICAL]]
+            !! - FS_COLUMN_LOGICAL
             !!
-            !! - [[FS_COLUMN_STRING]]
+            !! - FS_COLUMN_STRING
         procedure(data_column_array_copy), deferred, public, pass :: copy
             !! Copies the contents of the column to an array.
         procedure(data_column_array_view), deferred, public, pass :: view
@@ -1481,7 +1481,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function rc_add(x, y) result(rst)
         !! Overloads `+` to add corresponding elements of two columns.
-        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
         class(real_column), intent(in) :: x, y
             !! The left and right operands; unallocated storage is treated as empty.
         type(real_column) :: rst
@@ -1494,7 +1494,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function rc_subtract(x, y) result(rst)
         !! Overloads `-` to subtract corresponding elements of two columns.
-        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
         class(real_column), intent(in) :: x, y
             !! The left and right operands; unallocated storage is treated as empty.
         type(real_column) :: rst
@@ -1507,7 +1507,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function rc_multiply(x, y) result(rst)
         !! Overloads `*` to multiply corresponding elements, not compute a dot product.
-        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
         class(real_column), intent(in) :: x, y
             !! The left and right operands; unallocated storage is treated as empty.
         type(real_column) :: rst
@@ -1520,7 +1520,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function rc_divide(x, y) result(rst)
         !! Overloads `/` to divide corresponding elements of two columns.
-        !! Unequal counts cause ERROR STOP with [[FS_ARRAY_SIZE_ERROR]].
+        !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
         !! Zero divisors and nonfinite values follow intrinsic division behavior.
         class(real_column), intent(in) :: x, y
             !! The numerator and denominator columns; unallocated storage is empty.

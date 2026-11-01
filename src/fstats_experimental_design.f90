@@ -44,19 +44,67 @@ module fstats_experimental_design
         !! A model used to represent a design of experiments result.  The model
         !! is of the following form.
         !!
-        !! $$ Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n} 
-        !! \sum_{j=1 \\ i \neq j}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} 
-        !! \sum_{j=1}^{n} \sum_{k=1 \\ i \neq j \neq k}^{n} \beta_{ijk} X_{i} 
-        !! X_{j} X_{k} + ... $$
+        !! $$ Y = \beta_{0} + \sum_{i=1}^{n} \beta_{i} X_{i} + \sum_{i=1}^{n-1} 
+        !! \sum_{j=i+1}^{n} \beta_{ij} X_{i} X_{j} + \sum_{i=1}^{n} \beta_{ii} 
+        !! X_{i}^{2} + \sum_{i=1}^{n-2} \sum_{j=i+1}^{n-1} \sum_{k=j+1}^{n} 
+        !! \beta_{ijk} X_{i} X_{j} X_{k} + \sum_{i=1}^{n} \sum_{j=1 \\ j \neq i}^{n} 
+        !! \beta_{iij} X_{i}^{2} X_{j} + \sum_{i=1}^{n} \beta_{iii} X_{i}^{3} $$
+        !!
+        !! The cross and squared terms are included for a two-way model, and
+        !! the triple terms are added for a three-way model.  Each unique
+        !! combination of factors appears exactly once.  For two factors, a
+        !! two-way model is
+        !! \(Y = \beta_{0} + \beta_{1} X_{1} + \beta_{2} X_{2} + \beta_{12} 
+        !! X_{1} X_{2} + \beta_{11} X_{1}^{2} + \beta_{22} X_{2}^{2}\).
         integer(int32) :: nway
             !! The number of interaction levels.
         real(real64), allocatable, dimension(:) :: coefficients
-            !! The model coefficients.
+            !! The model coefficients, where N is the number of factors.  The
+            !! coefficients are ordered as follows, with each group included
+            !! only if the model has a sufficient number of interaction levels.
+            !!
+            !! 1. The constant term: \(\beta_{0}\) (1 term).
+            !! 2. Main effects, \(i = 1 \ldots N\): \(\beta_{1}, \beta_{2}, 
+            !!    \ldots, \beta_{N}\) (N terms).  Included for nway >= 1.
+            !! 3. Two-way cross terms, \(i < j\) in lexicographic order: 
+            !!    \(\beta_{12}, \beta_{13}, \ldots, \beta_{1N}, \beta_{23}, 
+            !!    \ldots, \beta_{N-1,N}\) (N(N-1)/2 terms).  Included for 
+            !!    nway >= 2.
+            !! 4. Squared terms: \(\beta_{11}, \beta_{22}, \ldots, 
+            !!    \beta_{NN}\) (N terms).  Included for nway >= 2.
+            !! 5. Three-way cross terms, \(i < j < k\) in lexicographic order: 
+            !!    \(\beta_{123}, \beta_{124}, \ldots, \beta_{N-2,N-1,N}\) 
+            !!    (N(N-1)(N-2)/6 terms).  Included for nway >= 3.
+            !! 6. Squared-by-linear terms \(X_{i}^{2} X_{j}\), \(i \neq j\), 
+            !!    with i as the outer index and j as the inner index: 
+            !!    \(\beta_{112}, \beta_{113}, \ldots, \beta_{11N}, 
+            !!    \beta_{221}, \beta_{223}, \ldots, \beta_{NN,N-1}\) 
+            !!    (N(N-1) terms).  Included for nway >= 3.
+            !! 7. Cubed terms: \(\beta_{111}, \beta_{222}, \ldots, 
+            !!    \beta_{NNN}\) (N terms).  Included for nway >= 3.
+            !!
+            !! For example, with N = 2 and nway = 2, the order is 
+            !! \(\beta_{0}, \beta_{1}, \beta_{2}, \beta_{12}, \beta_{11}, 
+            !! \beta_{22}\).
         type(regression_statistics), allocatable, dimension(:) :: stats
             !! Statistical information for each model parameter.
         logical, allocatable, dimension(:) :: map
             !! An array denoting if a model coefficient should be included
             !! as part of the model (true), or neglected (false).
+        real(real64), allocatable, dimension(:,:) :: covariance
+            !! The unscaled parameter covariance matrix 
+            !! \( \left( X^{T} X \right)^{-1} \), where \( X \) is the design
+            !! matrix used to fit the model.  Only the parameters included in 
+            !! the model (map = true) are represented, in coefficient order.  
+            !! This is populated by doe_fit_model, and is used to compute 
+            !! prediction intervals.
+        real(real64) :: mse = 0.0d0
+            !! The residual mean squared error of the fit, \( SS_{res} / 
+            !! (m - p) \).  This is only meaningful if dof > 0.
+        integer(int32) :: dof = 0
+            !! The residual degrees of freedom of the fit, \( m - p \).  A 
+            !! value of zero indicates the fit information is not available
+            !! (e.g. the model was not created by doe_fit_model).
     end type
 
     type doe_diagnostics

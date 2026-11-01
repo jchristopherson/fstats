@@ -644,9 +644,9 @@ end subroutine
 ! ------------------------------------------------------------------------------
 ! Sets up default tolerances.
 subroutine lm_set_default_tolerances(x)
-    !! Establishes defaults for a [[iterations_controls]] object.
+    !! Establishes defaults for a iteration_controls object.
     class(iteration_controls), intent(inout) :: x
-        !! The [[iterations_controls]] object.
+        !! The iteration_controls object.
 
     ! Set defaults
     x%max_iteration_count = 500
