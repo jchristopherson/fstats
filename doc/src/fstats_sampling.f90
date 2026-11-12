@@ -89,13 +89,13 @@ function box_muller_sample(mu, sigma, n) result(rst)
         !! The mean of the distribution.
     real(real64), intent(in) :: sigma
         !! The standard deviation of the distribution.
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
         !! The number of random samples to generate.
     real(real64), allocatable, dimension(:) :: rst
         !! An N-element array containing the values.
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: prev
 
     ! Process
@@ -117,7 +117,7 @@ function rejection_sample(tdist, n, xmin, xmax) result(rst)
     !! Uses rejection sampling to randomly sample a target distribution.
     class(distribution), intent(in) :: tdist
         !! The distribution to sample
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
         !! The number of samples to make.
     real(real64), intent(in) :: xmin
         !! The minimum range to explore.
@@ -132,7 +132,7 @@ function rejection_sample(tdist, n, xmin, xmax) result(rst)
     real(real64), parameter :: c_start = 1.01d0
 
     ! Local Variables
-    integer(int32) :: i, j, jmax
+    integer :: i, j, jmax
     real(real64) :: u, c, g, f, rng
 
     ! Quick Return
@@ -187,7 +187,7 @@ function sample_normal_multivariate(dist) result(rst)
         !! The resulting vector.
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
     real(real64), allocatable, dimension(:) :: u
     real(real64), allocatable, dimension(:,:) :: L
 

@@ -92,7 +92,7 @@ pure function shifted_scaled_values(x, scale_value) result(rst)
         !! Positive finite scale, normally MAXVAL(ABS(x)).
     real(real64), allocatable, dimension(:) :: rst
         !! Shifted/scaled observations; the first entry is zero.
-    integer(int32) :: observation
+    integer :: observation
 
     allocate(rst(size(x)))
     do observation = 1, size(x)
@@ -114,7 +114,7 @@ pure function sample_spread(x) result(rst)
         !! and an unrepresentable result gives positive infinity.
     real(real64), allocatable, dimension(:) :: shifted
     real(real64) :: scale_value, running_mean, delta, second_moment, factor
-    integer(int32) :: observation, count
+    integer :: observation, count
 
     rst = ieee_value(0.0d0, ieee_quiet_nan)
     count = size(x)
@@ -152,7 +152,7 @@ pure function mean_array(x) result(rst)
     real(real64), parameter :: zero = 0.0d0
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     real(real64) :: scale_value, compensation, term, updated
 
     ! Process
@@ -235,7 +235,7 @@ pure function median_array(x) result(rst)
     real(real64), parameter :: half = 0.5d0
 
     ! Local Variables
-    integer(int32) :: n, nmid, nmidp1, flag, iflag
+    integer :: n, nmid, nmidp1, flag, iflag
     real(real64), allocatable, dimension(:) :: xc
 
     ! Initialization
@@ -281,7 +281,7 @@ pure function quantile_array(x, q) result(rst)
 
     ! Local Variables
     real(real64) :: a, b
-    integer(int32) :: n, ib
+    integer :: n, ib
     real(real64), allocatable :: xc(:)
 
     ! Initialization
@@ -333,7 +333,7 @@ function trimmed_mean_array(x, p) result(rst)
         !! Trimmed mean; invalid p or empty/nonfinite data give NaN.
 
     ! Local Variables
-    integer(int32) :: i1, i2, n
+    integer :: i1, i2, n
     real(real64) :: pv
 
     ! Initialization
@@ -371,7 +371,7 @@ pure function covariance_array(x, y) result(rst)
         !! Sample covariance; fewer than two observations or nonfinite inputs
         !! give NaN. An unrepresentable result gives signed infinity.
 
-    integer(int32) :: i, n
+    integer :: i, n
     real(real64) :: meanX, meanY, scaleX, scaleY, compensation, term, updated, log_magnitude
     real(real64), allocatable, dimension(:) :: shiftedX, shiftedY
 
@@ -413,14 +413,14 @@ pure function pooled_variance_1(si, ni) result(rst)
     real(real64), intent(in), dimension(:) :: si
         !! An N-element array containing the estimates for each of the N
         !! variances.
-    integer(int32), intent(in), dimension(size(si)) :: ni
+    integer, intent(in), dimension(size(si)) :: ni
         !! An N-element array containing the number of data points in each
         !! of the data sets used to compute the variances in si.
     real(real64) :: rst
         !! Pooled variance; empty inputs, nonfinite/negative variances, or
         !! groups with fewer than two observations give NaN.
 
-    integer(int32) :: i, k
+    integer :: i, k
     integer(int64) :: degrees_of_freedom
     real(real64) :: scale_value, term, compensation, updated
 
@@ -451,9 +451,9 @@ pure function pooled_variance_2(x) result(rst)
         !! Pooled variance; empty/unallocated groups or groups with fewer than
         !! two finite observations give NaN.
 
-    integer(int32) :: i, k
+    integer :: i, k
     real(real64), allocatable, dimension(:) :: group_variances
-    integer(int32), allocatable, dimension(:) :: group_sizes
+    integer, allocatable, dimension(:) :: group_sizes
 
     k = size(x)
     rst = ieee_value(0.0d0, ieee_quiet_nan)
@@ -590,7 +590,7 @@ pure function pooled_variance_column(si, ni) result(rst)
     !! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.
     class(data_column), intent(in) :: si
         !! Group variance estimates, unchanged; unallocated storage is empty.
-    integer(int32), intent(in), dimension(:) :: ni
+    integer, intent(in), dimension(:) :: ni
         !! Group observation counts; must have si's count and each be at least two.
     real(real64) :: rst
         !! Pooled variance; empty data, negative/nonfinite estimates, or invalid
@@ -609,8 +609,8 @@ pure function pooled_variance_columns(x) result(rst)
         !! Pooled variance; no groups, undersized/unallocated groups, or
         !! nonfinite observations give NaN, as in the array-container overload.
     real(real64), allocatable, dimension(:) :: group_variances
-    integer(int32), allocatable, dimension(:) :: group_sizes
-    integer(int32) :: group
+    integer, allocatable, dimension(:) :: group_sizes
+    integer :: group
 
     allocate(group_variances(size(x)), group_sizes(size(x)))
     do group = 1, size(x)

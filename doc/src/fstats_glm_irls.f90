@@ -22,7 +22,7 @@ module fstats_glm_irls
     abstract interface
         subroutine glm_iteration_update(iter, resid, beta)
             use iso_fortran_env, only : int32, real64
-            integer(int32), intent(in) :: iter
+            integer, intent(in) :: iter
             real(real64), intent(in), dimension(:) :: resid
             real(real64), intent(in), dimension(:) :: beta
         end subroutine
@@ -58,7 +58,7 @@ contains
         !! Too few observations or numerical rank deficiency of the weighted,
         !! scaled design stop with FS_UNDERDEFINED_PROBLEM_ERROR. Missing data
         !! must be removed or imputed by the caller.
-        integer(int32), intent(in) :: method
+        integer, intent(in) :: method
             !! FS_GLM_BINOMIAL (logit), FS_GLM_POISSON (log), or
             !! FS_GLM_GAMMA (reciprocal).
         real(real64), intent(in), dimension(:,:) :: x
@@ -182,7 +182,7 @@ contains
         !! A**(-1) B A**(-T), where A differentiates the actual weighted score
         !! and B sums observation score outer products. Common score scaling
         !! cancels from this sandwich; column scaling is restored in log space.
-        integer(int32), intent(in) :: method
+        integer, intent(in) :: method
             !! Validated family identifier.
         real(real64), intent(in), dimension(:,:) :: x
             !! Finite full-rank N-by-P design.
@@ -204,8 +204,8 @@ contains
         real(real64), allocatable, dimension(:) :: eta, mu, scale, column_scale, &
             logw, tau, se, wr, score, plus_score, minus_score, trial_eta, trial_mu
         real(real64), allocatable, dimension(:,:) :: design, matrix, qr, rhs, influence
-        integer(int32), allocatable, dimension(:) :: pivots
-        integer(int32) :: n, p, col, row, attempt, other
+        integer, allocatable, dimension(:) :: pivots
+        integer :: n, p, col, row, attempt, other
         real(real64) :: norm, logdisp, lognorm, h, cutoff, magnitude, critical, halfwidth
         real(real64) :: correlation, entry, left_norm, right_norm
         logical :: valid, use_t
@@ -405,7 +405,7 @@ contains
             !! Common log normalization, fixed throughout differentiation.
         real(real64), allocatable, dimension(:) :: score
             !! Scaled signed observation contributions, excluding the design.
-        integer(int32) :: row
+        integer :: row
         allocate(score(size(r)), source = 0.0d0)
         do row = 1, size(r)
             if (wr(row) == 0.0d0 .or. r(row) == 0.0d0) cycle
@@ -419,7 +419,7 @@ contains
         info, status, resid)
         !! Solve the scaled weighted increment system. Family-specific
         !! logarithms avoid explicitly squaring derivatives or variances.
-        integer(int32), intent(in) :: method
+        integer, intent(in) :: method
             !! Validated family identifier.
         real(real64), intent(in), dimension(:,:) :: x
             !! Validated N-by-P design matrix.
@@ -442,8 +442,8 @@ contains
             !! An optional P-element array where the residual will be written.
 
         ! Local Variables
-        integer(int32) :: n, p, k, row, col, halvings
-        integer(int32), allocatable, dimension(:) :: pivots
+        integer :: n, p, k, row, col, halvings
+        integer, allocatable, dimension(:) :: pivots
         real(real64), allocatable, dimension(:) :: eta, mu, trial_mu, logw, loggp, wr, &
             r, rhs, delta, beta_new, scale, wscale, tau, qrhs, solution
         real(real64), allocatable, dimension(:,:) :: wx, qr
@@ -642,7 +642,7 @@ contains
         !! Compare half-deviances on a common scale, excluding common
         !! dispersion. Robust weights are fixed during backtracking. A small
         !! roundoff allowance prevents rejecting steps at a numerical optimum.
-        integer(int32), intent(in) :: method
+        integer, intent(in) :: method
             !! Validated family identifier.
         real(real64), intent(in), dimension(:) :: y, mu, trial_mu, wr
             !! Responses, current/trial valid means, and finite robust weights.
@@ -651,7 +651,7 @@ contains
             !! beyond 32 * epsilon * max(1, current scaled half-deviance).
         real(real64) :: old_cost, new_cost, norm, lognorm, weight, old_term, new_term
         real(real64) :: logratio, logtrial, factor, weight_norm
-        integer(int32) :: row
+        integer :: row
         old_cost = 0.0d0
         new_cost = 0.0d0
         norm = 1.0d0
@@ -725,7 +725,7 @@ contains
             !! N predictors; only usable if valid is true.
         logical, intent(out) :: valid
             !! True when all arithmetic produces finite predictors.
-        integer(int32) :: row, col
+        integer :: row, col
         real(real64) :: term
         valid = .false.
         if (.not.all(ieee_is_finite(beta))) return
@@ -746,7 +746,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function valid_mean(method, mu) result(valid)
         !! Reject unrepresentable means and rounded binomial boundary values.
-        integer(int32), intent(in) :: method
+        integer, intent(in) :: method
             !! Validated family identifier.
         real(real64), intent(in), dimension(:) :: mu
             !! N inverse-link results.
@@ -767,7 +767,7 @@ contains
             !! N finite log-odds.
         real(real64), allocatable, dimension(:) :: mu
             !! N probabilities; the driver rejects rounded zero/one values.
-        integer(int32) :: row
+        integer :: row
         real(real64) :: term
         allocate(mu(size(eta)))
         do row = 1, size(eta)
@@ -801,7 +801,7 @@ contains
             !! N predictors; nonpositive or unrepresentable values yield NaN.
         real(real64), allocatable, dimension(:) :: mu
             !! N means 1 / eta.
-        integer(int32) :: row
+        integer :: row
         allocate(mu(size(eta)))
         mu = ieee_value(0.0d0, ieee_quiet_nan)
         do row = 1, size(eta)

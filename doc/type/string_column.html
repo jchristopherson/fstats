@@ -12,14 +12,29 @@
 
     <title>string_column &ndash; FSTATS </title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -75,8 +90,7 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                  title="<p> 3.2% of total for derived types.</p>Including implementation: 134 statements,  4.4% of total for derived types.">19 statements</a>
             </li>
 
@@ -98,9 +112,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -155,19 +171,19 @@
       </a>
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-append~5">append</a>
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-copy~5">copy</a>
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-count~5">count</a>
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-get~4">get</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-append~6">append</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-copy~6">copy</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-count~9">count</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-get~5">get</a>
             <a class="list-group-item" href="../type/string_column.html#boundprocedure-get_data_type~5">get_data_type</a>
             <a class="list-group-item" href="../type/string_column.html#boundprocedure-get_name">get_name</a>
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-insert~5">insert</a>
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-remove~5">remove</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-insert~6">insert</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-remove~6">remove</a>
             <a class="list-group-item" href="../type/string_column.html#boundprocedure-set~4">set</a>
             <a class="list-group-item" href="../type/string_column.html#boundprocedure-set_name">set_name</a>
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-slice~5">slice</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-slice~6">slice</a>
             <a class="list-group-item" href="../type/string_column.html#boundprocedure-to_string~5">to_string</a>
-            <a class="list-group-item" href="../type/string_column.html#boundprocedure-view~5">view</a>
+            <a class="list-group-item" href="../type/string_column.html#boundprocedure-view~6">view</a>
         </div>
       </div>
     </div>
@@ -181,7 +197,7 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>
+      <h2 id="type-def-statement">
         type, public, extends(<a href='data_column.html'>data_column</a>) :: string_column</h2>
     <p>Defines a column of string values.</p>
     <br>
@@ -250,8 +266,8 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~38"></span>
-              integer(kind=int32),
+              <span class="anchor" id="variable-n~109"></span>
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -294,7 +310,7 @@ supplied array.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~61"></span>
+              <span class="anchor" id="variable-x~201"></span>
               type(string),
             </td>
 <td>intent(in),</td>
@@ -329,16 +345,16 @@ supplied array.</p>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-append~5"></span>
+      <span class="anchor" id="boundprocedure-append~6"></span>
       <h3>
           procedure, public ::
   <strong>append</strong> => sc_append
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  subroutine sc_append(this, x)  
 </h3>
 
@@ -389,24 +405,24 @@ supplied array.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-copy~5"></span>
+      <span class="anchor" id="boundprocedure-copy~6"></span>
       <h3>
           procedure, public ::
   <strong>copy</strong> => sc_copy
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private pure subroutine sc_copy(this, dest)  
 </h3>
 
@@ -457,24 +473,24 @@ supplied array.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-count~5"></span>
+      <span class="anchor" id="boundprocedure-count~9"></span>
       <h3>
           procedure, public ::
   <strong>count</strong> => sc_count
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private pure function sc_count(this) result(rst)  
 </h3>
 
@@ -511,28 +527,28 @@ supplied array.</p>
 
     <h4>
     Return Value
-    <small>integer(kind=int32)</small>
+    <small>integer</small>
     </h4>
     <p>The number of values.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-get~4"></span>
+      <span class="anchor" id="boundprocedure-get~5"></span>
       <h3>
           procedure, public ::
   <strong>get</strong> => sc_get
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private pure function sc_get(this, row) result(rst)  
 </h3>
 
@@ -567,7 +583,7 @@ supplied array.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -588,8 +604,8 @@ supplied array.</p>
     </h4>
     <p>The value stored at the requested row.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -603,9 +619,9 @@ supplied array.</p>
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private pure function sc_get_type(this) result(rst)  
 </h3>
 
@@ -642,12 +658,12 @@ supplied array.</p>
 
     <h4>
     Return Value
-    <small>integer(kind=int32)</small>
+    <small>integer</small>
     </h4>
     <p>The type stored by this column.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -661,9 +677,9 @@ supplied array.</p>
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private pure function dc_get_name(this) result(rst)  
 </h3>
 
@@ -704,24 +720,24 @@ supplied array.</p>
     </h4>
     <p>The name.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-insert~5"></span>
+      <span class="anchor" id="boundprocedure-insert~6"></span>
       <h3>
           procedure, public ::
   <strong>insert</strong> => sc_insert
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  subroutine sc_insert(this, row, x)  
 </h3>
 
@@ -756,7 +772,7 @@ supplied array.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -787,24 +803,24 @@ supplied array.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-remove~5"></span>
+      <span class="anchor" id="boundprocedure-remove~6"></span>
       <h3>
           procedure, public ::
   <strong>remove</strong> => sc_remove
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  subroutine sc_remove(this, row)  
 </h3>
 
@@ -839,7 +855,7 @@ supplied array.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -855,8 +871,8 @@ supplied array.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -870,9 +886,9 @@ supplied array.</p>
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  subroutine sc_set(this, row, x)  
 </h3>
 
@@ -907,7 +923,7 @@ supplied array.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -938,8 +954,8 @@ supplied array.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -953,9 +969,9 @@ supplied array.</p>
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  subroutine dc_set_name(this, x)  
 </h3>
 
@@ -1006,24 +1022,24 @@ supplied array.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-slice~5"></span>
+      <span class="anchor" id="boundprocedure-slice~6"></span>
       <h3>
           procedure, public ::
   <strong>slice</strong> => sc_slice
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  function sc_slice(this, first, last) result(rst)  
 </h3>
 
@@ -1058,7 +1074,7 @@ supplied array.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1073,7 +1089,7 @@ supplied array.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1094,8 +1110,8 @@ supplied array.</p>
     </h4>
     <p>The array pointer, or null if unallocated.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -1109,9 +1125,9 @@ supplied array.</p>
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  function sc_to_string(this, row, fmt) result(rst)  
 </h3>
 
@@ -1146,7 +1162,7 @@ supplied array.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1182,24 +1198,24 @@ supplied array.</p>
     </h4>
     <p>The resulting string.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-view~5"></span>
+      <span class="anchor" id="boundprocedure-view~6"></span>
       <h3>
           procedure, public ::
   <strong>view</strong> => sc_view
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  function sc_view(this) result(rst)  
 </h3>
 
@@ -1240,8 +1256,8 @@ supplied array.</p>
     </h4>
     <p>The array pointer, or null if unallocated.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -1256,40 +1272,21 @@ supplied array.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:39              </p>
+ on 2026-11-12 14:47 -0600             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>

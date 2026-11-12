@@ -220,9 +220,9 @@ pure elemental function dist_std_var(this, x) result(rst)
         !! The result.
 
     ! Local Variables
-    integer(int32), parameter :: maxiter = 100
+    integer, parameter :: maxiter = 100
     real(real64), parameter :: tol = 1.0d-6
-    integer(int32) :: i
+    integer :: i
     real(real64) :: f, df, h, twoh, dy
 
     ! Process
@@ -290,7 +290,7 @@ pure function cholesky_determinant(x) result(rst)
         !! The determinant.
 
     ! Local Variables
-    integer(int32) :: i, ep, n
+    integer :: i, ep, n
     real(real64) :: temp
 
     ! Initialization
@@ -325,7 +325,7 @@ pure subroutine populate_identity(x)
     real(real64), intent(inout), dimension(:,:) :: x
 
     ! Local Variables
-    integer(int32) :: i, m, n, mn
+    integer :: i, m, n, mn
 
     ! Process
     m = size(x, 1)

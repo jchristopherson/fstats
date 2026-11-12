@@ -72,7 +72,7 @@ pure function allan_variance_array(x, dt) result(rst)
         !! the M results stored in the second column.
 
     ! Local Variables
-    integer(int32) :: j, m, n, limit, nr
+    integer :: j, m, n, limit, nr
     real(real64), allocatable, dimension(:) :: tall1, tall2
     real(real64) :: temp, deltaT
     

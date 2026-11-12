@@ -56,7 +56,7 @@ subroutine lowess(x, y, ys, fsmooth, nstps, del, rweights, resid)
         !! each value.  As this value increases, the output becomes smoother.
         !! Choosing a value in the range of 0.2 to 0.8 typically results in a
         !! good fit.  The default value is 0.2.
-    integer(int32), intent(in), optional :: nstps
+    integer, intent(in), optional :: nstps
         !! An optional input that specifies the numb of iterations.  If set to
         !! zero, a non-robust fit is returned.  The default value is set to 2.
     real(real64), intent(in), optional :: del
@@ -78,7 +78,7 @@ subroutine lowess(x, y, ys, fsmooth, nstps, del, rweights, resid)
 
     ! Local Variables
     logical :: ok
-    integer(int32) :: iter, i, j, nleft, nright, ns, last, m1, m2, n, nsteps
+    integer :: iter, i, j, nleft, nright, ns, last, m1, m2, n, nsteps
     real(real64) :: f, delta, d1, d2, denom, alpha, cut, eps, cmad, c1, c9, r
     real(real64), allocatable, target, dimension(:) :: rwdef, rsdef
     real(real64), pointer, dimension(:) :: rw, res
@@ -203,7 +203,7 @@ subroutine lowest(x, y, xs, ys, nleft, nright, w, userw, rw, ok)
     real(real64), intent(in), dimension(:) :: x, y, rw ! N ELEMENT
     real(real64), intent(in) :: xs
     real(real64), intent(out) :: ys
-    integer(int32), intent(in) :: nleft, nright
+    integer, intent(in) :: nleft, nright
     real(real64), intent(out), dimension(:) :: w ! N ELEMENT
     logical, intent(in) :: userw
     logical, intent(out) :: ok
@@ -215,7 +215,7 @@ subroutine lowest(x, y, xs, ys, nleft, nright, w, userw, rw, ok)
     real(real64), parameter :: p999 = 0.999d0
 
     ! Local Variables
-    integer(int32) :: j, n, nrt
+    integer :: j, n, nrt
     real(real64) :: range, h, h9, h1, a, b, c, r
 
     ! Initialization

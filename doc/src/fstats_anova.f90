@@ -177,7 +177,7 @@ function anova_1_factor(x) result(rst)
     real(real64), parameter :: zero = 0.0d0
 
     ! Local Variables
-    integer(int32) :: j, a, n, nt
+    integer :: j, a, n, nt
     real(real64) :: sum_all, tssq, essq, bssq, gmean, cmean
 
     ! Initialization
@@ -263,7 +263,7 @@ function anova_2_factor(x) result(rst)
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, j, jj, k, r, n
+    integer :: i, j, jj, k, r, n
     real(real64) :: factorMean, sum_all
     real(real64), allocatable :: xpack(:)
 
@@ -370,7 +370,7 @@ end function
 ! REF: https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1
 function anova_model_fit(nmodelparams, ymeas, ymod) result(rst)
     !! Performs an analysis of variance (ANOVA) on the supplied data set.
-    integer(int32), intent(in) :: nmodelparams
+    integer, intent(in) :: nmodelparams
         !! The number of model parameters.
     real(real64), intent(in) :: ymeas(:)
         !! An N-element array containing the measured dependent variable data.
@@ -380,7 +380,7 @@ function anova_model_fit(nmodelparams, ymeas, ymod) result(rst)
         !! A single_factor_anova_table instance containing the ANOVA results.
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
     real(real64) :: sum_all
     
     ! Initialization

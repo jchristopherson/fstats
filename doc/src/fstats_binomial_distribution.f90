@@ -35,7 +35,7 @@ module fstats_binomial_distribution
     type, extends(distribution) :: binomial_distribution
         !! Defines a binomial distribution.  The binomial distribution describes
         !! the probability p of getting k successes in n independent trials.
-        integer(int32) :: n
+        integer :: n
             !! The number of independent trials.
         real(real64) :: p
             !! The success probability for each trial.  This parameter must

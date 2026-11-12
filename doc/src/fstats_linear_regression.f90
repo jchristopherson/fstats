@@ -20,7 +20,7 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
     !! - <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">Wikipedia - Linear Regression</a>
     !! - <a href="https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1" 
     !! target="_blank">SPC Excel Understanding Regression Statistics</a>
-    integer(int32), intent(in) :: order
+    integer, intent(in) :: order
         !! The order of the equation to fit.  This value must be at 
         !! least one (linear equation), but can be higher as desired, 
         !! as long as there is sufficient data.
@@ -55,7 +55,7 @@ subroutine linear_least_squares(order, intercept, x, y, coeffs, &
     real(real64), parameter :: one = 1.0d0
 
     ! Local Variables
-    integer(int32) :: i, npts, ncols, ncoeffs
+    integer :: i, npts, ncols, ncoeffs
     real(real64) :: alph, var, df, ssr, talpha
     real(real64), allocatable :: a(:,:), c(:,:), cxt(:,:)
     type(t_distribution) :: dist

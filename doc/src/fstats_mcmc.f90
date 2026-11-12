@@ -54,7 +54,7 @@ module fstats_mcmc
             !! A workspace array for containing the model values.
         real(real64), public :: data_noise = 1.0d0
             !! A parameter representing the noise in the data.
-        integer(int32), public :: likelihood_parallel_threshold = 10000
+        integer, public :: likelihood_parallel_threshold = 10000
             !! Minimum observation count for a threaded likelihood reduction.
             !! Adjust for the workload; nested worker teams are not created.
     contains
@@ -116,13 +116,13 @@ module fstats_mcmc
 ! ------------------------------------------------------------------------------
     type chain_builder
         !! A type allowing for the construction of chain of values.
-        integer(int32), private :: initial_iteration_estimate = 10000
+        integer, private :: initial_iteration_estimate = 10000
             !! An initial estimate at the number of allowed iterations.
-        integer(int32), private :: m_bufferSize = 0
+        integer, private :: m_bufferSize = 0
             !! The actual number of states (# of used rows) in the buffer.
         real(real64), private, allocatable, dimension(:,:) :: m_buffer
             !! The buffer where each new state is stored as a row in the matrix.
-        integer(int32), private :: m_numVars = 0
+        integer, private :: m_numVars = 0
             !! The number of state variables.
     contains
         procedure, public :: get_state_variable_count => cb_get_nvars
@@ -140,7 +140,7 @@ module fstats_mcmc
     type, extends(chain_builder) :: mcmc_sampler
         !! An implementation of the Metropolis-Hastings algorithm for the
         !! generation of a Markov chain.
-        integer(int32), private :: m_accepted = 0
+        integer, private :: m_accepted = 0
             !! The number of accepted steps.
     contains
         procedure, public :: sample => ms_sample 
@@ -157,7 +157,7 @@ pure function mt_get_param_count(this) result(rst)
     !! Gets the number of model parameters.
     class(mcmc_target), intent(in) :: this
         !! The mcmc_target object.
-    integer(int32) :: rst
+    integer :: rst
         !! The parameter count.
 
     rst = this%m_items%count()
@@ -180,7 +180,7 @@ function mt_get_param(this, i) result(rst)
     !! Gets a pointer to the stored parameter.
     class(mcmc_target), intent(in) :: this
         !! The mcmc_target object.
-    integer(int32), intent(in) :: i
+    integer, intent(in) :: i
         !! The index of the parameter to retrieve.  If outside the bounds of the
         !! collection of parameters a null pointer is returned.
     class(distribution), pointer :: rst
@@ -256,7 +256,7 @@ function mt_log_likelihood(this, xdata, ydata, xc, log_variance) result(rst)
     real(real64) :: rst
         !! Log likelihood; empty data give zero, invalid inputs/models give NaN,
         !! and an unrepresentably large residual penalty gives negative infinity.
-    integer(int32) :: i, m
+    integer :: i, m
     real(real64) :: log_scale, log_penalty, normalization
     logical :: use_parallel
 
@@ -392,7 +392,7 @@ function mt_sample_var_prior(this, vc, n) result(rst)
         !! The mcmc_target object.
     real(real64), intent(in) :: vc
         !! The prior variance term.
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
         !! The number of samples.
     real(real64), allocatable, dimension(:) :: rst
         !! The requested samples.
@@ -428,7 +428,7 @@ function mt_eval_prior(this, x) result(rst)
         !! The resulting probability.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     real(real64) :: temp, p
     class(distribution), pointer :: dist
     
@@ -473,10 +473,10 @@ subroutine mp_gen(this, tgt, xc, xp, vc, vp)
         !! The proposed variance (noise) value.
 
     ! Parameters
-    integer(int32), parameter :: nsamples = 1
+    integer, parameter :: nsamples = 1
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     real(real64) :: samples(nsamples), sigma, mu, xmax, xmin, mx, mn, rng(2)
     real(real64) :: u1, u2, z, u1v, u2v, zv, pscale
     class(distribution), pointer :: dist
@@ -575,7 +575,7 @@ end subroutine
 ! ------------------------------------------------------------------------------
 pure function mp_get_param_scale(this, idx) result(rst)
     class(mcmc_proposal), intent(in) :: this
-    integer(int32), intent(in) :: idx
+    integer, intent(in) :: idx
     real(real64) :: rst
     if (allocated(this%m_param_scale)) then
         if (idx >= 1 .and. idx <= size(this%m_param_scale)) then
@@ -591,9 +591,9 @@ end function
 ! ------------------------------------------------------------------------------
 subroutine mp_set_param_scale(this, idx, val)
     class(mcmc_proposal), intent(inout) :: this
-    integer(int32), intent(in) :: idx
+    integer, intent(in) :: idx
     real(real64), intent(in) :: val
-    integer(int32) :: n
+    integer :: n
     if (idx < 1) error stop FS_INVALID_INPUT_ERROR
     if (.not.ieee_is_finite(val) .or. val <= 0.0d0) error stop FS_INVALID_INPUT_ERROR
     if (.not.allocated(this%m_param_scale)) then
@@ -633,7 +633,7 @@ pure function cb_get_nvars(this) result(rst)
     !! Gets the number of state variables.
     class(chain_builder), intent(in) :: this
         !! The chain_builder object.
-    integer(int32) :: rst
+    integer :: rst
         !! The number of state variables.
 
     rst = this%m_numVars
@@ -644,7 +644,7 @@ pure function cb_get_chain_length(this) result(rst)
     !! Gets the length of the chain (number of stored state variables).
     class(chain_builder), intent(in) :: this
         !! The chain_builder object.
-    integer(int32) :: rst
+    integer :: rst
         !! The chain length.
 
     rst = this%m_bufferSize
@@ -657,7 +657,7 @@ subroutine cb_resize_buffer(this)
         !! The chain_builder object.
 
     ! Local Variables
-    integer(int32) :: m, n, mOld
+    integer :: m, n, mOld
     real(real64), allocatable, dimension(:,:) :: copy
     
     ! Initialization
@@ -686,7 +686,7 @@ pure function cb_get_buffer_length(this) result(rst)
     !! actual number of items in the chain.
     class(chain_builder), intent(in) :: this
         !! The chain_builder object.
-    integer(int32) :: rst
+    integer :: rst
         !! The actual buffer length.
 
     if (allocated(this%m_buffer)) then
@@ -705,7 +705,7 @@ subroutine cb_push(this, x)
         !! The new N-element state array.
 
     ! Local Variables
-    integer(int32) :: n, n1, nbuffer, nvars
+    integer :: n, n1, nbuffer, nvars
     
     ! Initialization
     n = this%get_chain_length()
@@ -745,7 +745,7 @@ pure function cb_get_chain(this, bin) result(rst)
         !! The resulting chain with each parameter represented by a column.
 
     ! Local Variables
-    integer(int32) :: npts, nvar, nstart, n
+    integer :: npts, nvar, nstart, n
     
     ! Initialization
     npts = this%get_chain_length()
@@ -796,10 +796,10 @@ subroutine sample_chains(samplers, xdata, ydata, proposals, targets, niter)
         !! One independently configured proposal per chain.
     class(mcmc_target), intent(inout) :: targets(:)
         !! One independently initialized target per chain.
-    integer(int32), intent(in), optional :: niter
+    integer, intent(in), optional :: niter
         !! Iterations per chain; defaults to 10,000.
 
-    integer(int32) :: chain_index, nchains
+    integer :: chain_index, nchains
     logical :: use_parallel
 
     nchains = size(samplers)
@@ -825,7 +825,7 @@ subroutine ms_on_success(this, iter, alpha, xc, xp)
     !! a proposed value.
     class(mcmc_sampler), intent(inout) :: this
         !! The mcmc_sampler object.
-    integer(int32), intent(in) :: iter
+    integer, intent(in) :: iter
         !! The current iteration number.
     real(real64), intent(in) :: alpha
         !! The proposal probabilty term used for acceptance criteria.
@@ -843,7 +843,7 @@ subroutine ms_on_rejection(this, iter, alpha, xc, xp)
     !! a proposed value.
     class(mcmc_sampler), intent(inout) :: this
         !! The mcmc_sampler object.
-    integer(int32), intent(in) :: iter
+    integer, intent(in) :: iter
         !! The current iteration number.
     real(real64), intent(in) :: alpha
         !! The proposal probabilty term used for acceptance criteria.
@@ -859,7 +859,7 @@ pure function ms_get_num_accepted(this) result(rst)
     !! Gets the number of accepted steps.
     class(mcmc_sampler), intent(in) :: this
         !! The mcmc_sampler object.
-    integer(int32) :: rst
+    integer :: rst
         !! The number of accepted steps.
     rst = this%m_accepted
 end function
@@ -878,13 +878,13 @@ subroutine ms_sample(this, xdata, ydata, prop, tgt, niter)
     class(mcmc_target), intent(inout) :: tgt
         !! An mcmc_target-based object containing the model and allowing for
         !! evaluation of likelihoods.
-    integer(int32), intent(in), optional :: niter
+    integer, intent(in), optional :: niter
         !! An optional input defining the number of iterations to take.  The
         !! default is 10,000.
 
     ! Local Variables
-    integer(int32) :: i, n, n1, npts, m
-    integer(int32) :: last_accept_count, adapt_interval
+    integer :: i, n, n1, npts, m
+    integer :: last_accept_count, adapt_interval
     real(real64) :: alpha
     real(real64) :: pc_log, pp_log, delta, u
     real(real64) :: adapt_gain, target_accept, accept_rate, cur_scale, new_scale

@@ -47,32 +47,32 @@ module fstats_data_table_io
     character, parameter :: TAB = achar(9)
     character, parameter :: QUOTE = '"'
 
-    integer(int32), parameter :: FIELD_LOGICAL = 1
+    integer, parameter :: FIELD_LOGICAL = 1
         !! The field holds a logical value.
-    integer(int32), parameter :: FIELD_INTEGER = 2
+    integer, parameter :: FIELD_INTEGER = 2
         !! The field holds a 32-bit integer value.
-    integer(int32), parameter :: FIELD_REAL = 3
+    integer, parameter :: FIELD_REAL = 3
         !! The field holds a floating-point value.
-    integer(int32), parameter :: FIELD_TEXT = 4
+    integer, parameter :: FIELD_TEXT = 4
         !! The field holds a value that is not logical or numeric.
 
     type delimited_fields
         !! Describes the fields parsed from an in-memory file buffer.  Fields
         !! are stored as character extents into the buffer to avoid copying.
-        integer(int32) :: field_count = 0
+        integer :: field_count = 0
             !! The number of stored fields.
-        integer(int32) :: row_count = 0
+        integer :: row_count = 0
             !! The number of stored data rows.
-        integer(int32), allocatable, dimension(:) :: first
+        integer, allocatable, dimension(:) :: first
             !! The buffer index of the first character of each field.
-        integer(int32), allocatable, dimension(:) :: last
+        integer, allocatable, dimension(:) :: last
             !! The buffer index of the last character of each field; a value
             !! less than the matching first index denotes an empty field.
         logical, allocatable, dimension(:) :: quoted
             !! True for fields that were enclosed in double quotes.
-        integer(int32), allocatable, dimension(:) :: row_first
+        integer, allocatable, dimension(:) :: row_first
             !! The index of the first field of each data row.
-        integer(int32), allocatable, dimension(:) :: row_size
+        integer, allocatable, dimension(:) :: row_size
             !! The number of fields in each data row.
     end type
 
@@ -134,7 +134,7 @@ contains
         character, intent(in), optional :: delimiter
             !! The field delimiter.  The default is a comma.  The delimiter
             !! must not be a double quote, carriage return, or line feed.
-        integer(int32), intent(in), optional :: header_row
+        integer, intent(in), optional :: header_row
             !! The one-based row, counting blank rows, holding the column
             !! names.  Rows above the header are ignored, and data begins on
             !! the row after the header.  The default is 1.  Use 0 for files
@@ -145,7 +145,7 @@ contains
         character :: delim
         character(len = :), allocatable :: buffer, name
         character(len = 16) :: index_text
-        integer(int32) :: hdr, unit, ios, start, ncols, header_first, &
+        integer :: hdr, unit, ios, start, ncols, header_first, &
             header_size, j
         integer(int64) :: fsize
         type(delimited_fields) :: fields
@@ -209,20 +209,20 @@ contains
         !! Splits the in-memory file contents into fields in a single pass.
         character(len = *), intent(in) :: buffer
             !! The file contents.
-        integer(int32), intent(in) :: start
+        integer, intent(in) :: start
             !! The buffer index at which parsing begins.
         character, intent(in) :: delim
             !! The field delimiter.
-        integer(int32), intent(in) :: header_row
+        integer, intent(in) :: header_row
             !! The header row index, or 0 if there is no header.
         type(delimited_fields), intent(out) :: fields
             !! The parsed header and data fields.
-        integer(int32), intent(out) :: header_first
+        integer, intent(out) :: header_first
             !! The index of the first header field.
-        integer(int32), intent(out) :: header_size
+        integer, intent(out) :: header_size
             !! The number of header fields; zero if no header was found.
 
-        integer(int32) :: n, pos, k, rec, first
+        integer :: n, pos, k, rec, first
         logical :: blank
 
         n = len(buffer)
@@ -274,13 +274,13 @@ contains
             !! The file contents.
         character, intent(in) :: delim
             !! The field delimiter.
-        integer(int32), intent(inout) :: pos
+        integer, intent(inout) :: pos
             !! On input, the start of the row; on output, the start of the
             !! next row.
         type(delimited_fields), intent(inout) :: fields
             !! The field collection to which the row's fields are appended.
 
-        integer(int32) :: n, s, e
+        integer :: n, s, e
         logical :: quoted
         character :: c
 
@@ -343,7 +343,7 @@ contains
         !! Advances past an LF, CRLF, or CR row terminator located at pos.
         character(len = *), intent(in) :: buffer
             !! The file contents.
-        integer(int32), intent(inout) :: pos
+        integer, intent(inout) :: pos
             !! The buffer position.
 
         if (pos > len(buffer)) return
@@ -375,16 +375,16 @@ contains
         !! Appends a field extent, growing storage geometrically as needed.
         type(delimited_fields), intent(inout) :: fields
             !! The field collection.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! The buffer index of the field's first character.
-        integer(int32), intent(in) :: last
+        integer, intent(in) :: last
             !! The buffer index of the field's last character.
         logical, intent(in) :: quoted
             !! True if the field was quoted.
 
-        integer(int32), allocatable, dimension(:) :: itemp
+        integer, allocatable, dimension(:) :: itemp
         logical, allocatable, dimension(:) :: ltemp
-        integer(int32) :: n
+        integer :: n
 
         n = fields%field_count
         if (n == size(fields%first)) then
@@ -410,13 +410,13 @@ contains
         !! Appends a data row, growing storage geometrically as needed.
         type(delimited_fields), intent(inout) :: fields
             !! The field collection.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! The index of the row's first field.
-        integer(int32), intent(in) :: count
+        integer, intent(in) :: count
             !! The number of fields in the row.
 
-        integer(int32), allocatable, dimension(:) :: temp
-        integer(int32) :: n
+        integer, allocatable, dimension(:) :: temp
+        integer :: n
 
         n = fields%row_count
         if (n == size(fields%row_first)) then
@@ -438,11 +438,11 @@ contains
         !! Locates the field holding the requested cell.
         type(delimited_fields), intent(in) :: fields
             !! The field collection.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The data row index.
-        integer(int32), intent(in) :: col
+        integer, intent(in) :: col
             !! The column index.
-        integer(int32) :: rst
+        integer :: rst
             !! The field index, or 0 if the row is too short to hold the cell.
 
         if (col > fields%row_size(row)) then
@@ -460,12 +460,12 @@ contains
             !! The file contents.
         type(delimited_fields), intent(in) :: fields
             !! The field collection.
-        integer(int32), intent(in) :: k
+        integer, intent(in) :: k
             !! The field index.
         character(len = :), allocatable :: rst
             !! The field text.
 
-        integer(int32) :: i, n
+        integer :: i, n
 
         rst = buffer(fields%first(k):fields%last(k))
         if (.not.fields%quoted(k) .or. index(rst, QUOTE // QUOTE) == 0) return
@@ -489,7 +489,7 @@ contains
             !! The file contents.
         type(delimited_fields), intent(in) :: fields
             !! The parsed data fields.
-        integer(int32), intent(in) :: col
+        integer, intent(in) :: col
             !! The column index.
         character(len = *), intent(in) :: name
             !! The column name.
@@ -500,7 +500,7 @@ contains
         type(real_column) :: rcol
         type(logical_column) :: lcol
         type(string_column) :: scol
-        integer(int32) :: i, k, nrows, n_logical, n_numeric
+        integer :: i, k, nrows, n_logical, n_numeric
         logical :: all_integer, any_missing, is_text, empty
         real(real64) :: nan
 
@@ -576,13 +576,13 @@ contains
         real(real64), intent(out) :: value
             !! The parsed value: 1 or 0 for logical fields, the numeric value
             !! for numeric fields, and 0 for text.
-        integer(int32) :: rst
+        integer :: rst
             !! FIELD_LOGICAL, FIELD_INTEGER, FIELD_REAL, or
             !! FIELD_TEXT.
 
         character(len = 9) :: lower
         integer(int64) :: ival
-        integer(int32) :: i, n, ndigits, nexp, ios
+        integer :: i, n, ndigits, nexp, ios
         logical :: is_integer
 
         n = len(text)
@@ -668,9 +668,9 @@ contains
         !! Advances past a run of decimal digits.
         character(len = *), intent(in) :: text
             !! The text being scanned.
-        integer(int32), intent(inout) :: i
+        integer, intent(inout) :: i
             !! The scan position.
-        integer(int32), intent(inout) :: count
+        integer, intent(inout) :: count
             !! Incremented by the number of digits skipped.
 
         do while (i <= len(text))
@@ -721,7 +721,7 @@ contains
         logical :: header
         character(len = :), allocatable :: buffer
         type(column_pointer), allocatable, dimension(:) :: cols
-        integer(int32) :: i, j, ncols, nrows, length, unit, ios
+        integer :: i, j, ncols, nrows, length, unit, ios
 
         delim = ","
         if (present(delimiter)) delim = delimiter
@@ -783,13 +783,13 @@ contains
         !! Appends text to a buffer, growing it geometrically as needed.
         character(len = :), allocatable, intent(inout) :: buffer
             !! The buffer.
-        integer(int32), intent(inout) :: length
+        integer, intent(inout) :: length
             !! The number of characters in use.
         character(len = *), intent(in) :: text
             !! The text to append.
 
         character(len = :), allocatable :: temp
-        integer(int32) :: n
+        integer :: n
 
         n = len(text)
         if (length + n > len(buffer)) then
@@ -812,7 +812,7 @@ contains
         character(len = :), allocatable :: rst
             !! The text, quoted if necessary.
 
-        integer(int32) :: i, n
+        integer :: i, n
         logical :: needs_quotes
 
         n = len(text)

@@ -34,7 +34,7 @@ module fstats_chi_squared_distribution
 
     type, extends(distribution) :: chi_squared_distribution
         !! Defines a Chi-squared distribution.
-        integer(int32) :: dof
+        integer :: dof
             !! The number of degrees of freedom.
     contains
         procedure, public :: log_pdf => cs_log_pdf
