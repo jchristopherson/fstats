@@ -67,19 +67,15 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
-    subroutine jac_fcn_1(xdata, params, f, stop, args)
+    subroutine jac_fcn_1(xdata, params, f, args)
         ! Arguments
         real(real64), intent(in) :: xdata(:), params(:)
         real(real64), intent(out) :: f(:)
-        logical, intent(out) :: stop
         class(*), intent(in), optional :: args
 
         ! Function
         ! f(x) = a1 * x**2 + a2 * x + a3
         f = params(1) * xdata**2 + params(2) * xdata + params(3)
-
-        ! End
-        stop = .false.
     end subroutine
 
     function test_jacobian() result(rst)
@@ -93,7 +89,6 @@ contains
         real(real64), parameter :: a3 = 1.2d0
         real(real64) :: x(3), ans(3,3), jac(3,3), params(3)
         procedure(regression_function), pointer :: fun
-        logical :: stop
 
         ! Initialization
         rst = .true.
@@ -110,7 +105,7 @@ contains
 
         ! Compute the Jacobian numerically
         fun => jac_fcn_1
-        call jacobian(fun, x, params, jac, stop)
+        call jacobian(fun, x, params, jac)
 
         ! Test
         if (.not.is_equal(ans, jac, tol)) then
@@ -120,18 +115,14 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
-    subroutine nl_test_fun(x, p, f, stop, args)
+    subroutine nl_test_fun(x, p, f, args)
         ! Arguments
         real(real64), intent(in) :: x(:), p(:)
         real(real64), intent(out) :: f(:)
-        logical, intent(out) :: stop
         class(*), intent(in), optional :: args
 
         ! Function
         f = p(1) * x**3 + p(2) * x**2 + p(3) * x + p(4)
-
-        ! End
-        stop = .false.
     end subroutine
 
     function test_nl_least_squares() result(rst)
@@ -217,11 +208,10 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
-    subroutine nl_test_fun_with_args(x, p, f, stop, args)
+    subroutine nl_test_fun_with_args(x, p, f, args)
         ! Arguments
         real(real64), intent(in) :: x(:), p(:)
         real(real64), intent(out) :: f(:)
-        logical, intent(out) :: stop
         class(*), intent(in), optional :: args
 
         ! Local Variables
@@ -239,9 +229,6 @@ contains
         ! Add and subtract 1.0 from the function to prove out the argument
         ! passing routine
         f = p(1) * x**3 + p(2) * x**2 + p(3) * x + p(4) + y - 1.0d0
-
-        ! End
-        stop = .false.
     end subroutine
 
     function test_nl_least_squares_with_args() result(rst)

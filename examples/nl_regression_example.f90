@@ -26,18 +26,14 @@
 module nl_example
     use iso_fortran_env
 contains
-    subroutine exfun(x, p, f, stop, args)
+    subroutine exfun(x, p, f, args)
         ! Arguments
         real(real64), intent(in) :: x(:), p(:)
         real(real64), intent(out) :: f(:)
-        logical, intent(out) :: stop
         class(*), intent(in), optional :: args
 
         ! Function
         f = p(4) * x**3 + p(3) * x**2 + p(2) * x + p(1)
-
-        ! Do not stop
-        stop = .false.
     end subroutine
 end module
 

@@ -128,8 +128,6 @@ module fstats_regression
             !! function evaluations.
         integer :: function_evaluation_count
             !! The function evaluation count.
-        logical :: user_requested_stop
-            !! True if the user requested the stop; else, false.
         integer :: covariance_rank = 0
             !! Numerical rank of the final weighted Jacobian when covariance is requested.
         real(real64) :: covariance_condition_number = 0.0d0
@@ -137,7 +135,7 @@ module fstats_regression
     end type
 
     interface
-        subroutine regression_function(xdata, params, f, stop, args)
+        subroutine regression_function(xdata, params, f, args)
             !! Defines the interface of a subroutine computing the function
             !! values at each of the N data points as part of a regression
             !! analysis.
@@ -149,11 +147,6 @@ module fstats_regression
             real(real64), intent(out), dimension(:) :: f
                 !! An N-element array where the results of the N function 
                 !! evaluations will be written.
-            logical, intent(out) :: stop
-                !! A mechanism to force a stop to the iteration process.  If
-                !! set to true, the iteration process will terminate.  If set
-                !! to false, the iteration process will continue along as 
-                !! normal.
             class(*), intent(in), optional :: args
                 !! An optional argument allowing the passing in/out of data.
         end subroutine
@@ -514,7 +507,7 @@ end function
 
 ! ------------------------------------------------------------------------------
 subroutine jacobian(fun, xdata, params, &
-    jac, stop, f0, f1, step, args)
+    jac, f0, f1, step, args)
     !! Computes the Jacobian matrix for a nonlinear regression problem.
     procedure(regression_function) :: fun
         !! A pointer to the regression_function to evaluate.
@@ -524,9 +517,6 @@ subroutine jacobian(fun, xdata, params, &
         !! The N-element array containing the model parameters.
     real(real64), intent(out) :: jac(:,:)
         !! The M-by-N matrix where the Jacobian will be written.
-    logical, intent(out) :: stop
-        !! A value that the user can set in fun forcing the
-        !! evaluation process to stop prior to completion.
     real(real64), intent(in), optional, target :: f0(:)
         !! An optional M-element array containing the model values
         !!  using the current parameters as defined in m.  This input 
@@ -568,8 +558,7 @@ subroutine jacobian(fun, xdata, params, &
         ! results
         allocate(f0a(m))
         f0p(1:m) => f0a
-        call fun(xdata, params, f0p, stop, args = args)
-        if (stop) return
+        call fun(xdata, params, f0p, args = args)
     end if
     if (present(f1)) then
         ! Check Size
@@ -586,7 +575,7 @@ subroutine jacobian(fun, xdata, params, &
 
     ! Compute the Jacobian
     call jacobian_finite_diff(fun, xdata, params, f0p, jac, f1p, &
-        stop, h, work, args = args)
+        h, work, args = args)
 end subroutine
 
 ! ******************************************************************************
@@ -604,17 +593,15 @@ end subroutine
 ! Outputs:
 ! - jac: The Jacobian matrix (M-by-N)
 ! - f1: A workspace array for the model output (M-by-1)
-! - stop: A flag allowing the user to terminate model execution
 ! - work: A workspace array for the model parameters (N-by-1)
 subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
-    stop, step, work, args)
+    step, work, args)
     ! Arguments
     procedure(regression_function) :: fun
     real(real64), intent(in), dimension(:) :: xdata, params
     real(real64), intent(in), dimension(:) :: f0
     real(real64), intent(out), dimension(:,:) :: jac
     real(real64), intent(out), dimension(:) :: f1, work
-    logical, intent(out) :: stop
     real(real64), intent(in) :: step
     class(*), intent(in), optional :: args
 
@@ -631,8 +618,7 @@ subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
     work = params
     do i = 1, n
         work(i) = work(i) + step
-        call fun(xdata, work, f1, stop, args = args)
-        if (stop) return
+        call fun(xdata, work, f1, args = args)
 
         jac(:,i) = (f1 - f0) / step
         work(i) = params(i)
