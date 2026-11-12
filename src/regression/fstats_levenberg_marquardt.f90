@@ -47,7 +47,7 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     status, cov, args)
     !! Performs a nonlinear regression to fit a model using a version
     !! of the Levenberg-Marquardt algorithm.
-    procedure(regression_function), intent(in), pointer :: fun
+    procedure(regression_function) :: fun
         !! A pointer to the regression_function to evaluate.
     real(real64), intent(in) :: x(:)
         !! The M-element array containing independent data.
@@ -98,7 +98,7 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
         !! An optional N-by-N matrix that, if supplied, will be used to return
         !! the covariance matrix, computed from an SVD of the final weighted
         !! Jacobian. Rank diagnostics are available in info when requested.
-    class(*), intent(inout), optional :: args
+    class(*), intent(in), optional :: args
         !! An optional argument allowing the passing in/out of data for the
         !! [[fun]] routine.
 
@@ -288,7 +288,7 @@ end subroutine
 subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     neval, update, step, JtWJ, JtWdy, X2, yNew, stop, work, mwork, args)
     ! Arguments
-    procedure(regression_function), pointer :: fun
+    procedure(regression_function) :: fun
     real(real64), intent(in), dimension(:) :: xdata, ydata, pOld, yOld, &
         p, weights
     real(real64), intent(in) :: dX2, step
@@ -302,7 +302,7 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     real(real64), intent(out), dimension(:) :: yNew
     logical, intent(out) :: stop
     real(real64), intent(out), target, dimension(:) :: work
-    class(*), intent(inout), optional :: args
+    class(*), intent(in), optional :: args
 
     ! Local Variables
     integer :: m, n
@@ -379,7 +379,7 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     maxP, minP, weights, JtWJ, JtWdy, h, pNew, deltaY, yNew, X2, X2Old, &
     alpha, stop, status, args)
     ! Arguments
-    procedure(regression_function), pointer :: fun
+    procedure(regression_function) :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), p(:), maxP(:), &
         minP(:), weights(:), JtWdy(:)
     real(real64), intent(in) :: lambda, X2Old
@@ -390,7 +390,7 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
     real(real64), intent(out) :: X2, alpha
     logical, intent(out) :: stop
     procedure(iteration_update), intent(in), pointer, optional :: status
-    class(*), intent(inout), optional :: args
+    class(*), intent(in), optional :: args
 
     ! Local Variables
     integer :: i, n
@@ -486,7 +486,7 @@ end subroutine
 subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     opt, y, resid, JtWJ, info, stop, status, args)
     ! Arguments
-    procedure(regression_function), intent(in), pointer :: fun
+    procedure(regression_function) :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), weights(:), maxP(:), &
         minP(:)
     real(real64), intent(inout) :: p(:)
@@ -496,7 +496,7 @@ subroutine lm_solve(fun, xdata, ydata, p, weights, maxP, minP, controls, &
     class(convergence_info), intent(out) :: info
     logical, intent(out) :: stop
     procedure(iteration_update), intent(in), pointer, optional :: status
-    class(*), intent(inout), optional :: args
+    class(*), intent(in), optional :: args
 
     ! Local Variables
     logical :: update
@@ -599,7 +599,7 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
     X2old, X2, X2try, lambda, alpha, nu, JtWdy, JtWJ, J, weights, niter, &
     neval, update, step, work, mwork, controls, opt, stop, args)
     ! Arguments
-    procedure(regression_function), intent(in), pointer :: fun
+    procedure(regression_function) :: fun
     real(real64), intent(in) :: xdata(:), ydata(:), X2try, h(:), step, &
         pTry(:), weights(:), alpha
     real(real64), intent(inout) :: pOld(:), p(:), yOld(:), y(:), lambda, &
@@ -611,7 +611,7 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
     class(iteration_controls), intent(in) :: controls
     class(lm_solver_options), intent(in) :: opt
     logical, intent(out) :: stop
-    class(*), intent(inout), optional :: args
+    class(*), intent(in), optional :: args
 
     ! Local Variables
     integer :: n

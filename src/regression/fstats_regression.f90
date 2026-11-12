@@ -154,7 +154,7 @@ module fstats_regression
                 !! set to true, the iteration process will terminate.  If set
                 !! to false, the iteration process will continue along as 
                 !! normal.
-            class(*), intent(inout), optional :: args
+            class(*), intent(in), optional :: args
                 !! An optional argument allowing the passing in/out of data.
         end subroutine
 
@@ -516,7 +516,7 @@ end function
 subroutine jacobian(fun, xdata, params, &
     jac, stop, f0, f1, step, args)
     !! Computes the Jacobian matrix for a nonlinear regression problem.
-    procedure(regression_function), intent(in), pointer :: fun
+    procedure(regression_function) :: fun
         !! A pointer to the regression_function to evaluate.
     real(real64), intent(in) :: xdata(:)
         !! The M-element array containing x-coordinate data.
@@ -539,7 +539,7 @@ subroutine jacobian(fun, xdata, params, &
     real(real64), intent(in), optional :: step
         !! The differentiation step size.  The default is the square 
         !! root of machine precision.
-    class(*), intent(inout), optional :: args
+    class(*), intent(in), optional :: args
         !! An optional argument allowing the passing in/out of data.
 
     ! Local Variables
@@ -609,14 +609,14 @@ end subroutine
 subroutine jacobian_finite_diff(fun, xdata, params, f0, jac, f1, &
     stop, step, work, args)
     ! Arguments
-    procedure(regression_function), intent(in), pointer :: fun
+    procedure(regression_function) :: fun
     real(real64), intent(in), dimension(:) :: xdata, params
     real(real64), intent(in), dimension(:) :: f0
     real(real64), intent(out), dimension(:,:) :: jac
     real(real64), intent(out), dimension(:) :: f1, work
     logical, intent(out) :: stop
     real(real64), intent(in) :: step
-    class(*), intent(inout), optional :: args
+    class(*), intent(in), optional :: args
 
     ! Local Variables
     integer :: i, n

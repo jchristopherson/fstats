@@ -72,7 +72,7 @@ contains
         real(real64), intent(in) :: xdata(:), params(:)
         real(real64), intent(out) :: f(:)
         logical, intent(out) :: stop
-        class(*), intent(inout), optional :: args
+        class(*), intent(in), optional :: args
 
         ! Function
         ! f(x) = a1 * x**2 + a2 * x + a3
@@ -125,7 +125,7 @@ contains
         real(real64), intent(in) :: x(:), p(:)
         real(real64), intent(out) :: f(:)
         logical, intent(out) :: stop
-        class(*), intent(inout), optional :: args
+        class(*), intent(in), optional :: args
 
         ! Function
         f = p(1) * x**3 + p(2) * x**2 + p(3) * x + p(4)
@@ -222,7 +222,7 @@ contains
         real(real64), intent(in) :: x(:), p(:)
         real(real64), intent(out) :: f(:)
         logical, intent(out) :: stop
-        class(*), intent(inout), optional :: args
+        class(*), intent(in), optional :: args
 
         ! Local Variables
         real(real64) :: y
