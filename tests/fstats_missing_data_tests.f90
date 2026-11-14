@@ -71,7 +71,7 @@ function test_knn_impute() result(rst)
     real(real64), parameter :: tol = 1.0d-10
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
     real(real64) :: x(6,2), xc(6,2), xw(6,2), ans
 
     ! Initialization - two well-separated clusters with a single missing value
@@ -126,12 +126,12 @@ function test_em_impute_complete() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: n = 50
-    integer(int32), parameter :: m = 3
+    integer, parameter :: n = 50
+    integer, parameter :: m = 3
     real(real64), parameter :: tol = 1.0d-8
 
     ! Local Variables
-    integer(int32) :: i, j
+    integer :: i, j
     real(real64) :: x(n,m), xc(n,m), mu(m), sigma(m,m), ans(m,m), amu(m)
 
     ! Initialization
@@ -174,12 +174,12 @@ function test_em_impute() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: n = 2000
-    integer(int32), parameter :: m = 2
+    integer, parameter :: n = 2000
+    integer, parameter :: m = 2
     real(real64), parameter :: tol = 1.5d-1
 
     ! Local Variables
-    integer(int32) :: i, j, niter
+    integer :: i, j, niter
     real(real64) :: x(n,m), xc(n,m), mu(m), sigma(m,m), u
     real(real64) :: mtrue(m), l(m,m)
 
@@ -242,13 +242,13 @@ function test_multiple_impute() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: n = 500
-    integer(int32), parameter :: m = 2
-    integer(int32), parameter :: nk = 5
+    integer, parameter :: n = 500
+    integer, parameter :: m = 2
+    integer, parameter :: nk = 5
     real(real64), parameter :: tol = 2.5d-1
 
     ! Parameters
-    integer(int32) :: i, j, k
+    integer :: i, j, k
     logical :: varies
     real(real64) :: x(n,m), xc(n,m,nk), mtrue(m), l(m,m), u, avg(m)
 

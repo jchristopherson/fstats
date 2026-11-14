@@ -21,7 +21,7 @@ contains
         type(glm_options) :: opts, defaults, copied
         type(glm_convergence_info) :: info
         procedure(robust_weight_function), pointer :: weights
-        integer(int32) :: family, scale_case
+        integer :: family, scale_case
         real(real64) :: magnitude
         logical :: halt_overflow, halt_invalid, halt_divide
 
@@ -257,7 +257,7 @@ contains
         real(real64), dimension(1,1) :: covariance, covariance_only
         real(real64), dimension(2,2) :: two_covariance, expected
         real(real64) :: variance, critical, wald, weight, derivative, cutoff
-        integer(int32) :: family
+        integer :: family
         procedure(robust_weight_function), pointer :: weights
         rst = .true.
         opts%use_robust_weighting = .false.
@@ -394,7 +394,7 @@ contains
         type(glm_coefficient_statistics), dimension(2) :: stats
         type(glm_options) :: opts
         procedure(robust_weight_function), pointer :: weights
-        integer(int32) :: family
+        integer :: family
         call ieee_set_halting_mode(ieee_overflow, .true.)
         call ieee_set_halting_mode(ieee_invalid, .true.)
         call ieee_set_halting_mode(ieee_divide_by_zero, .true.)

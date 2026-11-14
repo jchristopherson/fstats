@@ -104,7 +104,7 @@ subroutine random_resample(x, xn)
         !! An N-element array where the resampled data set will be written.
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
     real(real64) :: avg, sigma
 
     ! Process
@@ -123,7 +123,7 @@ subroutine random_resample_with_replacement(x, xn)
         !! An N-element array where the resampled data set will be written.
 
     ! Local Variables
-    integer(int32) :: i, n, idx
+    integer :: i, n, idx
     real(real64) :: u
 
     ! Process
@@ -145,7 +145,7 @@ subroutine random_resample_paired(x, xn)
     real(real64), intent(out), dimension(size(x)) :: xn
         !! The resampled pairs in the same interleaved layout.
 
-    integer(int32) :: i, n, npairs, idx
+    integer :: i, n, npairs, idx
     real(real64) :: u
 
     n = size(x)
@@ -170,9 +170,9 @@ subroutine random_resample_clusters(x, xn)
     real(real64), intent(out), dimension(size(x)) :: xn
         !! The resampled records in the same layout.
 
-    integer(int32) :: i, j, k, n, nrecords, nclusters, cluster_size
-    integer(int32) :: source_row, target_row, last_row, idx
-    integer(int32), allocatable :: cluster_starts(:)
+    integer :: i, j, k, n, nrecords, nclusters, cluster_size
+    integer :: source_row, target_row, last_row, idx
+    integer, allocatable :: cluster_starts(:)
     real(real64), allocatable :: cluster_ids(:), sorted_ids(:)
     real(real64) :: u
 
@@ -235,8 +235,8 @@ subroutine random_resample_circular_blocks(x, xn)
     real(real64), intent(out), dimension(size(x)) :: xn
         !! The resampled series, assembled from circular blocks.
 
-    integer(int32) :: i, j, n, block_size, nblocks, start, output_index
-    integer(int32) :: source_index
+    integer :: i, j, n, block_size, nblocks, start, output_index
+    integer :: source_index
     real(real64) :: u
 
     n = size(x)
@@ -276,7 +276,7 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
     procedure(bootstrap_resampling_routine), pointer, intent(in), optional :: method
         !! An optional pointer to the method to use for resampling of the data.
         !! If no method is supplied, a random resampling is utilized.
-    integer(int32), intent(in), optional :: nsamples
+    integer, intent(in), optional :: nsamples
         !! An optional input, that if supplied, specifies the number of
         !! bootstrap replicates to generate. The default is 10 000.
     real(real64), intent(in), optional :: alpha
@@ -291,7 +291,7 @@ function bootstrap(stat, x, method, nsamples, alpha) result(rst)
     real(real64), parameter :: p05 = 5.0d-2
 
     ! Local Variables
-    integer(int32) :: i, n, ns
+    integer :: i, n, ns
     real(real64) :: a
     real(real64), allocatable, dimension(:) :: xn
     procedure(bootstrap_resampling_routine), pointer :: resample

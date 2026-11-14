@@ -39,13 +39,13 @@ module fstats_msa
     public :: gauge_rr_results
     public :: gauge_rr
 
-    integer(int32), parameter :: GAUGE_RR_CROSSED_STUDY = 2000
+    integer, parameter :: GAUGE_RR_CROSSED_STUDY = 2000
         !! Indicates a crossed study, wherein every operator measures every
         !! part.
-    integer(int32), parameter :: GAUGE_RR_NESTED_STUDY = 2001
+    integer, parameter :: GAUGE_RR_NESTED_STUDY = 2001
         !! Indicates a nested study, wherein each operator measures a distinct
         !! set of parts.
-    integer(int32), parameter :: GAUGE_RR_EXPANDED_STUDY = 2002
+    integer, parameter :: GAUGE_RR_EXPANDED_STUDY = 2002
         !! Indicates an expanded study, wherein a third factor is considered
         !! alongside the part and operator factors.
 
@@ -170,7 +170,7 @@ module fstats_msa
     type gauge_rr_results
         !! Contains the results of a gauge repeatability and reproducibility
         !! study.
-        integer(int32) :: study_type
+        integer :: study_type
             !! The design that was analyzed; one of GAUGE_RR_CROSSED_STUDY,
             !! GAUGE_RR_NESTED_STUDY, or GAUGE_RR_EXPANDED_STUDY.
         type(gauge_rr_component) :: repeatability
@@ -204,7 +204,7 @@ module fstats_msa
             !! The part-to-part variation.
         type(gauge_rr_component) :: total_variation
             !! The total variation.
-        integer(int32) :: distinct_categories
+        integer :: distinct_categories
             !! The number of distinct categories the measurement system is able
             !! to resolve.  A value of 5 or more is generally considered
             !! acceptable.
@@ -243,7 +243,7 @@ function gauge_rr_2_factor(x, study, tolerance, alpha, multiplier) result(rst)
         !! the P parts measured by each operator are distinct from those
         !! measured by any other.  At least two replicates, two parts, and two
         !! operators are required.
-    integer(int32), intent(in), optional :: study
+    integer, intent(in), optional :: study
         !! An optional input specifying the design, either
         !! GAUGE_RR_CROSSED_STUDY or GAUGE_RR_NESTED_STUDY.  The default is a
         !! crossed study.
@@ -267,7 +267,7 @@ function gauge_rr_2_factor(x, study, tolerance, alpha, multiplier) result(rst)
         !! The results of the study.
 
     ! Local Variables
-    integer(int32) :: nrep, nparts, nops, design
+    integer :: nrep, nparts, nops, design
     real(real64) :: a, k, tol, msres, vrepeat, vop, vpo, vpart
 
     ! Initialization
@@ -370,7 +370,7 @@ function gauge_rr_3_factor(x, tolerance, alpha, multiplier) result(rst)
         !! The results of the study.
 
     ! Local Variables
-    integer(int32) :: nrep, nparts, nops, nlvls
+    integer :: nrep, nparts, nops, nlvls
     real(real64) :: a, k, tol, msres, ms3, vrepeat, vop, vpo, vc, vpc, voc, &
         v3, vpart
 
@@ -523,7 +523,7 @@ subroutine crossed_anova(x, tbl)
     type(gauge_rr_anova_table), intent(out) :: tbl
 
     ! Local Variables
-    integer(int32) :: i, j, l, r, p, o
+    integer :: i, j, l, r, p, o
     real(real64) :: gm, ssp, sso, sspo, sse, sst, dfp, dfo, dfpo, dfe, mspo, &
         mse
     real(real64), allocatable :: mp(:), mo(:), cell(:,:)
@@ -591,7 +591,7 @@ subroutine nested_anova(x, tbl)
     type(gauge_rr_anova_table), intent(out) :: tbl
 
     ! Local Variables
-    integer(int32) :: i, j, l, r, p, o
+    integer :: i, j, l, r, p, o
     real(real64) :: gm, sso, sspo, sse, sst, dfo, dfpo, dfe, mse, mspo
     real(real64), allocatable :: mo(:), cell(:,:)
 
@@ -653,7 +653,7 @@ subroutine expanded_anova(x, tbl)
     type(gauge_rr_anova_table), intent(out) :: tbl
 
     ! Local Variables
-    integer(int32) :: i, j, k, l, r, p, o, c
+    integer :: i, j, k, l, r, p, o, c
     real(real64) :: gm, ssp, sso, ssc, sspo, sspc, ssoc, ss3, sse, sst
     real(real64) :: dfp, dfo, dfc, dfpo, dfpc, dfoc, df3, dfe, mse, ms3
     real(real64) :: dnp, dno, dnc, dfnp, dfno, dfnc

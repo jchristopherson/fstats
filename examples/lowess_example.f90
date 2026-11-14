@@ -30,7 +30,7 @@ program example
     implicit none
 
     ! Local Variables
-    integer(int32), parameter :: n = 100
+    integer, parameter :: n = 100
     real(real64) :: x(n), y(n), ys(n), yr(n)
 
     ! Plot Variables

@@ -20,7 +20,7 @@ pure subroutine encode_variables(x_natural, x_low, x_high, x_coded)
         !! M-by-N matrix of coded values in range [-1, +1].
 
     ! Local Variables
-    integer(int32) :: m, n, i, j
+    integer :: m, n, i, j
 
     m = size(x_natural, 1)
     n = size(x_natural, 2)
@@ -47,7 +47,7 @@ pure subroutine decode_variables(x_coded, x_low, x_high, x_natural)
         !! M-by-N matrix of natural (physical) variable values.
 
     ! Local Variables
-    integer(int32) :: m, n, i, j
+    integer :: m, n, i, j
 
     m = size(x_coded, 1)
     n = size(x_coded, 2)

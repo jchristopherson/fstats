@@ -12,14 +12,29 @@
 
     <title>data_column &ndash; FSTATS </title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -75,8 +90,7 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                  title="<p> 2.5% of total for derived types.</p>Including implementation: 25 statements,  0.8% of total for derived types.">15 statements</a>
             </li>
 
@@ -98,9 +112,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -144,17 +160,17 @@
       </a>
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/data_column.html#boundprocedure-append">append</a>
-            <a class="list-group-item" href="../type/data_column.html#boundprocedure-copy">copy</a>
-            <a class="list-group-item" href="../type/data_column.html#boundprocedure-count">count</a>
+            <a class="list-group-item" href="../type/data_column.html#boundprocedure-append~2">append</a>
+            <a class="list-group-item" href="../type/data_column.html#boundprocedure-copy~2">copy</a>
+            <a class="list-group-item" href="../type/data_column.html#boundprocedure-count~5">count</a>
             <a class="list-group-item" href="../type/data_column.html#boundprocedure-get_data_type">get_data_type</a>
             <a class="list-group-item" href="../type/data_column.html#boundprocedure-get_name">get_name</a>
-            <a class="list-group-item" href="../type/data_column.html#boundprocedure-insert">insert</a>
-            <a class="list-group-item" href="../type/data_column.html#boundprocedure-remove">remove</a>
+            <a class="list-group-item" href="../type/data_column.html#boundprocedure-insert~2">insert</a>
+            <a class="list-group-item" href="../type/data_column.html#boundprocedure-remove~2">remove</a>
             <a class="list-group-item" href="../type/data_column.html#boundprocedure-set_name">set_name</a>
-            <a class="list-group-item" href="../type/data_column.html#boundprocedure-slice">slice</a>
+            <a class="list-group-item" href="../type/data_column.html#boundprocedure-slice~2">slice</a>
             <a class="list-group-item" href="../type/data_column.html#boundprocedure-to_string">to_string</a>
-            <a class="list-group-item" href="../type/data_column.html#boundprocedure-view">view</a>
+            <a class="list-group-item" href="../type/data_column.html#boundprocedure-view~2">view</a>
         </div>
       </div>
     </div>
@@ -168,8 +184,8 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>
-        type, public :: data_column</h2>
+      <h2 id="type-def-statement">
+        type, public, abstract :: data_column</h2>
     <p>Defines a column of data within a <a href="..\type\data_table.html">data_table</a> object.</p>
     <br>
 
@@ -215,21 +231,21 @@
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-append"></span>
+      <span class="anchor" id="boundprocedure-append~2"></span>
       <h3>
           procedure(data_column_append), public, deferred, pass ::
   <strong>append</strong>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Appends one value, initializing an unallocated column if needed.
+        <div class="card-body">
+          
+          <p>Appends one value, initializing an unallocated column if needed.
 Discard existing views before this operation.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
      subroutine data_column_append(this, x)  
 <small>Prototype</small></h3>
 
@@ -280,28 +296,28 @@ Discard existing views before this operation.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-copy"></span>
+      <span class="anchor" id="boundprocedure-copy~2"></span>
       <h3>
           procedure(data_column_array_copy), public, deferred, pass ::
   <strong>copy</strong>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Copies the contents of the column to an array.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        <div class="card-body">
+          
+          <p>Copies the contents of the column to an array.</p>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     pure subroutine data_column_array_copy(this, dest)  
 <small>Prototype</small></h3>
 
@@ -354,28 +370,28 @@ An unallocated column is treated as empty.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-count"></span>
+      <span class="anchor" id="boundprocedure-count~5"></span>
       <h3>
           procedure(data_column_integer_query), public, deferred, pass ::
   <strong>count</strong>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Gets the number of items stored in the column.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        <div class="card-body">
+          
+          <p>Gets the number of items stored in the column.</p>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     pure function data_column_integer_query(this) result(rst)  
 <small>Prototype</small></h3>
 
@@ -412,12 +428,12 @@ An unallocated column is treated as empty.</p>
 
     <h4>
     Return Value
-    <small>integer(kind=int32)</small>
+    <small>integer</small>
     </h4>
     <p>The property value.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -431,9 +447,9 @@ An unallocated column is treated as empty.</p>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Gets the data type stored by the column:</p>
+        <div class="card-body">
+          
+          <p>Gets the data type stored by the column:</p>
 <ul>
 <li>
 <p>FS_COLUMN_INTEGER</p>
@@ -448,10 +464,10 @@ An unallocated column is treated as empty.</p>
 <p>FS_COLUMN_STRING</p>
 </li>
 </ul>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     pure function data_column_integer_query(this) result(rst)  
 <small>Prototype</small></h3>
 
@@ -488,12 +504,12 @@ An unallocated column is treated as empty.</p>
 
     <h4>
     Return Value
-    <small>integer(kind=int32)</small>
+    <small>integer</small>
     </h4>
     <p>The property value.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -507,9 +523,9 @@ An unallocated column is treated as empty.</p>
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private pure function dc_get_name(this) result(rst)  
 </h3>
 
@@ -550,29 +566,29 @@ An unallocated column is treated as empty.</p>
     </h4>
     <p>The name.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-insert"></span>
+      <span class="anchor" id="boundprocedure-insert~2"></span>
       <h3>
           procedure(data_column_insert), public, deferred, pass ::
   <strong>insert</strong>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Inserts one value before row, in the range 1 through count() + 1.
+        <div class="card-body">
+          
+          <p>Inserts one value before row, in the range 1 through count() + 1.
 Discard existing views before this operation.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
      subroutine data_column_insert(this, row, x)  
 <small>Prototype</small></h3>
 
@@ -607,7 +623,7 @@ Discard existing views before this operation.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -638,29 +654,29 @@ Discard existing views before this operation.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-remove"></span>
+      <span class="anchor" id="boundprocedure-remove~2"></span>
       <h3>
           procedure(data_column_remove), public, deferred, pass ::
   <strong>remove</strong>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Removes one row, in the range 1 through count().
+        <div class="card-body">
+          
+          <p>Removes one row, in the range 1 through count().
 Discard existing views before this operation.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
      subroutine data_column_remove(this, row)  
 <small>Prototype</small></h3>
 
@@ -695,7 +711,7 @@ Discard existing views before this operation.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -711,8 +727,8 @@ Discard existing views before this operation.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -726,9 +742,9 @@ Discard existing views before this operation.</p>
         
       </h3>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
     private  subroutine dc_set_name(this, x)  
 </h3>
 
@@ -779,33 +795,33 @@ Discard existing views before this operation.</p>
   </table>
 
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-slice"></span>
+      <span class="anchor" id="boundprocedure-slice~2"></span>
       <h3>
           procedure(data_column_slice), public, deferred, pass ::
   <strong>slice</strong>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Borrows a mutable array pointer to a slice of the column without
+        <div class="card-body">
+          
+          <p>Borrows a mutable array pointer to a slice of the column without
 copying the column.  The actual column must have TARGET or be an 
 associated pointer.  The caller must not deallocate the returned 
 pointer.  Reallocation of the array or destruction of the column 
 invalidates the view; discard it before either operation and 
 reacquire afterward.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
      function data_column_slice(this, first, last) result(rst)  
 <small>Prototype</small></h3>
 
@@ -840,7 +856,7 @@ reacquire afterward.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -855,7 +871,7 @@ reacquire afterward.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -876,8 +892,8 @@ reacquire afterward.</p>
     </h4>
     <p>The array pointer, or null if unallocated.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -891,13 +907,13 @@ reacquire afterward.</p>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Converts the requested value to a string.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        <div class="card-body">
+          
+          <p>Converts the requested value to a string.</p>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
      function data_column_to_string(this, row, fmt) result(rst)  
 <small>Prototype</small></h3>
 
@@ -932,7 +948,7 @@ reacquire afterward.</p>
         <tr>
             <td>
               <span class="anchor" ></span>
-              integer(kind=int32),
+              integer,
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -968,32 +984,32 @@ reacquire afterward.</p>
     </h4>
     <p>The resulting string.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-view"></span>
+      <span class="anchor" id="boundprocedure-view~2"></span>
       <h3>
           procedure(data_column_array_view), public, deferred, pass ::
   <strong>view</strong>
         
       </h3>
     </div>
-      <div class="card-body">
-        
-        <p>Borrows a mutable array pointer without copying the column.
+        <div class="card-body">
+          
+          <p>Borrows a mutable array pointer without copying the column.
 The actual column must have TARGET or be an associated pointer.
 The caller must not deallocate the returned pointer.
 Reallocation of the array or destruction of the column invalidates
 the view; discard it before either operation and reacquire afterward.</p>
-      </div>
-    <ul class="list-group">
-        <li class="list-group-item">
-                  <h3>
+        </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
      function data_column_array_view(this) result(rst)  
 <small>Prototype</small></h3>
 
@@ -1034,8 +1050,8 @@ the view; discard it before either operation and reacquire afterward.</p>
     </h4>
     <p>The mutable view, or null if the array is unallocated.</p>
 
-        </li>
-    </ul>
+          </li>
+      </ul>
   </div>
 
           </div>
@@ -1050,40 +1066,21 @@ the view; discard it before either operation and reacquire afterward.</p>
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:39              </p>
+ on 2026-11-12 14:47 -0600             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>

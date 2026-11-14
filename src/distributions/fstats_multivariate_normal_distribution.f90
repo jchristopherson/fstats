@@ -71,7 +71,7 @@ pure subroutine mvnd_init(this, mu, sigma)
         !! the supplied matrix is not positive-definite.
 
     ! Local Variables
-    integer(int32) :: n, row_index
+    integer :: n, row_index
     real(real64) :: scale
     
     ! Initialization
@@ -124,7 +124,7 @@ pure function mvnd_log_pdf(this, x) result(rst)
         !! An unrepresentably large squared residual gives negative infinity.
     real(real64), allocatable, dimension(:) :: delta
     real(real64) :: residual_norm
-    integer(int32) :: n
+    integer :: n
 
     rst = ieee_value(0.0d0, ieee_quiet_nan)
     if (.not.allocated(this%m_means)) return
@@ -150,7 +150,7 @@ pure subroutine mvnd_update_mean(this, x)
         !! The N-element array of new mean values.
 
     ! Local Variables
-    integer(int32) :: n, nc
+    integer :: n, nc
     
     ! Initialization
     n = size(x)
@@ -175,7 +175,7 @@ pure function mvnd_get_means(this) result(rst)
         !! The mean values.
 
     ! Process
-    integer(int32) :: n
+    integer :: n
     if (allocated(this%m_means)) then
         n = size(this%m_means)
         allocate(rst(n), source = this%m_means)
@@ -192,7 +192,7 @@ pure function mvnd_get_covariance(this) result(rst)
         !! The covariance matrix.
 
     ! Process
-    integer(int32) :: n
+    integer :: n
     if (allocated(this%m_cov)) then
         n = size(this%m_cov, 1)
         allocate(rst(n, n), source = this%m_cov)
@@ -210,7 +210,7 @@ pure function mvnd_get_cholesky(this) result(rst)
         !! The Cholesky factored matrix.
 
     ! Process
-    integer(int32) :: n
+    integer :: n
     if (allocated(this%m_cholesky)) then
         n = size(this%m_cholesky, 1)
         allocate(rst(n, n), source = this%m_cholesky)

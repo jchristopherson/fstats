@@ -26,18 +26,14 @@
 module nl_example
     use iso_fortran_env
 contains
-    subroutine exfun(x, p, f, stop, args)
+    subroutine exfun(x, p, f, args)
         ! Arguments
         real(real64), intent(in) :: x(:), p(:)
         real(real64), intent(out) :: f(:)
-        logical, intent(out) :: stop
-        class(*), intent(inout), optional :: args
+        class(*), intent(in), optional :: args
 
         ! Function
         f = p(4) * x**3 + p(3) * x**2 + p(2) * x + p(1)
-
-        ! Do not stop
-        stop = .false.
     end subroutine
 end module
 
@@ -50,8 +46,7 @@ program example
     ! Local Variables
     character, parameter :: tab = achar(9)
     character, parameter :: nl = new_line('a')
-    integer(int32) :: i
-    procedure(regression_function), pointer :: fun
+    integer :: i
     real(real64) :: xp(21), yp(21), params(4), ymod(21), resid(21), &
         ylmod(21), lresid(21), lparams(4)
     type(convergence_info) :: info
@@ -68,12 +63,11 @@ program example
         5.652854194d0, 6.784320119d0, 8.307936836d0, 8.395126494d0, &
         10.30252404d0]
 
-    ! Assign the function pointer and define an initial solution estimate
-    fun => exfun
+    ! Define an initial solution estimate
     params = 1.0d0
 
     ! Solve the problem
-    call nonlinear_least_squares(fun, xp, yp, params, ymod, resid, &
+    call nonlinear_least_squares(exfun, xp, yp, params, ymod, resid, &
         info = info, stats = stats)
 
     ! Display the results

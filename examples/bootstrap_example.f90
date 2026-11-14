@@ -30,7 +30,7 @@ program example
     implicit none
 
     ! Local Variables
-    integer(int32), parameter :: n = 1000
+    integer, parameter :: n = 1000
     real(real64) :: x(n), avg
     procedure(bootstrap_statistic_routine), pointer :: fun
     type(bootstrap_statistics) :: rst

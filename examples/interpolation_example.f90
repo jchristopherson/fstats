@@ -30,8 +30,8 @@ program example
     implicit none
 
     ! Parameters
-    integer(int32), parameter :: n = 9
-    integer(int32), parameter :: m = 100
+    integer, parameter :: n = 9
+    integer, parameter :: m = 100
 
     ! Local Variables
     type(spline_interpolator) :: interp

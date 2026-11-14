@@ -64,7 +64,7 @@ pure function confidence_interval_scalar(dist, alpha, s, n) result(rst)
         !! for a confidence level of 95%.
     real(real64), intent(in) :: s
         !! The sample standard deviation.
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
         !! The number of samples in the data set.
     real(real64) :: rst
         !! The result.
@@ -127,7 +127,7 @@ pure subroutine t_test_equal_variance(x1, x2, stat, p, dof)
 
     ! Local Variables
     real(real64) :: v1, v2, m1, m2, sv, a, b, x
-    integer(int32) :: n1, n2
+    integer :: n1, n2
 
     ! Compute the T-statistic
     n1 = size(x1)
@@ -178,7 +178,7 @@ pure subroutine t_test_unequal_variance(x1, x2, stat, p, dof)
 
     ! Local Variables
     real(real64) :: v1, v2, m1, m2, sv, a, b, x
-    integer(int32) :: n1, n2
+    integer :: n1, n2
 
     ! Compute the T-statistic
     n1 = size(x1)
@@ -229,7 +229,7 @@ pure subroutine t_test_paired(x1, x2, stat, p, dof)
 
     ! Local Variables
     real(real64) :: v1, v2, m1, m2, sd, cov, a, b, x
-    integer(int32) :: i, n1, n2, n
+    integer :: i, n1, n2, n
     
     ! Initialization
     n1 = size(x1)
@@ -291,7 +291,7 @@ pure subroutine f_test(x1, x2, stat, p, dof1, dof2)
     real(real64), parameter :: two = 2.0d0
 
     ! Local Variables
-    integer(int32) :: n1, n2
+    integer :: n1, n2
     real(real64) :: v1, v2, pupper
 
     ! Compute the F-statistic
@@ -351,7 +351,7 @@ pure subroutine bartletts_test(x, stat, p)
         !! indicates a non-equivalance of variances.
 
     ! Local Variables
-    integer(int32) :: i, n, k, ni
+    integer :: i, n, k, ni
     real(real64) :: si, sp, numer, denom
     type(chi_squared_distribution) :: dist
 
@@ -415,7 +415,7 @@ pure subroutine levenes_test(x, stat, p)
         !! indicates a non-equivalance of variances.
 
     ! Local Variables
-    integer(int32) :: i, j, k, n, ni
+    integer :: i, j, k, n, ni
     real(real64) :: numer, denom, inner, yi, z, zij
     real(real64), allocatable, dimension(:) :: y, zt, zi
     type(f_distribution) :: dist

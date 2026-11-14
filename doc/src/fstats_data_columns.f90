@@ -46,13 +46,13 @@ module fstats_data_columns
     public :: exp, log, log10, sum, product, sqrt
     public :: operator(+), operator(-), operator(*), operator(/)
 
-    integer(int32), parameter :: FS_COLUMN_INTEGER = 1
+    integer, parameter :: FS_COLUMN_INTEGER = 1
         !! Denotes a column of integer values.
-    integer(int32), parameter :: FS_COLUMN_REAL = 2
+    integer, parameter :: FS_COLUMN_REAL = 2
         !! Denotes a column of real (floating-point) values.
-    integer(int32), parameter :: FS_COLUMN_LOGICAL = 3
+    integer, parameter :: FS_COLUMN_LOGICAL = 3
         !! Denotes a column of logical values.
-    integer(int32), parameter :: FS_COLUMN_STRING = 4
+    integer, parameter :: FS_COLUMN_STRING = 4
         !! Denotes a column of text strings.
 
     type, abstract :: data_column
@@ -109,7 +109,7 @@ module fstats_data_columns
             import data_column
             class(data_column), intent(in) :: this
                 !! The [[data_column]] object.
-            integer(int32) :: rst
+            integer :: rst
                 !! The property value.
         end function
 
@@ -139,7 +139,7 @@ module fstats_data_columns
             import data_column
             class(data_column), intent(in) :: this
                 !! The [[data_column]] object.
-            integer(int32), intent(in) :: row
+            integer, intent(in) :: row
                 !! The row index.
             character(len = *), intent(in), optional :: fmt
                 !! The formatting string.
@@ -157,14 +157,14 @@ module fstats_data_columns
             !! Inserts a scalar of the column's type; strings also accept character.
             import data_column, int32
             class(data_column), intent(inout) :: this
-            integer(int32), intent(in) :: row
+            integer, intent(in) :: row
             class(*), intent(in) :: x
         end subroutine
 
         subroutine data_column_remove(this, row)
             import data_column, int32
             class(data_column), intent(inout) :: this
-            integer(int32), intent(in) :: row
+            integer, intent(in) :: row
         end subroutine
 
         ! ------------------------------------------------------------------------------
@@ -174,9 +174,9 @@ module fstats_data_columns
             import data_column
             class(data_column), target, intent(inout) :: this
                 !! The [[data_column]] object.
-            integer(int32), intent(in) :: first
+            integer, intent(in) :: first
                 !! The one-based starting index of the slice.
-            integer(int32), intent(in) :: last
+            integer, intent(in) :: last
                 !! The one-based ending index of the slice.
             class(*), pointer, dimension(:) :: rst
                 !! The array pointer, or null if unallocated.
@@ -185,7 +185,7 @@ module fstats_data_columns
 
     type, extends(data_column) :: integer_column
         !! Defines a column of integer values.
-        integer(int32), private, allocatable, dimension(:) :: m_values
+        integer, private, allocatable, dimension(:) :: m_values
     contains
         procedure, public :: count => ic_count
         procedure, public :: get_data_type => ic_get_type
@@ -374,7 +374,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function ic_init_empty(n) result(rst)
         !! Constructs an empty [[integer_column]] of the requested size.
-        integer(int32), intent(in) :: n
+        integer, intent(in) :: n
             !! The number of rows to create.
         type(integer_column) :: rst
             !! The newly constructed [[integer_column]] object.
@@ -387,7 +387,7 @@ contains
     pure function ic_init_array(x) result(rst)
         !! Constructs a new [[integer_column]] by copying the contents of the
         !! supplied array.
-        integer(int32), intent(in), dimension(:) :: x
+        integer, intent(in), dimension(:) :: x
             !! The array to copy.
         type(integer_column) :: rst
             !! The newly constructed [[integer_column]] object.
@@ -400,7 +400,7 @@ contains
         !! Gets the number of values stored in this column.
         class(integer_column), intent(in) :: this
             !! The [[integer_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The number of values.
 
         if (allocated(this%m_values)) then
@@ -415,7 +415,7 @@ contains
         !! Gets the type stored by this column.
         class(integer_column), intent(in) :: this
             !! The [[integer_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The type stored by this column.
         rst = FS_COLUMN_INTEGER
     end function
@@ -425,9 +425,9 @@ contains
         !! Gets the requested value from the column.
         class(integer_column), intent(in) :: this
             !! The [[integer_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index of the value to retrieve.
-        integer(int32) :: rst
+        integer :: rst
             !! The value stored at the requested row.
 
         if (.not.allocated(this%m_values)) error stop FS_UNINITIALIZED_OBJECT_ERROR
@@ -440,9 +440,9 @@ contains
         !! Sets the requested value into the column.
         class(integer_column), intent(inout) :: this
             !! The [[integer_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
-        integer(int32), intent(in) :: x
+        integer, intent(in) :: x
             !! The value stored at the requested row.
 
         if (.not.allocated(this%m_values)) error stop FS_UNINITIALIZED_OBJECT_ERROR
@@ -460,7 +460,7 @@ contains
 
         if (size(dest) /= this%count()) error stop FS_ARRAY_SIZE_ERROR
         select type (dest)
-        type is (integer(int32))
+        type is (integer)
             if (allocated(this%m_values)) dest = this%m_values
         class default
             error stop FS_INVALID_ARGUMENT_ERROR
@@ -484,9 +484,9 @@ contains
         !! Returns a borrowed, mutable slice of this column's array.
         class(integer_column), target, intent(inout) :: this
             !! The [[integer_column]] object.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! The one-based starting index of the slice.
-        integer(int32), intent(in) :: last
+        integer, intent(in) :: last
             !! The one-based ending index of the slice.
         class(*), pointer, dimension(:) :: rst
             !! The array pointer, or null if unallocated.
@@ -503,7 +503,7 @@ contains
         !! Returns the value in the requested row as a string.
         class(integer_column), intent(in) :: this
             !! The [[integer_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
         character(len = *), intent(in), optional :: fmt
             !! The formatting string (e.g. "I0").
@@ -536,15 +536,15 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine ic_insert(this, row, x)
         class(integer_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
         class(*), intent(in) :: x
-        integer(int32), allocatable, dimension(:) :: values
-        integer(int32) :: n
+        integer, allocatable, dimension(:) :: values
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
         select type (x)
-        type is (integer(int32))
+        type is (integer)
             allocate(values(n + 1))
             if (allocated(this%m_values)) then
                 values(:row - 1) = this%m_values(:row - 1)
@@ -560,9 +560,9 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine ic_remove(this, row)
         class(integer_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
-        integer(int32), allocatable, dimension(:) :: values
-        integer(int32) :: n
+        integer, intent(in) :: row
+        integer, allocatable, dimension(:) :: values
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
@@ -577,7 +577,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function rc_init_empty(n) result(rst)
         !! Constructs an empty [[real_column]] of the requested size.
-        integer(int32), intent(in) :: n
+        integer, intent(in) :: n
             !! The number of rows to create.
         type(real_column) :: rst
             !! The newly constructed [[real_column]] object.
@@ -603,7 +603,7 @@ contains
         !! Gets the number of values stored in this column.
         class(real_column), intent(in) :: this
             !! The [[real_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The number of values.
 
         if (allocated(this%m_values)) then
@@ -618,7 +618,7 @@ contains
         !! Gets the type stored by this column.
         class(real_column), intent(in) :: this
             !! The [[real_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The type stored by this column.
         rst = FS_COLUMN_REAL
     end function
@@ -628,7 +628,7 @@ contains
         !! Gets the requested value from the column.
         class(real_column), intent(in) :: this
             !! The [[real_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index of the value to retrieve.
         real(real64) :: rst
             !! The value stored at the requested row.
@@ -643,7 +643,7 @@ contains
         !! Sets the requested value into the column.
         class(real_column), intent(inout) :: this
             !! The [[real_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
         real(real64), intent(in) :: x
             !! The value stored at the requested row.
@@ -687,9 +687,9 @@ contains
         !! Returns a borrowed, mutable slice of this column's array.
         class(real_column), target, intent(inout) :: this
             !! The [[real_column]] object.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! The one-based starting index of the slice.
-        integer(int32), intent(in) :: last
+        integer, intent(in) :: last
             !! The one-based ending index of the slice.
         class(*), pointer, dimension(:) :: rst
             !! The array pointer, or null if unallocated.
@@ -706,7 +706,7 @@ contains
         !! Returns the value in the requested row as a string.
         class(real_column), intent(in) :: this
             !! The [[real_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
         character(len = *), intent(in), optional :: fmt
             !! The formatting string (e.g. "F0.6").
@@ -745,10 +745,10 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine rc_insert(this, row, x)
         class(real_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
         class(*), intent(in) :: x
         real(real64), allocatable, dimension(:) :: values
-        integer(int32) :: n
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
@@ -769,9 +769,9 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine rc_remove(this, row)
         class(real_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
         real(real64), allocatable, dimension(:) :: values
-        integer(int32) :: n
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
@@ -786,7 +786,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function lc_init_empty(n) result(rst)
         !! Constructs an empty [[logical_column]] of the requested size.
-        integer(int32), intent(in) :: n
+        integer, intent(in) :: n
             !! The number of rows to create.
         type(logical_column) :: rst
             !! The newly constructed [[logical_column]] object.
@@ -812,7 +812,7 @@ contains
         !! Gets the number of values stored in this column.
         class(logical_column), intent(in) :: this
             !! The [[logical_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The number of values.
 
         if (allocated(this%m_values)) then
@@ -827,7 +827,7 @@ contains
         !! Gets the type stored by this column.
         class(logical_column), intent(in) :: this
             !! The [[logical_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The type stored by this column.
         rst = FS_COLUMN_LOGICAL
     end function
@@ -837,7 +837,7 @@ contains
         !! Gets the requested value from the column.
         class(logical_column), intent(in) :: this
             !! The [[logical_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index of the value to retrieve.
         logical :: rst
             !! The value stored at the requested row.
@@ -852,7 +852,7 @@ contains
         !! Sets the requested value into the column.
         class(logical_column), intent(inout) :: this
             !! The [[logical_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
         logical, intent(in) :: x
             !! The value stored at the requested row.
@@ -896,9 +896,9 @@ contains
         !! Returns a borrowed, mutable slice of this column's array.
         class(logical_column), target, intent(inout) :: this
             !! The [[logical_column]] object.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! The one-based starting index of the slice.
-        integer(int32), intent(in) :: last
+        integer, intent(in) :: last
             !! The one-based ending index of the slice.
         class(*), pointer, dimension(:) :: rst
             !! The array pointer, or null if unallocated.
@@ -915,7 +915,7 @@ contains
         !! Returns the value in the requested row as a string.
         class(logical_column), intent(in) :: this
             !! The [[logical_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
         character(len = *), intent(in), optional :: fmt
             !! The formatting string (e.g. "L1").
@@ -948,10 +948,10 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine lc_insert(this, row, x)
         class(logical_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
         class(*), intent(in) :: x
         logical, allocatable, dimension(:) :: values
-        integer(int32) :: n
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
@@ -972,9 +972,9 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine lc_remove(this, row)
         class(logical_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
         logical, allocatable, dimension(:) :: values
-        integer(int32) :: n
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
@@ -989,7 +989,7 @@ contains
 ! ------------------------------------------------------------------------------
     pure function sc_init_empty(n) result(rst)
         !! Constructs an empty [[integer_column]] of the requested size.
-        integer(int32), intent(in) :: n
+        integer, intent(in) :: n
             !! The number of rows to create.
         type(string_column) :: rst
             !! The newly constructed [[string_column]] object.
@@ -1015,7 +1015,7 @@ contains
         !! Gets the number of values stored in this column.
         class(string_column), intent(in) :: this
             !! The [[string_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The number of values.
 
         if (allocated(this%m_values)) then
@@ -1030,7 +1030,7 @@ contains
         !! Gets the type stored by this column.
         class(string_column), intent(in) :: this
             !! The [[string_column]] object.
-        integer(int32) :: rst
+        integer :: rst
             !! The type stored by this column.
         rst = FS_COLUMN_STRING
     end function
@@ -1040,7 +1040,7 @@ contains
         !! Gets the requested value from the column.
         class(string_column), intent(in) :: this
             !! The [[string_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index of the value to retrieve.
         character(len = :), allocatable :: rst
             !! The value stored at the requested row.
@@ -1055,7 +1055,7 @@ contains
         !! Sets the requested value into the column.
         class(string_column), intent(inout) :: this
             !! The [[string_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
         character(len = *), intent(in) :: x
             !! The value stored at the requested row.
@@ -1099,9 +1099,9 @@ contains
         !! Returns a borrowed, mutable slice of this column's array.
         class(string_column), target, intent(inout) :: this
             !! The [[string_column]] object.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! The one-based starting index of the slice.
-        integer(int32), intent(in) :: last
+        integer, intent(in) :: last
             !! The one-based ending index of the slice.
         class(*), pointer, dimension(:) :: rst
             !! The array pointer, or null if unallocated.
@@ -1118,7 +1118,7 @@ contains
         !! Returns the value in the requested row as a string.
         class(string_column), intent(in) :: this
             !! The [[string_column]] object.
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
             !! The row index.
         character(len = *), intent(in), optional :: fmt
             !! The formatting string.
@@ -1142,11 +1142,11 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine sc_insert(this, row, x)
         class(string_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
         class(*), intent(in) :: x
         type(string), allocatable, dimension(:) :: values
         type(string) :: value
-        integer(int32) :: n
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n + 1) error stop FS_INVALID_INPUT_ERROR
@@ -1170,9 +1170,9 @@ contains
 ! ------------------------------------------------------------------------------
     subroutine sc_remove(this, row)
         class(string_column), intent(inout) :: this
-        integer(int32), intent(in) :: row
+        integer, intent(in) :: row
         type(string), allocatable, dimension(:) :: values
-        integer(int32) :: n
+        integer :: n
 
         n = this%count()
         if (row < 1 .or. row > n) error stop FS_INVALID_INPUT_ERROR
@@ -1202,7 +1202,7 @@ contains
         character(len = :), allocatable :: rst
             !! The trimmed string.
 
-        integer(int32) :: last_character, exponent_start
+        integer :: last_character, exponent_start
 
         rst = trim(value)
         exponent_start = scan(rst, "EeDd")

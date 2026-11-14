@@ -18,7 +18,7 @@ contains
         type(string_column) :: texts
         class(data_column), pointer :: column, second
         class(*), pointer, dimension(:) :: values
-        integer(int32) :: column_index
+        integer :: column_index
 
         rst = .true.
         call check(table%column_count() == 0, rst, 'initial column count')
@@ -175,7 +175,7 @@ contains
         call view_source%insert_column(1, integer_column([5, 6, 7, 8]))
         values => live_view%column_slice(1)
         select type (values)
-        type is (integer(int32))
+        type is (integer)
             call check(values(1) == 20 .and. values(2) == 30, &
                 rst, 'view follows current positional columns after insertion')
         class default
@@ -187,7 +187,7 @@ contains
         call check(single_row_view%row_count() == 1, rst, 'single-row slice count')
         values => single_row_view%column_slice(1)
         select type (values)
-        type is (integer(int32))
+        type is (integer)
             call check(size(values) == 1 .and. values(1) == 6, &
                 rst, 'single-row slice value')
         class default
@@ -227,7 +227,7 @@ contains
         call check(detached_view%row_count() == 2, rst, 'view retains state after table destruction')
         values => detached_view%column_slice(1)
         select type (values)
-        type is (integer(int32))
+        type is (integer)
             call check(values(1) == 12 .and. values(2) == 13, &
                 rst, 'detached view retains values')
         class default
@@ -281,7 +281,7 @@ contains
         logical, intent(inout) :: rst
         character(len = *), intent(in) :: label
         class(data_column), pointer :: column
-        integer(int32) :: column_index
+        integer :: column_index
 
         call check(table%column_count() == size(names), rst, label // ' count')
         if (table%column_count() /= size(names)) return

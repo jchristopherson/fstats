@@ -44,7 +44,7 @@ pure function difference(x) result(rst)
         !! elements.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
 
     ! Process
     n = size(x)

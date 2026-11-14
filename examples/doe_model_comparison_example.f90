@@ -29,8 +29,8 @@ program doe_model_comparison_example
     use fstats
     implicit none
 
-    integer(int32) :: i, j, k
-    integer(int32), parameter :: npts = 9
+    integer :: i, j, k
+    integer, parameter :: npts = 9
     real(real64) :: x(npts, 2), y(npts)
     real(real64) :: beta_simple(3), beta_full(6)
     type(doe_model) :: mdl_simple, mdl_full

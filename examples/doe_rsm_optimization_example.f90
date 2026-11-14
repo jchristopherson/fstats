@@ -31,12 +31,12 @@ program doe_rsm_optimization_example
     implicit none
 
     ! Parameters
-    integer(int32), parameter :: npts = 13
-    integer(int32), parameter :: nfactors = 2
-    integer(int32), parameter :: nparams = 6
+    integer, parameter :: npts = 13
+    integer, parameter :: nfactors = 2
+    integer, parameter :: nparams = 6
     
     ! Local Variables
-    integer(int32) :: i, j, k
+    integer :: i, j, k
     real(real64) :: x(npts, nfactors), y(npts)
     real(real64) :: coeffs(nparams), lower_bounds(nfactors), upper_bounds(nfactors)
     type(doe_model) :: mdl

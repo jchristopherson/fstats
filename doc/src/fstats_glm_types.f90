@@ -38,16 +38,16 @@ module fstats_glm_types
     public :: robust_weight_function
     public :: assignment(=)
 
-    integer(int32), parameter :: FS_GLM_BINOMIAL = 1
+    integer, parameter :: FS_GLM_BINOMIAL = 1
         !! Bernoulli/proportion responses with the logit link; no trial counts.
-    integer(int32), parameter :: FS_GLM_POISSON = 2
+    integer, parameter :: FS_GLM_POISSON = 2
         !! Nonnegative responses with the log link and V(mu) = mu.
-    integer(int32), parameter :: FS_GLM_GAMMA = 3
+    integer, parameter :: FS_GLM_GAMMA = 3
         !! Positive responses with the reciprocal link and V(mu) = mu**2.
 
     type glm_options
         !! GLM controls. Component initialization and set_to_default agree.
-        integer(int32) :: max_iteration_count = 100
+        integer :: max_iteration_count = 100
             !! Positive maximum number of completed coefficient updates.
         real(real64) :: tolerance = 1.0d-8
             !! Finite positive absolute tolerance on maximum coefficient change.
@@ -109,7 +109,7 @@ module fstats_glm_types
         real(real64) :: residual_value = 0.0d0
             !! Maximum absolute coefficient change in the last update, not a
             !! response residual. IRLS initializes this to NaN before updates.
-        integer(int32) :: iteration_count = 0
+        integer :: iteration_count = 0
             !! Completed updates, excluding domain-preserving step halvings.
     end type
 

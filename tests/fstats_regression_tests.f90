@@ -37,7 +37,7 @@ contains
         real(real64), dimension(3,2) :: design
         real(real64), allocatable, dimension(:,:) :: covariance_values
         real(real64) :: condition_number
-        integer(int32) :: rank
+        integer :: rank
 
         design(:,1) = [1.0d0, 0.0d0, 0.0d0]
         design(:,2) = [1.0d0, 1.0d-8, 0.0d0]
@@ -62,10 +62,10 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: npts = 5
-        integer(int32), parameter :: order1 = 1
-        integer(int32), parameter :: order2 = 3
-        integer(int32), parameter :: order4 = 4
+        integer, parameter :: npts = 5
+        integer, parameter :: order1 = 1
+        integer, parameter :: order2 = 3
+        integer, parameter :: order4 = 4
         real(real64) :: x(npts), c1(npts, 2), c2(npts, 1), c3(npts, 5), &
             c4(npts, 3), ans1(npts, 2), ans2(npts, 1), ans3(npts, 5), &
             ans4(npts, 3)
@@ -124,7 +124,7 @@ contains
         logical :: rst
 
         ! Variables
-        integer(int32), parameter :: npts = 31
+        integer, parameter :: npts = 31
         real(real64), parameter :: tol = 1.0d-3
         real(real64), parameter :: se1 = 8.0d-3
         real(real64), parameter :: se2 = 5.0d-3

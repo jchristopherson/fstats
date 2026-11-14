@@ -62,7 +62,7 @@ subroutine doe_stationary_point(mdl, n, z, nature, ok, eigenvalues)
     class(doe_model), intent(in) :: mdl
         !! The fitted DOE model, defined in coded variables.  Its nway 
         !! must be 1 or 2.
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
         !! The number of factors.
     real(real64), allocatable, intent(out), dimension(:) :: z
         !! The stationary point in coded variables.  This is allocated only 
@@ -76,7 +76,7 @@ subroutine doe_stationary_point(mdl, n, z, nature, ok, eigenvalues)
         eigenvalues
         !! The eigenvalues of the Hessian, in coded variables.
 
-    integer(int32) :: i, j
+    integer :: i, j
     real(real64) :: y0, lmax
     real(real64), allocatable, dimension(:) :: g, ev, ep, em, e0
     real(real64), allocatable, dimension(:,:) :: h, vecs
@@ -188,7 +188,7 @@ function doe_optimize_rsm(mdl, x_low, x_high, goal, target, tol, max_iter) &
     real(real64), intent(in), optional :: tol
         !! The convergence tolerance on the projected gradient step.  The 
         !! default is 1.0d-8.
-    integer(int32), intent(in), optional :: max_iter
+    integer, intent(in), optional :: max_iter
         !! The maximum number of iterations allowed for each starting point.
         !! The default is 1000.
     type(doe_optimization_result) :: opt
@@ -198,10 +198,10 @@ function doe_optimize_rsm(mdl, x_low, x_high, goal, target, tol, max_iter) &
         !! method name, and the tolerance used.
 
     ! Parameters
-    integer(int32), parameter :: max_corner_bits = 6
+    integer, parameter :: max_corner_bits = 6
 
     ! Local Variables
-    integer(int32) :: i, k, n, nbits, nstarts, mi, iters, best_iters, kind
+    integer :: i, k, n, nbits, nstarts, mi, iters, best_iters, kind
     logical :: ok, best_ok, have_best
     real(real64) :: tl, tgt, f, best_f
     real(real64), allocatable, dimension(:) :: z, z0, zbest, zs
@@ -320,7 +320,7 @@ end function
 function objective(mdl, kind, target, z) result(rst)
     !! Evaluates the objective (to be minimized) at a coded point.
     class(doe_model), intent(in) :: mdl
-    integer(int32), intent(in) :: kind
+    integer, intent(in) :: kind
     real(real64), intent(in) :: target
     real(real64), intent(in), dimension(:) :: z
     real(real64) :: rst
@@ -340,14 +340,14 @@ subroutine projected_gradient(mdl, kind, target, z0, tol, max_iter, z, f, &
     !! Minimizes the objective over the box [-1, 1]**N using a projected 
     !! gradient method with Armijo backtracking.
     class(doe_model), intent(in) :: mdl
-    integer(int32), intent(in) :: kind
+    integer, intent(in) :: kind
     real(real64), intent(in) :: target
     real(real64), intent(in), dimension(:) :: z0
     real(real64), intent(in) :: tol
-    integer(int32), intent(in) :: max_iter
+    integer, intent(in) :: max_iter
     real(real64), intent(out), dimension(:) :: z
     real(real64), intent(out) :: f
-    integer(int32), intent(out) :: iters
+    integer, intent(out) :: iters
     logical, intent(out) :: converged
 
     ! Parameters
@@ -356,7 +356,7 @@ subroutine projected_gradient(mdl, kind, target, z0, tol, max_iter, z, f, &
     real(real64), parameter :: min_step = 1.0d-16
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     logical :: accepted
     real(real64) :: step, fnew, decrease
     real(real64), allocatable, dimension(:) :: g, znew
@@ -409,13 +409,13 @@ subroutine gradient(mdl, kind, target, z, h, g)
     !! are allowed to step slightly outside the bounds as the model is a 
     !! polynomial that is defined everywhere.
     class(doe_model), intent(in) :: mdl
-    integer(int32), intent(in) :: kind
+    integer, intent(in) :: kind
     real(real64), intent(in) :: target
     real(real64), intent(in), dimension(:) :: z
     real(real64), intent(in) :: h
     real(real64), intent(out), dimension(:) :: g
 
-    integer(int32) :: i
+    integer :: i
     real(real64), allocatable, dimension(:) :: zp, zm
 
     allocate(zp(size(z)), zm(size(z)))

@@ -34,7 +34,7 @@ program example
     ! distributed data points.
 
     ! Local Variables
-    integer(int32), parameter :: npts = 100000
+    integer, parameter :: npts = 100000
     real(real64), parameter :: sigma = 1.0d-1
     real(real64), parameter :: mu = 5.0d0
     real(real64), allocatable, dimension(:) :: x

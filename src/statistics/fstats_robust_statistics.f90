@@ -51,7 +51,7 @@ pure function median_absolute_deviation_array(x) result(rst)
         !! The median absolute deviation of x.
 
     ! Local Variables
-    integer(int32) :: n, i
+    integer :: n, i
     real(real64) :: x_median, x_abs, median_abs, max_value
     real(real64), allocatable, dimension(:) :: distances
 

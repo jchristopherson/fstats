@@ -244,7 +244,7 @@ pure elemental function normal_log_tail(z) result(rst)
     real(real64) :: rst
         !! Log upper-tail probability; +infinity gives -infinity, NaN propagates.
     real(real64) :: term, total, previous, inverse_square
-    integer(int32) :: iteration
+    integer :: iteration
 
     if (ieee_is_nan(z)) then
         rst = z

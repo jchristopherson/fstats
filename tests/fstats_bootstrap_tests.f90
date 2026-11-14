@@ -38,7 +38,7 @@ contains
         real(real64), parameter :: ci_upper = 0.746d0
         real(real64), parameter :: ci_lower = 0.583d0
         real(real64), parameter :: std_err = 0.042d0
-        integer(int32), parameter :: nsamples = 1000
+        integer, parameter :: nsamples = 1000
 
         ! NOTES:
         ! - The loose tolerance accounts for the precision with which
@@ -51,7 +51,7 @@ contains
         ! - Original data set was randomly generated
 
         ! Variables
-        integer(int32), parameter :: n = 30
+        integer, parameter :: n = 30
         real(real64) :: x(n), mu
         procedure(bootstrap_statistic_routine), pointer :: fcn
         type(bootstrap_statistics) :: z
@@ -138,7 +138,7 @@ contains
         real(real64), parameter :: ci_upper = 0.746d0
         real(real64), parameter :: ci_lower = 0.583d0
         real(real64), parameter :: std_err = 0.042d0
-        integer(int32), parameter :: nsamples = 1000
+        integer, parameter :: nsamples = 1000
 
         ! NOTES:
         ! - The loose tolerance accounts for the precision with which
@@ -151,7 +151,7 @@ contains
         ! - Original data set was randomly generated
 
         ! Variables
-        integer(int32), parameter :: n = 30
+        integer, parameter :: n = 30
         real(real64) :: x(n), mu
         procedure(bootstrap_statistic_routine), pointer :: fcn
         procedure(bootstrap_resampling_routine), pointer :: sampler
@@ -234,7 +234,7 @@ contains
         real(real64) :: paired(8), paired_sample(8)
         real(real64) :: clustered(8), cluster_sample(8)
         real(real64) :: series(12), block_sample(12)
-        integer(int32) :: i, block_size
+        integer :: i, block_size
 
         rst = .true.
         paired = [1.0d0, 101.0d0, 2.0d0, 102.0d0, &

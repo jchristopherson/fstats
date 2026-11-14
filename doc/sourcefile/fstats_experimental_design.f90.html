@@ -12,14 +12,29 @@
 
     <title>fstats_experimental_design.f90 &ndash; FSTATS</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -75,8 +90,7 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                  title=" 1.1% of total for source files.">103 statements</a>
             </li>
 
@@ -96,9 +110,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -212,7 +228,7 @@
 <a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">        </span><span class="c">!! two-way model is</span>
 <a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">        </span><span class="c">!! \(Y = \beta_{0} + \beta_{1} X_{1} + \beta_{2} X_{2} + \beta_{12} </span>
 <a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">        </span><span class="c">!! X_{1} X_{2} + \beta_{11} X_{1}^{2} + \beta_{22} X_{2}^{2}\).</span>
-<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nway</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nway</span>
 <a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">            </span><span class="c">!! The number of interaction levels.</span>
 <a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">coefficients</span>
 <a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">            </span><span class="c">!! The model coefficients, where N is the number of factors.  The</span>
@@ -257,7 +273,7 @@
 <a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
 <a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">            </span><span class="c">!! The residual mean squared error of the fit, \( SS_{res} / </span>
 <a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">            </span><span class="c">!! (m - p) \).  This is only meaningful if dof &gt; 0.</span>
-<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
 <a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">            </span><span class="c">!! The residual degrees of freedom of the fit, \( m - p \).  A </span>
 <a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">            </span><span class="c">!! value of zero indicates the fit information is not available</span>
 <a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">            </span><span class="c">!! (e.g. the model was not created by doe_fit_model).</span>
@@ -279,9 +295,9 @@
 <a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">            </span><span class="c">!! P-value for the overall F-statistic.</span>
 <a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mean_response</span>
 <a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">            </span><span class="c">!! Mean of the response variable.</span>
-<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_observations</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_observations</span>
 <a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">            </span><span class="c">!! Number of observations.</span>
-<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_parameters</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_parameters</span>
 <a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">            </span><span class="c">!! Number of model parameters (including intercept).</span>
 <a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">    </span><span class="k">end type</span>
 <a id="ln-131" name="ln-131" href="#ln-131"></a>
@@ -332,11 +348,11 @@
 <a id="ln-176" name="ln-176" href="#ln-176"></a><span class="w">            </span><span class="c">!! otherwise.</span>
 <a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">is_orthogonal</span>
 <a id="ln-178" name="ln-178" href="#ln-178"></a><span class="w">            </span><span class="c">!! True if design is perfectly orthogonal.</span>
-<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_runs</span>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_runs</span>
 <a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">            </span><span class="c">!! Number of design runs.</span>
-<a id="ln-181" name="ln-181" href="#ln-181"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_factors</span>
+<a id="ln-181" name="ln-181" href="#ln-181"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_factors</span>
 <a id="ln-182" name="ln-182" href="#ln-182"></a><span class="w">            </span><span class="c">!! Number of factors.</span>
-<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_parameters</span>
+<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_parameters</span>
 <a id="ln-184" name="ln-184" href="#ln-184"></a><span class="w">            </span><span class="c">!! Number of model parameters.</span>
 <a id="ln-185" name="ln-185" href="#ln-185"></a><span class="w">    </span><span class="k">end type</span>
 <a id="ln-186" name="ln-186" href="#ln-186"></a>
@@ -354,7 +370,7 @@
 <a id="ln-198" name="ln-198" href="#ln-198"></a><span class="w">            </span><span class="c">!! Model intercept.</span>
 <a id="ln-199" name="ln-199" href="#ln-199"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">response_at_center</span>
 <a id="ln-200" name="ln-200" href="#ln-200"></a><span class="w">            </span><span class="c">!! Predicted response at design center (coded 0,0,...,0).</span>
-<a id="ln-201" name="ln-201" href="#ln-201"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_factors</span>
+<a id="ln-201" name="ln-201" href="#ln-201"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_factors</span>
 <a id="ln-202" name="ln-202" href="#ln-202"></a><span class="w">            </span><span class="c">!! Number of factors.</span>
 <a id="ln-203" name="ln-203" href="#ln-203"></a><span class="w">    </span><span class="k">end type</span>
 <a id="ln-204" name="ln-204" href="#ln-204"></a>
@@ -366,7 +382,7 @@
 <a id="ln-210" name="ln-210" href="#ln-210"></a><span class="w">            </span><span class="c">!! Optimal factor settings (in natural scale).</span>
 <a id="ln-211" name="ln-211" href="#ln-211"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">optimal_response</span>
 <a id="ln-212" name="ln-212" href="#ln-212"></a><span class="w">            </span><span class="c">!! Predicted response at optimal point.</span>
-<a id="ln-213" name="ln-213" href="#ln-213"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iteration_count</span>
+<a id="ln-213" name="ln-213" href="#ln-213"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iteration_count</span>
 <a id="ln-214" name="ln-214" href="#ln-214"></a><span class="w">            </span><span class="c">!! Number of iterations to converge.</span>
 <a id="ln-215" name="ln-215" href="#ln-215"></a><span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">converged</span>
 <a id="ln-216" name="ln-216" href="#ln-216"></a><span class="w">            </span><span class="c">!! Whether optimization converged.</span>
@@ -386,11 +402,11 @@
 <a id="ln-230" name="ln-230" href="#ln-230"></a><span class="w">            </span><span class="c">!! Residual sum of squares for full model.</span>
 <a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rss_reduced</span>
 <a id="ln-232" name="ln-232" href="#ln-232"></a><span class="w">            </span><span class="c">!! Residual sum of squares for reduced model.</span>
-<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_full</span>
+<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_full</span>
 <a id="ln-234" name="ln-234" href="#ln-234"></a><span class="w">            </span><span class="c">!! Degrees of freedom for full model.</span>
-<a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_reduced</span>
+<a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_reduced</span>
 <a id="ln-236" name="ln-236" href="#ln-236"></a><span class="w">            </span><span class="c">!! Degrees of freedom for reduced model.</span>
-<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_diff</span>
+<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_diff</span>
 <a id="ln-238" name="ln-238" href="#ln-238"></a><span class="w">            </span><span class="c">!! Difference in degrees of freedom.</span>
 <a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">significant_difference</span>
 <a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">            </span><span class="c">!! True if models differ significantly (p &lt; 0.05).</span>
@@ -406,11 +422,11 @@
 <a id="ln-250" name="ln-250" href="#ln-250"></a><span class="w">            </span><span class="c">!! Model sum of squares.</span>
 <a id="ln-251" name="ln-251" href="#ln-251"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ss_residual</span>
 <a id="ln-252" name="ln-252" href="#ln-252"></a><span class="w">            </span><span class="c">!! Residual sum of squares.</span>
-<a id="ln-253" name="ln-253" href="#ln-253"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_total</span>
+<a id="ln-253" name="ln-253" href="#ln-253"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_total</span>
 <a id="ln-254" name="ln-254" href="#ln-254"></a><span class="w">            </span><span class="c">!! Total degrees of freedom.</span>
-<a id="ln-255" name="ln-255" href="#ln-255"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_model</span>
+<a id="ln-255" name="ln-255" href="#ln-255"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_model</span>
 <a id="ln-256" name="ln-256" href="#ln-256"></a><span class="w">            </span><span class="c">!! Model degrees of freedom.</span>
-<a id="ln-257" name="ln-257" href="#ln-257"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_residual</span>
+<a id="ln-257" name="ln-257" href="#ln-257"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">df_residual</span>
 <a id="ln-258" name="ln-258" href="#ln-258"></a><span class="w">            </span><span class="c">!! Residual degrees of freedom.</span>
 <a id="ln-259" name="ln-259" href="#ln-259"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ms_model</span>
 <a id="ln-260" name="ln-260" href="#ln-260"></a><span class="w">            </span><span class="c">!! Model mean square.</span>
@@ -435,40 +451,21 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:39              </p>
+ on 2026-11-12 14:47 -0600             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>

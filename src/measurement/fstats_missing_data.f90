@@ -101,7 +101,7 @@ subroutine knn_impute(x, xc, k, weighted)
         !! entries must be denoted by NaN's (see [[missing_value]]).
     real(real64), intent(out), dimension(:,:) :: xc
         !! An N-by-M matrix where the completed data set will be written.
-    integer(int32), intent(in), optional :: k
+    integer, intent(in), optional :: k
         !! An optional input specifying the number of neighbors to use.  The
         !! default is 5.
     logical, intent(in), optional :: weighted
@@ -112,7 +112,7 @@ subroutine knn_impute(x, xc, k, weighted)
     logical :: wgt
     logical, allocatable, dimension(:) :: used
     logical, allocatable, dimension(:,:) :: miss
-    integer(int32) :: i, j, p, q, n, m, nk, nu, id, cnt
+    integer :: i, j, p, q, n, m, nk, nu, id, cnt
     real(real64) :: ds, dmin, num, den, w, big, eps
     real(real64), allocatable, dimension(:) :: mu, sd, dist
 
@@ -232,19 +232,19 @@ subroutine em_impute(x, xc, mu, sigma, maxiter, tol, niter)
     real(real64), intent(out), optional, dimension(:,:) :: sigma
         !! An optional M-by-M matrix where the maximum-likelihood estimate of
         !! the covariance matrix will be written.
-    integer(int32), intent(in), optional :: maxiter
+    integer, intent(in), optional :: maxiter
         !! An optional input specifying the maximum number of iterations to
         !! allow.  The default is 500.
     real(real64), intent(in), optional :: tol
         !! An optional input specifying the convergence tolerance.  The
         !! iteration terminates once the largest change in any parameter falls
         !! below this value.  The default is 1.0e-8.
-    integer(int32), intent(out), optional :: niter
+    integer, intent(out), optional :: niter
         !! An optional output containing the number of iterations performed.
 
     ! Local Variables
     logical, allocatable, dimension(:,:) :: miss
-    integer(int32) :: i, n, m, iter, mxit
+    integer :: i, n, m, iter, mxit
     real(real64) :: delta, tolerance
     real(real64), allocatable, dimension(:) :: mv, mnew, xf
     real(real64), allocatable, dimension(:,:) :: sv, snew, cv, t2
@@ -340,10 +340,10 @@ subroutine multiple_impute(x, xc, nburn, maxiter, tol)
     real(real64), intent(out), dimension(:,:,:) :: xc
         !! An N-by-M-by-K array where the K completed data sets will be
         !! written.
-    integer(int32), intent(in), optional :: nburn
+    integer, intent(in), optional :: nburn
         !! An optional input specifying the number of data augmentation cycles
         !! to perform between successive imputations.  The default is 20.
-    integer(int32), intent(in), optional :: maxiter
+    integer, intent(in), optional :: maxiter
         !! An optional input specifying the maximum number of EM iterations to
         !! allow when computing the starting estimates.  The default is 500.
     real(real64), intent(in), optional :: tol
@@ -352,7 +352,7 @@ subroutine multiple_impute(x, xc, nburn, maxiter, tol)
 
     ! Local Variables
     logical, allocatable, dimension(:,:) :: miss
-    integer(int32) :: i, j, n, m, nk, imp, it, nb, df
+    integer :: i, j, n, m, nk, imp, it, nb, df
     real(real64), allocatable, dimension(:) :: mv, xbar, xf
     real(real64), allocatable, dimension(:,:) :: sv, cv, xfull, s, lc
 
@@ -427,7 +427,7 @@ pure subroutine pool_imputations(est, vars, qbar, tvar, dof)
         !! the pooled estimate.
 
     ! Local Variables
-    integer(int32) :: k
+    integer :: k
     real(real64) :: ubar, b, r, kr
 
     ! Initialization
@@ -474,7 +474,7 @@ pure subroutine column_stats(x, miss, mu, var)
     real(real64), intent(out), dimension(:) :: var
 
     ! Local Variables
-    integer(int32) :: i, j, n, m, cnt
+    integer :: i, j, n, m, cnt
 
     n = size(x, 1)
     m = size(x, 2)
@@ -509,7 +509,7 @@ subroutine starting_estimates(x, miss, mu, sigma)
     real(real64), intent(out), dimension(:,:) :: sigma
 
     ! Local Variables
-    integer(int32) :: j, m
+    integer :: j, m
     real(real64), allocatable, dimension(:) :: var
 
     ! A variable with no observed values cannot be imputed
@@ -551,8 +551,8 @@ subroutine conditional_step(xrow, miss, mu, sigma, draw, xf, cvar)
         !! is zeroed if DRAW is true.
 
     ! Local Variables
-    integer(int32) :: i, m, nm, no, io, im
-    integer(int32), allocatable, dimension(:) :: iobs, imis
+    integer :: i, m, nm, no, io, im
+    integer, allocatable, dimension(:) :: iobs, imis
     real(real64), allocatable, dimension(:) :: xhat
     real(real64), allocatable, dimension(:,:) :: soo, som, smm, z, lc, cmm
 
@@ -624,11 +624,11 @@ subroutine draw_inverse_wishart(s, df, rst)
     !! matrix S and DF degrees of freedom by means of the Bartlett 
     !! decomposition.
     real(real64), intent(in), dimension(:,:) :: s
-    integer(int32), intent(in) :: df
+    integer, intent(in) :: df
     real(real64), intent(out), dimension(:,:) :: rst
 
     ! Local Variables
-    integer(int32) :: i, m
+    integer :: i, m
     real(real64), allocatable, dimension(:) :: z
     real(real64), allocatable, dimension(:,:) :: sinv, c, a, w
 
@@ -659,7 +659,7 @@ end subroutine
 ! ------------------------------------------------------------------------------
 function std_normal(n) result(rst)
     !! Generates N standard normal deviates.
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
     real(real64), allocatable, dimension(:) :: rst
 
     rst = box_muller_sample(0.0d0, 1.0d0, n)
@@ -672,7 +672,7 @@ pure function outer_product(a, b) result(rst)
     real(real64), allocatable, dimension(:,:) :: rst
 
     ! Local Variables
-    integer(int32) :: i, j
+    integer :: i, j
 
     allocate(rst(size(a), size(b)))
     do j = 1, size(b)
@@ -685,11 +685,11 @@ end function
 ! ------------------------------------------------------------------------------
 pure function identity_matrix(n) result(rst)
     !! Constructs an N-by-N identity matrix.
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
     real(real64), allocatable, dimension(:,:) :: rst
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
 
     allocate(rst(n, n), source = 0.0d0)
     do i = 1, n
@@ -706,7 +706,7 @@ subroutine spd_cholesky(a, l)
     real(real64), intent(out), dimension(:,:) :: l
 
     ! Local Variables
-    integer(int32) :: i, n, attempt
+    integer :: i, n, attempt
     real(real64) :: jitter, scaling
     real(real64), allocatable, dimension(:,:) :: b
 
@@ -744,7 +744,7 @@ pure function is_valid_factor(l) result(rst)
     logical :: rst
 
     ! Local Variables
-    integer(int32) :: i
+    integer :: i
 
     rst = .true.
     do i = 1, size(l, 1)
@@ -762,7 +762,7 @@ function spd_inverse(a) result(rst)
     real(real64), allocatable, dimension(:,:) :: rst
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
     real(real64), allocatable, dimension(:,:) :: l
 
     n = size(a, 1)

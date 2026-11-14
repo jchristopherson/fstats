@@ -12,14 +12,29 @@
 
     <title>fstats_anova.f90 &ndash; FSTATS</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -75,8 +90,7 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                  title=" 1.8% of total for source files.">177 statements</a>
             </li>
 
@@ -96,9 +110,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -333,7 +349,7 @@
 <a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">zero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
 <a id="ln-178" name="ln-178" href="#ln-178"></a>
 <a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">nt</span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">nt</span>
 <a id="ln-181" name="ln-181" href="#ln-181"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sum_all</span><span class="p">,</span><span class="w"> </span><span class="n">tssq</span><span class="p">,</span><span class="w"> </span><span class="n">essq</span><span class="p">,</span><span class="w"> </span><span class="n">bssq</span><span class="p">,</span><span class="w"> </span><span class="n">gmean</span><span class="p">,</span><span class="w"> </span><span class="n">cmean</span>
 <a id="ln-182" name="ln-182" href="#ln-182"></a>
 <a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -419,7 +435,7 @@
 <a id="ln-263" name="ln-263" href="#ln-263"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
 <a id="ln-264" name="ln-264" href="#ln-264"></a>
 <a id="ln-265" name="ln-265" href="#ln-265"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-266" name="ln-266" href="#ln-266"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">jj</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-266" name="ln-266" href="#ln-266"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">jj</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-267" name="ln-267" href="#ln-267"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factorMean</span><span class="p">,</span><span class="w"> </span><span class="n">sum_all</span>
 <a id="ln-268" name="ln-268" href="#ln-268"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xpack</span><span class="p">(:)</span>
 <a id="ln-269" name="ln-269" href="#ln-269"></a>
@@ -526,7 +542,7 @@
 <a id="ln-370" name="ln-370" href="#ln-370"></a><span class="c">! REF: https://www.spcforexcel.com/knowledge/root-cause-analysis/understanding-regression-statistics-part-1</span>
 <a id="ln-371" name="ln-371" href="#ln-371"></a><span class="k">function </span><span class="n">anova_model_fit</span><span class="p">(</span><span class="n">nmodelparams</span><span class="p">,</span><span class="w"> </span><span class="n">ymeas</span><span class="p">,</span><span class="w"> </span><span class="n">ymod</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
 <a id="ln-372" name="ln-372" href="#ln-372"></a><span class="w">    </span><span class="c">!! Performs an analysis of variance (ANOVA) on the supplied data set.</span>
-<a id="ln-373" name="ln-373" href="#ln-373"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nmodelparams</span>
+<a id="ln-373" name="ln-373" href="#ln-373"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nmodelparams</span>
 <a id="ln-374" name="ln-374" href="#ln-374"></a><span class="w">        </span><span class="c">!! The number of model parameters.</span>
 <a id="ln-375" name="ln-375" href="#ln-375"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ymeas</span><span class="p">(:)</span>
 <a id="ln-376" name="ln-376" href="#ln-376"></a><span class="w">        </span><span class="c">!! An N-element array containing the measured dependent variable data.</span>
@@ -536,7 +552,7 @@
 <a id="ln-380" name="ln-380" href="#ln-380"></a><span class="w">        </span><span class="c">!! A single_factor_anova_table instance containing the ANOVA results.</span>
 <a id="ln-381" name="ln-381" href="#ln-381"></a>
 <a id="ln-382" name="ln-382" href="#ln-382"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-383" name="ln-383" href="#ln-383"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-383" name="ln-383" href="#ln-383"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-384" name="ln-384" href="#ln-384"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sum_all</span>
 <a id="ln-385" name="ln-385" href="#ln-385"></a><span class="w">    </span>
 <a id="ln-386" name="ln-386" href="#ln-386"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -613,40 +629,21 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:39              </p>
+ on 2026-11-12 14:47 -0600             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>

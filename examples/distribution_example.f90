@@ -86,7 +86,7 @@ program example
     implicit none
 
     ! Local Variables
-    integer(int32), parameter :: npts = 100
+    integer, parameter :: npts = 100
     real(real64) :: x(npts)
     type(f_distribution) :: fd
 

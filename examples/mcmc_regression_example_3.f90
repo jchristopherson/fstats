@@ -28,7 +28,7 @@ module data_container
     use iso_fortran_env
     implicit none
 
-    integer(int32), parameter :: ndata = 81
+    integer, parameter :: ndata = 81
 
     real(real64), parameter, dimension(ndata) :: xdata = [20.0d0, 22.0d0, 24.0d0, &
         26.0d0, 28.0d0, 30.0d0, 31.0d0, 32.0d0, 33.0d0, 34.0d0, 35.0d0, 36.0d0, &
