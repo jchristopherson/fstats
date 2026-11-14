@@ -40,16 +40,16 @@ module fstats_interp
     public :: hermite_interpolator
 
         
-    integer(int32), parameter :: SPLINE_QUADRATIC_OVER_INTERVAL = 1000
+    integer, parameter :: SPLINE_QUADRATIC_OVER_INTERVAL = 1000
         !! Indicates that the spline is quadratic over the interval under
         !! consideration (beginning or ending interval).
-    integer(int32), parameter :: SPLINE_KNOWN_FIRST_DERIVATIVE = 1001
+    integer, parameter :: SPLINE_KNOWN_FIRST_DERIVATIVE = 1001
         !! Indicates a known first derivative at either the beginning or ending
         !! point.
-    integer(int32), parameter :: SPLINE_KNOWN_SECOND_DERIVATIVE = 1002
+    integer, parameter :: SPLINE_KNOWN_SECOND_DERIVATIVE = 1002
         !! Indicates a known second derivative at either the beginning or ending
         !! point.
-    integer(int32), parameter :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE = 1003
+    integer, parameter :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE = 1003
         !! Indicates a continuous third derivative at either the beginning or 
         !! ending point.
 
@@ -61,15 +61,15 @@ module fstats_interp
             !! An N-element array containing the raw x-coordinate data.
         real(real64), public, allocatable, dimension(:) :: y
             !! An N-element array containing the raw y-coordinate data.
-        integer(int32), private :: m_order
+        integer, private :: m_order
             !! The order of the interpolating polynomial.
-        integer(int32), private :: m_nearestIndex
+        integer, private :: m_nearestIndex
             !! The saved nearest index from the last search.  Utilizing this
             !! value improves the behavior of the search.
-        integer(int32), private :: m_method
+        integer, private :: m_method
             !! An integer used to identify the search method to use during
             !! interpolation.
-        integer(int32), private :: m_indexDelta
+        integer, private :: m_indexDelta
             !! The bracket index difference.
     contains
         procedure, public :: initialize => im_init
@@ -194,7 +194,7 @@ pure function is_monotonic(x) result(rst)
         !! Returns true if the array is monotonic; else, false.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     logical :: ascend
 
     ! Process
@@ -230,11 +230,11 @@ subroutine im_init(this, x, y, order)
         !! monotonically increasing or decreasing order.
     real(real64), intent(in), dimension(:) :: y
         !! An N-element array containing the y-coordinate data.
-    integer(int32), intent(in) :: order
+    integer, intent(in) :: order
         !! The order of the interpolating polynomial.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     
     ! Initialization
     n = size(x)
@@ -266,7 +266,7 @@ pure function im_get_method(this) result(rst)
     !! Gets an integer representing the search method to utilize.
     class(interpolation_manager), intent(in) :: this
         !! The interpolation_manager object.
-    integer(int32) :: rst
+    integer :: rst
         !! The method identifier.
     rst = this%m_method
 end function
@@ -276,7 +276,7 @@ pure function im_get_order(this) result(rst)
     !! Gets the polynomial order.
     class(interpolation_manager), intent(in) :: this
         !! The interpolation_manager object.
-    integer(int32) :: rst
+    integer :: rst
         !! The order.
     rst = this%m_order
 end function
@@ -288,13 +288,13 @@ function im_locate(this, x) result(rst)
         !! The interpolation_manager object.
     real(real64), intent(in) :: x
         !! The x-coordinate of interest.
-    integer(int32) :: rst
+    integer :: rst
         !! The index below the nearest entry to x.  This value is always within
         !! the range of possible indices for the stored data.
 
     ! Local Variables
     logical :: ascnd
-    integer(int32) :: ju, jm, jl, n
+    integer :: ju, jm, jl, n
 
     ! Initialization
     n = size(this%x)
@@ -338,12 +338,12 @@ function im_hunt(this, x) result(rst)
         !! The interpolation_manager object.
     real(real64), intent(in) :: x
         !! The x-coordinate of interest.
-    integer(int32) :: rst
+    integer :: rst
         !! The index below the nearest entry to x.  This value is always within
         !! the range of possible indices for the stored data.
 
     ! Local Variables
-    integer(int32) :: jl, jm, ju, inc, n
+    integer :: jl, jm, ju, inc, n
     logical :: ascnd
 
     ! Initialization
@@ -420,7 +420,7 @@ pure function im_size(this) result(rst)
     !! Gets the size of the stored raw data array.
     class(interpolation_manager), intent(in) :: this
         !! The interpolation_manager object.
-    integer(int32) :: rst
+    integer :: rst
         !! The size of the stored data.
 
     if (allocated(this%x)) then
@@ -444,7 +444,7 @@ subroutine bi_interp(this, x, yi)
         !! An N-element array  containing the interpolated data.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     
     ! Initialization
     n = size(x)
@@ -486,7 +486,7 @@ function li_raw_interp(this, x) result(rst)
         !! The interpolated value.
 
     ! Local Variables
-    integer(int32) :: j
+    integer :: j
 
     ! Locate the proper index
     if (this%m_manager%method() == 1) then
@@ -518,7 +518,7 @@ function pi_raw_interp(this, x) result(rst)
         !! The interpolated value.
 
     ! Local Variables
-    integer(int32) :: i, ind, m, n, ns, mm, jl, jlo
+    integer :: i, ind, m, n, ns, mm, jl, jlo
     real(real64) :: den, dif, dift, ho, hp, w, dy
 
     ! Initialization
@@ -577,7 +577,7 @@ subroutine pi_init(this, order, x, y)
     !! Initializes the interpolation object.
     class(polynomial_interpolator), intent(inout) :: this
         !! The polynomial_interpolator object.
-    integer(int32), intent(in) :: order
+    integer, intent(in) :: order
         !! The polynomial order.  This value must be at least 1.
     real(real64), intent(in), dimension(:) :: x
         !! An N-element array containing the x-coordinate data in either
@@ -586,7 +586,7 @@ subroutine pi_init(this, order, x, y)
         !! An N-element array containing the y-coordinate data.
 
     ! Local Variables
-    integer(int32) :: m
+    integer :: m
     
     ! Initialization
     call this%m_manager%initialize(x, y, order)
@@ -611,7 +611,7 @@ function si_raw_interp(this, x) result(rst)
         !! The interpolated value.
 
     ! Local Variables
-    integer(int32) :: jlo, right
+    integer :: jlo, right
     real(real64) :: dt, h, yr, yl
 
     ! Initialization
@@ -665,7 +665,7 @@ subroutine penta_solve(a1, a2, a3, a4, a5, b, x)
         !! linear system.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     real(real64) :: xmult
 
     ! Initialization
@@ -702,7 +702,7 @@ subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend)
         !! monotonically increasing or decreasing order.
     real(real64), intent(in), dimension(:) :: y
         !! An N-element array containing the y-coordinate data.
-    integer(int32), intent(in), optional :: ibcbeg
+    integer, intent(in), optional :: ibcbeg
         !! An optional input that defines the nature of the boundary condition 
         !! at the beginning of the spline.  If no parameter, or an invalid 
         !! parameter, is specified, the default condition
@@ -722,7 +722,7 @@ subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend)
     real(real64), intent(in), optional :: ybcbeg
         !! If needed, the value of the initial point boundary condition.  If 
         !! needed, but not supplied, a default value of zero will be used.
-    integer(int32), intent(in), optional :: ibcend
+    integer, intent(in), optional :: ibcend
         !! An optional input that defines the nature of the boundary condition 
         !! at the end of the spline.  If no parameter, or an invalid 
         !! parameter, is specified, the default condition
@@ -744,7 +744,7 @@ subroutine si_init(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend)
         !! needed, but not supplied, a default value of zero will be used.
 
     ! Local Variables
-    integer(int32) :: ibeg, iend, n
+    integer :: ibeg, iend, n
     real(real64) :: ybeg, yend
     
     ! Initialization
@@ -787,7 +787,7 @@ subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend)
     !! Computes the second derivative terms for the cubic-spline model.
     class(spline_interpolator), intent(inout) :: this
         !! The spline_interpolator object.
-    integer(int32), intent(in) :: ibcbeg
+    integer, intent(in) :: ibcbeg
         !! An input that defines the nature of the boundary condition 
         !! at the beginning of the spline.
         !!
@@ -804,7 +804,7 @@ subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend)
         !!      continuous at x(2).
     real(real64), intent(in) :: ybcbeg
         !! The value of the initial point boundary condition.
-    integer(int32), intent(in) :: ibcend
+    integer, intent(in) :: ibcend
         !! An input that defines the nature of the boundary condition 
         !! at the end of the spline.
         !!
@@ -823,7 +823,7 @@ subroutine si_second_diff(this, ibcbeg, ybcbeg, ibcend, ybcend)
         !! The value of the final point boundary condition.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
     real(real64), allocatable ,dimension(:) :: a1, a2, a3, a4, a5, b
     
     ! Initialization
@@ -913,7 +913,7 @@ subroutine hi_dif_deriv(this)
         !! The hermite_interpolator object.
 
     ! Local Variables
-    integer(int32) :: i, nd, ndp
+    integer :: i, nd, ndp
     
     ! Initialization
     nd = size(this%m_xd)
@@ -943,7 +943,7 @@ subroutine hi_set_up_table(this)
         !! The hermite_interpolator object.
 
     ! Local Variables
-    integer(int32) :: i, j, n, nd, ndp
+    integer :: i, j, n, nd, ndp
     
     ! Initialization
     n = size(this%m_x)
@@ -989,7 +989,7 @@ subroutine hi_init(this, x, y, yp)
         !! An N-element array containing the first derivative of the data.
 
     ! Local Variables
-    integer(int32) :: n
+    integer :: n
     
     ! Initialization
     n = size(x)
@@ -1043,7 +1043,7 @@ subroutine hi_interp_all(this, x, yi, ypi)
         !! data, if supplied.
 
     ! Local Variables
-    integer(int32) :: i, nd, nv, ndp
+    integer :: i, nd, nv, ndp
     
     ! Initialization
     nd = size(this%m_xd)
@@ -1105,7 +1105,7 @@ subroutine dif_shift_x(xd, yd, xv)
         !! polynomial.
 
     ! Local Variables
-    integer(int32) :: i, nd
+    integer :: i, nd
 
     ! Recompute the divided difference coefficients
     nd = size(xd)
@@ -1129,7 +1129,7 @@ subroutine dif_shift_zero(xd, yd)
         !! coefficient array for the standard representation of the polynomial.
 
     ! Local Variables
-    integer(int32) :: i, nd
+    integer :: i, nd
     real(real64) :: xv
 
     ! Process

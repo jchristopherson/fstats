@@ -12,14 +12,29 @@
 
     <title>fstats_descriptive_statistics.f90 &ndash; FSTATS</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -75,8 +90,7 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                  title=" 3.8% of total for source files.">370 statements</a>
             </li>
 
@@ -96,9 +110,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -248,7 +264,7 @@
 <a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">        </span><span class="c">!! Positive finite scale, normally MAXVAL(ABS(x)).</span>
 <a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">        </span><span class="c">!! Shifted/scaled observations; the first entry is zero.</span>
-<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">observation</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">observation</span>
 <a id="ln-96" name="ln-96" href="#ln-96"></a>
 <a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">rst</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
 <a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">    </span><span class="k">do </span><span class="n">observation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -270,7 +286,7 @@
 <a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">        </span><span class="c">!! and an unrepresentable result gives positive infinity.</span>
 <a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">shifted</span>
 <a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">scale_value</span><span class="p">,</span><span class="w"> </span><span class="n">running_mean</span><span class="p">,</span><span class="w"> </span><span class="n">delta</span><span class="p">,</span><span class="w"> </span><span class="n">second_moment</span><span class="p">,</span><span class="w"> </span><span class="n">factor</span>
-<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">observation</span><span class="p">,</span><span class="w"> </span><span class="nb">count</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">observation</span><span class="p">,</span><span class="w"> </span><span class="nb">count</span>
 <a id="ln-118" name="ln-118" href="#ln-118"></a>
 <a id="ln-119" name="ln-119" href="#ln-119"></a><span class="nb">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ieee_value</span><span class="p">(</span><span class="mf">0.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">ieee_quiet_nan</span><span class="p">)</span>
 <a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">    </span><span class="nb">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -308,7 +324,7 @@
 <a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">zero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
 <a id="ln-153" name="ln-153" href="#ln-153"></a>
 <a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">scale_value</span><span class="p">,</span><span class="w"> </span><span class="n">compensation</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p">,</span><span class="w"> </span><span class="n">updated</span>
 <a id="ln-157" name="ln-157" href="#ln-157"></a>
 <a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">    </span><span class="c">! Process</span>
@@ -391,7 +407,7 @@
 <a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">half</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5d0</span>
 <a id="ln-236" name="ln-236" href="#ln-236"></a>
 <a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-238" name="ln-238" href="#ln-238"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">nmid</span><span class="p">,</span><span class="w"> </span><span class="n">nmidp1</span><span class="p">,</span><span class="w"> </span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="n">iflag</span>
+<a id="ln-238" name="ln-238" href="#ln-238"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">nmid</span><span class="p">,</span><span class="w"> </span><span class="n">nmidp1</span><span class="p">,</span><span class="w"> </span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="n">iflag</span>
 <a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xc</span>
 <a id="ln-240" name="ln-240" href="#ln-240"></a>
 <a id="ln-241" name="ln-241" href="#ln-241"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -437,7 +453,7 @@
 <a id="ln-281" name="ln-281" href="#ln-281"></a>
 <a id="ln-282" name="ln-282" href="#ln-282"></a><span class="w">    </span><span class="c">! Local Variables</span>
 <a id="ln-283" name="ln-283" href="#ln-283"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span>
-<a id="ln-284" name="ln-284" href="#ln-284"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">ib</span>
+<a id="ln-284" name="ln-284" href="#ln-284"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">ib</span>
 <a id="ln-285" name="ln-285" href="#ln-285"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xc</span><span class="p">(:)</span>
 <a id="ln-286" name="ln-286" href="#ln-286"></a>
 <a id="ln-287" name="ln-287" href="#ln-287"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -489,7 +505,7 @@
 <a id="ln-333" name="ln-333" href="#ln-333"></a><span class="w">        </span><span class="c">!! Trimmed mean; invalid p or empty/nonfinite data give NaN.</span>
 <a id="ln-334" name="ln-334" href="#ln-334"></a>
 <a id="ln-335" name="ln-335" href="#ln-335"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-336" name="ln-336" href="#ln-336"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-336" name="ln-336" href="#ln-336"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-337" name="ln-337" href="#ln-337"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pv</span>
 <a id="ln-338" name="ln-338" href="#ln-338"></a>
 <a id="ln-339" name="ln-339" href="#ln-339"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -527,7 +543,7 @@
 <a id="ln-371" name="ln-371" href="#ln-371"></a><span class="w">        </span><span class="c">!! Sample covariance; fewer than two observations or nonfinite inputs</span>
 <a id="ln-372" name="ln-372" href="#ln-372"></a><span class="w">        </span><span class="c">!! give NaN. An unrepresentable result gives signed infinity.</span>
 <a id="ln-373" name="ln-373" href="#ln-373"></a>
-<a id="ln-374" name="ln-374" href="#ln-374"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-374" name="ln-374" href="#ln-374"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-375" name="ln-375" href="#ln-375"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">meanX</span><span class="p">,</span><span class="w"> </span><span class="n">meanY</span><span class="p">,</span><span class="w"> </span><span class="n">scaleX</span><span class="p">,</span><span class="w"> </span><span class="n">scaleY</span><span class="p">,</span><span class="w"> </span><span class="n">compensation</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p">,</span><span class="w"> </span><span class="n">updated</span><span class="p">,</span><span class="w"> </span><span class="n">log_magnitude</span>
 <a id="ln-376" name="ln-376" href="#ln-376"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">shiftedX</span><span class="p">,</span><span class="w"> </span><span class="n">shiftedY</span>
 <a id="ln-377" name="ln-377" href="#ln-377"></a>
@@ -569,14 +585,14 @@
 <a id="ln-413" name="ln-413" href="#ln-413"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">si</span>
 <a id="ln-414" name="ln-414" href="#ln-414"></a><span class="w">        </span><span class="c">!! An N-element array containing the estimates for each of the N</span>
 <a id="ln-415" name="ln-415" href="#ln-415"></a><span class="w">        </span><span class="c">!! variances.</span>
-<a id="ln-416" name="ln-416" href="#ln-416"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">si</span><span class="p">))</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ni</span>
+<a id="ln-416" name="ln-416" href="#ln-416"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">si</span><span class="p">))</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ni</span>
 <a id="ln-417" name="ln-417" href="#ln-417"></a><span class="w">        </span><span class="c">!! An N-element array containing the number of data points in each</span>
 <a id="ln-418" name="ln-418" href="#ln-418"></a><span class="w">        </span><span class="c">!! of the data sets used to compute the variances in si.</span>
 <a id="ln-419" name="ln-419" href="#ln-419"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-420" name="ln-420" href="#ln-420"></a><span class="w">        </span><span class="c">!! Pooled variance; empty inputs, nonfinite/negative variances, or</span>
 <a id="ln-421" name="ln-421" href="#ln-421"></a><span class="w">        </span><span class="c">!! groups with fewer than two observations give NaN.</span>
 <a id="ln-422" name="ln-422" href="#ln-422"></a>
-<a id="ln-423" name="ln-423" href="#ln-423"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">k</span>
+<a id="ln-423" name="ln-423" href="#ln-423"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">k</span>
 <a id="ln-424" name="ln-424" href="#ln-424"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">degrees_of_freedom</span>
 <a id="ln-425" name="ln-425" href="#ln-425"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">scale_value</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p">,</span><span class="w"> </span><span class="n">compensation</span><span class="p">,</span><span class="w"> </span><span class="n">updated</span>
 <a id="ln-426" name="ln-426" href="#ln-426"></a>
@@ -607,9 +623,9 @@
 <a id="ln-451" name="ln-451" href="#ln-451"></a><span class="w">        </span><span class="c">!! Pooled variance; empty/unallocated groups or groups with fewer than</span>
 <a id="ln-452" name="ln-452" href="#ln-452"></a><span class="w">        </span><span class="c">!! two finite observations give NaN.</span>
 <a id="ln-453" name="ln-453" href="#ln-453"></a>
-<a id="ln-454" name="ln-454" href="#ln-454"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">k</span>
+<a id="ln-454" name="ln-454" href="#ln-454"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">k</span>
 <a id="ln-455" name="ln-455" href="#ln-455"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group_variances</span>
-<a id="ln-456" name="ln-456" href="#ln-456"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group_sizes</span>
+<a id="ln-456" name="ln-456" href="#ln-456"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group_sizes</span>
 <a id="ln-457" name="ln-457" href="#ln-457"></a>
 <a id="ln-458" name="ln-458" href="#ln-458"></a><span class="w">    </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <a id="ln-459" name="ln-459" href="#ln-459"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ieee_value</span><span class="p">(</span><span class="mf">0.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">ieee_quiet_nan</span><span class="p">)</span>
@@ -746,7 +762,7 @@
 <a id="ln-590" name="ln-590" href="#ln-590"></a><span class="w">    </span><span class="c">!! Unequal counts cause ERROR STOP with FS_ARRAY_SIZE_ERROR.</span>
 <a id="ln-591" name="ln-591" href="#ln-591"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">data_column</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">si</span>
 <a id="ln-592" name="ln-592" href="#ln-592"></a><span class="w">        </span><span class="c">!! Group variance estimates, unchanged; unallocated storage is empty.</span>
-<a id="ln-593" name="ln-593" href="#ln-593"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ni</span>
+<a id="ln-593" name="ln-593" href="#ln-593"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ni</span>
 <a id="ln-594" name="ln-594" href="#ln-594"></a><span class="w">        </span><span class="c">!! Group observation counts; must have si&#39;s count and each be at least two.</span>
 <a id="ln-595" name="ln-595" href="#ln-595"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-596" name="ln-596" href="#ln-596"></a><span class="w">        </span><span class="c">!! Pooled variance; empty data, negative/nonfinite estimates, or invalid</span>
@@ -765,8 +781,8 @@
 <a id="ln-609" name="ln-609" href="#ln-609"></a><span class="w">        </span><span class="c">!! Pooled variance; no groups, undersized/unallocated groups, or</span>
 <a id="ln-610" name="ln-610" href="#ln-610"></a><span class="w">        </span><span class="c">!! nonfinite observations give NaN, as in the array-container overload.</span>
 <a id="ln-611" name="ln-611" href="#ln-611"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group_variances</span>
-<a id="ln-612" name="ln-612" href="#ln-612"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group_sizes</span>
-<a id="ln-613" name="ln-613" href="#ln-613"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group</span>
+<a id="ln-612" name="ln-612" href="#ln-612"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group_sizes</span>
+<a id="ln-613" name="ln-613" href="#ln-613"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">group</span>
 <a id="ln-614" name="ln-614" href="#ln-614"></a>
 <a id="ln-615" name="ln-615" href="#ln-615"></a><span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">group_variances</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span><span class="w"> </span><span class="n">group_sizes</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
 <a id="ln-616" name="ln-616" href="#ln-616"></a><span class="w">    </span><span class="k">do </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -789,40 +805,21 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:39              </p>
+ on 2026-11-12 14:47 -0600             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>

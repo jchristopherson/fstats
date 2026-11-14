@@ -56,7 +56,7 @@ module fstats_experimental_design
         !! two-way model is
         !! \(Y = \beta_{0} + \beta_{1} X_{1} + \beta_{2} X_{2} + \beta_{12} 
         !! X_{1} X_{2} + \beta_{11} X_{1}^{2} + \beta_{22} X_{2}^{2}\).
-        integer(int32) :: nway
+        integer :: nway
             !! The number of interaction levels.
         real(real64), allocatable, dimension(:) :: coefficients
             !! The model coefficients, where N is the number of factors.  The
@@ -101,7 +101,7 @@ module fstats_experimental_design
         real(real64) :: mse = 0.0d0
             !! The residual mean squared error of the fit, \( SS_{res} / 
             !! (m - p) \).  This is only meaningful if dof > 0.
-        integer(int32) :: dof = 0
+        integer :: dof = 0
             !! The residual degrees of freedom of the fit, \( m - p \).  A 
             !! value of zero indicates the fit information is not available
             !! (e.g. the model was not created by doe_fit_model).
@@ -123,9 +123,9 @@ module fstats_experimental_design
             !! P-value for the overall F-statistic.
         real(real64) :: mean_response
             !! Mean of the response variable.
-        integer(int32) :: n_observations
+        integer :: n_observations
             !! Number of observations.
-        integer(int32) :: n_parameters
+        integer :: n_parameters
             !! Number of model parameters (including intercept).
     end type
 
@@ -176,11 +176,11 @@ module fstats_experimental_design
             !! otherwise.
         logical :: is_orthogonal
             !! True if design is perfectly orthogonal.
-        integer(int32) :: n_runs
+        integer :: n_runs
             !! Number of design runs.
-        integer(int32) :: n_factors
+        integer :: n_factors
             !! Number of factors.
-        integer(int32) :: n_parameters
+        integer :: n_parameters
             !! Number of model parameters.
     end type
 
@@ -198,7 +198,7 @@ module fstats_experimental_design
             !! Model intercept.
         real(real64) :: response_at_center
             !! Predicted response at design center (coded 0,0,...,0).
-        integer(int32) :: n_factors
+        integer :: n_factors
             !! Number of factors.
     end type
 
@@ -210,7 +210,7 @@ module fstats_experimental_design
             !! Optimal factor settings (in natural scale).
         real(real64) :: optimal_response
             !! Predicted response at optimal point.
-        integer(int32) :: iteration_count
+        integer :: iteration_count
             !! Number of iterations to converge.
         logical :: converged
             !! Whether optimization converged.
@@ -230,11 +230,11 @@ module fstats_experimental_design
             !! Residual sum of squares for full model.
         real(real64) :: rss_reduced
             !! Residual sum of squares for reduced model.
-        integer(int32) :: df_full
+        integer :: df_full
             !! Degrees of freedom for full model.
-        integer(int32) :: df_reduced
+        integer :: df_reduced
             !! Degrees of freedom for reduced model.
-        integer(int32) :: df_diff
+        integer :: df_diff
             !! Difference in degrees of freedom.
         logical :: significant_difference
             !! True if models differ significantly (p < 0.05).
@@ -250,11 +250,11 @@ module fstats_experimental_design
             !! Model sum of squares.
         real(real64) :: ss_residual
             !! Residual sum of squares.
-        integer(int32) :: df_total
+        integer :: df_total
             !! Total degrees of freedom.
-        integer(int32) :: df_model
+        integer :: df_model
             !! Model degrees of freedom.
-        integer(int32) :: df_residual
+        integer :: df_residual
             !! Residual degrees of freedom.
         real(real64) :: ms_model
             !! Model mean square.

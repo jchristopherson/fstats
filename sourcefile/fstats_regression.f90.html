@@ -12,14 +12,29 @@
 
     <title>fstats_regression.f90 &ndash; FSTATS</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -75,8 +90,7 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                  title=" 3.3% of total for source files.">321 statements</a>
             </li>
 
@@ -96,9 +110,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -237,9 +253,9 @@
 <a id="ln-81" name="ln-81" href="#ln-81"></a>
 <a id="ln-82" name="ln-82" href="#ln-82"></a><span class="k">    type </span><span class="n">iteration_controls</span>
 <a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">        </span><span class="c">!! Provides a collection of iteration control parameters.</span>
-<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">max_iteration_count</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">max_iteration_count</span>
 <a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">            </span><span class="c">!! Defines the maximum number of iterations allowed.</span>
-<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">max_function_evaluations</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">max_function_evaluations</span>
 <a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">            </span><span class="c">!! Defines the maximum number of function evaluations allowed.</span>
 <a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">gradient_tolerance</span>
 <a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">            </span><span class="c">!! Defines a tolerance on the gradient of the fitted function.</span>
@@ -251,7 +267,7 @@
 <a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iteration_improvement_tolerance</span>
 <a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">            </span><span class="c">!! Defines a tolerance to ensure adequate improvement on each </span>
 <a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">            </span><span class="c">!! iteration.</span>
-<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">max_iteration_between_updates</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">max_iteration_between_updates</span>
 <a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">            </span><span class="c">!! Defines how many iterations can pass before a re-evaluation of </span>
 <a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">            </span><span class="c">!! the Jacobian matrix is forced.</span>
 <a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">    </span><span class="k">contains</span>
@@ -277,16 +293,16 @@
 <a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">reach_iteration_limit</span>
 <a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">            </span><span class="c">!! True if the solution did not converge in the allowed number of </span>
 <a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">            </span><span class="c">!! iterations.</span>
-<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iteration_count</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iteration_count</span>
 <a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">            </span><span class="c">!! The iteration count.</span>
 <a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">reach_function_evaluation_limit</span>
 <a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">            </span><span class="c">!! True if the solution did not converge in the allowed number of</span>
 <a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">            </span><span class="c">!! function evaluations.</span>
-<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">function_evaluation_count</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">function_evaluation_count</span>
 <a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">            </span><span class="c">!! The function evaluation count.</span>
 <a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">user_requested_stop</span>
 <a id="ln-132" name="ln-132" href="#ln-132"></a><span class="w">            </span><span class="c">!! True if the user requested the stop; else, false.</span>
-<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">covariance_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">covariance_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
 <a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">            </span><span class="c">!! Numerical rank of the final weighted Jacobian when covariance is requested.</span>
 <a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">covariance_condition_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
 <a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">            </span><span class="c">!! Condition number of that Jacobian; infinity indicates rank deficiency.</span>
@@ -310,7 +326,7 @@
 <a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">                </span><span class="c">!! set to true, the iteration process will terminate.  If set</span>
 <a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">                </span><span class="c">!! to false, the iteration process will continue along as </span>
 <a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">                </span><span class="c">!! normal.</span>
-<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">            </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">            </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span>
 <a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">                </span><span class="c">!! An optional argument allowing the passing in/out of data.</span>
 <a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">        </span><span class="k">end subroutine</span>
 <a id="ln-160" name="ln-160" href="#ln-160"></a>
@@ -318,7 +334,7 @@
 <a id="ln-162" name="ln-162" href="#ln-162"></a><span class="w">            </span><span class="c">!! Defines a routine for providing updates about an iteration</span>
 <a id="ln-163" name="ln-163" href="#ln-163"></a><span class="w">            </span><span class="c">!! process.</span>
 <a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">            </span><span class="k">use </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">int32</span><span class="p">,</span><span class="w"> </span><span class="n">real64</span>
-<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">            </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iter</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">            </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iter</span>
 <a id="ln-166" name="ln-166" href="#ln-166"></a><span class="w">                </span><span class="c">!! The current iteration number.</span>
 <a id="ln-167" name="ln-167" href="#ln-167"></a><span class="w">            </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">funvals</span>
 <a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">                </span><span class="c">!! The function values.</span>
@@ -362,7 +378,7 @@
 <a id="ln-206" name="ln-206" href="#ln-206"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
 <a id="ln-207" name="ln-207" href="#ln-207"></a>
 <a id="ln-208" name="ln-208" href="#ln-208"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-209" name="ln-209" href="#ln-209"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-209" name="ln-209" href="#ln-209"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-210" name="ln-210" href="#ln-210"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">esum</span><span class="p">,</span><span class="w"> </span><span class="n">vt</span>
 <a id="ln-211" name="ln-211" href="#ln-211"></a><span class="w">    </span>
 <a id="ln-212" name="ln-212" href="#ln-212"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -393,7 +409,7 @@
 <a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">    </span><span class="c">!! See Also:</span>
 <a id="ln-238" name="ln-238" href="#ln-238"></a><span class="w">    </span><span class="c">!!</span>
 <a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">    </span><span class="c">!! - &lt;a href=&quot;https://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2&quot; target=&quot;_blank&quot;&gt;Wikipedia&lt;/a&gt;</span>
-<a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">p</span>
+<a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">p</span>
 <a id="ln-241" name="ln-241" href="#ln-241"></a><span class="w">        </span><span class="c">!! The number of variables.</span>
 <a id="ln-242" name="ln-242" href="#ln-242"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">(:)</span>
 <a id="ln-243" name="ln-243" href="#ln-243"></a><span class="w">        </span><span class="c">!! An N-element array containing the dependent variables from </span>
@@ -405,7 +421,7 @@
 <a id="ln-249" name="ln-249" href="#ln-249"></a><span class="w">        </span><span class="c">!! The result.</span>
 <a id="ln-250" name="ln-250" href="#ln-250"></a>
 <a id="ln-251" name="ln-251" href="#ln-251"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-252" name="ln-252" href="#ln-252"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-252" name="ln-252" href="#ln-252"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-253" name="ln-253" href="#ln-253"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">r2</span>
 <a id="ln-254" name="ln-254" href="#ln-254"></a>
 <a id="ln-255" name="ln-255" href="#ln-255"></a><span class="w">    </span><span class="c">! Parameters</span>
@@ -438,7 +454,7 @@
 <a id="ln-282" name="ln-282" href="#ln-282"></a>
 <a id="ln-283" name="ln-283" href="#ln-283"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">centeredX</span><span class="p">,</span><span class="w"> </span><span class="n">centeredY</span>
 <a id="ln-284" name="ln-284" href="#ln-284"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">scaleX</span><span class="p">,</span><span class="w"> </span><span class="n">scaleY</span><span class="p">,</span><span class="w"> </span><span class="n">normX</span><span class="p">,</span><span class="w"> </span><span class="n">normY</span>
-<a id="ln-285" name="ln-285" href="#ln-285"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">observation</span>
+<a id="ln-285" name="ln-285" href="#ln-285"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">observation</span>
 <a id="ln-286" name="ln-286" href="#ln-286"></a>
 <a id="ln-287" name="ln-287" href="#ln-287"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ieee_value</span><span class="p">(</span><span class="mf">0.0d0</span><span class="p">,</span><span class="w"> </span><span class="n">ieee_quiet_nan</span><span class="p">)</span>
 <a id="ln-288" name="ln-288" href="#ln-288"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="k">all</span><span class="p">(</span><span class="n">ieee_is_finite</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="k">all</span><span class="p">(</span><span class="n">ieee_is_finite</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span><span class="w"> </span><span class="k">return</span>
@@ -481,7 +497,7 @@
 <a id="ln-325" name="ln-325" href="#ln-325"></a><span class="w">    </span><span class="c">!! - &lt;a href=&quot;https://en.wikipedia.org/wiki/Linear_regression&quot; target=&quot;_blank&quot;&gt;Wikipedia - Linear Regression&lt;/a&gt;</span>
 <a id="ln-326" name="ln-326" href="#ln-326"></a><span class="w">    </span><span class="c">!! - &lt;a href=&quot;https://en.wikipedia.org/wiki/Vandermonde_matrix&quot; target=&quot;_blank&quot;&gt;Wikipedia - Vandermonde Matrix&lt;/a&gt;</span>
 <a id="ln-327" name="ln-327" href="#ln-327"></a><span class="w">    </span><span class="c">!! - &lt;a href=&quot;https://en.wikipedia.org/wiki/Design_matrix&quot; target=&quot;_blank&quot;&gt;Wikipedia - Design Matrix&lt;/a&gt;</span>
-<a id="ln-328" name="ln-328" href="#ln-328"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">order</span>
+<a id="ln-328" name="ln-328" href="#ln-328"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">order</span>
 <a id="ln-329" name="ln-329" href="#ln-329"></a><span class="w">        </span><span class="c">!! The order of the equation to fit.  This value must be</span>
 <a id="ln-330" name="ln-330" href="#ln-330"></a><span class="w">        </span><span class="c">!! at least one (linear equation), but can be higher as desired.</span>
 <a id="ln-331" name="ln-331" href="#ln-331"></a><span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">intercept</span>
@@ -499,7 +515,7 @@
 <a id="ln-343" name="ln-343" href="#ln-343"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
 <a id="ln-344" name="ln-344" href="#ln-344"></a>
 <a id="ln-345" name="ln-345" href="#ln-345"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-346" name="ln-346" href="#ln-346"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">npts</span><span class="p">,</span><span class="w"> </span><span class="n">ncols</span>
+<a id="ln-346" name="ln-346" href="#ln-346"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">npts</span><span class="p">,</span><span class="w"> </span><span class="n">ncols</span>
 <a id="ln-347" name="ln-347" href="#ln-347"></a><span class="w">    </span>
 <a id="ln-348" name="ln-348" href="#ln-348"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-349" name="ln-349" href="#ln-349"></a><span class="w">    </span><span class="n">npts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -557,14 +573,14 @@
 <a id="ln-401" name="ln-401" href="#ln-401"></a><span class="w">        </span><span class="c">!! M-by-N design matrix, or a Jacobian whose rows include sqrt(weights).</span>
 <a id="ln-402" name="ln-402" href="#ln-402"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span>
 <a id="ln-403" name="ln-403" href="#ln-403"></a><span class="w">        </span><span class="c">!! N-by-N covariance before residual-variance scaling. Nonfinite X gives NaNs.</span>
-<a id="ln-404" name="ln-404" href="#ln-404"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rank</span>
+<a id="ln-404" name="ln-404" href="#ln-404"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rank</span>
 <a id="ln-405" name="ln-405" href="#ln-405"></a><span class="w">        </span><span class="c">!! Number of retained singular directions; zero for empty/invalid input.</span>
 <a id="ln-406" name="ln-406" href="#ln-406"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">condition_number</span>
 <a id="ln-407" name="ln-407" href="#ln-407"></a><span class="w">        </span><span class="c">!! Condition number of X; +infinity for rank deficiency, NaN for invalid X.</span>
 <a id="ln-408" name="ln-408" href="#ln-408"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">singular_values</span>
 <a id="ln-409" name="ln-409" href="#ln-409"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">vectors</span><span class="p">,</span><span class="w"> </span><span class="n">scaled_vectors</span>
 <a id="ln-410" name="ln-410" href="#ln-410"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">relative_tolerance</span>
-<a id="ln-411" name="ln-411" href="#ln-411"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ncols</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">effective_rank</span>
+<a id="ln-411" name="ln-411" href="#ln-411"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ncols</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">,</span><span class="w"> </span><span class="n">effective_rank</span>
 <a id="ln-412" name="ln-412" href="#ln-412"></a>
 <a id="ln-413" name="ln-413" href="#ln-413"></a><span class="w">    </span><span class="n">ncols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
 <a id="ln-414" name="ln-414" href="#ln-414"></a><span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="n">ncols</span><span class="p">,</span><span class="w"> </span><span class="n">ncols</span><span class="p">),</span><span class="w"> </span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="p">)</span>
@@ -619,7 +635,7 @@
 <a id="ln-463" name="ln-463" href="#ln-463"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span>
 <a id="ln-464" name="ln-464" href="#ln-464"></a>
 <a id="ln-465" name="ln-465" href="#ln-465"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-466" name="ln-466" href="#ln-466"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">dof</span>
+<a id="ln-466" name="ln-466" href="#ln-466"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">dof</span>
 <a id="ln-467" name="ln-467" href="#ln-467"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">ssr</span><span class="p">,</span><span class="w"> </span><span class="n">var</span><span class="p">,</span><span class="w"> </span><span class="n">talpha</span>
 <a id="ln-468" name="ln-468" href="#ln-468"></a><span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">t_distribution</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dist</span>
 <a id="ln-469" name="ln-469" href="#ln-469"></a>
@@ -672,7 +688,7 @@
 <a id="ln-516" name="ln-516" href="#ln-516"></a><span class="k">subroutine </span><span class="n">jacobian</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="n">xdata</span><span class="p">,</span><span class="w"> </span><span class="n">params</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
 <a id="ln-517" name="ln-517" href="#ln-517"></a><span class="w">    </span><span class="n">jac</span><span class="p">,</span><span class="w"> </span><span class="k">stop</span><span class="p">,</span><span class="w"> </span><span class="n">f0</span><span class="p">,</span><span class="w"> </span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">step</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
 <a id="ln-518" name="ln-518" href="#ln-518"></a><span class="w">    </span><span class="c">!! Computes the Jacobian matrix for a nonlinear regression problem.</span>
-<a id="ln-519" name="ln-519" href="#ln-519"></a><span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">regression_function</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fun</span>
+<a id="ln-519" name="ln-519" href="#ln-519"></a><span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">regression_function</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fun</span>
 <a id="ln-520" name="ln-520" href="#ln-520"></a><span class="w">        </span><span class="c">!! A pointer to the regression_function to evaluate.</span>
 <a id="ln-521" name="ln-521" href="#ln-521"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xdata</span><span class="p">(:)</span>
 <a id="ln-522" name="ln-522" href="#ln-522"></a><span class="w">        </span><span class="c">!! The M-element array containing x-coordinate data.</span>
@@ -695,12 +711,12 @@
 <a id="ln-539" name="ln-539" href="#ln-539"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">step</span>
 <a id="ln-540" name="ln-540" href="#ln-540"></a><span class="w">        </span><span class="c">!! The differentiation step size.  The default is the square </span>
 <a id="ln-541" name="ln-541" href="#ln-541"></a><span class="w">        </span><span class="c">!! root of machine precision.</span>
-<a id="ln-542" name="ln-542" href="#ln-542"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span>
+<a id="ln-542" name="ln-542" href="#ln-542"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span>
 <a id="ln-543" name="ln-543" href="#ln-543"></a><span class="w">        </span><span class="c">!! An optional argument allowing the passing in/out of data.</span>
 <a id="ln-544" name="ln-544" href="#ln-544"></a>
 <a id="ln-545" name="ln-545" href="#ln-545"></a><span class="w">    </span><span class="c">! Local Variables</span>
 <a id="ln-546" name="ln-546" href="#ln-546"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">h</span>
-<a id="ln-547" name="ln-547" href="#ln-547"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">actual</span>
+<a id="ln-547" name="ln-547" href="#ln-547"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">actual</span>
 <a id="ln-548" name="ln-548" href="#ln-548"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">f1p</span><span class="p">(:),</span><span class="w"> </span><span class="n">f0p</span><span class="p">(:)</span>
 <a id="ln-549" name="ln-549" href="#ln-549"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">f1a</span><span class="p">(:),</span><span class="w"> </span><span class="n">f0a</span><span class="p">(:),</span><span class="w"> </span><span class="n">work</span><span class="p">(:)</span>
 <a id="ln-550" name="ln-550" href="#ln-550"></a>
@@ -765,17 +781,17 @@
 <a id="ln-609" name="ln-609" href="#ln-609"></a><span class="k">subroutine </span><span class="n">jacobian_finite_diff</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="n">xdata</span><span class="p">,</span><span class="w"> </span><span class="n">params</span><span class="p">,</span><span class="w"> </span><span class="n">f0</span><span class="p">,</span><span class="w"> </span><span class="n">jac</span><span class="p">,</span><span class="w"> </span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
 <a id="ln-610" name="ln-610" href="#ln-610"></a><span class="w">    </span><span class="k">stop</span><span class="p">,</span><span class="w"> </span><span class="n">step</span><span class="p">,</span><span class="w"> </span><span class="n">work</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
 <a id="ln-611" name="ln-611" href="#ln-611"></a><span class="w">    </span><span class="c">! Arguments</span>
-<a id="ln-612" name="ln-612" href="#ln-612"></a><span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">regression_function</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fun</span>
+<a id="ln-612" name="ln-612" href="#ln-612"></a><span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">regression_function</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fun</span>
 <a id="ln-613" name="ln-613" href="#ln-613"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xdata</span><span class="p">,</span><span class="w"> </span><span class="n">params</span>
 <a id="ln-614" name="ln-614" href="#ln-614"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">f0</span>
 <a id="ln-615" name="ln-615" href="#ln-615"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:,:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">jac</span>
 <a id="ln-616" name="ln-616" href="#ln-616"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">f1</span><span class="p">,</span><span class="w"> </span><span class="n">work</span>
 <a id="ln-617" name="ln-617" href="#ln-617"></a><span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">stop</span>
 <a id="ln-618" name="ln-618" href="#ln-618"></a><span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">step</span>
-<a id="ln-619" name="ln-619" href="#ln-619"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span>
+<a id="ln-619" name="ln-619" href="#ln-619"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span>
 <a id="ln-620" name="ln-620" href="#ln-620"></a>
 <a id="ln-621" name="ln-621" href="#ln-621"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-622" name="ln-622" href="#ln-622"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-622" name="ln-622" href="#ln-622"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-623" name="ln-623" href="#ln-623"></a>
 <a id="ln-624" name="ln-624" href="#ln-624"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-625" name="ln-625" href="#ln-625"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
@@ -827,40 +843,21 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:39              </p>
+ on 2026-11-12 14:47 -0600             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>

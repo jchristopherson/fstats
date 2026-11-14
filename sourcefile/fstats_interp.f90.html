@@ -12,14 +12,29 @@
 
     <title>fstats_interp.f90 &ndash; FSTATS</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -75,8 +90,7 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                  title=" 6.2% of total for source files.">600 statements</a>
             </li>
 
@@ -96,9 +110,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -196,16 +212,16 @@
 <a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">hermite_interpolator</span>
 <a id="ln-41" name="ln-41" href="#ln-41"></a>
 <a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">        </span>
-<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_QUADRATIC_OVER_INTERVAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_QUADRATIC_OVER_INTERVAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span>
 <a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">        </span><span class="c">!! Indicates that the spline is quadratic over the interval under</span>
 <a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">        </span><span class="c">!! consideration (beginning or ending interval).</span>
-<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_KNOWN_FIRST_DERIVATIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1001</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_KNOWN_FIRST_DERIVATIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1001</span>
 <a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">        </span><span class="c">!! Indicates a known first derivative at either the beginning or ending</span>
 <a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">        </span><span class="c">!! point.</span>
-<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_KNOWN_SECOND_DERIVATIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1002</span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_KNOWN_SECOND_DERIVATIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1002</span>
 <a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">        </span><span class="c">!! Indicates a known second derivative at either the beginning or ending</span>
 <a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">        </span><span class="c">!! point.</span>
-<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_CONTINUOUS_THIRD_DERIVATIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1003</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">SPLINE_CONTINUOUS_THIRD_DERIVATIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1003</span>
 <a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">        </span><span class="c">!! Indicates a continuous third derivative at either the beginning or </span>
 <a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">        </span><span class="c">!! ending point.</span>
 <a id="ln-55" name="ln-55" href="#ln-55"></a>
@@ -217,15 +233,15 @@
 <a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">            </span><span class="c">!! An N-element array containing the raw x-coordinate data.</span>
 <a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">public</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span>
 <a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">            </span><span class="c">!! An N-element array containing the raw y-coordinate data.</span>
-<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_order</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_order</span>
 <a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">            </span><span class="c">!! The order of the interpolating polynomial.</span>
-<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_nearestIndex</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_nearestIndex</span>
 <a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">            </span><span class="c">!! The saved nearest index from the last search.  Utilizing this</span>
 <a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">            </span><span class="c">!! value improves the behavior of the search.</span>
-<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_method</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_method</span>
 <a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">            </span><span class="c">!! An integer used to identify the search method to use during</span>
 <a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">            </span><span class="c">!! interpolation.</span>
-<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_indexDelta</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m_indexDelta</span>
 <a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">            </span><span class="c">!! The bracket index difference.</span>
 <a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">    </span><span class="k">contains</span>
 <a id="ln-75" name="ln-75" href="#ln-75"></a><span class="k">        procedure</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialize</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">im_init</span>
@@ -350,7 +366,7 @@
 <a id="ln-194" name="ln-194" href="#ln-194"></a><span class="w">        </span><span class="c">!! Returns true if the array is monotonic; else, false.</span>
 <a id="ln-195" name="ln-195" href="#ln-195"></a>
 <a id="ln-196" name="ln-196" href="#ln-196"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-197" name="ln-197" href="#ln-197"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-197" name="ln-197" href="#ln-197"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-198" name="ln-198" href="#ln-198"></a><span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ascend</span>
 <a id="ln-199" name="ln-199" href="#ln-199"></a>
 <a id="ln-200" name="ln-200" href="#ln-200"></a><span class="w">    </span><span class="c">! Process</span>
@@ -386,11 +402,11 @@
 <a id="ln-230" name="ln-230" href="#ln-230"></a><span class="w">        </span><span class="c">!! monotonically increasing or decreasing order.</span>
 <a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span>
 <a id="ln-232" name="ln-232" href="#ln-232"></a><span class="w">        </span><span class="c">!! An N-element array containing the y-coordinate data.</span>
-<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">order</span>
+<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">order</span>
 <a id="ln-234" name="ln-234" href="#ln-234"></a><span class="w">        </span><span class="c">!! The order of the interpolating polynomial.</span>
 <a id="ln-235" name="ln-235" href="#ln-235"></a>
 <a id="ln-236" name="ln-236" href="#ln-236"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-238" name="ln-238" href="#ln-238"></a><span class="w">    </span>
 <a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -422,7 +438,7 @@
 <a id="ln-266" name="ln-266" href="#ln-266"></a><span class="w">    </span><span class="c">!! Gets an integer representing the search method to utilize.</span>
 <a id="ln-267" name="ln-267" href="#ln-267"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">interpolation_manager</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
 <a id="ln-268" name="ln-268" href="#ln-268"></a><span class="w">        </span><span class="c">!! The interpolation_manager object.</span>
-<a id="ln-269" name="ln-269" href="#ln-269"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-269" name="ln-269" href="#ln-269"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-270" name="ln-270" href="#ln-270"></a><span class="w">        </span><span class="c">!! The method identifier.</span>
 <a id="ln-271" name="ln-271" href="#ln-271"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">m_method</span>
 <a id="ln-272" name="ln-272" href="#ln-272"></a><span class="k">end function</span>
@@ -432,7 +448,7 @@
 <a id="ln-276" name="ln-276" href="#ln-276"></a><span class="w">    </span><span class="c">!! Gets the polynomial order.</span>
 <a id="ln-277" name="ln-277" href="#ln-277"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">interpolation_manager</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
 <a id="ln-278" name="ln-278" href="#ln-278"></a><span class="w">        </span><span class="c">!! The interpolation_manager object.</span>
-<a id="ln-279" name="ln-279" href="#ln-279"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-279" name="ln-279" href="#ln-279"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-280" name="ln-280" href="#ln-280"></a><span class="w">        </span><span class="c">!! The order.</span>
 <a id="ln-281" name="ln-281" href="#ln-281"></a><span class="w">    </span><span class="n">rst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">m_order</span>
 <a id="ln-282" name="ln-282" href="#ln-282"></a><span class="k">end function</span>
@@ -444,13 +460,13 @@
 <a id="ln-288" name="ln-288" href="#ln-288"></a><span class="w">        </span><span class="c">!! The interpolation_manager object.</span>
 <a id="ln-289" name="ln-289" href="#ln-289"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
 <a id="ln-290" name="ln-290" href="#ln-290"></a><span class="w">        </span><span class="c">!! The x-coordinate of interest.</span>
-<a id="ln-291" name="ln-291" href="#ln-291"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-291" name="ln-291" href="#ln-291"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-292" name="ln-292" href="#ln-292"></a><span class="w">        </span><span class="c">!! The index below the nearest entry to x.  This value is always within</span>
 <a id="ln-293" name="ln-293" href="#ln-293"></a><span class="w">        </span><span class="c">!! the range of possible indices for the stored data.</span>
 <a id="ln-294" name="ln-294" href="#ln-294"></a>
 <a id="ln-295" name="ln-295" href="#ln-295"></a><span class="w">    </span><span class="c">! Local Variables</span>
 <a id="ln-296" name="ln-296" href="#ln-296"></a><span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ascnd</span>
-<a id="ln-297" name="ln-297" href="#ln-297"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ju</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="n">jl</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-297" name="ln-297" href="#ln-297"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ju</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="n">jl</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-298" name="ln-298" href="#ln-298"></a>
 <a id="ln-299" name="ln-299" href="#ln-299"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-300" name="ln-300" href="#ln-300"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">x</span><span class="p">)</span>
@@ -494,12 +510,12 @@
 <a id="ln-338" name="ln-338" href="#ln-338"></a><span class="w">        </span><span class="c">!! The interpolation_manager object.</span>
 <a id="ln-339" name="ln-339" href="#ln-339"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
 <a id="ln-340" name="ln-340" href="#ln-340"></a><span class="w">        </span><span class="c">!! The x-coordinate of interest.</span>
-<a id="ln-341" name="ln-341" href="#ln-341"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-341" name="ln-341" href="#ln-341"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-342" name="ln-342" href="#ln-342"></a><span class="w">        </span><span class="c">!! The index below the nearest entry to x.  This value is always within</span>
 <a id="ln-343" name="ln-343" href="#ln-343"></a><span class="w">        </span><span class="c">!! the range of possible indices for the stored data.</span>
 <a id="ln-344" name="ln-344" href="#ln-344"></a>
 <a id="ln-345" name="ln-345" href="#ln-345"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-346" name="ln-346" href="#ln-346"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">jl</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="n">ju</span><span class="p">,</span><span class="w"> </span><span class="n">inc</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-346" name="ln-346" href="#ln-346"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">jl</span><span class="p">,</span><span class="w"> </span><span class="n">jm</span><span class="p">,</span><span class="w"> </span><span class="n">ju</span><span class="p">,</span><span class="w"> </span><span class="n">inc</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-347" name="ln-347" href="#ln-347"></a><span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ascnd</span>
 <a id="ln-348" name="ln-348" href="#ln-348"></a>
 <a id="ln-349" name="ln-349" href="#ln-349"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -576,7 +592,7 @@
 <a id="ln-420" name="ln-420" href="#ln-420"></a><span class="w">    </span><span class="c">!! Gets the size of the stored raw data array.</span>
 <a id="ln-421" name="ln-421" href="#ln-421"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">interpolation_manager</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
 <a id="ln-422" name="ln-422" href="#ln-422"></a><span class="w">        </span><span class="c">!! The interpolation_manager object.</span>
-<a id="ln-423" name="ln-423" href="#ln-423"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
+<a id="ln-423" name="ln-423" href="#ln-423"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rst</span>
 <a id="ln-424" name="ln-424" href="#ln-424"></a><span class="w">        </span><span class="c">!! The size of the stored data.</span>
 <a id="ln-425" name="ln-425" href="#ln-425"></a>
 <a id="ln-426" name="ln-426" href="#ln-426"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
@@ -600,7 +616,7 @@
 <a id="ln-444" name="ln-444" href="#ln-444"></a><span class="w">        </span><span class="c">!! An N-element array  containing the interpolated data.</span>
 <a id="ln-445" name="ln-445" href="#ln-445"></a>
 <a id="ln-446" name="ln-446" href="#ln-446"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-447" name="ln-447" href="#ln-447"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-447" name="ln-447" href="#ln-447"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-448" name="ln-448" href="#ln-448"></a><span class="w">    </span>
 <a id="ln-449" name="ln-449" href="#ln-449"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-450" name="ln-450" href="#ln-450"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -642,7 +658,7 @@
 <a id="ln-486" name="ln-486" href="#ln-486"></a><span class="w">        </span><span class="c">!! The interpolated value.</span>
 <a id="ln-487" name="ln-487" href="#ln-487"></a>
 <a id="ln-488" name="ln-488" href="#ln-488"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-489" name="ln-489" href="#ln-489"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">j</span>
+<a id="ln-489" name="ln-489" href="#ln-489"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">j</span>
 <a id="ln-490" name="ln-490" href="#ln-490"></a>
 <a id="ln-491" name="ln-491" href="#ln-491"></a><span class="w">    </span><span class="c">! Locate the proper index</span>
 <a id="ln-492" name="ln-492" href="#ln-492"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">m_manager</span><span class="p">%</span><span class="n">method</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
@@ -674,7 +690,7 @@
 <a id="ln-518" name="ln-518" href="#ln-518"></a><span class="w">        </span><span class="c">!! The interpolated value.</span>
 <a id="ln-519" name="ln-519" href="#ln-519"></a>
 <a id="ln-520" name="ln-520" href="#ln-520"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-521" name="ln-521" href="#ln-521"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ind</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">ns</span><span class="p">,</span><span class="w"> </span><span class="n">mm</span><span class="p">,</span><span class="w"> </span><span class="n">jl</span><span class="p">,</span><span class="w"> </span><span class="n">jlo</span>
+<a id="ln-521" name="ln-521" href="#ln-521"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ind</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">ns</span><span class="p">,</span><span class="w"> </span><span class="n">mm</span><span class="p">,</span><span class="w"> </span><span class="n">jl</span><span class="p">,</span><span class="w"> </span><span class="n">jlo</span>
 <a id="ln-522" name="ln-522" href="#ln-522"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">den</span><span class="p">,</span><span class="w"> </span><span class="n">dif</span><span class="p">,</span><span class="w"> </span><span class="n">dift</span><span class="p">,</span><span class="w"> </span><span class="n">ho</span><span class="p">,</span><span class="w"> </span><span class="n">hp</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span>
 <a id="ln-523" name="ln-523" href="#ln-523"></a>
 <a id="ln-524" name="ln-524" href="#ln-524"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -733,7 +749,7 @@
 <a id="ln-577" name="ln-577" href="#ln-577"></a><span class="w">    </span><span class="c">!! Initializes the interpolation object.</span>
 <a id="ln-578" name="ln-578" href="#ln-578"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">polynomial_interpolator</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
 <a id="ln-579" name="ln-579" href="#ln-579"></a><span class="w">        </span><span class="c">!! The polynomial_interpolator object.</span>
-<a id="ln-580" name="ln-580" href="#ln-580"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">order</span>
+<a id="ln-580" name="ln-580" href="#ln-580"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">order</span>
 <a id="ln-581" name="ln-581" href="#ln-581"></a><span class="w">        </span><span class="c">!! The polynomial order.  This value must be at least 1.</span>
 <a id="ln-582" name="ln-582" href="#ln-582"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
 <a id="ln-583" name="ln-583" href="#ln-583"></a><span class="w">        </span><span class="c">!! An N-element array containing the x-coordinate data in either</span>
@@ -742,7 +758,7 @@
 <a id="ln-586" name="ln-586" href="#ln-586"></a><span class="w">        </span><span class="c">!! An N-element array containing the y-coordinate data.</span>
 <a id="ln-587" name="ln-587" href="#ln-587"></a>
 <a id="ln-588" name="ln-588" href="#ln-588"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-589" name="ln-589" href="#ln-589"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span>
+<a id="ln-589" name="ln-589" href="#ln-589"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span>
 <a id="ln-590" name="ln-590" href="#ln-590"></a><span class="w">    </span>
 <a id="ln-591" name="ln-591" href="#ln-591"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-592" name="ln-592" href="#ln-592"></a><span class="w">    </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">m_manager</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">order</span><span class="p">)</span>
@@ -767,7 +783,7 @@
 <a id="ln-611" name="ln-611" href="#ln-611"></a><span class="w">        </span><span class="c">!! The interpolated value.</span>
 <a id="ln-612" name="ln-612" href="#ln-612"></a>
 <a id="ln-613" name="ln-613" href="#ln-613"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-614" name="ln-614" href="#ln-614"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">jlo</span><span class="p">,</span><span class="w"> </span><span class="n">right</span>
+<a id="ln-614" name="ln-614" href="#ln-614"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">jlo</span><span class="p">,</span><span class="w"> </span><span class="n">right</span>
 <a id="ln-615" name="ln-615" href="#ln-615"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dt</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="n">yr</span><span class="p">,</span><span class="w"> </span><span class="n">yl</span>
 <a id="ln-616" name="ln-616" href="#ln-616"></a>
 <a id="ln-617" name="ln-617" href="#ln-617"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -821,7 +837,7 @@
 <a id="ln-665" name="ln-665" href="#ln-665"></a><span class="w">        </span><span class="c">!! linear system.</span>
 <a id="ln-666" name="ln-666" href="#ln-666"></a>
 <a id="ln-667" name="ln-667" href="#ln-667"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-668" name="ln-668" href="#ln-668"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-668" name="ln-668" href="#ln-668"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-669" name="ln-669" href="#ln-669"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xmult</span>
 <a id="ln-670" name="ln-670" href="#ln-670"></a>
 <a id="ln-671" name="ln-671" href="#ln-671"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -858,7 +874,7 @@
 <a id="ln-702" name="ln-702" href="#ln-702"></a><span class="w">        </span><span class="c">!! monotonically increasing or decreasing order.</span>
 <a id="ln-703" name="ln-703" href="#ln-703"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span>
 <a id="ln-704" name="ln-704" href="#ln-704"></a><span class="w">        </span><span class="c">!! An N-element array containing the y-coordinate data.</span>
-<a id="ln-705" name="ln-705" href="#ln-705"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcbeg</span>
+<a id="ln-705" name="ln-705" href="#ln-705"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcbeg</span>
 <a id="ln-706" name="ln-706" href="#ln-706"></a><span class="w">        </span><span class="c">!! An optional input that defines the nature of the boundary condition </span>
 <a id="ln-707" name="ln-707" href="#ln-707"></a><span class="w">        </span><span class="c">!! at the beginning of the spline.  If no parameter, or an invalid </span>
 <a id="ln-708" name="ln-708" href="#ln-708"></a><span class="w">        </span><span class="c">!! parameter, is specified, the default condition</span>
@@ -878,7 +894,7 @@
 <a id="ln-722" name="ln-722" href="#ln-722"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ybcbeg</span>
 <a id="ln-723" name="ln-723" href="#ln-723"></a><span class="w">        </span><span class="c">!! If needed, the value of the initial point boundary condition.  If </span>
 <a id="ln-724" name="ln-724" href="#ln-724"></a><span class="w">        </span><span class="c">!! needed, but not supplied, a default value of zero will be used.</span>
-<a id="ln-725" name="ln-725" href="#ln-725"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcend</span>
+<a id="ln-725" name="ln-725" href="#ln-725"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcend</span>
 <a id="ln-726" name="ln-726" href="#ln-726"></a><span class="w">        </span><span class="c">!! An optional input that defines the nature of the boundary condition </span>
 <a id="ln-727" name="ln-727" href="#ln-727"></a><span class="w">        </span><span class="c">!! at the end of the spline.  If no parameter, or an invalid </span>
 <a id="ln-728" name="ln-728" href="#ln-728"></a><span class="w">        </span><span class="c">!! parameter, is specified, the default condition</span>
@@ -900,7 +916,7 @@
 <a id="ln-744" name="ln-744" href="#ln-744"></a><span class="w">        </span><span class="c">!! needed, but not supplied, a default value of zero will be used.</span>
 <a id="ln-745" name="ln-745" href="#ln-745"></a>
 <a id="ln-746" name="ln-746" href="#ln-746"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-747" name="ln-747" href="#ln-747"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibeg</span><span class="p">,</span><span class="w"> </span><span class="n">iend</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-747" name="ln-747" href="#ln-747"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibeg</span><span class="p">,</span><span class="w"> </span><span class="n">iend</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-748" name="ln-748" href="#ln-748"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ybeg</span><span class="p">,</span><span class="w"> </span><span class="n">yend</span>
 <a id="ln-749" name="ln-749" href="#ln-749"></a><span class="w">    </span>
 <a id="ln-750" name="ln-750" href="#ln-750"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -943,7 +959,7 @@
 <a id="ln-787" name="ln-787" href="#ln-787"></a><span class="w">    </span><span class="c">!! Computes the second derivative terms for the cubic-spline model.</span>
 <a id="ln-788" name="ln-788" href="#ln-788"></a><span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">spline_interpolator</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
 <a id="ln-789" name="ln-789" href="#ln-789"></a><span class="w">        </span><span class="c">!! The spline_interpolator object.</span>
-<a id="ln-790" name="ln-790" href="#ln-790"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcbeg</span>
+<a id="ln-790" name="ln-790" href="#ln-790"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcbeg</span>
 <a id="ln-791" name="ln-791" href="#ln-791"></a><span class="w">        </span><span class="c">!! An input that defines the nature of the boundary condition </span>
 <a id="ln-792" name="ln-792" href="#ln-792"></a><span class="w">        </span><span class="c">!! at the beginning of the spline.</span>
 <a id="ln-793" name="ln-793" href="#ln-793"></a><span class="w">        </span><span class="c">!!</span>
@@ -960,7 +976,7 @@
 <a id="ln-804" name="ln-804" href="#ln-804"></a><span class="w">        </span><span class="c">!!      continuous at x(2).</span>
 <a id="ln-805" name="ln-805" href="#ln-805"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ybcbeg</span>
 <a id="ln-806" name="ln-806" href="#ln-806"></a><span class="w">        </span><span class="c">!! The value of the initial point boundary condition.</span>
-<a id="ln-807" name="ln-807" href="#ln-807"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcend</span>
+<a id="ln-807" name="ln-807" href="#ln-807"></a><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ibcend</span>
 <a id="ln-808" name="ln-808" href="#ln-808"></a><span class="w">        </span><span class="c">!! An input that defines the nature of the boundary condition </span>
 <a id="ln-809" name="ln-809" href="#ln-809"></a><span class="w">        </span><span class="c">!! at the end of the spline.</span>
 <a id="ln-810" name="ln-810" href="#ln-810"></a><span class="w">        </span><span class="c">!!</span>
@@ -979,7 +995,7 @@
 <a id="ln-823" name="ln-823" href="#ln-823"></a><span class="w">        </span><span class="c">!! The value of the final point boundary condition.</span>
 <a id="ln-824" name="ln-824" href="#ln-824"></a>
 <a id="ln-825" name="ln-825" href="#ln-825"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-826" name="ln-826" href="#ln-826"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-826" name="ln-826" href="#ln-826"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-827" name="ln-827" href="#ln-827"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="p">,</span><span class="k">dimension</span><span class="p">(:)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="n">a3</span><span class="p">,</span><span class="w"> </span><span class="n">a4</span><span class="p">,</span><span class="w"> </span><span class="n">a5</span><span class="p">,</span><span class="w"> </span><span class="n">b</span>
 <a id="ln-828" name="ln-828" href="#ln-828"></a><span class="w">    </span>
 <a id="ln-829" name="ln-829" href="#ln-829"></a><span class="w">    </span><span class="c">! Initialization</span>
@@ -1069,7 +1085,7 @@
 <a id="ln-913" name="ln-913" href="#ln-913"></a><span class="w">        </span><span class="c">!! The hermite_interpolator object.</span>
 <a id="ln-914" name="ln-914" href="#ln-914"></a>
 <a id="ln-915" name="ln-915" href="#ln-915"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-916" name="ln-916" href="#ln-916"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span><span class="p">,</span><span class="w"> </span><span class="n">ndp</span>
+<a id="ln-916" name="ln-916" href="#ln-916"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span><span class="p">,</span><span class="w"> </span><span class="n">ndp</span>
 <a id="ln-917" name="ln-917" href="#ln-917"></a><span class="w">    </span>
 <a id="ln-918" name="ln-918" href="#ln-918"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-919" name="ln-919" href="#ln-919"></a><span class="w">    </span><span class="n">nd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">m_xd</span><span class="p">)</span>
@@ -1099,7 +1115,7 @@
 <a id="ln-943" name="ln-943" href="#ln-943"></a><span class="w">        </span><span class="c">!! The hermite_interpolator object.</span>
 <a id="ln-944" name="ln-944" href="#ln-944"></a>
 <a id="ln-945" name="ln-945" href="#ln-945"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-946" name="ln-946" href="#ln-946"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span><span class="p">,</span><span class="w"> </span><span class="n">ndp</span>
+<a id="ln-946" name="ln-946" href="#ln-946"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span><span class="p">,</span><span class="w"> </span><span class="n">ndp</span>
 <a id="ln-947" name="ln-947" href="#ln-947"></a><span class="w">    </span>
 <a id="ln-948" name="ln-948" href="#ln-948"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-949" name="ln-949" href="#ln-949"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">m_x</span><span class="p">)</span>
@@ -1145,7 +1161,7 @@
 <a id="ln-989" name="ln-989" href="#ln-989"></a><span class="w">        </span><span class="c">!! An N-element array containing the first derivative of the data.</span>
 <a id="ln-990" name="ln-990" href="#ln-990"></a>
 <a id="ln-991" name="ln-991" href="#ln-991"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-992" name="ln-992" href="#ln-992"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<a id="ln-992" name="ln-992" href="#ln-992"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
 <a id="ln-993" name="ln-993" href="#ln-993"></a><span class="w">    </span>
 <a id="ln-994" name="ln-994" href="#ln-994"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-995" name="ln-995" href="#ln-995"></a><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -1199,7 +1215,7 @@
 <a id="ln-1043" name="ln-1043" href="#ln-1043"></a><span class="w">        </span><span class="c">!! data, if supplied.</span>
 <a id="ln-1044" name="ln-1044" href="#ln-1044"></a>
 <a id="ln-1045" name="ln-1045" href="#ln-1045"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-1046" name="ln-1046" href="#ln-1046"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span><span class="p">,</span><span class="w"> </span><span class="n">nv</span><span class="p">,</span><span class="w"> </span><span class="n">ndp</span>
+<a id="ln-1046" name="ln-1046" href="#ln-1046"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span><span class="p">,</span><span class="w"> </span><span class="n">nv</span><span class="p">,</span><span class="w"> </span><span class="n">ndp</span>
 <a id="ln-1047" name="ln-1047" href="#ln-1047"></a><span class="w">    </span>
 <a id="ln-1048" name="ln-1048" href="#ln-1048"></a><span class="w">    </span><span class="c">! Initialization</span>
 <a id="ln-1049" name="ln-1049" href="#ln-1049"></a><span class="w">    </span><span class="n">nd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">this</span><span class="p">%</span><span class="n">m_xd</span><span class="p">)</span>
@@ -1261,7 +1277,7 @@
 <a id="ln-1105" name="ln-1105" href="#ln-1105"></a><span class="w">        </span><span class="c">!! polynomial.</span>
 <a id="ln-1106" name="ln-1106" href="#ln-1106"></a>
 <a id="ln-1107" name="ln-1107" href="#ln-1107"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-1108" name="ln-1108" href="#ln-1108"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span>
+<a id="ln-1108" name="ln-1108" href="#ln-1108"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span>
 <a id="ln-1109" name="ln-1109" href="#ln-1109"></a>
 <a id="ln-1110" name="ln-1110" href="#ln-1110"></a><span class="w">    </span><span class="c">! Recompute the divided difference coefficients</span>
 <a id="ln-1111" name="ln-1111" href="#ln-1111"></a><span class="w">    </span><span class="n">nd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">xd</span><span class="p">)</span>
@@ -1285,7 +1301,7 @@
 <a id="ln-1129" name="ln-1129" href="#ln-1129"></a><span class="w">        </span><span class="c">!! coefficient array for the standard representation of the polynomial.</span>
 <a id="ln-1130" name="ln-1130" href="#ln-1130"></a>
 <a id="ln-1131" name="ln-1131" href="#ln-1131"></a><span class="w">    </span><span class="c">! Local Variables</span>
-<a id="ln-1132" name="ln-1132" href="#ln-1132"></a><span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span>
+<a id="ln-1132" name="ln-1132" href="#ln-1132"></a><span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">nd</span>
 <a id="ln-1133" name="ln-1133" href="#ln-1133"></a><span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xv</span>
 <a id="ln-1134" name="ln-1134" href="#ln-1134"></a>
 <a id="ln-1135" name="ln-1135" href="#ln-1135"></a><span class="w">    </span><span class="c">! Process</span>
@@ -1309,40 +1325,21 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FSTATS was developed by Jason Christopherson<br>&copy; 2026 
+          <div class="col">
+            <p>
+              FSTATS
+ was developed by Jason Christopherson<br>              &copy; 2026 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-11-01 06:39              </p>
+ on 2026-11-12 14:47 -0600             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>

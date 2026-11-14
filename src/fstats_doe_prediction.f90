@@ -91,7 +91,7 @@ function doe_predict(mdl, x, alpha, x_fit, residual_mse) result(pred)
         !! bounds, and the confidence level.
 
     ! Local Variables
-    integer(int32) :: i, m, p, dof
+    integer :: i, m, p, dof
     real(real64) :: alph, mse, tcrit, q
     real(real64), allocatable, dimension(:,:) :: c, xt, w
     type(t_distribution) :: dist

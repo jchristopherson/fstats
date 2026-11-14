@@ -43,7 +43,7 @@ module fstats_data_table
         !! Dynamically sized owner for the table's heterogeneous columns.
         type(data_table_column_slot), allocatable, dimension(:) :: slots
             !! Storage for column handles; capacity can exceed the active count.
-        integer(int32) :: active_count = 0
+        integer :: active_count = 0
             !! Number of initialized column slots.
     contains
         procedure, private :: reserve => dtcc_reserve
@@ -61,7 +61,7 @@ module fstats_data_table
         !! Shared mutable state retained by its table and all live views.
         type(data_table_column_collection) :: columns
             !! The owned heterogeneous columns.
-        integer(int32) :: reference_count = 1
+        integer :: reference_count = 1
             !! Number of table and view handles retaining this state.
     end type
 
@@ -85,13 +85,13 @@ module fstats_data_table
         !! A live positional selection of rows and columns in shared table state.
         type(data_table_state), pointer, private :: m_state => null()
             !! Shared mutable state retained independently of the source table.
-        integer(int32), private :: row_first = 1
+        integer, private :: row_first = 1
             !! First selected one-based row position.
-        integer(int32), private :: row_last = 0
+        integer, private :: row_last = 0
             !! Last selected row; zero selects through the current final row.
-        integer(int32), private :: column_first = 1
+        integer, private :: column_first = 1
             !! First selected one-based column position.
-        integer(int32), private :: column_last = 0
+        integer, private :: column_last = 0
             !! Last selected column; zero selects through the current final column.
     contains
         procedure, public :: row_count => dtv_row_count
@@ -113,7 +113,7 @@ contains
         !! Returns the number of active column slots.
         class(data_table_column_collection), intent(in) :: this
             !! The collection being queried.
-        integer(int32) :: rst
+        integer :: rst
             !! The number of stored columns.
         rst = this%active_count
     end function
@@ -123,11 +123,11 @@ contains
         !! Grows column-handle storage without moving the separately allocated columns.
         class(data_table_column_collection), intent(inout) :: this
             !! The collection whose capacity may need to grow.
-        integer(int32), intent(in) :: needed
+        integer, intent(in) :: needed
             !! The minimum required number of slots.
 
         type(data_table_column_slot), allocatable, dimension(:) :: expanded
-        integer(int32) :: capacity, new_capacity, i
+        integer :: capacity, new_capacity, i
 
         capacity = 0
         if (allocated(this%slots)) capacity = size(this%slots)
@@ -163,13 +163,13 @@ contains
         !! Copies a column into the requested position while preserving other column objects.
         class(data_table_column_collection), intent(inout) :: this
             !! The collection receiving the column.
-        integer(int32), intent(in) :: index
+        integer, intent(in) :: index
             !! One-based insertion position, from one through count plus one.
         class(data_column), intent(in) :: column
             !! The source column to copy.
 
         class(data_column), pointer :: owned_column
-        integer(int32) :: i
+        integer :: i
 
         if (index < 1 .or. index > this%active_count + 1) then
             error stop FS_INVALID_INPUT_ERROR
@@ -189,10 +189,10 @@ contains
         !! Removes and deallocates a column, shifting remaining handles in place.
         class(data_table_column_collection), intent(inout) :: this
             !! The collection from which the column is removed.
-        integer(int32), intent(in) :: index
+        integer, intent(in) :: index
             !! One-based position of the column to remove.
 
-        integer(int32) :: i
+        integer :: i
 
         if (this%active_count == 0) return
         if (index < 1 .or. index > this%active_count) then
@@ -213,7 +213,7 @@ contains
         class(data_table_column_collection), intent(inout) :: this
             !! The collection to empty.
 
-        integer(int32) :: i
+        integer :: i
 
         do i = 1, this%active_count
             if (associated(this%slots(i)%value)) then
@@ -243,7 +243,7 @@ contains
         !! Returns a borrowed pointer to a column in the collection.
         class(data_table_column_collection), intent(in) :: this
             !! The collection being queried.
-        integer(int32), intent(in) :: index
+        integer, intent(in) :: index
             !! One-based position of the requested column.
         class(data_column), pointer :: rst
             !! The stored column; invalid indices cause an error stop.
@@ -261,7 +261,7 @@ contains
         type(data_table_column_collection), intent(inout) :: this
             !! The collection being finalized.
 
-        integer(int32) :: i
+        integer :: i
 
         do i = 1, this%active_count
             if (associated(this%slots(i)%value)) then
@@ -304,7 +304,7 @@ contains
             !! The independent copy, or null when source is null.
 
         class(data_column), pointer :: column
-        integer(int32) :: i
+        integer :: i
 
         nullify(clone)
         if (.not.associated(source)) return
@@ -348,7 +348,7 @@ contains
             !! The view whose state and selector are copied.
 
         type(data_table_state), pointer :: shared_state
-        integer(int32) :: row_first, row_last, column_first, column_last
+        integer :: row_first, row_last, column_first, column_last
 
         shared_state => rhs%m_state
         row_first = rhs%row_first
@@ -387,16 +387,16 @@ contains
 ! ------------------------------------------------------------------------------
     pure function dt_bounded_count(first, last, extent) result(rst)
         !! Computes the visible size of a positional range within a current extent.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! First one-based position in the selector.
-        integer(int32), intent(in) :: last
+        integer, intent(in) :: last
             !! Last selector position; zero denotes the current end.
-        integer(int32), intent(in) :: extent
+        integer, intent(in) :: extent
             !! Current number of available positions.
-        integer(int32) :: rst
+        integer :: rst
             !! Number of selected positions currently available.
 
-        integer(int32) :: upper
+        integer :: upper
 
         rst = 0
         if (extent < 1 .or. first > extent) return
@@ -410,13 +410,13 @@ contains
         !! Creates a retained view state with validated positional selectors.
         class(data_table), intent(inout) :: this
             !! The source table whose state is shared.
-        integer(int32), intent(in) :: row_first
+        integer, intent(in) :: row_first
             !! First selected row position.
-        integer(int32), intent(in) :: row_last
+        integer, intent(in) :: row_last
             !! Last selected row position, or zero for the current final row.
-        integer(int32), intent(in) :: column_first
+        integer, intent(in) :: column_first
             !! First selected column position.
-        integer(int32), intent(in) :: column_last
+        integer, intent(in) :: column_last
             !! Last selected column position, or zero for the current final column.
         type(data_table_view) :: rst
             !! The live view retaining the source table state.
@@ -448,18 +448,18 @@ contains
         !! final bounds remain fixed.
         class(data_table), intent(inout) :: this
             !! The source table whose shared state is retained.
-        integer(int32), intent(in), optional :: row_first
+        integer, intent(in), optional :: row_first
             !! First selected row; defaults to one.
-        integer(int32), intent(in), optional :: row_last
+        integer, intent(in), optional :: row_last
             !! Inclusive final row; omitted means through the current final row.
-        integer(int32), intent(in), optional :: column_first
+        integer, intent(in), optional :: column_first
             !! First selected column; defaults to one.
-        integer(int32), intent(in), optional :: column_last
+        integer, intent(in), optional :: column_last
             !! Inclusive final column; omitted means through the current final column.
         type(data_table_view) :: rst
             !! The live positional view.
 
-        integer(int32) :: first_row, last_row, first_column, last_column
+        integer :: first_row, last_row, first_column, last_column
 
         first_row = 1
         last_row = 0
@@ -483,9 +483,9 @@ contains
         !! Creates a live row slice spanning all current and future columns.
         class(data_table), intent(inout) :: this
             !! The source table whose shared state is retained.
-        integer(int32), intent(in) :: first
+        integer, intent(in) :: first
             !! First selected one-based row position.
-        integer(int32), intent(in) :: last
+        integer, intent(in) :: last
             !! Inclusive final row position.
         type(data_table_view) :: rst
             !! A view restricted to the requested row positions.
@@ -499,7 +499,7 @@ contains
         !! Gets the number of rows in the data table.
         class(data_table), intent(in) :: this
             !! The table being queried.
-        integer(int32) :: rst
+        integer :: rst
             !! The number of rows, or zero when there are no columns.
 
         rst = 0
@@ -513,7 +513,7 @@ contains
         !! Gets the number of columns in the data table.
         class(data_table), intent(in) :: this
             !! The table being queried.
-        integer(int32) :: rst
+        integer :: rst
             !! The number of columns.
 
         rst = 0
@@ -540,7 +540,7 @@ contains
         !! Removes a column from the table and shifts later positions left.
         class(data_table), intent(inout) :: this
             !! The table from which the column is removed.
-        integer(int32), intent(in) :: col
+        integer, intent(in) :: col
             !! One-based position of the column to remove.
 
         if (.not.associated(this%m_state)) return
@@ -552,7 +552,7 @@ contains
         !! Inserts an owned copy of a column at the requested position.
         class(data_table), intent(inout) :: this
             !! The table receiving the column.
-        integer(int32), intent(in) :: index
+        integer, intent(in) :: index
             !! One-based insertion position, from one through count plus one.
         class(data_column), intent(in) :: col
             !! The column to copy; its row count must match the table.
@@ -571,7 +571,7 @@ contains
         !! of the final table/view owner invalidates it.
         class(data_table), intent(in) :: this
             !! The table being queried.
-        integer(int32), intent(in) :: col
+        integer, intent(in) :: col
             !! One-based position of the requested column.
         class(data_column), pointer :: rst
             !! The stored column; invalid indices cause an error stop.
@@ -586,10 +586,10 @@ contains
         !! Returns the number of selected rows currently available.
         class(data_table_view), intent(in) :: this
             !! The view being queried.
-        integer(int32) :: rst
+        integer :: rst
             !! The visible row count after clipping to the current table shape.
 
-        integer(int32) :: extent
+        integer :: extent
 
         extent = 0
         if (associated(this%m_state)) then
@@ -605,10 +605,10 @@ contains
         !! Returns the number of selected columns currently available.
         class(data_table_view), intent(in) :: this
             !! The view being queried.
-        integer(int32) :: rst
+        integer :: rst
             !! The visible column count after clipping to the current table shape.
 
-        integer(int32) :: extent
+        integer :: extent
 
         extent = 0
         if (associated(this%m_state)) extent = this%m_state%columns%count()
@@ -622,12 +622,12 @@ contains
         !! for those rows. Removing the column invalidates the pointer.
         class(data_table_view), intent(in) :: this
             !! The view selecting the column.
-        integer(int32), intent(in) :: col
+        integer, intent(in) :: col
             !! One-based position within the view's selected columns.
         class(data_column), pointer :: rst
             !! The stored column; invalid view positions cause an error stop.
 
-        integer(int32) :: actual_column
+        integer :: actual_column
 
         nullify(rst)
         if (col < 1 .or. col > this%column_count()) error stop FS_INVALID_INPUT_ERROR
@@ -642,13 +642,13 @@ contains
         !! reallocated; reacquire it after such edits.
         class(data_table_view), intent(in) :: this
             !! The view selecting rows and columns.
-        integer(int32), intent(in) :: col
+        integer, intent(in) :: col
             !! One-based position of the column within the view.
         class(*), pointer, dimension(:) :: rst
             !! Mutable selected values; reacquire after a source-column reallocation.
 
         class(data_column), pointer :: selected_column
-        integer(int32) :: actual_column, actual_last_row
+        integer :: actual_column, actual_last_row
 
         nullify(rst)
         if (col < 1 .or. col > this%column_count()) error stop FS_INVALID_INPUT_ERROR

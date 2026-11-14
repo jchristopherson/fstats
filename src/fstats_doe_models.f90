@@ -67,7 +67,7 @@ function doe_fit_model(nway, x, y, map, alpha) result(rst)
     !! (i < j, lexicographic), squared terms, and (three-way only) triple 
     !! cross terms (i < j < k), X_i**2 * X_j terms (i, then j, with i /= j), 
     !! and cubed terms.
-    integer(int32), intent(in) :: nway
+    integer, intent(in) :: nway
         !! The number of interaction levels.
     real(real64), intent(in), dimension(:,:) :: x
         !! The M-by-N matrix containing the M values of each of the N factors
@@ -88,7 +88,7 @@ function doe_fit_model(nway, x, y, map, alpha) result(rst)
         !! The resulting model.
 
     ! Local Variables
-    integer(int32) :: i, j, m, n, nparam, nfactors
+    integer :: i, j, m, n, nparam, nfactors
     logical, allocatable, target, dimension(:) :: nmap
     logical, pointer, dimension(:) :: mapptr
     real(real64) :: alph, nan
@@ -192,7 +192,7 @@ function doe_model_covariance(mdl, x) result(rst)
         !! included in the model.
 
     ! Local Variables
-    integer(int32) :: m, p
+    integer :: m, p
     real(real64), allocatable, dimension(:,:) :: xc
 
     m = size(x, 1)
@@ -225,11 +225,11 @@ end subroutine
 ! ------------------------------------------------------------------------------
 pure function doe_param_count(nway, n) result(rst)
     !! Computes the number of model parameters for an N-factor model.
-    integer(int32), intent(in) :: nway
+    integer, intent(in) :: nway
         !! The number of interaction levels.
-    integer(int32), intent(in) :: n
+    integer, intent(in) :: n
         !! The number of factors.
-    integer(int32) :: rst
+    integer :: rst
         !! The number of parameters.
 
     rst = 1
@@ -265,13 +265,13 @@ subroutine doe_design_matrix(nway, x, map, c)
     !!
     !! No error checking is provided.  It is assumed the arrays are sized 
     !! correctly.
-    integer(int32), intent(in) :: nway
+    integer, intent(in) :: nway
     real(real64), intent(in), dimension(:,:) :: x
     logical, intent(in), dimension(:) :: map
     real(real64), intent(out), dimension(:,:) :: c
 
     ! Local Variables
-    integer(int32) :: i, j, k, jj, kk, m, n, np
+    integer :: i, j, k, jj, kk, m, n, np
 
     ! Determine the number of model parameters
     np = 0
@@ -372,7 +372,7 @@ function doe_evaluate_model_1(nway, beta, x, map) result(rst)
     !! (i < j, lexicographic), squared terms, and (three-way only) triple 
     !! cross terms (i < j < k), X_i**2 * X_j terms (i, then j, with i /= j), 
     !! and cubed terms.
-    integer(int32), intent(in) :: nway
+    integer, intent(in) :: nway
         !! The number of interaction levels.  Currently, this algorithm supports
         !! a maximum of three-way interaction.
     real(real64), intent(in), dimension(:) :: beta
@@ -390,7 +390,7 @@ function doe_evaluate_model_1(nway, beta, x, map) result(rst)
         !! The resulting M-element array.
 
     ! Local Variables
-    integer(int32) :: m, n, nparam
+    integer :: m, n, nparam
     logical, pointer, dimension(:) :: mapptr
     logical, allocatable, target, dimension(:) :: nmap
     
@@ -460,14 +460,14 @@ subroutine doe_eval_engine(nway, beta, x, map, y)
     ! Driver routine for "doe_evaluate_model" that performs the actual 
     ! calculations but forgoes any error checking.  This should not be exposed 
     ! as part of the public API.
-    integer(int32), intent(in) :: nway
+    integer, intent(in) :: nway
     real(real64), intent(in), dimension(:) :: beta
     real(real64), intent(in), dimension(:,:) :: x
     logical, intent(in), dimension(:) :: map
     real(real64), intent(out), dimension(:) :: y
 
     ! Local Variables
-    integer(int32) :: i1, i2, n
+    integer :: i1, i2, n
 
     ! Initialization
     n = size(x, 2)
@@ -513,7 +513,7 @@ subroutine doe_eval_1(beta, x, map, y)
         !! model.  On output, this array is updated to include the main effects.
 
     ! Local Variables
-    integer(int32) :: i, n
+    integer :: i, n
 
     ! Initialization
     n = size(x, 2)
@@ -544,7 +544,7 @@ subroutine doe_eval_2(beta, x, map, y)
         !! interactions.
 
     ! Local Variables
-    integer(int32) :: i, j, k, n
+    integer :: i, j, k, n
 
     ! Initialization
     n = size(x, 2)
@@ -584,7 +584,7 @@ subroutine doe_eval_3(beta, x, map, y)
         !! interactions.
 
     ! Local Variables
-    integer(int32) :: i, j, k, ii, n
+    integer :: i, j, k, ii, n
 
     ! Initialization
     n = size(x, 2)
