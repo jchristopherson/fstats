@@ -37,6 +37,32 @@ module fstats_nonlinear_regression_tests
         end function
     end interface
 contains
+    function test_nl_least_squares_inactive_parameter() result(rst)
+        !! The slope parameter is initially inactive, then becomes identifiable
+        !! as the gain moves away from zero.
+        logical :: rst
+        real(real64) :: x(5), y(5), ymod(5), resid(5), p(2)
+        type(iteration_controls) :: controls
+
+        x = [-2.0d0, -1.0d0, 0.0d0, 1.0d0, 2.0d0]
+        y = 2.0d0 + 6.0d0*x
+        p = 0.0d0
+        call controls%set_to_default()
+        controls%residual_tolerance = 1.0d-12
+        call nonlinear_least_squares(inactive_parameter_model, x, y, p, ymod, resid, controls=controls)
+        rst = is_equal(p, [2.0d0, 3.0d0], 1.0d-6) .and. is_equal(ymod, y, 1.0d-6)
+        if (.not. rst) print *, "TEST FAILED: test_nl_least_squares_inactive_parameter"
+    end function
+
+    subroutine inactive_parameter_model(x, p, f, args)
+        !! At zero gain, changes in the slope parameter do not affect the model.
+        real(real64), intent(in) :: x(:), p(:)
+        real(real64), intent(out) :: f(:)
+        class(*), intent(in), optional :: args
+
+        f = p(1) * (1.0d0 + p(2)*x)
+    end subroutine
+
 ! ------------------------------------------------------------------------------
     function square_x(x) result(y)
         real(real64), intent(in) :: x
