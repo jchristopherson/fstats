@@ -312,8 +312,9 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     call fun(xdata, p, yNew, args = args)
     neval = neval + 1
 
-    ! Update or recompute the Jacobian matrix
-    if (dX2 > 0 .or. update) then
+    ! Update or recompute the Jacobian matrix. A zero column means a parameter
+    ! had no sensitivity; a Broyden update cannot recover it, so recompute.
+    if (dX2 > 0 .or. update .or. any(all(jac == 0.0d0, dim = 1))) then
         ! Recompute the Jacobian
         call jacobian(fun, xdata, p, jac, f0 = yNew, f1 = w1, &
             step = step, args = args)
