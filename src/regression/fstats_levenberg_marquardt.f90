@@ -47,6 +47,8 @@ subroutine nonlinear_least_squares(fun, x, y, params, ymod, &
     status, cov, args)
     !! Performs a nonlinear regression to fit a model using a version
     !! of the Levenberg-Marquardt algorithm.
+    !! The Marquardt update leaves a parameter unchanged for an iteration
+    !! if it has no sensitivity in the current weighted Jacobian.
     procedure(regression_function) :: fun
         !! A pointer to the regression_function to evaluate.
     real(real64), intent(in) :: x(:)
@@ -242,6 +244,7 @@ subroutine broyden_update(pOld, yOld, jac, p, y, dp, dy)
     ! Process
     dp = p - pOld
     h2 = dot_product(dp, dp)
+    if (h2 <= tiny(h2)) return
     dy = y - yOld - matmul(jac, dp)
     dy = dy / h2
     call rank1_update(1.0d0, dy, dp, jac)
@@ -309,8 +312,9 @@ subroutine lm_matrix(fun, xdata, ydata, pOld, yOld, dX2, jac, p, weights, &
     call fun(xdata, p, yNew, args = args)
     neval = neval + 1
 
-    ! Update or recompute the Jacobian matrix
-    if (dX2 > 0 .or. update) then
+    ! Update or recompute the Jacobian matrix. A zero column means a parameter
+    ! had no sensitivity; a Broyden update cannot recover it, so recompute.
+    if (dX2 > 0 .or. update .or. any(all(jac == 0.0d0, dim = 1))) then
         ! Recompute the Jacobian
         call jacobian(fun, xdata, p, jac, f0 = yNew, f1 = w1, &
             step = step, args = args)
@@ -399,7 +403,13 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
         ! A = J**T * W * J + lambda * diag(J**T * W * J)
         ! b = J**T * W * dy
         do i = 1, n
-            a(i,i) = a(i,i) * (1.0d0 + lambda)
+            if (a(i,i) == 0.0d0) then
+                ! For a weighted Gram matrix this is a zero row with zero
+                ! right-hand side. Solve h(i)=0 until sensitivity returns.
+                a(i,i) = 1.0d0
+            else
+                a(i,i) = a(i,i) * (1.0d0 + lambda)
+            end if
         end do
     else
         ! Compute: h = A \ b
@@ -410,6 +420,7 @@ subroutine lm_iter(fun, xdata, ydata, p, neval, niter, update, lambda, &
         end do
     end if
     call lu_factor(a, ipvt = iwork, lu = lu)
+    if (any(iwork < 1 .or. iwork > n)) error stop "Singular Levenberg-Marquardt step"
     h = solve_lu(lu, iwork, JtWdy)
 
     ! Compute the new attempted solution, and apply any constraints
@@ -585,7 +596,7 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
 
     ! Local Variables
     integer :: n
-    real(real64) :: rho
+    real(real64) :: predicted, rho
 
     ! Initialization
     n = size(p)
@@ -597,7 +608,9 @@ subroutine lm_update(fun, xdata, ydata, pOld, p, pTry, yOld, y, h, dX2, &
     else
         work(1:n) = lambda * h + JtWdy
     end if
-    rho = (X2 - X2try) / abs(dot_product(h, work(1:n)))
+    predicted = abs(dot_product(h, work(1:n)))
+    rho = 0.0d0
+    if (predicted > 0.0d0) rho = (X2 - X2try) / predicted
     if (rho > controls%iteration_improvement_tolerance) then
         ! Things are getting better at an acceptable rate
         dX2 = X2 - X2old
